@@ -36,36 +36,16 @@ namespace world
 {
     trajak::trajak(context *ctx)
         : context_part(ctx)
+        , vshader(GL_VERTEX_SHADER, vcode)
+        , fshader(GL_FRAGMENT_SHADER, fcode)
     {
-        vshader = glCreateShader(GL_VERTEX_SHADER);
-        assert(vshader > 0);
-
-        glShaderSource(vshader, 1, &vcode, nullptr);
-        glCompileShader(vshader);
-
-
-        GLint ok;
-        glGetShaderiv(vshader, GL_COMPILE_STATUS, &ok);
-        assert(ok);
-
-
-        fshader = glCreateShader(GL_FRAGMENT_SHADER);
-        assert(fshader > 0);
-
-        glShaderSource(fshader, 1, &fcode, nullptr);
-        glCompileShader(fshader);
-
-
-        glGetShaderiv(fshader, GL_COMPILE_STATUS, &ok);
-        assert(ok);
-
-
-
         program = glCreateProgram();
         assert(program > 0);
 
-        glAttachShader(program, vshader);
-        glAttachShader(program, fshader);
+        GLint ok;
+
+        glAttachShader(program, vshader.get_handle());
+        glAttachShader(program, fshader.get_handle());
         glLinkProgram(program);
         glGetProgramiv(program, GL_LINK_STATUS, &ok);
         assert(ok);
@@ -73,8 +53,6 @@ namespace world
 
     trajak::~trajak()
     {
-        glDeleteShader(vshader);
-        glDeleteShader(fshader);
         glDeleteProgram(program);
     }
 

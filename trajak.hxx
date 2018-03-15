@@ -7,6 +7,7 @@
 #define __world_trajak_hxx
 
 #include "context_part.hxx"
+#include "shader.hxx"
 
 namespace world
 {
@@ -19,10 +20,10 @@ namespace world
         void draw();
 
     private:
-        GLuint vshader;
-        GLuint fshader;
         GLuint program;
         GLuint a_coord;
+        common::shader vshader;
+        common::shader fshader;
     };
 }
 
