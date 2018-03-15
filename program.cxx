@@ -56,6 +56,11 @@ namespace glutils
         handle = 0;
     }
 
+    void program::use()
+    {
+        glUseProgram(get_handle());
+    }
+
     GLuint program::get_handle()
     {
         if (handle <= 0)

@@ -28,6 +28,7 @@ namespace glutils
 
         void link();
         void destroy();
+        void use();
 
         GLuint get_handle();
 

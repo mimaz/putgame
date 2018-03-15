@@ -9,6 +9,7 @@
 #include "context_part.hxx"
 #include "shader.hxx"
 #include "program.hxx"
+#include "attribute.hxx"
 
 namespace world
 {
@@ -21,10 +22,10 @@ namespace world
         void draw();
 
     private:
-        GLuint a_coord;
         glutils::shader vshader;
         glutils::shader fshader;
         glutils::program program;
+        glutils::attribute a_coord;
     };
 }
 

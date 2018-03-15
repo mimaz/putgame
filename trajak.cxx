@@ -39,6 +39,7 @@ namespace world
         , vshader(GL_VERTEX_SHADER, vcode)
         , fshader(GL_FRAGMENT_SHADER, fcode)
         , program(&vshader, &fshader)
+        , a_coord(&program, "a_coord")
     {}
 
     trajak::~trajak()
@@ -46,10 +47,8 @@ namespace world
 
     void trajak::draw()
     {
-        a_coord = glGetAttribLocation(program.get_handle(), "a_coord");
-
-        glUseProgram(program);
-        glEnableVertexAttribArray(a_coord);
+        program.use();
+        a_coord.enable();
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glVertexAttribPointer(a_coord, 2, GL_FLOAT, 
@@ -58,6 +57,6 @@ namespace world
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        glDisableVertexAttribArray(a_coord);
+        a_coord.disable();
     }
 }

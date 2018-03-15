@@ -1,3 +1,8 @@
+/*
+ * Mieszko Mazurek <mimaz@gmx.com> 
+ * 2018
+ */
+
 #include <algorithm>
 #include <vector>
 #include <map>
