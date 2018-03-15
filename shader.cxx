@@ -7,7 +7,7 @@
 
 #include "shader.hxx"
 
-namespace common
+namespace glutils
 {
     namespace 
     {
@@ -33,11 +33,13 @@ namespace common
         }
     }
 
-    shader::shader(GLenum type, srcitem src)
-        : shader(type, srcvec { src }) {}
+    shader::shader(GLenum type, const srclist &list)
+        : type(type), srcv(list.begin(), list.end()), handle(0) {}
 
-    shader::shader(GLenum type, srcvec src)
-        : type(type), srcv(src), handle(0) {}
+    shader::~shader() 
+    {
+        destroy();
+    }
 
     void shader::compile()
     {
@@ -93,7 +95,7 @@ namespace common
 
     GLuint shader::get_handle()
     {
-        if (handle == 0)
+        if (handle <= 0)
             compile();
 
         return handle;

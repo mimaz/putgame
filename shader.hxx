@@ -3,19 +3,27 @@
  * 2018
  */
 
-#ifndef __common_shader_hxx
-#define __common_shader_hxx
+#ifndef __glutils_shader_hxx
+#define __glutils_shader_hxx
 
-namespace common
+namespace glutils
 {
     class shader
     {
     public:
         using srcitem = const GLchar *;
+        using srclist = std::initializer_list<srcitem>;
         using srcvec = std::vector<srcitem>;
 
-        shader(GLenum type, srcitem src);
-        shader(GLenum type, srcvec src);
+        shader(GLenum type, const srclist &list);
+
+          template<typename ..._Sources>
+        shader(GLenum type, const _Sources &...sources);
+
+        shader(const shader &) = delete;
+        shader(shader &&) = default;
+
+        ~shader();
 
         void compile();
         void destroy();
@@ -24,10 +32,14 @@ namespace common
 
     private:
         GLenum type;
-        std::vector<const GLchar *> srcv;
+        srcvec srcv;
 
         GLuint handle;
     };
+
+      template<typename ..._Sources>
+    shader::shader(GLenum type, const _Sources &...sources)
+        : shader(type, { sources... }) {}
 }
 
 #endif

@@ -6,8 +6,8 @@
 PROJECT = putgame
 BUILD_DIR = /tmp/${PROJECT}-build
 ELF = ${BUILD_DIR}/${PROJECT}.elf
-CXXFLAGS = -Wall -O0 -MMD -I${BUILD_DIR}/ `pkg-config --cflags glfw3`
-LDFLAGS = `pkg-config --libs glfw3` -lGLESv2
+CXXFLAGS = -Wall -O0 -MMD -I${BUILD_DIR}/
+LDFLAGS = -lglfw -lGLESv2
 
 SRC = ${shell find . -name "*.cxx"}
 PCH = putgame-std.hxx

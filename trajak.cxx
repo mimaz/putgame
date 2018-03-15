@@ -48,7 +48,14 @@ namespace world
         glAttachShader(program, fshader.get_handle());
         glLinkProgram(program);
         glGetProgramiv(program, GL_LINK_STATUS, &ok);
-        assert(ok);
+
+        GLchar msg[256];
+
+        if (not ok)
+        {
+            glGetProgramInfoLog(program, sizeof(msg), nullptr, msg);
+            std::cerr << "error: " << msg << std::endl;
+        }
     }
 
     trajak::~trajak()

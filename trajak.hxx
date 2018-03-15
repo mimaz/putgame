@@ -22,8 +22,8 @@ namespace world
     private:
         GLuint program;
         GLuint a_coord;
-        common::shader vshader;
-        common::shader fshader;
+        glutils::shader vshader;
+        glutils::shader fshader;
     };
 }
 
