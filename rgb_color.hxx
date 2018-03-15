@@ -24,6 +24,9 @@ namespace common
         rgb_color(const rgb_color &) = default;
         rgb_color(rgb_color &&) = default;
 
+        rgb_color &operator=(const rgb_color &) = default;
+        rgb_color &operator=(rgb_color &&) = default;
+
         float &operator[](int idx) { return vec[idx]; }
         float operator[](int idx) const { return vec[idx]; }
 
