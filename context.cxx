@@ -7,6 +7,7 @@
 
 #include "context.hxx"
 #include "trajak.hxx"
+#include "visible_object.hxx"
 
 namespace world
 {
@@ -25,6 +26,9 @@ namespace world
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        for (auto obj : vis_objs)
+            obj->draw();
+
         get_part<trajak>()->draw();
     }
 
@@ -34,5 +38,15 @@ namespace world
         height = h;
 
         glViewport(0, 0, w, h);
+    }
+
+    void context::register_object(visible_object *obj)
+    {
+        vis_objs.insert(obj);
+    }
+
+    void context::unregister_object(visible_object *obj)
+    {
+        vis_objs.erase(obj);
     }
 }
