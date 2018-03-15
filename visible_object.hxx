@@ -3,8 +3,8 @@
  * 2018
  */
 
-#ifndef __visible_object_hxx
-#define __visible_object_hxx
+#ifndef __world_visible_object_hxx
+#define __world_visible_object_hxx
 
 namespace world
 {
