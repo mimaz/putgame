@@ -11,6 +11,7 @@
 #include <memory>
 #include <limits>
 
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,6 +19,9 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <cmath>
 
 #define GLFW_INCLUDE_ES2
 #include <GLFW/glfw3.h>
+
+constexpr auto PI = static_cast<float>(M_PI);
