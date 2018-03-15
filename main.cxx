@@ -5,10 +5,13 @@
 
 #include <putgame-std.hxx>
 
+#include "context.hxx"
+#include "trajak.hxx"
+
 static void error_callback(int code, const char *desc)
 {
     std::cerr << "GLFW error: " << code << ": " << desc << std::endl;
-    abort();
+    exit(1);
 }
 
 static void key_callback(GLFWwindow *win, 
@@ -34,8 +37,8 @@ int main(void)
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     GLFWwindow *win = glfwCreateWindow(640, 480, "putgame", nullptr, nullptr);
 
@@ -54,6 +57,9 @@ int main(void)
     glfwMakeContextCurrent(win);
 
 
+    auto ctx = std::make_unique<world::context>();
+
+
     double next_time = glfwGetTime();
 
     while (!glfwWindowShouldClose(win))
@@ -65,6 +71,10 @@ int main(void)
             continue;
 
         next_time += 1.0 / 60;
+
+
+        auto traj = ctx->get_part<world::trajak>();
+        traj->draw();
 
 
         glfwSwapBuffers(win);

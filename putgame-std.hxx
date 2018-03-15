@@ -2,11 +2,13 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include <typeindex>
+#include <memory>
 
 #include <glm/glm.hpp>
 
 #include <cassert>
 #include <cstdlib>
 
-#define GLFW_INCLUDE_ES31
+#define GLFW_INCLUDE_ES2
 #include <GLFW/glfw3.h>
