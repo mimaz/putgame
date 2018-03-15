@@ -43,8 +43,7 @@ namespace glutils
 
     void shader::compile()
     {
-        if (handle > 0)
-            destroy();
+        destroy();
 
 
         handle = glCreateShader(type);

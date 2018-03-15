@@ -38,33 +38,16 @@ namespace world
         : context_part(ctx)
         , vshader(GL_VERTEX_SHADER, vcode)
         , fshader(GL_FRAGMENT_SHADER, fcode)
-    {
-        program = glCreateProgram();
-        assert(program > 0);
-
-        GLint ok;
-
-        glAttachShader(program, vshader.get_handle());
-        glAttachShader(program, fshader.get_handle());
-        glLinkProgram(program);
-        glGetProgramiv(program, GL_LINK_STATUS, &ok);
-
-        GLchar msg[256];
-
-        if (not ok)
-        {
-            glGetProgramInfoLog(program, sizeof(msg), nullptr, msg);
-            std::cerr << "error: " << msg << std::endl;
-        }
-    }
+        , program(&vshader, &fshader)
+    {}
 
     trajak::~trajak()
-    {
-        glDeleteProgram(program);
-    }
+    {}
 
     void trajak::draw()
     {
+        a_coord = glGetAttribLocation(program.get_handle(), "a_coord");
+
         glUseProgram(program);
         glEnableVertexAttribArray(a_coord);
 

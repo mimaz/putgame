@@ -30,6 +30,8 @@ namespace glutils
 
         GLuint get_handle();
 
+        operator GLuint() { return get_handle(); }
+
     private:
         GLenum type;
         srcvec srcv;
