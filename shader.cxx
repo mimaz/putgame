@@ -7,6 +7,8 @@
 
 #include "shader.hxx"
 
+#include "exception.hxx"
+
 namespace glutils
 {
     namespace 
@@ -73,15 +75,8 @@ namespace glutils
             glGetShaderInfoLog(handle, sizeof(msg), nullptr, msg);
 
 
-            std::cerr << "compilling shader of type "
-                      << strtype(type)
-                      << " failed with error: " << msg << std::endl;
-
-            exit(1);
+            throw shader_error { type, msg };
         }
-
-
-        std::cout << "shader " << strtype(type) << " created" << std::endl;
     }
 
     void shader::destroy()

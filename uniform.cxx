@@ -8,23 +8,46 @@
 #include "uniform.hxx"
 
 #include "program.hxx"
+#include "exception.hxx"
 
 namespace glutils
 {
     uniform::uniform(program *prog, const GLchar *name)
-        : prog(prog), name(name), handle(-1) {}
-
-    void uniform::detach()
-    {
-        handle = -1;
-    }
+        : prog(prog), name(name), bound(false) {}
 
     GLuint uniform::get_handle()
     {
-        if (handle < 0)
+        if (not bound)
+        {
+            bound = true;
+
             handle = glGetUniformLocation(*prog, name);
 
-        return handle;
+            if (handle < 0)
+                throw location_error { name };
+        }
+
+        return static_cast<GLuint>(handle);
+    }
+
+    void uniform::operator=(const GLfloat &v)
+    {
+        glUniform1f(get_handle(), v);
+    }
+
+    void uniform::operator=(const glm::vec2 &v)
+    {
+        glUniform2fv(get_handle(), 1, glm::value_ptr(v));
+    }
+
+    void uniform::operator=(const glm::vec3 &v)
+    {
+        glUniform3fv(get_handle(), 1, glm::value_ptr(v));
+    }
+
+    void uniform::operator=(const glm::vec4 &v)
+    {
+        glUniform4fv(get_handle(), 1, glm::value_ptr(v));
     }
 
     void uniform::operator=(const glm::mat4 &v)

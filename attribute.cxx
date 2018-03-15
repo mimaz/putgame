@@ -8,16 +8,24 @@
 #include "attribute.hxx"
 
 #include "program.hxx"
+#include "exception.hxx"
 
 namespace glutils
 {
     attribute::attribute(program *prog, const GLchar *name)
-        : prog(prog), name(name), handle(0) {}
+        : prog(prog), name(name), bound(false) {}
 
     GLuint attribute::get_handle()
     {
-        if (handle == 0)
+        if (not bound)
+        {
+            bound = true;
+
             handle = glGetAttribLocation(*prog, name);
+
+            if (handle < 0)
+                throw location_error { name };
+        }
 
         return static_cast<GLuint>(handle);
     }

@@ -15,10 +15,12 @@ namespace glutils
     public:
         uniform(program *prog, const GLchar *name);
 
-        void detach();
-
         GLuint get_handle();
 
+        void operator=(const GLfloat &);
+        void operator=(const glm::vec2 &);
+        void operator=(const glm::vec3 &);
+        void operator=(const glm::vec4 &);
         void operator=(const glm::mat4 &);
 
     private:
@@ -26,6 +28,7 @@ namespace glutils
         const GLchar *const name;
 
         GLint handle;
+        bool bound;
     };
 }
 

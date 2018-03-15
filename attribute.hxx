@@ -26,6 +26,7 @@ namespace glutils
         program *const prog;
         const GLchar *const name;
 
+        bool bound;
         GLint handle;
     };
 }
