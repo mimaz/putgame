@@ -10,6 +10,7 @@
 #include "shader.hxx"
 #include "program.hxx"
 #include "attribute.hxx"
+#include "uniform.hxx"
 
 namespace world
 {
@@ -26,6 +27,8 @@ namespace world
         glutils::shader fshader;
         glutils::program program;
         glutils::attribute a_coord;
+        glutils::attribute a_color;
+        glutils::uniform u_matrix;
     };
 }
 

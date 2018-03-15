@@ -13,18 +13,25 @@ namespace world
     class context
     {
     public:
-        context();
+        context(int width, int height);
         ~context();
 
         void draw_frame();
+        void resize_frame(int width, int height);
 
           template<typename _Type>
         _Type *get_part();
+
+        int get_width() const { return width; }
+        int get_height() const { return height; }
 
     private:
         using part_ref = std::unique_ptr<context_part>;
 
         std::map<std::type_index, part_ref> _m_part_map;
+
+        int width;
+        int height;
     };
 
       template<typename _Type>

@@ -26,10 +26,18 @@ static void resize_callback(GLFWwindow *win,
                             int width, int height)
 {
     std::cout << "resize: " << width << " x " << height << std::endl;
+
+    auto ctxptr = glfwGetWindowUserPointer(win);
+    auto ctx = reinterpret_cast<world::context *>(ctxptr);
+
+    ctx->resize_frame(width, height);
 }
 
 int main(void)
 {
+    constexpr auto default_width = 640;
+    constexpr auto default_height = 480;
+
     assert(glfwInit());
 
     glfwSetErrorCallback(error_callback);
@@ -40,7 +48,8 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    GLFWwindow *win = glfwCreateWindow(640, 480, "putgame", nullptr, nullptr);
+    GLFWwindow *win = glfwCreateWindow(default_width, default_height,
+                                       "putgame", nullptr, nullptr);
 
     if (win == nullptr)
     {
@@ -57,7 +66,9 @@ int main(void)
     glfwMakeContextCurrent(win);
 
 
-    auto ctx = std::make_unique<world::context>();
+    auto ctx = std::make_unique<world::context>(default_width, default_height);
+
+    glfwSetWindowUserPointer(win, ctx.get());
 
 
     double next_time = glfwGetTime();
