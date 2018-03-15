@@ -11,8 +11,17 @@ namespace world
     class camera
     {
     public:
+        camera();
+
+        ~camera();
+
+        glm::mat4 get_proj() const;
+        glm::mat4 get_view() const;
+        glm::mat4 get_mvp(const glm::mat4 &model) const;
 
     private:
+        glm::mat4 proj_mat;
+        glm::mat4 view_mat;
     };
 }
 
