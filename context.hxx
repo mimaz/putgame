@@ -16,6 +16,8 @@ namespace world
         context();
         ~context();
 
+        void draw_frame();
+
           template<typename _Type>
         _Type *get_part();
 
@@ -41,10 +43,11 @@ namespace world
 
 
         auto part = std::make_unique<_Type>(this);
+        auto raw = part.get();
 
         _m_part_map[index] = std::move(part);
 
-        return part.get();
+        return raw;
     }
 }
 

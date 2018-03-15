@@ -73,8 +73,7 @@ int main(void)
         next_time += 1.0 / 60;
 
 
-        auto traj = ctx->get_part<world::trajak>();
-        traj->draw();
+        ctx->draw_frame();
 
 
         glfwSwapBuffers(win);

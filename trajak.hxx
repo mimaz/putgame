@@ -14,8 +14,15 @@ namespace world
     {
     public:
         trajak(context *ctx);
+        ~trajak();
 
         void draw();
+
+    private:
+        GLuint vshader;
+        GLuint fshader;
+        GLuint program;
+        GLuint a_coord;
     };
 }
 
