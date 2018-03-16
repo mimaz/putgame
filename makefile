@@ -9,10 +9,11 @@ PROJECT = putgame
 ##
  # build directories
  ##
-TARGET_BUILD_DIR = /tmp/${PROJECT}-build
-GEN_SRC_DIR = ${TARGET_BUILD_DIR}/gen-src
-GEN_OBJ_DIR = ${TARGET_BUILD_DIR}/gen-obj
-PRECOMPILER_BUILD_DIR = ${TARGET_BUILD_DIR}/precompiler-build
+BASE_BUILD_DIR = /tmp/${PROJECT}-build
+TARGET_BUILD_DIR = ${BASE_BUILD_DIR}/target
+GLSL_C_DIR = ${BASE_BUILD_DIR}/glsl-src
+GLSL_O_DIR = ${BASE_BUILD_DIR}/glsl-obj
+PRECOMPILER_BUILD_DIR = ${BASE_BUILD_DIR}/precompiler-build
 
 ##
  # targets
@@ -23,12 +24,11 @@ PRECOMPILER = ${PRECOMPILER_BUILD_DIR}/precompiler/precompiler
 ##
  # resources
  ##
-RESOURCE_GLSL = ${shell find . -name "*.glsl"}
-RESOURCE_ALL = ${RESOURCE_GLSL}
+RESOURCE_H = ${TARGET_BUILD_DIR}/putgame-resource.h
 
-RESOURCE_C_HEADER = ${GEN_SRC_DIR}/putgame-resource.h
-RESOURCE_C_SRC = ${RESOURCE_ALL:%=${GEN_SRC_DIR}/%.c}
-RESOURCE_C_OBJ = ${RESOURCE_C_SRC:${GEN_SRC_DIR}/%=${GEN_OBJ_DIR}/%.o}
+GLSL = ${shell find glsl/ -type f}
+GLSL_C = ${GLSL:%=${GLSL_C_DIR}/%.c}
+GLSL_O = ${GLSL_C:${GLSL_C_DIR}/%=${GLSL_O_DIR}/%.o}
 
 ##
  # compile flags
@@ -36,8 +36,8 @@ RESOURCE_C_OBJ = ${RESOURCE_C_SRC:${GEN_SRC_DIR}/%=${GEN_OBJ_DIR}/%.o}
 CFLAGS = -Wall -O0 -MMD
 LDFLAGS = 
 
-TARGET_CFLAGS = -I${GEN_SRC_DIR} ${CFLAGS}
-TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR}/pch ${TARGET_CFLAGS}
+TARGET_CFLAGS = ${CFLAGS}
+TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR}/pch -I${TARGET_BUILD_DIR} ${TARGET_CFLAGS}
 TARGET_LDFLAGS = -lglfw -lGLESv2 ${LDFLAGS}
 
 PRECOMPILER_CFLAGS = ${CFLAGS}
@@ -64,10 +64,10 @@ TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC}.gch
 ##
  # target objects
  ##
-TARGET_OBJ = ${TARGET_SRC:%=${TARGET_BUILD_DIR}/%.o} ${RESOURCE_C_OBJ}
+TARGET_OBJ = ${TARGET_SRC:%=${TARGET_BUILD_DIR}/%.o} ${GLSL_O}
 PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${PRECOMPILER_BUILD_DIR}/%.o}
 
-ALL_OBJ = ${TARGET_OBJ} ${PRECOMPILER_OBJ} ${RESOURCE_C_OBJ}
+ALL_OBJ = ${TARGET_OBJ} ${PRECOMPILER_OBJ}
 ALL_DEP = ${OBJ:%.o=%.d}
 
 ##
@@ -79,13 +79,13 @@ run: ${TARGET}
 	$<
 
 clean:
-	rm -rf ${TARGET_BUILD_DIR} ${PRECOMPILER_BUILD_DIR}
+	rm -rf ${BASE_BUILD_DIR}
 
 pch: ${TARGET_PCH_OBJ}
 
 prec: ${PRECOMPILER}
 
-res: ${RESOURCE_C_HEADER}
+res: ${RESOURCE_H}
 
 debug:
 	gdb ${TARGET}
@@ -115,23 +115,23 @@ ${TARGET_BUILD_DIR}/%.gch: %
 ##############################################
 
 # auto-generated objects
-${GEN_OBJ_DIR}/%.c.o: ${GEN_SRC_DIR}/%.c
+${GLSL_O_DIR}/%.c.o: ${GLSL_C_DIR}/%.c
 	@mkdir -p ${dir $@}
 	${CC} ${TARGET_CXXFLAGS} -c $< -o $@
 
 # auto-generated sources
-${GEN_SRC_DIR}/%.c: % ${PRECOMPILER}
+${GLSL_C_DIR}/%.c: % ${PRECOMPILER}
 	@mkdir -p ${dir $@}
-	${PRECOMPILER} resource $< $@
+	${PRECOMPILER} glsl $< $@
 	
 # auto-generated header
-${RESOURCE_C_HEADER}: ${RESOURCE_C_SRC}
+${RESOURCE_H}: ${GLSL_C}
 	${PRECOMPILER} header $@ $^
 
 ##############################################
 
 # target objects
-${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${TARGET_PCH_OBJ} ${RESOURCE_C_HEADER}
+${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${TARGET_PCH_OBJ} ${RESOURCE_H}
 	@mkdir -p ${dir $@}
 	${CXX} ${TARGET_CXXFLAGS} -c $< -o $@
 

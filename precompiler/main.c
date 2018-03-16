@@ -12,7 +12,7 @@
 
 #include <sys/stat.h>
 
-extern void resource(int argc, char **argv);
+extern void glsl(int argc, char **argv);
 extern void header(int argc, char **argv);
 
 struct option
@@ -22,7 +22,7 @@ struct option
 };
 
 static struct option optionlst[] = {
-    { resource, "resource" },
+    { glsl, "glsl" },
     { header, "header" }
 };
 
