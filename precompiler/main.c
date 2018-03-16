@@ -15,18 +15,18 @@
 extern void resource(int argc, char **argv);
 extern void header(int argc, char **argv);
 
-struct funopt
+struct option
 {
     void (*fun)(int, char **);
-    const char *opt;
+    const char *name;
 };
 
-static struct funopt optset[] = {
-    { resource, "source" },
+static struct option optionlst[] = {
+    { resource, "resource" },
     { header, "header" }
 };
 
-#define funcnt (sizeof(optset) / sizeof(struct funopt))
+#define funcnt (sizeof(optionlst) / sizeof(struct option))
 
 const char *author_message =
     "/*\n" 
@@ -52,9 +52,9 @@ int main(int argc, char **argv)
 
     for (i = 0; i < funcnt; i++)
     {
-        if (strcmp(optset[i].opt, opt) == 0)
+        if (strcmp(optionlst[i].name, opt) == 0)
         {
-            optset[i].fun(argc, argv);
+            optionlst[i].fun(argc, argv);
 
             return 0;
         }
