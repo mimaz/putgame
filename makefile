@@ -9,11 +9,14 @@ ELF = ${BUILD_DIR}/${PROJECT}.elf
 CXXFLAGS = -Wall -O0 -MMD -I${BUILD_DIR}/pch
 LDFLAGS = -lglfw -lGLESv2
 
-SRC = ${shell find . -name "*.cxx"}
+PRECOMPILER = ${BUILD_DIR}/precompiler
+PRECOMPILER_MAKE = ${MAKE} -C precompiler/ PUTGAME_BUILD=${BUILD_DIR}
+
+SRC_DIRS = . world/ common/ glutils/
+SRC = ${shell find ${SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 PCH = pch/putgame-std.hxx
 
-
-OBJ = ${SRC:./%.cxx=${BUILD_DIR}/%.o}
+OBJ = ${SRC:%.cxx=${BUILD_DIR}/%.o}
 
 DEP = ${OBJ:%.o=%.d}
 
@@ -25,6 +28,8 @@ run: ${ELF}
 
 clean: 
 	rm -rf ${BUILD_DIR}
+
+precompiler: ${PRECOMPILER}
 
 debug:
 	gdb ${ELF}
@@ -39,5 +44,8 @@ ${BUILD_DIR}/${PCH}.gch: ${PCH}
 ${BUILD_DIR}/%.o: %.cxx ${BUILD_DIR}/${PCH}.gch
 	@mkdir -p ${dir $@}
 	${CXX} ${CXXFLAGS} -c $< -o $@
+
+${PRECOMPILER}: 
+	${PRECOMPILER_MAKE} all
 
 -include ${DEP}
