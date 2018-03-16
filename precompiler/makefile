@@ -3,15 +3,19 @@
  # 2018
  ##
 
-ifndef PUTGAME_BUILD
-$(error PUTGAME_BUILD is not set)
+ifndef BUILD_DIR
+$(error BUILD_DIR is not defined)
 endif
 
-TARGET = ${PUTGAME_BUILD}/precompiler
-BUILD_DIR = ${PUTGAME_BUILD}/precompiler-obj
-CFLAGS = -Wall -O0
+ifndef TARGET
+$(error TARGET is not defined)
+endif
 
-OBJ = ${BUILD_DIR}/main.o
+CFLAGS = -Wall -O0
+CC = gcc
+
+SRC = ${shell find . -name "*.c"}
+OBJ = ${SRC:./%.c=%.o}
 
 all: ${TARGET}
 
