@@ -13,6 +13,7 @@
 #include <sys/stat.h>
 
 extern void glsl(int argc, char **argv);
+extern void mesh(int argc, char **argv);
 extern void header(int argc, char **argv);
 
 struct option
@@ -23,6 +24,7 @@ struct option
 
 static struct option optionlst[] = {
     { glsl, "glsl" },
+    { mesh, "mesh" },
     { header, "header" }
 };
 

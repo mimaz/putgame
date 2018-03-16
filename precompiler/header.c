@@ -24,7 +24,7 @@ static void findpatt(const char *patt)
 
         if (c < 0)
         {
-            fprintf(stderr, "missing \"size\" comment\n");
+            fprintf(stderr, "missing \"%s\" comment\n", patt);
             exit(1);
         }
 
@@ -49,13 +49,16 @@ static void findpatt(const char *patt)
 
 static void handlefile(void)
 {
-    char symbol[64];
+    char symbol[64], datatype[64];
     int size;
 
-    findpatt("const char");
+    findpatt("data_type");
+    fscanf(input, "%s", datatype);
+
+
+    findpatt("data_type");
     fscanf(input, "%s", symbol);
     symbol[strlen(symbol) - 2] = 0;
-
 
 
     findpatt("size");
@@ -63,7 +66,7 @@ static void handlefile(void)
 
 
 
-    fprintf(output, "extern const char %s[];\n", symbol);
+    fprintf(output, "extern const %s %s[];\n", datatype, symbol);
     fprintf(output, "#define %s_size %d\n\n", symbol, size);
 }
 

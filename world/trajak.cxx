@@ -11,25 +11,12 @@
 #include "context.hxx"
 #include "camera.hxx"
 
-namespace 
-{
-    const GLfloat vdata[] = {
-        -0.5f, -0.5f, 1, 0, 0,
-        -0.5f, 0.5f, 0, 1, 0,
-        0.5f, -0.5f, 0, 0, 1,
-
-        -0.5f, -0.5f, 1, 0, 0,
-        -0.5f, 0.5f, 0, 1, 0,
-        0.5f, -0.5f, 0, 0, 1,
-    };
-}
-
 namespace world
 {
     trajak::trajak(context *ctx)
         : context_part(ctx)
-        , vshader(GL_VERTEX_SHADER, trajak_vert_glsl)
-        , fshader(GL_FRAGMENT_SHADER, trajak_frag_glsl)
+        , vshader(GL_VERTEX_SHADER, trajak_vsh)
+        , fshader(GL_FRAGMENT_SHADER, trajak_fsh)
         , program(&vshader, &fshader)
         , a_coord(&program, "a_coord")
         , a_color(&program, "a_color")
@@ -54,11 +41,11 @@ namespace world
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glVertexAttribPointer(a_coord, 2, GL_FLOAT, 
                               GL_FALSE, sizeof(GLfloat) * 5, 
-                              vdata);
+                              trajak_mesh);
 
         glVertexAttribPointer(a_color, 3, GL_FLOAT,
                               GL_FALSE, sizeof(GLfloat) * 5,
-                              vdata + sizeof(GLfloat) * 2);
+                              trajak_mesh + sizeof(GLfloat) * 2);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
