@@ -4,6 +4,7 @@
  */
 
 #include <putgame-std.hxx>
+#include <putgame-resource.h>
 
 #include "trajak.hxx"
 
@@ -21,39 +22,14 @@ namespace
         -0.5f, 0.5f, 0, 1, 0,
         0.5f, -0.5f, 0, 0, 1,
     };
-
-    const GLchar *vcode = R"(
-    attribute lowp vec2 a_coord;
-    attribute lowp vec3 a_color;
-
-    uniform highp mat4 u_matrix;
-
-    varying lowp vec3 v_color;
-
-    void main()
-    {
-        v_color = a_color;
-
-        gl_Position = u_matrix * vec4(a_coord, 0.0, 1.0);
-    }
-    )";
-
-    const GLchar *fcode = R"(
-    varying lowp vec3 v_color;
-
-    void main()
-    {
-        gl_FragColor = vec4(v_color, 1.0);
-    }
-    )";
 }
 
 namespace world
 {
     trajak::trajak(context *ctx)
         : context_part(ctx)
-        , vshader(GL_VERTEX_SHADER, vcode)
-        , fshader(GL_FRAGMENT_SHADER, fcode)
+        , vshader(GL_VERTEX_SHADER, trajak_vert_glsl)
+        , fshader(GL_FRAGMENT_SHADER, trajak_frag_glsl)
         , program(&vshader, &fshader)
         , a_coord(&program, "a_coord")
         , a_color(&program, "a_color")
