@@ -23,73 +23,60 @@
 #define MAX_FILE_COUNT 64
 #define MAX_FILE_SIZE 16384
 
-static const char *extensions[] = {
-    ".vert", ".frag"
-};
-
 
 static char summary[MAX_FILE_COUNT][MAX_FILENAME_LENGTH];
 static int filecount;
 
 
-static const char *findext(const char *filename)
+static const char *comname(const char *filename)
 {
-    static char shortname[MAX_FILENAME_LENGTH];
+    static char comn[MAX_FILENAME_LENGTH];
+    const char *bg;
+    char *ptr;
 
-    int namelen, i, extcnt, extlen, cmp, shortlen;
-    const char *ext, *suff;
-    
-    namelen = strlen(filename);
-    extcnt = sizeof(extensions) / sizeof(extensions[0]);
+    bg = strrchr(filename, '/');
 
-    for (i = 0; i < extcnt; i++)
+
+    if (bg == NULL)
+        bg = filename;
+
+
+    strcpy(comn, bg);
+
+    ptr = comn;
+
+    while (*ptr)
     {
-        ext = extensions[i];
-        extlen = strlen(ext);
+        if (strchr(".", *ptr))
+            *ptr = '_';
 
-        suff = filename + namelen - extlen;
-
-        if (suff <= filename)
-            continue;
-
-        cmp = strcmp(ext, suff);
-
-        if (cmp == 0)
-        {
-            shortlen = namelen - extlen;
-
-            memcpy(shortname, filename, shortlen);
-            shortname[shortlen] = 0;
-
-            return shortname;
-        }
+        ptr++;
     }
 
-    return NULL;
+
+    return comn;
 }
 
-static void process(const char *srcdir, 
-                    const char *dstdir,
+static void process(const char *dstdir,
                     const char *filename)
 {
     static char filebuff[MAX_FILE_SIZE];
 
-    const char *shortname; 
+    const char *common; 
     char outname[MAX_FILENAME_LENGTH];
     FILE *input, *output;
     int readno, i, buflen;
 
     
-    shortname = findext(filename);
+    common = comname(filename);
 
-    if (shortname == NULL)
-        return;
 
-    strcpy(outname, shortname);
+    strcpy(outname, dstdir);
+    strcat(outname, "/");
+    strcat(outname, filename);
     strcat(outname, ".c");
 
 
-    chdir(srcdir);
     input = fopen(filename, "r");
 
     if (input == NULL)
@@ -115,7 +102,6 @@ static void process(const char *srcdir,
 
 
 
-    chdir(dstdir);
     output = fopen(outname, "w");
 
     if (outname == NULL)
@@ -128,7 +114,7 @@ static void process(const char *srcdir,
 
 
     fprintf(output, "%s\n", AUTHOR_MESSAGE);
-    fprintf(output, "const char %s[] = {", shortname);
+    fprintf(output, "const char %s[] = {", common);
 
     for (i = 0; i < buflen; i++)
     {
@@ -141,18 +127,18 @@ static void process(const char *srcdir,
     fprintf(output, "\n};\n");
 
     fclose(output);
+    printf("written %s\n", outname);
 
 
-    strcpy(summary[filecount++], shortname);
+    strcpy(summary[filecount++], common);
 }
 
-static void genheader(const char *dstdir, const char *filename)
+static void genheader(const char *filename)
 {
     FILE *output;
     int i;
 
 
-    chdir(dstdir);
     output = fopen(filename, "w");
 
 
@@ -183,52 +169,27 @@ static void genheader(const char *dstdir, const char *filename)
 
 int main(int argc, char **argv)
 {
-    const char *dirname;
-    const char *outdirname;
-
-    DIR *dir;
-    struct dirent *entr;
-    struct stat st;
-
+    const char *destdir, *header, *source;
+    int i;
 
     if (argc < 3)
     {
-        fprintf(stderr, "no source and/or destination directory\n");
+        printf("usage: precompiler /foo/destination-dir "
+               "header.h source1.jpeg source2.txt\n");
         return 1;
     }
 
-    dirname = argv[1];
-    outdirname = argv[2];
+    destdir = argv[1];
+    header = argv[2];
 
-
-    dir = opendir(dirname);
-
-    if (dir == NULL)
+    for (i = 3; i < argc; i++)
     {
-        fprintf(stderr, "cannot open directory %s: %s\n",
-                dirname, strerror(errno));
-        return 1;
+        source = argv[i];
+
+        process(destdir, source);
     }
 
-
-    entr = readdir(dir);
-
-    while (entr != NULL)
-    {
-        lstat(entr->d_name, &st);
-
-        process(dirname, outdirname, entr->d_name);
-
-
-        entr = readdir(dir);
-    }
-
-
-
-    closedir(dir);
-
-
-    genheader(outdirname, "glsl.h");
+    genheader(header);
 
     return 0;
 }

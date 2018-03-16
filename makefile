@@ -3,28 +3,41 @@
  # 2018
  ##
 
+
 PROJECT = putgame
 BUILD_DIR = /tmp/${PROJECT}-build
-TARGET = ${BUILD_DIR}/${PROJECT}.elf
+
+CC = gcc
+CXX = g++
+
 CXXFLAGS = -Wall -O0 -MMD -I${BUILD_DIR}/pch
+CFLAGS = -Wall -O0
 LDFLAGS = -lglfw -lGLESv2
 
-
-PRECOMPILER = ${BUILD_DIR}/precompiler
-PRECOMPILER_MAKE = ${MAKE} -C precompiler/ BUILD_DIR=${BUILD_DIR} TARGET=${PRECOMPILER}
-
+TARGET = ${BUILD_DIR}/${PROJECT}.elf
+PRECOMPILER = ${BUILD_DIR}/precompiler.elf
 
 RES_SRC = resouces/
 RES_DST = ${BUILD_DIR}/resources
 RES_INC = ${RES_DST}/resources.h
+
+${shell mkdir -p ${RES_DST}}
+
 RES_SRC = ${shell find ${RES_DST} -name "*.c"}
 
 
-SRC_DIRS = . world/ common/ glutils/
-SRC = ${shell find ${SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 PCH = pch/putgame-std.hxx
 
-OBJ = ${SRC:%.cxx=${BUILD_DIR}/%.o}
+
+TARGET_SRC = ${shell find . world/ common/ glutils/ -maxdepth 1 -name "*.cxx"}
+
+PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
+
+
+TARGET_OBJ = ${TARGET_SRC:%=${BUILD_DIR}/%.o}
+PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${BUILD_DIR}/%.o}
+
+OBJ = ${TARGET_OBJ} ${PRECOMPILER_OBJ}
 DEP = ${OBJ:%.o=%.d}
 
 
@@ -41,21 +54,26 @@ precompiler: ${PRECOMPILER}
 debug:
 	gdb ${TARGET}
 
-${TARGET}: ${OBJ}
+${TARGET}: ${TARGET_OBJ}
 	${CXX} ${LDFLAGS} $^ -o $@
 
 ${BUILD_DIR}/%.gch: %
 	@mkdir -p ${dir $@}
 	${CXX} ${CXXFLAGS} -c -xc++-header $< -o $@
 
-${BUILD_DIR}/%.o: %.cxx ${BUILD_DIR}/${PCH}.gch ${RES_INC}
+${BUILD_DIR}/%.c.o: %.c
+	@mkdir -p ${dir $@}
+	${CC} ${CFLAGS} -c $< -o $@
+
+${BUILD_DIR}/%.cxx.o: %.cxx ${BUILD_DIR}/${PCH}.gch ${RES_INC}
 	@mkdir -p ${dir $@}
 	${CXX} ${CXXFLAGS} -c $< -o $@
 
-${PRECOMPILER}: 
-	${PRECOMPILER_MAKE} all
+${PRECOMPILER}: ${PRECOMPILER_OBJ}
+	${CC} ${LDFLAGS} $< -o $@
 
 ${RES_INC}: ${PRECOMPILER} ${RES_SRC}
-	$< --dst ${RES_DST} --header $@ $^
+	@mkdir -p ${dir $@} ${RES_SRC}
+	$< ${RES_DST} $@ ${RES_SRC}
 
 -include ${DEP}
