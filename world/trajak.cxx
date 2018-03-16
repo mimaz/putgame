@@ -4,7 +4,7 @@
  */
 
 #include <putgame-std.hxx>
-#include <putgame-resource.h>
+#include <putgame-res.h>
 
 #include "trajak.hxx"
 

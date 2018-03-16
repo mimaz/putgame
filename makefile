@@ -27,13 +27,13 @@ PRECOMPILER = ${PRECOMPILER_BUILD_DIR}/precompiler/precompiler
 ##
  # resources
  ##
-RESOURCE_H = ${TARGET_BUILD_DIR}/putgame-resource.h
+RESOURCE_H = ${TARGET_BUILD_DIR}/putgame-res.h
 
-GLSL = ${shell find glsl/ -type f}
+GLSL = ${shell find glsl/ -type f -not -name ".*"}
 GLSL_C = ${GLSL:%=${GLSL_C_DIR}/%.c}
 GLSL_O = ${GLSL_C:${GLSL_C_DIR}/%=${GLSL_O_DIR}/%.o}
 
-MESH = ${shell find mesh/ -type f}
+MESH = ${shell find mesh/ -type f -not -name ".*"}
 MESH_C = ${MESH:%=${MESH_C_DIR}/%.c}
 MESH_O = ${MESH_C:${MESH_C_DIR}/%=${MESH_O_DIR}/%.o}
 

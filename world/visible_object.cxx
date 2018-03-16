@@ -22,6 +22,11 @@ namespace world
         get_context()->unregister_object(this);
     }
 
+    void visible_object::detach()
+    {
+        ctx = nullptr;
+    }
+
     void visible_object::set_matrix(const glm::mat4 &mat)
     {
         model = mat;
@@ -39,4 +44,12 @@ namespace world
 
     void visible_object::draw()
     {}
+
+    context *visible_object::get_context() const
+    {
+        if (ctx == nullptr)
+            throw invalid_context();
+
+        return ctx;
+    }
 }

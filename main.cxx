@@ -8,6 +8,8 @@
 #include "world/context.hxx"
 #include "world/trajak.hxx"
 
+#include "glutils/exception.hxx"
+
 static void error_callback(int code, const char *desc)
 {
     std::cerr << "GLFW error: " << code << ": " << desc << std::endl;
@@ -73,22 +75,26 @@ int main(void)
 
     double next_time = glfwGetTime();
 
-    while (!glfwWindowShouldClose(win))
-    {
-        double time = glfwGetTime();
+    try {
+        while (!glfwWindowShouldClose(win))
+        {
+            double time = glfwGetTime();
 
-        if (time < next_time)
-            // TODO sleep?
-            continue;
+            if (time < next_time)
+                // TODO sleep?
+                continue;
 
-        next_time += 1.0 / 60;
-
-
-        ctx->draw_frame();
+            next_time += 1.0 / 60;
 
 
-        glfwSwapBuffers(win);
-        glfwPollEvents();
+            ctx->draw_frame();
+
+
+            glfwSwapBuffers(win);
+            glfwPollEvents();
+        }
+    } catch (glutils::shader_error e) {
+        std::cerr << "error: " << e.desc << std::endl;
     }
 
 

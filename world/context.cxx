@@ -6,8 +6,12 @@
 #include <putgame-std.hxx>
 
 #include "context.hxx"
+
 #include "trajak.hxx"
 #include "visible_object.hxx"
+#include "light_box.hxx"
+
+#include "../common/rgb_color.hxx"
 
 namespace world
 {
@@ -15,12 +19,21 @@ namespace world
         : width(0), height(0)
     {
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        glCullFace(GL_BACK);
 
         resize_frame(w, h);
+
+        box = new light_box(this, common::rgb_color::red);
+        box->move({ -4, 1, 6 });
     }
 
     context::~context()
-    {}
+    {
+        delete box;
+
+        for (auto obj : vis_objs)
+            obj->detach();
+    }
 
     void context::draw_frame()
     {

@@ -11,6 +11,7 @@
 namespace world
 {
     class visible_object;
+    class light_box;
 
     class context
     {
@@ -42,6 +43,8 @@ namespace world
 
         int width;
         int height;
+
+        light_box *box;
     };
 
       template<typename _Type>
