@@ -7,10 +7,11 @@
 #define __world_trajak_hxx
 
 #include "context_part.hxx"
-#include "shader.hxx"
-#include "program.hxx"
-#include "attribute.hxx"
-#include "uniform.hxx"
+
+#include "../glutils/shader.hxx"
+#include "../glutils/program.hxx"
+#include "../glutils/attribute.hxx"
+#include "../glutils/uniform.hxx"
 
 namespace world
 {

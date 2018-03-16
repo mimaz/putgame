@@ -7,7 +7,8 @@
 #define __world_light_box_hxx
 
 #include "visible_object.hxx"
-#include "rgb_color.hxx"
+
+#include "../common/rgb_color.hxx"
 
 namespace world
 {

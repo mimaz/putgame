@@ -5,8 +5,8 @@
 
 #include <putgame-std.hxx>
 
-#include "context.hxx"
-#include "trajak.hxx"
+#include "world/context.hxx"
+#include "world/trajak.hxx"
 
 static void error_callback(int code, const char *desc)
 {

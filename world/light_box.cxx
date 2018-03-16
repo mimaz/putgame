@@ -9,8 +9,9 @@
 
 #include "context_part.hxx"
 #include "context.hxx"
-#include "shader.hxx"
-#include "program.hxx"
+
+#include "../glutils/program.hxx"
+#include "../glutils/shader.hxx"
 
 constexpr auto size = 1.0f;
 
