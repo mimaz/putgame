@@ -44,7 +44,7 @@ CFLAGS = -Wall -O0 -MMD
 LDFLAGS = 
 
 TARGET_CFLAGS = ${CFLAGS}
-TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR}/pch -I${TARGET_BUILD_DIR} ${TARGET_CFLAGS}
+TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR} -I${TARGET_BUILD_DIR} ${TARGET_CFLAGS}
 TARGET_LDFLAGS = -lglfw -lGLESv2 ${LDFLAGS}
 
 PRECOMPILER_CFLAGS = ${CFLAGS}
@@ -64,7 +64,7 @@ PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 ##
  # pre-compiler header
  ##
-TARGET_PCH_SRC = pch/putgame-std.hxx
+TARGET_PCH_SRC = putgame-std.hxx
 TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC}.gch
 
 
