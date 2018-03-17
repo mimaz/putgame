@@ -16,7 +16,7 @@ void main()
     else if (v_type < 1.5)
         color = u_color * 0.5;
     else
-        color = vec3(1.0, 1.0, 1.0);
+        color = vec3(0.2, 0.2, 0.2);
 
     gl_FragColor = vec4(color, 1.0);
 }

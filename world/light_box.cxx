@@ -72,7 +72,7 @@ namespace
                                   GL_FALSE, sizeof(GLfloat) * 4,
                                   light_box_mesh + 3);
 
-            glDrawArrays(GL_TRIANGLES, 0, 60);
+            glDrawArrays(GL_TRIANGLES, 0, light_box_mesh_size / 3);
 
 
             a_coord.disable();
