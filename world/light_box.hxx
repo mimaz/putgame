@@ -8,26 +8,31 @@
 
 #include "visible_object.hxx"
 
-#include "../common/rgb_color.hxx"
-
 namespace world
 {
     class light_box : public visible_object
     {
     public:
-        light_box(context *ctx, common::rgb_color color);
+        enum color
+        {
+            red,
+            green,
+            blue,
+        };
+
+        light_box(context *ctx, color col);
 
         void draw() override;
 
-        void set_color(const common::rgb_color &color);
+        void set_color(color col);
         void set_speed(float speed);
 
-        common::rgb_color get_color() const { return color; }
+        color get_color() const { return col; }
         float get_speed() const { return speed; }
         float get_angle() const { return angle; }
 
     private:
-        common::rgb_color color;
+        color col;
 
         float speed;
         float angle;

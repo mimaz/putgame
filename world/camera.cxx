@@ -28,8 +28,8 @@ namespace world
     {
         view_mat = glm::translate(glm::mat4(1), glm::vec3(0, 0.0f, 4.0f));
 
-        rotate(PI / 10, { 0, 0, 1 });
-        move({ 1.5f, 0.0f, 0.0f });
+        //rotate(PI / 10, { 0, 1, 0 });
+        //move({ 1.5f, 0.0f, 0.0f });
     }
 
     camera::~camera()
@@ -90,8 +90,15 @@ namespace world
         return get_proj() * get_view() * model;
     }
 
+    glm::vec3 camera::get_position() const
+    {
+        // TODO it may be needed to invert w-axis
+        return glm::vec3(get_view() * glm::vec4(0, 0, 0, 1));
+    }
+
     glm::vec3 camera::get_direction() const
     {
+        // TODO it may be needed to invert z-axis
         return glm::vec3(get_view() * glm::vec4(0, 0, 1, 0));
     }
 }

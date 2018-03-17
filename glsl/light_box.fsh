@@ -13,14 +13,24 @@ void main()
 {
     lowp vec3 color;
 
-    lowp float fac = dot(v_normal, -v_coord) / length(v_coord);
-
     if (v_type < 0.5)
+    {
         color = u_color;
-    else if (v_type < 1.5)
-        color = u_color * 0.5 * fac;
+    }
     else
-        color = vec3(0.2, 0.2, 0.2) * fac;
+    {
+        if (v_type < 1.5)
+        {
+            color = u_color * 0.5;
+        }
+        else
+        {
+            color = vec3(0.25, 0.25, 0.25);
+        }
+
+        color = enlighted(color, v_normal, v_coord);
+    }
+
 
     gl_FragColor = vec4(color, 1.0);
 }

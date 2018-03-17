@@ -18,6 +18,7 @@ namespace glutils
         GLuint get_handle();
 
         void operator=(const GLfloat &);
+        void operator=(const GLint &);
         void operator=(const glm::vec2 &);
         void operator=(const glm::vec3 &);
         void operator=(const glm::vec4 &);

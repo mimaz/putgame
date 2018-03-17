@@ -35,6 +35,11 @@ namespace glutils
         glUniform1f(get_handle(), v);
     }
 
+    void uniform::operator=(const GLint &v)
+    {
+        glUniform1i(get_handle(), v);
+    }
+
     void uniform::operator=(const glm::vec2 &v)
     {
         glUniform2fv(get_handle(), 1, glm::value_ptr(v));

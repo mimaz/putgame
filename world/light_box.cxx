@@ -6,31 +6,56 @@
 #include <putgame-std.hxx>
 #include <putgame-res.h>
 
+#include <glutils/program.hxx>
+#include <glutils/shader.hxx>
+#include <glutils/attribute.hxx>
+#include <glutils/uniform.hxx>
+
+#include <common/rgb_color.hxx>
+#include <common/exception.hxx>
+
 #include "light_box.hxx"
 
 #include "context_part.hxx"
 #include "context.hxx"
 #include "camera.hxx"
+#include "lighting.hxx"
 
-#include "../glutils/program.hxx"
-#include "../glutils/shader.hxx"
-#include "../glutils/attribute.hxx"
-#include "../glutils/uniform.hxx"
 
 constexpr auto size = 1.0f;
-
-using common::rgb_color;
 
 
 namespace 
 {
+    common::rgb_color to_rgb(world::light_box::color col)
+    {
+        const auto bright = 1.0f;
+        const auto dim = 0.6f;
+
+        switch (col)
+        {
+            case world::light_box::red:
+                return common::rgb_color(bright, dim, dim);
+
+            case world::light_box::green:
+                return common::rgb_color(dim, bright, dim);
+
+            case world::light_box::blue:
+                return common::rgb_color(dim, dim, bright);
+        }
+
+        throw common::make_invalid_argument(col);
+    }
+
     class drawer : public world::context_part
     {
     public:
         drawer(world::context *ctx) 
             : context_part(ctx)
             , vsh(GL_VERTEX_SHADER, light_box_vsh)
-            , fsh(GL_FRAGMENT_SHADER, light_box_fsh)
+            , fsh(GL_FRAGMENT_SHADER, 
+                  world::lighting::fragment_source,
+                  light_box_fsh)
             , prog(&vsh, &fsh)
             , a_coord(&prog, "a_coord")
             , a_type(&prog, "a_type")
@@ -38,6 +63,7 @@ namespace
             , u_mvp(&prog, "u_mvp")
             , u_model(&prog, "u_model")
             , u_color(&prog, "u_color")
+            , light(std::make_unique<world::lighting>(ctx, &prog))
         {}
 
         void draw(world::light_box *box)
@@ -53,6 +79,9 @@ namespace
             a_normal.enable();
 
 
+            light->calculate();
+
+
             auto model = box->get_model();
 
             model = glm::rotate(model, box->get_angle(), 
@@ -64,7 +93,7 @@ namespace
 
             u_mvp = get_context()->get_part<world::camera>()->get_mvp(model);
             u_model = model;
-            u_color = box->get_color();
+            u_color = to_rgb(box->get_color());
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -77,6 +106,8 @@ namespace
             glVertexAttribPointer(a_normal, 3, GL_FLOAT,
                                   GL_FALSE, sizeof(GLfloat) * 7,
                                   light_box_mesh + 4);
+
+
 
             glDrawArrays(GL_TRIANGLES, 0, light_box_mesh_size / 3);
 
@@ -95,22 +126,24 @@ namespace
         glutils::uniform u_mvp;
         glutils::uniform u_model;
         glutils::uniform u_color;
+
+        std::unique_ptr<world::lighting> light;
     };
 }
 
 namespace world
 {
-    light_box::light_box(context *ctx, rgb_color color)
+    light_box::light_box(context *ctx, color col)
         : visible_object(ctx)
-        , color(color)
+        , col(col)
         , speed(0.05)
         , angle(0)
         , blur(0)
     {}
 
-    void light_box::set_color(const common::rgb_color &col)
+    void light_box::set_color(color c)
     {
-        color = col;
+        col = c;
     }
 
     void light_box::set_speed(float spd)

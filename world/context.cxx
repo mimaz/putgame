@@ -23,8 +23,8 @@ namespace world
 
         resize_frame(w, h);
 
-        box = new light_box(this, common::rgb_color::red);
-        box->move({ -4, 1, 6 });
+        box = new light_box(this, light_box::blue);
+        box->move({ 0, 0, 5 });
     }
 
     context::~context()
@@ -42,7 +42,7 @@ namespace world
         for (auto obj : vis_objs)
             obj->draw();
 
-        get_part<trajak>()->draw();
+        //get_part<trajak>()->draw();
     }
 
     void context::resize_frame(int w, int h)
