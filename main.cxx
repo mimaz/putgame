@@ -95,6 +95,8 @@ int main(void)
         }
     } catch (glutils::shader_error e) {
         std::cerr << "error: " << e.desc << std::endl;
+    } catch (glutils::location_error e) {
+        std::cerr << "error: " << e.name << std::endl;
     }
 
 

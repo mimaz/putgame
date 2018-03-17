@@ -18,7 +18,7 @@ namespace world
     context::context(int w, int h)
         : width(0), height(0)
     {
-        glClearColor(0.0f, 0.2f, 0.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glCullFace(GL_BACK);
 
         resize_frame(w, h);

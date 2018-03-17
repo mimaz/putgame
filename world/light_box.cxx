@@ -36,6 +36,7 @@ namespace
             , a_type(&prog, "a_type")
             , a_normal(&prog, "a_normal")
             , u_mvp(&prog, "u_mvp")
+            , u_model(&prog, "u_model")
             , u_color(&prog, "u_color")
         {}
 
@@ -49,6 +50,7 @@ namespace
 
             a_coord.enable();
             a_type.enable();
+            a_normal.enable();
 
 
             auto model = box->get_model();
@@ -61,22 +63,27 @@ namespace
                                 glm::vec3(1, 0, 0));
 
             u_mvp = get_context()->get_part<world::camera>()->get_mvp(model);
+            u_model = model;
             u_color = box->get_color();
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             glVertexAttribPointer(a_coord, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(GLfloat) * 4,
+                                  GL_FALSE, sizeof(GLfloat) * 7,
                                   light_box_mesh);
             glVertexAttribPointer(a_type, 1, GL_FLOAT,
-                                  GL_FALSE, sizeof(GLfloat) * 4,
+                                  GL_FALSE, sizeof(GLfloat) * 7,
                                   light_box_mesh + 3);
+            glVertexAttribPointer(a_normal, 3, GL_FLOAT,
+                                  GL_FALSE, sizeof(GLfloat) * 7,
+                                  light_box_mesh + 4);
 
             glDrawArrays(GL_TRIANGLES, 0, light_box_mesh_size / 3);
 
 
             a_coord.disable();
             a_type.disable();
+            a_normal.disable();
         }
 
         glutils::shader vsh;
@@ -86,6 +93,7 @@ namespace
         glutils::attribute a_type;
         glutils::attribute a_normal;
         glutils::uniform u_mvp;
+        glutils::uniform u_model;
         glutils::uniform u_color;
     };
 }
