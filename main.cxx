@@ -7,6 +7,8 @@
 
 #include "world/context.hxx"
 #include "world/trajak.hxx"
+#include "world/tunnel.hxx"
+#include "world/tunnel_mesh.hxx"
 
 #include "glutils/exception.hxx"
 
@@ -69,6 +71,10 @@ int main(void)
 
 
     auto ctx = std::make_unique<world::context>(default_width, default_height);
+
+    ctx->get_part<world::tunnel>()->append(1, 0, { 0, 1, 0 });
+    ctx->get_part<world::tunnel>()->append(1, 0, { 0, 1, 0 });
+
 
     glfwSetWindowUserPointer(win, ctx.get());
 

@@ -10,8 +10,7 @@
 #include "trajak.hxx"
 #include "visible_object.hxx"
 #include "light_box.hxx"
-
-#include "../common/rgb_color.hxx"
+#include "tunnel.hxx"
 
 namespace world
 {
@@ -42,7 +41,7 @@ namespace world
         for (auto obj : vis_objs)
             obj->draw();
 
-        //get_part<trajak>()->draw();
+        get_part<tunnel>()->draw();
     }
 
     void context::resize_frame(int w, int h)
