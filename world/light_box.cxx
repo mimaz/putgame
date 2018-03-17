@@ -3,8 +3,8 @@
  * 2018
  */
 
-#include <putgame-std.hxx>
-#include <putgame-res.h>
+#include <putgame-std>
+#include <putgame-res>
 
 #include <glutils/program.hxx>
 #include <glutils/shader.hxx>

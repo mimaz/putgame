@@ -27,7 +27,7 @@ PRECOMPILER = ${PRECOMPILER_BUILD_DIR}/precompiler/precompiler
 ##
  # resources
  ##
-RESOURCE_H = ${TARGET_BUILD_DIR}/putgame-res.h
+RESOURCE_H = ${TARGET_BUILD_DIR}/putgame-res
 
 GLSL = ${shell find glsl/ -type f -not -name ".*"}
 GLSL_C = ${GLSL:%=${GLSL_C_DIR}/%.c}
@@ -64,8 +64,8 @@ PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 ##
  # pre-compiler header
  ##
-TARGET_PCH_SRC = putgame-std.hxx
-TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC}.gch
+TARGET_PCH_SRC = pch/putgame-std.hxx
+TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC:pch/%.hxx=%.gch}
 
 
 ##
@@ -115,7 +115,7 @@ ${PRECOMPILER}: ${PRECOMPILER_OBJ}
 ##############################################
 
 # pre-compiled header
-${TARGET_BUILD_DIR}/%.gch: % 
+${TARGET_PCH_OBJ}: ${TARGET_PCH_SRC}
 	@mkdir -p ${dir $@}
 	${CXX} ${TARGET_CXXFLAGS} -c -xc++-header $< -o $@
 

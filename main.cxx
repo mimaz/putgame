@@ -3,7 +3,7 @@
  * 2018
  */
 
-#include <putgame-std.hxx>
+#include <putgame-std>
 
 #include "world/context.hxx"
 #include "world/trajak.hxx"
