@@ -19,7 +19,7 @@ namespace world
 {
     tunnel::tunnel(context *ctx)
         : context_part(ctx)
-        , model(std::make_shared<tunnel_model>(12, true, this))
+        , model(std::make_shared<tunnel_model>(2, 12, true, this))
     {}
 
     void tunnel::draw()

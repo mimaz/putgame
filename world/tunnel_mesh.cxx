@@ -12,7 +12,7 @@ namespace world
     tunnel_mesh::tunnel_mesh(int quality, float width, bool stripped)
         : quality(quality)
         , width(width)
-        , gap(PI * 2 / quality)
+        , gap(PI * sqrtf(3.0f) * width / quality)
     {
         const auto indices = quality * 2;
 
@@ -27,17 +27,12 @@ namespace world
          * therefore 4 bytes per vertex
          */
 
-        auto pushvert = [this, quality, width](int i, GLfloat layer) -> void {
-            auto angle = PI * 2 * i / quality;
-
-            GLfloat x = cosf(angle) * width;
-            GLfloat y = sinf(angle) * width;
-            GLfloat z = 0;
-
+        auto pushvert = [this](GLfloat x, GLfloat y, 
+                               GLfloat z, GLfloat l) -> void {
             vdata.push_back(x);
             vdata.push_back(y);
             vdata.push_back(z);
-            vdata.push_back(layer);
+            vdata.push_back(l);
         };
 
         auto pushindex = [this, indices](int i) -> void {
@@ -46,8 +41,14 @@ namespace world
 
         for (int i = 0; i < quality; i++)
         {
-            pushvert(i, 0);
-            pushvert(i, 1);
+            auto angle = PI * 2 * i / quality;
+
+            GLfloat x = cosf(angle) * width;
+            GLfloat y = sinf(angle) * width;
+            GLfloat z = 0;
+
+            pushvert(x, y, z, 0);
+            pushvert(x, y, z, 1);
 
             pushindex(i * 2);
             pushindex((i + 1) * 2 + 1);

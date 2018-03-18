@@ -15,27 +15,34 @@
 
 namespace world
 {
+    class camera;
     class tunnel;
+    class tunnel_path;
 
     class tunnel_model
     {
     public:
         class frame;
 
-        tunnel_model(int quality, bool stripped, tunnel *tun);
+        tunnel_model(float width, int quality, bool stripped, tunnel *tun);
 
         ~tunnel_model();
+
 
         void gen_frame();
 
         void draw();
 
+        const frame &get_last_frame() const { return frames.back(); }
+
     private:
         std::deque<frame> frames;
         tunnel_mesh mesh;
 
-        tunnel *tun;
-        int path_frame_id;
+        tunnel_path *path;
+        camera *cam;
+
+        int path_segment_id;
 
         glutils::shader vsh;
         glutils::shader fsh;
@@ -48,18 +55,19 @@ namespace world
     class tunnel_model::frame
     {
     public:
-        frame(int index, const glm::mat4 &matrix);
+        frame(const glm::mat4 &matrix, int index);
 
         frame(const frame &) = default;
         frame(frame &&) = default;
 
-        int get_index() const { return index; }
         const glm::mat4 &get_matrix() const { return matrix; }
+        int get_index() const { return index; }
+
         float distance(const glm::vec3 &point) const;
 
     private:
-        int index;
         glm::mat4 matrix;
+        int index;
     };
 }
 

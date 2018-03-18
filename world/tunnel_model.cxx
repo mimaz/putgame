@@ -11,14 +11,29 @@
 #include "tunnel.hxx"
 #include "camera.hxx"
 #include "context.hxx"
-#include "path.hxx"
+#include "tunnel_path.hxx"
+
+namespace
+{
+    inline glm::vec3 get_position(const glm::mat4 &matrix)
+    {
+        return glm::vec3(matrix * glm::vec4(0, 0, 0, 1));
+    }
+
+    inline glm::vec3 get_direction(const glm::mat4 &matrix)
+    {
+        return glm::vec3(matrix * glm::vec4(0, 0, 1, 0));
+    }
+}
 
 namespace world
 {
-    tunnel_model::tunnel_model(int quality, bool stripped, tunnel *tun)
-        : mesh(quality, tunnel::width, stripped)
-        , tun(tun)
-        , path_frame_id(0)
+    tunnel_model::tunnel_model(float width, int quality, 
+                               bool stripped, tunnel *tun)
+        : mesh(quality, width, stripped)
+        , path(tun->get_context()->get_part<tunnel_path>())
+        , cam(tun->get_context()->get_part<camera>())
+        , path_segment_id(0)
         , vsh(GL_VERTEX_SHADER, tunnel_vsh)
         , fsh(GL_FRAGMENT_SHADER, tunnel_fsh)
         , prog(&vsh, &fsh)
@@ -37,92 +52,59 @@ namespace world
     {
         if (frames.empty())
         {
-            frames.push_back(frame(0, glm::mat4(1))); 
+            frames.push_back(frame(glm::mat4(1), 0)); 
             return;
         }
 
 
+        auto calc_target_coord = [this](void) -> glm::vec3 {
+            auto mat = path->get_by_id(path_segment_id).get_matrix();
 
-        auto pt = tun->get_context()->get_part<path>();
-
-
-        auto last = [this]() -> const frame & {
-            return frames.back();
-        };
-
-        auto calc_coord = [](const glm::mat4 &matrix) -> glm::vec3 {
-            return glm::vec3(matrix * glm::vec4(0, 0, 0, 1));
-        };
-
-        auto calc_direction = [](const glm::mat4 &matrix) -> glm::vec3 {
-            return glm::vec3(matrix * glm::vec4(0, 0, 1, 0));
-        };
-
-        auto calc_last_coord = [this, last, calc_coord](void) -> glm::vec3 {
-            auto mat = last().get_matrix();
-
-            return calc_coord(mat);
-        };
-
-        auto calc_path_coord = [this, pt, calc_coord](void) -> glm::vec3 {
-            auto mat = pt->get_by_id(path_frame_id).get_matrix();
-
-            return calc_coord(mat);
+            return get_position(mat);
         };
 
 
-        auto last_coord = calc_last_coord();
-        auto path_coord = calc_path_coord();
+        auto last_coord = get_position(get_last_frame().get_matrix());
+        auto target_coord = calc_target_coord();
 
 
-        auto get_dist = [&path_coord, &last_coord]() -> float {
-            return glm::length(path_coord - last_coord);
-        };
+        auto gap = mesh.get_gap();
 
 
-        while (get_dist() < 1)
+        while (glm::length(target_coord - last_coord) < gap)
         {
-            path_frame_id++;
-            path_coord = calc_path_coord();
+            path_segment_id++;
+            target_coord = calc_target_coord();
         }
 
-        auto index = last().get_index() + 1;
-        auto transform = pt->get_by_id(path_frame_id).get_matrix();
 
 
-        auto last_direction = calc_direction(last().get_matrix());
-        auto new_direction = path_coord - last_coord;
+        auto last_direction = glm::normalize(
+            get_direction(get_last_frame().get_matrix())
+        );
 
-        last_direction = glm::normalize(last_direction);
-        new_direction = glm::normalize(new_direction);
+        auto new_direction = glm::normalize(
+            target_coord - last_coord
+        );
 
-        // TODO order
-        auto cross_axis = glm::cross(last_direction, new_direction);
-        cross_axis = glm::normalize(cross_axis);
+        auto axis = glm::normalize(
+            glm::cross(last_direction, new_direction)
+        );
 
+        auto angle = acosf(
+            glm::dot(new_direction, last_direction)
+        );
 
-        auto angle = glm::dot(new_direction, last_direction);
+        
+        auto index = get_last_frame().get_index() + 1;
+        auto transform = get_last_frame().get_matrix();
 
-        angle = acosf(angle);
-
-        std::cout << "last direction: " << last_direction << std::endl;
-        std::cout << "new direction: " << new_direction << std::endl;
-        std::cout << "cross: " << cross_axis << std::endl;
-        std::cout << "angle: " << angle << std::endl;
-
-
-
-        transform = glm::mat4(1);
-
-        transform = last().get_matrix();
-
-        transform = glm::translate(transform, glm::vec3(0, 0, 0.4));
-
-        transform = glm::rotate(transform, angle, cross_axis);
+        transform = glm::translate(transform, glm::vec3(0, 0, gap));
+        transform = glm::rotate(transform, angle, axis);
 
 
 
-        frames.emplace_back(index, transform);
+        frames.emplace_back(transform, index);
     }
 
     void tunnel_model::draw()
@@ -139,7 +121,6 @@ namespace world
         a_layer.enable();
 
 
-        auto cam = tun->get_context()->get_part<world::camera>();
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -148,7 +129,7 @@ namespace world
             auto fr1 = it[-1];
             auto fr2 = it[0];
 
-            auto make_mvp = [cam](const frame &fr) -> glm::mat4 {
+            auto make_mvp = [this](const frame &fr) -> glm::mat4 {
                 auto idx = fr.get_index();
                 auto axis = glm::vec3(0, 0, 1);
                 auto rot = glm::rotate(glm::mat4(1), -PI / 12 * idx, axis);
@@ -181,9 +162,9 @@ namespace world
         a_layer.disable();
     }
 
-    tunnel_model::frame::frame(int index, const glm::mat4 &matrix)
-        : index(index)
-        , matrix(matrix)
+    tunnel_model::frame::frame(const glm::mat4 &matrix, int index)
+        : matrix(matrix)
+        , index(index)
     {}
 
     float tunnel_model::frame::distance(const glm::vec3 &point) const

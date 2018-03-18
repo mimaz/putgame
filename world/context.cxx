@@ -11,6 +11,7 @@
 #include "visible_object.hxx"
 #include "light_box.hxx"
 #include "tunnel.hxx"
+#include "camera.hxx"
 
 namespace world
 {
@@ -37,6 +38,7 @@ namespace world
             obj->draw();
 
         get_part<tunnel>()->draw();
+        get_part<camera>()->rotate(PI / 200, { 0, 1, 0 });
     }
 
     void context::resize_frame(int w, int h)

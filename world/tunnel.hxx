@@ -17,9 +17,6 @@ namespace world
     public:
         class frame;
 
-        static constexpr float width = 2;
-
-
         tunnel(context *ctx);
 
         void draw();
