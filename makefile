@@ -27,7 +27,7 @@ PRECOMPILER = ${PRECOMPILER_BUILD_DIR}/precompiler/precompiler
 ##
  # resources
  ##
-RESOURCE_H = ${TARGET_BUILD_DIR}/putgame-res
+RESOURCE_HEADER = ${TARGET_BUILD_DIR}/putgame-res
 
 GLSL = ${shell find glsl/ -type f -not -name ".*"}
 GLSL_C = ${GLSL:%=${GLSL_C_DIR}/%.c}
@@ -92,7 +92,7 @@ pch: ${TARGET_PCH_OBJ}
 
 prec: ${PRECOMPILER}
 
-res: ${RESOURCE_H}
+res: ${RESOURCE_HEADER}
 
 debug:
 	gdb ${TARGET}
@@ -142,13 +142,13 @@ ${MESH_C_DIR}/%.c: % ${PRECOMPILER}
 	${PRECOMPILER} mesh $< $@
 	
 # auto-generated header
-${RESOURCE_H}: ${GLSL_C} ${MESH_C}
+${RESOURCE_HEADER}: ${GLSL_C} ${MESH_C}
 	${PRECOMPILER} header $@ $^
 
 ##############################################
 
 # target objects
-${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${TARGET_PCH_OBJ} | ${RESOURCE_H}
+${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${TARGET_PCH_OBJ} | ${RESOURCE_HEADER}
 	@mkdir -p ${dir $@}
 	${CXX} ${TARGET_CXXFLAGS} -c $< -o $@
 
@@ -156,4 +156,4 @@ ${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${TARGET_PCH_OBJ} | ${RESOURCE_H}
 ${TARGET}: ${TARGET_OBJ}
 	${CXX} ${TARGET_LDFLAGS} $^ -o $@
 
--include ${ALL_DEP}
+#-include ${ALL_DEP}

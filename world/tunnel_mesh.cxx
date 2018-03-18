@@ -9,11 +9,12 @@
 
 namespace world
 {
-    tunnel_mesh::tunnel_mesh(int quality)
+    tunnel_mesh::tunnel_mesh(int quality, float width, bool stripped)
+        : quality(quality)
+        , width(width)
+        , gap(0)
     {
-        const auto triangles = quality;
-
-        vertices = triangles * 3;
+        const auto indices = quality * 2;
 
         /*
          * data layout
@@ -26,31 +27,38 @@ namespace world
          * therefore 4 bytes per vertex
          */
 
-        GLfloat *data = new GLfloat[vertices * 4];
-
-
-        auto ptr = data;
-
-        auto pushvert = [&ptr, quality](int i, GLfloat layer) -> void {
+        auto pushvert = [this, quality, width](int i, GLfloat layer) -> void {
             auto angle = PI * 2 * i / quality;
 
-            GLfloat x = cosf(angle);
-            GLfloat y = sinf(angle);
+            GLfloat x = cosf(angle) * width;
+            GLfloat y = sinf(angle) * width;
             GLfloat z = 0;
 
-            *ptr++ = x;
-            *ptr++ = y;
-            *ptr++ = z;
-            *ptr++ = layer;
+            vdata.push_back(x);
+            vdata.push_back(y);
+            vdata.push_back(z);
+            vdata.push_back(layer);
+        };
+
+        auto pushindex = [this, indices](int i) -> void {
+            idata.push_back(static_cast<GLushort>(i % indices));
         };
 
         for (int i = 0; i < quality; i++)
         {
-            pushvert(i + 0, 0);
-            pushvert(i + 0, 1);
-            pushvert(i + 1, 0);
-        }
+            pushvert(i, 0);
+            pushvert(i, 1);
 
-        vdata = std::shared_ptr<GLfloat>(data);
+            pushindex(i * 2);
+            pushindex((i + 1) * 2 + 1);
+            pushindex(i * 2 + 1);
+
+            if (not stripped)
+            {
+                pushindex(i * 2);
+                pushindex((i + 1) * 2);
+                pushindex((i + 1) * 2 + 1);
+            }
+        }
     }
 }

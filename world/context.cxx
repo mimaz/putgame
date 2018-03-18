@@ -21,15 +21,10 @@ namespace world
         glCullFace(GL_BACK);
 
         resize_frame(w, h);
-
-        box = new light_box(this, light_box::blue);
-        box->move({ 0, 0, 5 });
     }
 
     context::~context()
     {
-        delete box;
-
         for (auto obj : vis_objs)
             obj->detach();
     }

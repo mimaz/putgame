@@ -11,7 +11,10 @@
 
 extern const char *author_message;
 
-static FILE *input, *output;
+static FILE *input;
+
+static char headerbuf[16386];
+static char *buffptr;
 
 static void findpatt(const char *patt)
 {
@@ -23,10 +26,7 @@ static void findpatt(const char *patt)
         c = fgetc(input);
 
         if (c < 0)
-        {
-            fprintf(stderr, "missing \"%s\" comment\n", patt);
-            exit(1);
-        }
+            break;
 
         if (c == patt[idx])
         {
@@ -65,16 +65,57 @@ static void handlefile(void)
     fscanf(input, "%d", &size);
 
 
+    buffptr += sprintf(buffptr, "extern const %s %s[];\n", datatype, symbol);
+    buffptr += sprintf(buffptr, "#define %s_size %d\n\n", symbol, size);
+}
 
-    fprintf(output, "extern const %s %s[];\n", datatype, symbol);
-    fprintf(output, "#define %s_size %d\n\n", symbol, size);
+static void update(const char *outname)
+{
+    static char lastbuf[16386];
+
+    FILE *last, *output;
+    int lastsiz, bufsiz, skip;
+
+
+    bufsiz = buffptr - headerbuf;
+
+
+    last = fopen(outname, "r");
+
+    if (last != NULL)
+    {
+        lastsiz = fread(lastbuf, 1, sizeof(lastbuf), last);
+
+        fclose(last);
+    }
+    else
+    {
+        lastsiz = -1;
+    }
+
+
+    skip = lastsiz == bufsiz && memcmp(lastbuf, headerbuf, bufsiz) == 0;
+
+
+
+
+    output = fopen(outname, "w");
+
+    if (output == NULL)
+    {
+        fprintf(stderr, "failed to open file %s to write: %s\n",
+                outname, strerror(errno));
+        exit(1);
+    }
+
+    if (! skip)
+        fwrite(headerbuf, 1, buffptr - headerbuf, output);
+
+    fclose(output);
 }
 
 static void closefiles(void)
 {
-    if (output != NULL)
-        fclose(output);
-
     if (input != NULL)
         fclose(input);
 }
@@ -93,14 +134,6 @@ void header(int argc, char **argv)
     }
 
 
-    output = fopen(argv[2], "w");
-
-    if (output == NULL)
-    {
-        fprintf(stderr, "failed to open file %s to write: %s\n",
-                argv[2], strerror(errno));
-        exit(1);
-    }
 
 
     atexit(closefiles);
@@ -114,9 +147,11 @@ void header(int argc, char **argv)
             unitname[i] = '_';
     }
 
-    fprintf(output, "%s\n", author_message);
-    fprintf(output, "#ifndef __%s\n", unitname);
-    fprintf(output, "#define __%s\n\n", unitname);
+    buffptr = headerbuf;
+
+    buffptr += sprintf(buffptr, "%s\n", author_message);
+    buffptr += sprintf(buffptr, "#ifndef __%s\n", unitname);
+    buffptr += sprintf(buffptr, "#define __%s\n", unitname);
 
     
     for (i = 3; i < argc; i++)
@@ -128,8 +163,17 @@ void header(int argc, char **argv)
 
         input = fopen(src, "r");
 
-        handlefile();
+        if (input != NULL)
+        {
+            handlefile();
+
+            fclose(input);
+            input = NULL;
+        }
     }
 
-    fprintf(output, "#endif\n");
+    buffptr += sprintf(buffptr, "#endif\n");
+
+
+    update(argv[2]);
 }

@@ -27,7 +27,7 @@ namespace world
 
         drawer(context *ctx)
             : context_part(ctx)
-            , mesh(12)
+            , mesh(12, 2, true)
             , vsh(GL_VERTEX_SHADER, tunnel_vsh)
             , fsh(GL_FRAGMENT_SHADER, tunnel_fsh)
             , prog(&vsh, &fsh)
@@ -38,7 +38,7 @@ namespace world
 
         void draw_begin()
         {
-            glDisable(GL_CULL_FACE);
+            glEnable(GL_CULL_FACE);
 
             prog.use();
 
@@ -54,9 +54,18 @@ namespace world
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
+            auto make_mvp = [cam](const frame &fr) -> glm::mat4 {
+                auto idx = fr.get_index();
+                auto axis = glm::vec3(0, 0, 1);
+                auto rot = glm::rotate(glm::mat4(1), -PI / 12 * idx, axis);
+
+                return cam->get_mvp(fr.get_model() * rot);
+            };
+
+
             glm::mat4 mvp_v[2] = {
-                cam->get_mvp(fr1.get_model()),
-                cam->get_mvp(fr2.get_model()),
+                make_mvp(fr1),
+                make_mvp(fr2),
             };
 
             glUniformMatrix4fv(u_mvp_v.get_handle(), 2, GL_FALSE, 
@@ -64,13 +73,14 @@ namespace world
 
             glVertexAttribPointer(a_coord, 3, GL_FLOAT,
                                   GL_FALSE, sizeof(GLfloat) * 4,
-                                  mesh.vdata.get());
+                                  mesh.get_vertex_ptr());
             glVertexAttribPointer(a_layer, 1, GL_FLOAT,
                                   GL_FALSE, sizeof(GLfloat) * 4,
-                                  mesh.vdata.get() + 3);
+                                  mesh.get_vertex_ptr() + 3);
 
 
-            glDrawArrays(GL_TRIANGLES, 0, mesh.vertices);
+            glDrawElements(GL_TRIANGLES, mesh.get_index_count(), 
+                           GL_UNSIGNED_SHORT, mesh.get_index_ptr());
         }
 
         void draw_end()
