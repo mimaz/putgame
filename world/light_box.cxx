@@ -94,7 +94,7 @@ namespace
             model = glm::rotate(model, box->get_angle() / 3, 
                                 glm::vec3(1, 0, 0));
 
-            u_mvp = get_context()->get_part<world::camera>()->get_mvp(model);
+            u_mvp = get_context()->get_part<world::camera>()->make_mvp(model);
             u_model = model;
             u_color = to_rgb(box->get_color());
 

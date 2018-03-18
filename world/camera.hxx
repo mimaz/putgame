@@ -26,7 +26,7 @@ namespace world
 
         glm::mat4 get_proj() const;
         glm::mat4 get_view() const;
-        glm::mat4 get_mvp(const glm::mat4 &model) const;
+        glm::mat4 make_mvp(const glm::mat4 &model) const;
 
         glm::vec3 get_position() const;
         glm::vec3 get_direction() const;

@@ -10,6 +10,7 @@
 #include <glutils/program.hxx>
 #include <glutils/uniform.hxx>
 #include <glutils/attribute.hxx>
+#include <glutils/buffer.hxx>
 
 #include "tunnel_mesh.hxx"
 
@@ -50,6 +51,8 @@ namespace world
         glutils::attribute a_coord;
         glutils::attribute a_layer;
         glutils::uniform u_mvp_v;
+        glutils::buffer vbo;
+        glutils::buffer ibo;
     };
 
     class tunnel_model::frame

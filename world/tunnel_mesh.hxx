@@ -16,15 +16,17 @@ namespace world
         void draw();
 
         const GLfloat *get_vertex_ptr() const { return vdata.data(); }
-        const GLushort *get_index_ptr() const { return idata.data(); }
-        GLuint get_index_count() const { return idata.size(); }
+        const GLubyte *get_index_ptr() const { return idata.data(); }
+
+        GLuint get_vertex_data_size() const;
+        GLuint get_index_count() const;
 
         int get_quality() const { return quality; }
         float get_gap() const { return gap; }
 
     private:
         std::vector<GLfloat> vdata;
-        std::vector<GLushort> idata;
+        std::vector<GLubyte> idata;
 
         int quality;
         float width;

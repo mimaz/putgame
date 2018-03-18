@@ -40,6 +40,10 @@ namespace world
         , a_coord(&prog, "a_coord")
         , a_layer(&prog, "a_layer")
         , u_mvp_v(&prog, "u_mvp_v")
+        , vbo(GL_ARRAY_BUFFER, mesh.get_vertex_ptr(), 
+              mesh.get_vertex_data_size())
+        , ibo(GL_ELEMENT_ARRAY_BUFFER, mesh.get_index_ptr(),
+              mesh.get_index_count())
     {
         for (int i = 0; i < 10; i++)
             gen_frame();
@@ -122,7 +126,25 @@ namespace world
 
 
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        vbo.bind();
+        ibo.bind();
+
+
+        auto offset = [](int n) -> void * {
+            return reinterpret_cast<void *>(n * sizeof(GLfloat));
+        };
+
+        auto stride = sizeof(GLfloat) * 4;
+
+
+        glVertexAttribPointer(a_coord, 3, GL_FLOAT,
+                              GL_FALSE, stride,
+                              offset(0));
+
+        glVertexAttribPointer(a_layer, 1, GL_FLOAT,
+                              GL_FALSE, stride,
+                              offset(3));
+
 
         for (auto it = frames.begin() + 1; it != frames.end(); it++)
         {
@@ -131,10 +153,11 @@ namespace world
 
             auto make_mvp = [this](const frame &fr) -> glm::mat4 {
                 auto idx = fr.get_index();
+                auto angle = -PI / mesh.get_quality() * idx;
                 auto axis = glm::vec3(0, 0, 1);
-                auto rot = glm::rotate(glm::mat4(1), -PI / 12 * idx, axis);
+                auto rot = glm::rotate(glm::mat4(1), angle, axis);
 
-                return cam->get_mvp(fr.get_matrix() * rot);
+                return cam->make_mvp(fr.get_matrix() * rot);
             };
 
 
@@ -146,16 +169,9 @@ namespace world
             glUniformMatrix4fv(u_mvp_v.get_handle(), 2, GL_FALSE, 
                                glm::value_ptr(mvp_v[0]));
 
-            glVertexAttribPointer(a_coord, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(GLfloat) * 4,
-                                  mesh.get_vertex_ptr());
-            glVertexAttribPointer(a_layer, 1, GL_FLOAT,
-                                  GL_FALSE, sizeof(GLfloat) * 4,
-                                  mesh.get_vertex_ptr() + 3);
-
 
             glDrawElements(GL_TRIANGLES, mesh.get_index_count(), 
-                           GL_UNSIGNED_SHORT, mesh.get_index_ptr());
+                           GL_UNSIGNED_BYTE, 0);
         }
 
         a_coord.disable();

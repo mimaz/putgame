@@ -36,7 +36,7 @@ namespace world
         auto model = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
         model = glm::rotate(model, PI / 14, glm::vec3(0, 1, 0));
 
-        u_matrix = get_context()->get_part<camera>()->get_mvp(model);
+        u_matrix = get_context()->get_part<camera>()->make_mvp(model);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glVertexAttribPointer(a_coord, 2, GL_FLOAT, 

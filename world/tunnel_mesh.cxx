@@ -36,7 +36,7 @@ namespace world
         };
 
         auto pushindex = [this, indices](int i) -> void {
-            idata.push_back(static_cast<GLushort>(i % indices));
+            idata.push_back(static_cast<GLubyte>(i % indices));
         };
 
         for (int i = 0; i < quality; i++)
@@ -61,5 +61,15 @@ namespace world
                 pushindex((i + 1) * 2 + 1);
             }
         }
+    }
+
+    GLuint tunnel_mesh::get_vertex_data_size() const
+    {
+        return vdata.size() * sizeof(GLfloat);
+    }
+
+    GLuint tunnel_mesh::get_index_count() const
+    {
+        return idata.size();
     }
 }

@@ -38,7 +38,7 @@ namespace world
             obj->draw();
 
         get_part<tunnel>()->draw();
-        get_part<camera>()->rotate(PI / 200, { 0, 1, 0 });
+        //get_part<camera>()->rotate(PI / 200, { 0, 1, 0 });
     }
 
     void context::resize_frame(int w, int h)

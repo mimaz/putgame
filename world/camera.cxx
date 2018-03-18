@@ -28,7 +28,7 @@ namespace world
     {
         view_mat = glm::translate(glm::mat4(1), glm::vec3(0, 0.0f, 4.0f));
 
-        move({ 0.0f, 0.0f, 6.0f });
+        move({ 0.0f, 0.0f, 0.0f });
     }
 
     camera::~camera()
@@ -84,7 +84,7 @@ namespace world
         return view_mat;
     }
 
-    glm::mat4 camera::get_mvp(const glm::mat4 &model) const
+    glm::mat4 camera::make_mvp(const glm::mat4 &model) const
     {
         return get_proj() * get_view() * model;
     }
