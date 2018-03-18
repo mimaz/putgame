@@ -31,7 +31,7 @@ namespace world
         void draw();
 
     private:
-        std::deque<frame> list;
+        std::deque<frame> frames;
         tunnel_mesh mesh;
 
         tunnel *tun;

@@ -35,9 +35,9 @@ namespace world
 
     void tunnel_model::gen_frame()
     {
-        if (list.empty())
+        if (frames.empty())
         {
-            list.push_back(frame(0, glm::mat4(1))); 
+            frames.push_back(frame(0, glm::mat4(1))); 
             return;
         }
 
@@ -47,7 +47,7 @@ namespace world
 
 
         auto last = [this]() -> const frame & {
-            return list.back();
+            return frames.back();
         };
 
         auto calc_coord = [](const glm::mat4 &matrix) -> glm::vec3 {
@@ -89,12 +89,45 @@ namespace world
         auto index = last().get_index() + 1;
         auto transform = pt->get_by_id(path_frame_id).get_matrix();
 
-        list.emplace_back(index, transform);
+
+        auto last_direction = calc_direction(last().get_matrix());
+        auto new_direction = path_coord - last_coord;
+
+        last_direction = glm::normalize(last_direction);
+        new_direction = glm::normalize(new_direction);
+
+        // TODO order
+        auto cross_axis = glm::cross(last_direction, new_direction);
+        cross_axis = glm::normalize(cross_axis);
+
+
+        auto angle = glm::dot(new_direction, last_direction);
+
+        angle = acosf(angle);
+
+        std::cout << "last direction: " << last_direction << std::endl;
+        std::cout << "new direction: " << new_direction << std::endl;
+        std::cout << "cross: " << cross_axis << std::endl;
+        std::cout << "angle: " << angle << std::endl;
+
+
+
+        transform = glm::mat4(1);
+
+        transform = last().get_matrix();
+
+        transform = glm::translate(transform, glm::vec3(0, 0, 0.4));
+
+        transform = glm::rotate(transform, angle, cross_axis);
+
+
+
+        frames.emplace_back(index, transform);
     }
 
     void tunnel_model::draw()
     {
-        if (list.empty())
+        if (frames.empty())
             return;
 
 
@@ -110,7 +143,7 @@ namespace world
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        for (auto it = list.begin() + 1; it != list.end(); it++)
+        for (auto it = frames.begin() + 1; it != frames.end(); it++)
         {
             auto fr1 = it[-1];
             auto fr2 = it[0];
