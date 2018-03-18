@@ -13,7 +13,8 @@ namespace
     // basing on its base length
     inline float triangle_height(float base)
     {
-        return base * (sqrtf(3) / 2);
+        //return base * (sqrtf(3) / 2);
+        return base * 2;
     }
 }
 

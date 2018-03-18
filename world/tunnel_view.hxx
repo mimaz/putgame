@@ -3,8 +3,8 @@
  * 2018
  */
 
-#ifndef __world_tunnel_model_hxx
-#define __world_tunnel_model_hxx
+#ifndef __world_tunnel_view_hxx
+#define __world_tunnel_view_hxx
 
 #include <glutils/shader.hxx>
 #include <glutils/program.hxx>
@@ -22,14 +22,14 @@ namespace world
     class tunnel_path;
     class tunnel_data;
 
-    class tunnel_model
+    class tunnel_view
     {
     public:
         class frame;
 
-        tunnel_model(float width, int quality, bool stripped, tunnel *tun);
+        tunnel_view(float width, int quality, bool stripped, tunnel *tun);
 
-        ~tunnel_model();
+        ~tunnel_view();
 
 
         void gen_frame();
@@ -65,7 +65,7 @@ namespace world
         glutils::buffer ibo;
     };
 
-    class tunnel_model::frame
+    class tunnel_view::frame
     {
     public:
         frame(const glm::mat4 &matrix, int index);

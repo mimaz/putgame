@@ -22,9 +22,11 @@ void main()
 {
     lowp float inter = sharpen(v_random, steps);
 
-    lowp float red = 1.0;
-    lowp float green = 1.0 - inter;
-    lowp float blue = 1.0 - inter;
+    lowp float v = 0.25 + inter * 0.7;
+
+    lowp float red = v;
+    lowp float green = v;
+    lowp float blue = v;
 
     lowp vec3 color = vec3(red, green, blue);
 

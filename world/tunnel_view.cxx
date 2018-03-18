@@ -6,7 +6,7 @@
 #include <putgame-std>
 #include <putgame-res>
 
-#include "tunnel_model.hxx"
+#include "tunnel_view.hxx"
 
 #include "tunnel.hxx"
 #include "tunnel_path.hxx"
@@ -39,7 +39,7 @@ namespace
 
 namespace world
 {
-    tunnel_model::tunnel_model(float width, int quality, 
+    tunnel_view::tunnel_view(float width, int quality, 
                                bool stripped, tunnel *tun)
         : mesh(quality, width, stripped)
         , path(tun->get_context()->get_part<tunnel_path>())
@@ -70,10 +70,10 @@ namespace world
             gen_frame();
     }
 
-    tunnel_model::~tunnel_model()
+    tunnel_view::~tunnel_view()
     {}
 
-    void tunnel_model::gen_frame()
+    void tunnel_view::gen_frame()
     {
         if (frames.empty())
         {
@@ -132,7 +132,7 @@ namespace world
         frames.emplace_back(transform, index);
     }
 
-    void tunnel_model::draw()
+    void tunnel_view::draw()
     {
         if (frames.empty())
             return;
@@ -219,13 +219,13 @@ namespace world
         a_index.disable();
     }
 
-    tunnel_model::frame::frame(const glm::mat4 &matrix, int index)
+    tunnel_view::frame::frame(const glm::mat4 &matrix, int index)
         : matrix(matrix)
         , index(index)
         , hash(frame_hash(matrix, index))
     {}
 
-    float tunnel_model::frame::distance(const glm::vec3 &point) const
+    float tunnel_view::frame::distance(const glm::vec3 &point) const
     {
         glm::vec3 coord = glm::vec3(get_matrix() * glm::vec4(0, 0, 0, 1));
 

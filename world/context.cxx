@@ -38,7 +38,6 @@ namespace world
             obj->draw();
 
         get_part<tunnel>()->draw();
-        //get_part<camera>()->rotate(PI / 200, { 0, 1, 0 });
     }
 
     void context::resize_frame(int w, int h)
@@ -47,6 +46,10 @@ namespace world
         height = h;
 
         glViewport(0, 0, w, h);
+
+        auto ratio = static_cast<float>(w) / h;
+
+        get_part<camera>()->set_view_ratio(ratio);
     }
 
     void context::register_object(visible_object *obj)

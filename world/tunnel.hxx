@@ -10,7 +10,7 @@
 
 namespace world
 {
-    class tunnel_model;
+    class tunnel_view;
 
     class tunnel : public context_part
     {
@@ -21,8 +21,22 @@ namespace world
 
         void draw();
 
+        void set_width(int width);
+        void set_quality(int quality);
+        void set_stripped(bool stripped);
+
+        int get_width() const { return width; }
+        int get_quality() const { return quality; }
+        bool is_stripped() const { return stripped; }
+
+        tunnel_view *get_view();
+
     private:
-        std::shared_ptr<tunnel_model> model;
+        std::shared_ptr<tunnel_view> view;
+
+        int width;
+        int quality;
+        bool stripped;
     };
 }
 

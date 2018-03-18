@@ -75,17 +75,27 @@ int main(void)
 
     auto ctx = std::make_unique<world::context>(default_width, default_height);
 
-    ctx->get_part<world::tunnel_path>();
+    ctx->get_part<world::tunnel>()->set_stripped(true);
+    ctx->get_part<world::tunnel>()->set_stripped(false);
 
     auto cam = ctx->get_part<world::camera>();
 
-    auto box = std::make_unique<world::light_box>(
+    cam->move({ 0, 0, 0 });
+
+
+    auto box1 = std::make_unique<world::light_box>(
             ctx.get(), world::light_box::blue);
 
-    cam->move({ 0, 0, -2 });
+    box1->scale(0.25);
+    box1->move({ 0.2, -0.5, 3 });
 
-    box->scale(0.5);
-    box->move({ 0.5, 0, 3 });
+
+
+    auto box2 = std::make_unique<world::light_box>(
+            ctx.get(), world::light_box::red);
+
+    box2->scale(0.25);
+    box2->move({ 1.5, 0.5, 8 });
 
 
     glfwSetWindowUserPointer(win, ctx.get());
@@ -110,7 +120,6 @@ int main(void)
             } catch (glutils::location_error e) {
                 std::cerr << "location error: " << e.name << std::endl;
             }
-
 
             glfwSwapBuffers(win);
             glfwPollEvents();
