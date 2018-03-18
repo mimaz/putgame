@@ -64,8 +64,8 @@ PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 ##
  # pre-compiler header
  ##
-TARGET_PCH_SRC = pch/putgame-std.hxx
-TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC:pch/%.hxx=%.gch}
+TARGET_PCH_SRC = putgame-std
+TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC}.gch
 
 
 ##
