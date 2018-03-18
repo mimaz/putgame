@@ -10,6 +10,7 @@
 #include "world/tunnel.hxx"
 #include "world/tunnel_mesh.hxx"
 #include "world/light_box.hxx"
+#include "world/path.hxx"
 
 #include "glutils/exception.hxx"
 
@@ -73,10 +74,12 @@ int main(void)
 
     auto ctx = std::make_unique<world::context>(default_width, default_height);
 
+    ctx->get_part<world::path>();
+
     auto angle = PI / 66;
 
     for (int i = 0; i < 20; i++)
-        ctx->get_part<world::tunnel>()->append(1, angle, { 0, 1, 0 });
+        ;//ctx->get_part<world::tunnel>()->append(1, angle, { 0, 1, 0 });
 
     auto box = std::make_unique<world::light_box>(
             ctx.get(), world::light_box::green);

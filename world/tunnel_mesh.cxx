@@ -12,7 +12,7 @@ namespace world
     tunnel_mesh::tunnel_mesh(int quality, float width, bool stripped)
         : quality(quality)
         , width(width)
-        , gap(0)
+        , gap(PI * 2 / quality)
     {
         const auto indices = quality * 2;
 

@@ -156,4 +156,4 @@ ${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${TARGET_PCH_OBJ} | ${RESOURCE_HEADER}
 ${TARGET}: ${TARGET_OBJ}
 	${CXX} ${TARGET_LDFLAGS} $^ -o $@
 
-#-include ${ALL_DEP}
+-include ${ALL_DEP}

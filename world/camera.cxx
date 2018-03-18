@@ -24,12 +24,12 @@ namespace world
         , view_mat(1)
         , view_angle(PI / 4)
         , view_ratio(1)
-        , view_range(16)
+        , view_range(64)
     {
         view_mat = glm::translate(glm::mat4(1), glm::vec3(0, 0.0f, 4.0f));
 
         //rotate(PI / 10, { 0, 1, 0 });
-        //move({ 1.5f, 0.0f, 0.0f });
+        move({ 0.0f, 0.0f, -5.0f });
     }
 
     camera::~camera()
@@ -37,7 +37,7 @@ namespace world
 
     void camera::move(const glm::vec3 &vec)
     {
-        view_mat = glm::translate(view_mat, vec);
+        view_mat = glm::translate(view_mat, -vec);
     }
 
     void camera::rotate(float angle, const glm::vec3 &axis)
