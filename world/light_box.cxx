@@ -10,6 +10,7 @@
 #include <glutils/shader.hxx>
 #include <glutils/attribute.hxx>
 #include <glutils/uniform.hxx>
+#include <glutils/buffer.hxx>
 
 #include <common/rgb_color.hxx>
 #include <common/exception.hxx>
@@ -63,6 +64,8 @@ namespace
             , u_mvp(&prog, "u_mvp")
             , u_model(&prog, "u_model")
             , u_color(&prog, "u_color")
+            , vbo(GL_ARRAY_BUFFER, light_box_mesh, 
+                  light_box_mesh_size * sizeof(GLfloat))
             , light(std::make_unique<world::lighting>(ctx, &prog))
         {}
 
@@ -97,15 +100,26 @@ namespace
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+
+            auto offset = [](int n) -> void * {
+                return reinterpret_cast<void *>(n * sizeof(GLfloat));
+            };
+
+            auto stride = sizeof(GLfloat) * 7;
+
+
+            vbo.bind();
+
+
             glVertexAttribPointer(a_coord, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(GLfloat) * 7,
-                                  light_box_mesh);
+                                  GL_FALSE, stride,
+                                  offset(0));
             glVertexAttribPointer(a_type, 1, GL_FLOAT,
-                                  GL_FALSE, sizeof(GLfloat) * 7,
-                                  light_box_mesh + 3);
+                                  GL_FALSE, stride,
+                                  offset(3));
             glVertexAttribPointer(a_normal, 3, GL_FLOAT,
-                                  GL_FALSE, sizeof(GLfloat) * 7,
-                                  light_box_mesh + 4);
+                                  GL_FALSE, stride,
+                                  offset(4));
 
 
 
@@ -126,6 +140,7 @@ namespace
         glutils::uniform u_mvp;
         glutils::uniform u_model;
         glutils::uniform u_color;
+        glutils::buffer vbo;
 
         std::unique_ptr<world::lighting> light;
     };
