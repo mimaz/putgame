@@ -9,9 +9,11 @@
 #include "tunnel_model.hxx"
 
 #include "tunnel.hxx"
+#include "tunnel_path.hxx"
+#include "tunnel_data.hxx"
 #include "camera.hxx"
 #include "context.hxx"
-#include "tunnel_path.hxx"
+#include "lighting.hxx"
 
 namespace
 {
@@ -24,6 +26,15 @@ namespace
     {
         return glm::vec3(matrix * glm::vec4(0, 0, 1, 0));
     }
+
+    inline int frame_hash(const glm::mat4 &matrix, int index)
+    {
+        for (int y = 0; y < 4; y++)
+            for (int x = 0; x < 4; x++)
+                index += static_cast<int>(matrix[y][x]);
+
+        return std::hash<int>()(rand() + index);
+    }
 }
 
 namespace world
@@ -32,14 +43,24 @@ namespace world
                                bool stripped, tunnel *tun)
         : mesh(quality, width, stripped)
         , path(tun->get_context()->get_part<tunnel_path>())
+        , data(tun->get_context()->get_part<tunnel_data>())
         , cam(tun->get_context()->get_part<camera>())
+        , light(std::make_unique<world::lighting>(tun->get_context(), &prog))
         , path_segment_id(0)
         , vsh(GL_VERTEX_SHADER, tunnel_vsh)
-        , fsh(GL_FRAGMENT_SHADER, tunnel_fsh)
+        , fsh(GL_FRAGMENT_SHADER, 
+              world::lighting::fragment_source,
+              tunnel_fsh)
         , prog(&vsh, &fsh)
         , a_coord(&prog, "a_coord")
         , a_layer(&prog, "a_layer")
-        , u_mvp_v(&prog, "u_mvp_v")
+        , a_index(&prog, "a_index")
+        , u_model_0(&prog, "u_model_0")
+        , u_model_1(&prog, "u_model_1")
+        , u_mvp_0(&prog, "u_mvp_0")
+        , u_mvp_1(&prog, "u_mvp_1")
+        , u_random_0(&prog, "u_random_0")
+        , u_random_1(&prog, "u_random_1")
         , vbo(GL_ARRAY_BUFFER, mesh.get_vertex_ptr(), 
               mesh.get_vertex_data_size())
         , ibo(GL_ELEMENT_ARRAY_BUFFER, mesh.get_index_ptr(),
@@ -123,6 +144,10 @@ namespace world
 
         a_coord.enable();
         a_layer.enable();
+        a_index.enable();
+
+
+        light->calculate();
 
 
 
@@ -130,11 +155,11 @@ namespace world
         ibo.bind();
 
 
-        auto offset = [](int n) -> void * {
+        auto offset = [](GLuint n) -> void * {
             return reinterpret_cast<void *>(n * sizeof(GLfloat));
         };
 
-        auto stride = sizeof(GLfloat) * 4;
+        auto stride = sizeof(GLfloat) * 5;
 
 
         glVertexAttribPointer(a_coord, 3, GL_FLOAT,
@@ -145,29 +170,44 @@ namespace world
                               GL_FALSE, stride,
                               offset(3));
 
+        glVertexAttribPointer(a_index, 1, GL_FLOAT,
+                              GL_FALSE, stride,
+                              offset(4));
+
+
 
         for (auto it = frames.begin() + 1; it != frames.end(); it++)
         {
-            auto fr1 = it[-1];
-            auto fr2 = it[0];
+            auto &fr0 = it[-1];
+            auto &fr1 = it[0];
 
-            auto make_mvp = [this](const frame &fr) -> glm::mat4 {
+            auto rotate_model = [this](const frame &fr) -> glm::mat4 {
                 auto idx = fr.get_index();
+
                 auto angle = -PI / mesh.get_quality() * idx;
                 auto axis = glm::vec3(0, 0, 1);
+
                 auto rot = glm::rotate(glm::mat4(1), angle, axis);
 
-                return cam->make_mvp(fr.get_matrix() * rot);
+                return fr.get_matrix() * rot;
             };
 
 
-            glm::mat4 mvp_v[2] = {
-                make_mvp(fr1),
-                make_mvp(fr2),
-            };
+            auto model_0 = rotate_model(fr0);
+            auto model_1 = rotate_model(fr1);
 
-            glUniformMatrix4fv(u_mvp_v.get_handle(), 2, GL_FALSE, 
-                               glm::value_ptr(mvp_v[0]));
+            u_model_0 = model_0;
+            u_model_1 = model_1;
+
+            u_mvp_0 = cam->make_mvp(model_0);
+            u_mvp_1 = cam->make_mvp(model_1);
+
+
+            auto random0 = data->get(fr0.get_hash()).data();
+            auto random1 = data->get(fr1.get_hash()).data();
+
+            glUniform1fv(u_random_0.get_handle(), 8, random0);
+            glUniform1fv(u_random_1.get_handle(), 8, random1);
 
 
             glDrawElements(GL_TRIANGLES, mesh.get_index_count(), 
@@ -176,11 +216,13 @@ namespace world
 
         a_coord.disable();
         a_layer.disable();
+        a_index.disable();
     }
 
     tunnel_model::frame::frame(const glm::mat4 &matrix, int index)
         : matrix(matrix)
         , index(index)
+        , hash(frame_hash(matrix, index))
     {}
 
     float tunnel_model::frame::distance(const glm::vec3 &point) const

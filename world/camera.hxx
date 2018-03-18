@@ -7,10 +7,11 @@
 #define __world_camera_hxx
 
 #include "context_part.hxx"
+#include "light_source.hxx"
 
 namespace world
 {
-    class camera : public context_part
+    class camera : public context_part, public light_source
     {
     public:
         camera(context *ctx);
@@ -34,6 +35,10 @@ namespace world
         float get_view_angle() const { return view_angle; }
         float get_view_ratio() const { return view_ratio; }
         float get_view_range() const { return view_range; }
+
+        glm::vec3 get_light_position() override;
+        glm::vec3 get_light_color() override;
+        float get_light_range() override;
 
     private:
         mutable int flags;

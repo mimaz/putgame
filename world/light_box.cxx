@@ -150,6 +150,7 @@ namespace world
 {
     light_box::light_box(context *ctx, color col)
         : visible_object(ctx)
+        , light_source(ctx)
         , col(col)
         , speed(0.05)
         , angle(0)
@@ -171,5 +172,22 @@ namespace world
         angle += get_speed();
 
         get_context()->get_part<drawer>()->draw(this);
+    }
+
+    glm::vec3 light_box::get_light_position() 
+    {
+        return get_position();
+    }
+
+    glm::vec3 light_box::get_light_color()
+    {
+        // TODO optimize
+        return to_rgb(get_color());
+        //return common::rgb_color::white;
+    }
+
+    float light_box::get_light_range()
+    {
+        return 50;
     }
 }

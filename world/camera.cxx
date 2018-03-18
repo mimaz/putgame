@@ -19,17 +19,14 @@ namespace world
 {
     camera::camera(context *ctx)
         : context_part(ctx)
+        , light_source(ctx)
         , flags(dirty_proj | dirty_mvp)
         , proj_mat(1)
         , view_mat(1)
         , view_angle(PI / 4)
         , view_ratio(1)
         , view_range(64)
-    {
-        view_mat = glm::translate(glm::mat4(1), glm::vec3(0, 0.0f, 4.0f));
-
-        move({ 0.0f, 0.0f, 0.0f });
-    }
+    {}
 
     camera::~camera()
     {}
@@ -92,12 +89,27 @@ namespace world
     glm::vec3 camera::get_position() const
     {
         // TODO it may be needed to invert w-axis
-        return glm::vec3(get_view() * glm::vec4(0, 0, 0, 1));
+        return glm::vec3(get_view() * glm::vec4(0, 0, 0, -1));
     }
 
     glm::vec3 camera::get_direction() const
     {
         // TODO it may be needed to invert z-axis
         return glm::vec3(get_view() * glm::vec4(0, 0, 1, 0));
+    }
+
+    glm::vec3 camera::get_light_position()
+    {
+        return get_position();
+    }
+
+    glm::vec3 camera::get_light_color()
+    {
+        return glm::vec3(1, 1, 1);
+    }
+
+    float camera::get_light_range()
+    {
+        return 5;
     }
 }

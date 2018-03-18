@@ -29,11 +29,15 @@ namespace world
 
         void move(const glm::vec3 &vec);
         void rotate(float angle, const glm::vec3 &axis);
+        void scale(float scalar);
+        void scale(const glm::vec3 &vec);
 
         virtual void draw();
 
         context *get_context() const;
+
         const glm::mat4 &get_model() const { return model; }
+        glm::vec3 get_position() const;
 
     private:
         context *ctx;

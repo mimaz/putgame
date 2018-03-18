@@ -6,11 +6,13 @@
 #include <putgame-std>
 #include <putgame-res>
 
+#include <glutils/exception.hxx>
+
 #include "lighting.hxx"
 
 #include "camera.hxx"
-
-#include <glutils/exception.hxx>
+#include "light_group.hxx"
+#include "light_source.hxx"
 
 namespace world
 {
@@ -23,19 +25,39 @@ namespace world
         , u_light_color_v(prog, "u_light_color_v")
         , u_light_range_v(prog, "u_light_range_v")
         , cam(ctx->get_part<camera>())
+        , grp(ctx->get_part<light_group>())
     {}
 
     void lighting::calculate()
     {
-        glm::vec3 pos = { 0, 0, 0 };
-        glm::vec3 col = { 1, 1, 1 };
-        float ran = 10;
+        auto all = grp->get_all();
+        auto count = (GLuint) all.size();
+
+        glm::vec3 coords[count];
+        glm::vec3 colors[count];
+        GLfloat ranges[count];
+
+        int idx = 0;
+
+        for (auto s : all)
+        {
+            coords[idx] = s->get_light_position();
+            colors[idx] = s->get_light_color();
+            ranges[idx] = s->get_light_range();
+
+            idx++;
+        }
 
         try {
-            u_light_count = 1;
-            u_light_coord_v = pos;
-            u_light_color_v = col;
-            u_light_range_v = ran;
+            u_light_count = count;
+
+            glUniform3fv(u_light_coord_v, count, 
+                         glm::value_ptr(coords[0]));
+
+            glUniform3fv(u_light_color_v, count, 
+                         glm::value_ptr(colors[0]));
+
+            glUniform1fv(u_light_range_v, count, ranges);
 
             u_camera_coord = cam->get_position();
         } catch(glutils::location_error e) {

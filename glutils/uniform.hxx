@@ -15,10 +15,16 @@ namespace glutils
     public:
         uniform(program *prog, const GLchar *name);
 
+        uniform(const uniform &) = delete;
+        uniform(uniform &&) = delete;
+
         GLuint get_handle();
+
+        operator GLuint() { return get_handle(); }
 
         void operator=(const GLfloat &);
         void operator=(const GLint &);
+        void operator=(const GLuint &);
         void operator=(const glm::vec2 &);
         void operator=(const glm::vec3 &);
         void operator=(const glm::vec4 &);

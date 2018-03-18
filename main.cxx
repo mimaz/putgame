@@ -11,6 +11,7 @@
 #include "world/tunnel_mesh.hxx"
 #include "world/light_box.hxx"
 #include "world/tunnel_path.hxx"
+#include "world/camera.hxx"
 
 #include "glutils/exception.hxx"
 
@@ -76,10 +77,15 @@ int main(void)
 
     ctx->get_part<world::tunnel_path>();
 
-    auto box = std::make_unique<world::light_box>(
-            ctx.get(), world::light_box::green);
+    auto cam = ctx->get_part<world::camera>();
 
-    box->move({ -3, 2, 6 });
+    auto box = std::make_unique<world::light_box>(
+            ctx.get(), world::light_box::blue);
+
+    cam->move({ 0, 0, -2 });
+
+    box->scale(0.5);
+    box->move({ 0.5, 0, 3 });
 
 
     glfwSetWindowUserPointer(win, ctx.get());
@@ -99,18 +105,19 @@ int main(void)
             next_time += 1.0 / 60;
 
 
-            ctx->draw_frame();
+            try {
+                ctx->draw_frame();
+            } catch (glutils::location_error e) {
+                std::cerr << "location error: " << e.name << std::endl;
+            }
 
 
             glfwSwapBuffers(win);
             glfwPollEvents();
         }
     } catch (glutils::shader_error e) {
-        std::cerr << "error: " << e.desc << std::endl;
-    } catch (glutils::location_error e) {
-        std::cerr << "error: " << e.name << std::endl;
+        std::cerr << "shader error: " << e.desc << std::endl;
     }
-
 
 
 

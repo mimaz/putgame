@@ -7,10 +7,11 @@
 #define __world_light_box_hxx
 
 #include "visible_object.hxx"
+#include "light_source.hxx"
 
 namespace world
 {
-    class light_box : public visible_object
+    class light_box : public visible_object, public light_source
     {
     public:
         enum color
@@ -30,6 +31,10 @@ namespace world
         color get_color() const { return col; }
         float get_speed() const { return speed; }
         float get_angle() const { return angle; }
+
+        glm::vec3 get_light_position() override;
+        glm::vec3 get_light_color() override;
+        float get_light_range() override;
 
     private:
         color col;

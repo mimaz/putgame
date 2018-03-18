@@ -16,6 +16,7 @@
 namespace world
 {
     class camera;
+    class light_group;
 
     class lighting
     {
@@ -35,6 +36,7 @@ namespace world
         glutils::uniform u_light_range_v;
 
         camera *cam;
+        light_group *grp;
     };
 }
 

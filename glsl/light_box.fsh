@@ -21,16 +21,15 @@ void main()
     {
         if (v_type < 1.5)
         {
-            color = u_color * 0.5;
+            color = u_color;
         }
         else
         {
-            color = vec3(0.25, 0.25, 0.25);
+            color = vec3(0.5, 0.5, 0.5);
         }
 
-        color = enlighted(color, v_normal, v_coord);
+        color = enlight(color, v_normal, v_coord);
     }
-
 
     gl_FragColor = vec4(color, 1.0);
 }

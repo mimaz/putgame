@@ -42,6 +42,16 @@ namespace world
         model = glm::rotate(model, angle, axis);
     }
 
+    void visible_object::scale(float scalar)
+    {
+        scale(glm::vec3(scalar, scalar, scalar));
+    }
+
+    void visible_object::scale(const glm::vec3 &vec)
+    {
+        model = glm::scale(model, vec);
+    }
+
     void visible_object::draw()
     {}
 
@@ -51,5 +61,10 @@ namespace world
             throw invalid_context();
 
         return ctx;
+    }
+
+    glm::vec3 visible_object::get_position() const
+    {
+        return glm::vec3(get_model() * glm::vec4(0, 0, 0, 1));
     }
 }

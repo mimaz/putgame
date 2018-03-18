@@ -17,8 +17,10 @@
 namespace world
 {
     class camera;
+    class lighting;
     class tunnel;
     class tunnel_path;
+    class tunnel_data;
 
     class tunnel_model
     {
@@ -41,7 +43,9 @@ namespace world
         tunnel_mesh mesh;
 
         tunnel_path *path;
+        tunnel_data *data;
         camera *cam;
+        std::unique_ptr<lighting> light;
 
         int path_segment_id;
 
@@ -50,7 +54,13 @@ namespace world
         glutils::program prog;
         glutils::attribute a_coord;
         glutils::attribute a_layer;
-        glutils::uniform u_mvp_v;
+        glutils::attribute a_index;
+        glutils::uniform u_model_0;
+        glutils::uniform u_model_1;
+        glutils::uniform u_mvp_0;
+        glutils::uniform u_mvp_1;
+        glutils::uniform u_random_0;
+        glutils::uniform u_random_1;
         glutils::buffer vbo;
         glutils::buffer ibo;
     };
@@ -65,12 +75,14 @@ namespace world
 
         const glm::mat4 &get_matrix() const { return matrix; }
         int get_index() const { return index; }
+        int get_hash() const { return hash; }
 
         float distance(const glm::vec3 &point) const;
 
     private:
         glm::mat4 matrix;
         int index;
+        int hash;
     };
 }
 
