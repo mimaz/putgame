@@ -8,8 +8,8 @@
 #include "context.hxx"
 
 #include "trajak.hxx"
-#include "visible_object.hxx"
 #include "light_box.hxx"
+#include "light_box_manager.hxx"
 #include "tunnel.hxx"
 #include "camera.hxx"
 
@@ -25,19 +25,14 @@ namespace world
     }
 
     context::~context()
-    {
-        for (auto obj : vis_objs)
-            obj->detach();
-    }
+    {}
 
     void context::draw_frame()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for (auto obj : vis_objs)
-            obj->draw();
-
         get_part<tunnel>()->draw();
+        get_part<light_box_manager>()->draw_all();
     }
 
     void context::resize_frame(int w, int h)
@@ -50,15 +45,5 @@ namespace world
         auto ratio = static_cast<float>(w) / h;
 
         get_part<camera>()->set_view_ratio(ratio);
-    }
-
-    void context::register_object(visible_object *obj)
-    {
-        vis_objs.insert(obj);
-    }
-
-    void context::unregister_object(visible_object *obj)
-    {
-        vis_objs.erase(obj);
     }
 }

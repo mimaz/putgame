@@ -17,6 +17,7 @@
 
 #include "light_box.hxx"
 
+#include "light_box_manager.hxx"
 #include "context_part.hxx"
 #include "context.hxx"
 #include "camera.hxx"
@@ -25,141 +26,50 @@
 
 constexpr auto size = 1.0f;
 
-
-namespace 
-{
-    common::rgb_color to_rgb(world::light_box::color col)
-    {
-        const auto bright = 1.0f;
-        const auto dim = 0.6f;
-
-        switch (col)
-        {
-            case world::light_box::red:
-                return common::rgb_color(bright, dim, dim);
-
-            case world::light_box::green:
-                return common::rgb_color(dim, bright, dim);
-
-            case world::light_box::blue:
-                return common::rgb_color(dim, dim, bright);
-        }
-
-        throw common::make_invalid_argument(col);
-    }
-
-    class drawer : public world::context_part
-    {
-    public:
-        drawer(world::context *ctx) 
-            : context_part(ctx)
-            , vsh(GL_VERTEX_SHADER, light_box_vsh)
-            , fsh(GL_FRAGMENT_SHADER, 
-                  world::lighting::fragment_source,
-                  light_box_fsh)
-            , prog(&vsh, &fsh)
-            , a_coord(&prog, "a_coord")
-            , a_type(&prog, "a_type")
-            , a_normal(&prog, "a_normal")
-            , u_mvp(&prog, "u_mvp")
-            , u_model(&prog, "u_model")
-            , u_color(&prog, "u_color")
-            , vbo(GL_ARRAY_BUFFER, light_box_mesh, 
-                  light_box_mesh_size * sizeof(GLfloat))
-            , light(std::make_unique<world::lighting>(ctx, &prog))
-        {}
-
-        void draw(world::light_box *box)
-        {
-            glEnable(GL_DEPTH_TEST);
-            glEnable(GL_CULL_FACE);
-
-
-            prog.use();
-
-            a_coord.enable();
-            a_type.enable();
-            a_normal.enable();
-
-
-            light->calculate();
-
-
-            auto model = box->get_model();
-
-            model = glm::rotate(model, box->get_angle(), 
-                                glm::vec3(0, 0, 1));
-            model = glm::rotate(model, box->get_angle() / 2, 
-                                glm::vec3(0, 1, 0));
-            model = glm::rotate(model, box->get_angle() / 3, 
-                                glm::vec3(1, 0, 0));
-
-            u_mvp = get_context()->get_part<world::camera>()->make_mvp(model);
-            u_model = model;
-            u_color = to_rgb(box->get_color());
-
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-            auto offset = [](int n) -> void * {
-                return reinterpret_cast<void *>(n * sizeof(GLfloat));
-            };
-
-            auto stride = sizeof(GLfloat) * 7;
-
-
-            vbo.bind();
-
-
-            glVertexAttribPointer(a_coord, 3, GL_FLOAT,
-                                  GL_FALSE, stride,
-                                  offset(0));
-            glVertexAttribPointer(a_type, 1, GL_FLOAT,
-                                  GL_FALSE, stride,
-                                  offset(3));
-            glVertexAttribPointer(a_normal, 3, GL_FLOAT,
-                                  GL_FALSE, stride,
-                                  offset(4));
-
-
-
-            glDrawArrays(GL_TRIANGLES, 0, light_box_mesh_size / 3);
-
-
-            a_coord.disable();
-            a_type.disable();
-            a_normal.disable();
-        }
-
-        glutils::shader vsh;
-        glutils::shader fsh;
-        glutils::program prog;
-        glutils::attribute a_coord;
-        glutils::attribute a_type;
-        glutils::attribute a_normal;
-        glutils::uniform u_mvp;
-        glutils::uniform u_model;
-        glutils::uniform u_color;
-        glutils::buffer vbo;
-
-        std::unique_ptr<world::lighting> light;
-    };
-}
-
 namespace world
 {
     light_box::light_box(context *ctx, color col)
         : visible_object(ctx)
         , light_source(ctx)
-        , col(col)
+        , light_col(common::rgb_color::black)
+        , manager(ctx->get_part<light_box_manager>())
         , speed(0.05)
-        , angle(0)
+        , angle(PI * 2 * rand() / RAND_MAX)
         , blur(0)
-    {}
+    {
+        manager->register_box(this);
+
+        set_color(col);
+    }
+
+    light_box::~light_box()
+    {
+        manager->unregister_box(this);
+    }
 
     void light_box::set_color(color c)
     {
         col = c;
+
+        auto dim = 0.0f;
+
+        switch (c)
+        {
+        case red:
+            light_col = common::rgb_color(1.f, dim, dim);
+            break;
+
+        case green:
+            light_col = common::rgb_color(dim, 1.0f, dim);
+            break;
+
+        case blue:
+            light_col = common::rgb_color(dim, dim, 1.0f);
+            break;
+
+        default:
+            throw common::make_invalid_argument(c);
+        }
     }
 
     void light_box::set_speed(float spd)
@@ -167,11 +77,9 @@ namespace world
         speed = spd;
     }
 
-    void light_box::draw()
+    void light_box::on_draw()
     {
         angle += get_speed();
-
-        get_context()->get_part<drawer>()->draw(this);
     }
 
     glm::vec3 light_box::get_light_position() 
@@ -181,13 +89,11 @@ namespace world
 
     glm::vec3 light_box::get_light_color()
     {
-        // TODO optimize
-        return to_rgb(get_color());
-        //return common::rgb_color::white;
+        return light_col;
     }
 
     float light_box::get_light_range()
     {
-        return 50;
+        return manager->get_light_range();
     }
 }

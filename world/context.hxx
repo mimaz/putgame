@@ -10,8 +10,6 @@
 
 namespace world
 {
-    class visible_object;
-
     class context
     {
     public:
@@ -25,9 +23,6 @@ namespace world
         void draw_frame();
         void resize_frame(int width, int height);
 
-        void register_object(visible_object *obj);
-        void unregister_object(visible_object *obj);
-
           template<typename _Type>
         _Type *get_part();
 
@@ -38,7 +33,6 @@ namespace world
         using part_ref = std::unique_ptr<context_part>;
 
         std::map<std::type_index, part_ref> _m_part_map;
-        std::set<visible_object *> vis_objs;
 
         int width;
         int height;

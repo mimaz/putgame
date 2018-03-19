@@ -6,11 +6,15 @@
 #ifndef __world_light_box_hxx
 #define __world_light_box_hxx
 
+#include <common/rgb_color.hxx>
+
 #include "visible_object.hxx"
 #include "light_source.hxx"
 
 namespace world
 {
+    class light_box_manager;
+
     class light_box : public visible_object, public light_source
     {
     public:
@@ -22,8 +26,9 @@ namespace world
         };
 
         light_box(context *ctx, color col);
+        ~light_box();
 
-        void draw() override;
+        void on_draw();
 
         void set_color(color col);
         void set_speed(float speed);
@@ -38,6 +43,9 @@ namespace world
 
     private:
         color col;
+        common::rgb_color light_col;
+
+        light_box_manager *manager;
 
         float speed;
         float angle;

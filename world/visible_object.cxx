@@ -13,14 +13,10 @@ namespace world
 {
     visible_object::visible_object(context *ctx)
         : ctx(ctx) 
-    {
-        get_context()->register_object(this);
-    }
+    {}
 
     visible_object::~visible_object() 
-    {
-        get_context()->unregister_object(this);
-    }
+    {}
 
     void visible_object::detach()
     {
@@ -51,9 +47,6 @@ namespace world
     {
         model = glm::scale(glm::mat4(1), vec) * model;
     }
-
-    void visible_object::draw()
-    {}
 
     context *visible_object::get_context() const
     {
