@@ -9,12 +9,13 @@
 #include "glass_view.hxx"
 
 #include "glass_pane.hxx"
+#include "glass_piece.hxx"
 #include "context.hxx"
 #include "camera.hxx"
 
 namespace 
 {
-    const float mesh[] = {
+    const float pane_mesh[] = {
         -0.5f, -0.5f, 
         -0.5f, 0.5f,
         0.5f, 0.5f,
@@ -22,6 +23,13 @@ namespace
         -0.5f, -0.5f, 
         0.5f, 0.5f,
         0.5f, -0.5f,
+    };
+
+    const float piece_mesh[] = {
+        // TODO make it better
+        -0.5f, -0.5f, 
+        -0.5f, 0.5f,
+        0.5f, 0.5f,
     };
 }
 
@@ -55,7 +63,14 @@ namespace world
     {
         glVertexAttribPointer(a_coord, 2, GL_FLOAT,
                               GL_FALSE, sizeof(float) * 2,
-                              mesh);
+                              pane_mesh);
+    }
+
+    void glass_view::bind_piece()
+    {
+        glVertexAttribPointer(a_coord, 2, GL_FLOAT,
+                              GL_FALSE, sizeof(float) * 2,
+                              piece_mesh);
     }
 
     void glass_view::draw(const glass_pane *pane)
@@ -64,6 +79,14 @@ namespace world
         u_color = pane->get_color();
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+
+    void glass_view::draw(const glass_piece *piece)
+    {
+        u_mvp = cam->make_mvp(piece->get_model());
+        u_color = piece->get_color();
+
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
     void glass_view::end()

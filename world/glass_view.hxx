@@ -16,6 +16,7 @@ namespace world
     class context;
     class camera;
     class glass_pane;
+    class glass_piece;
 
     class glass_view
     {
@@ -25,8 +26,10 @@ namespace world
         void begin();
 
         void bind_pane();
+        void bind_piece();
 
         void draw(const glass_pane *pane);
+        void draw(const glass_piece *piece);
 
         void end();
 

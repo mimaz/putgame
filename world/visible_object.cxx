@@ -35,7 +35,7 @@ namespace world
 
     void visible_object::rotate(float angle, const glm::vec3 &axis)
     {
-        model = glm::rotate(glm::mat4(1), angle, axis) * model;
+        model = glm::rotate(model, angle, axis);
     }
 
     void visible_object::scale(float scalar)
@@ -45,7 +45,7 @@ namespace world
 
     void visible_object::scale(const glm::vec3 &vec)
     {
-        model = glm::scale(glm::mat4(1), vec) * model;
+        model = glm::scale(model, vec);
     }
 
     glm::vec3 visible_object::get_position() const
