@@ -155,7 +155,7 @@ int main(void)
             ctx.get(), world::light_box::red);
 
     box2->scale(0.25);
-    box2->move({ 1.5, 0.5, 8 });
+    box2->move({ 1.3, 0.4, 8 });
 
 
 

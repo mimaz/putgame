@@ -39,25 +39,30 @@ namespace world
 
     void glass_manager::draw_all()
     {
-        view->begin();
-
-
-        view->bind_pane();
-
-        for (auto pane : panes)
-            view->draw(pane);
-
-
-        view->bind_piece();
-
         for (auto piece : pieces)
-        {
             piece->on_draw();
 
-            view->draw(piece);
-        }
+        draw(false);
+        draw(true);
+    }
+
+    void glass_manager::draw(bool specular)
+    {
+        view->begin(specular);
 
 
-        view->end();
+        view->bind_pane(specular);
+
+        for (auto pane : panes)
+            view->draw(pane, specular);
+
+
+        view->bind_piece(specular);
+
+        for (auto piece : pieces)
+            view->draw(piece, specular);
+
+
+        view->end(specular);
     }
 }

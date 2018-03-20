@@ -33,7 +33,11 @@ void main()
 
     lowp vec3 normal = normalize(v_normal);
 
-    color = enlight(color, normal, v_coord);
+    color = enlight(color, white,
+                    normal, v_coord, 
+                    100.0,
+                    true, true,
+                    false);
 
     gl_FragColor = vec4(color, 1.0);
 }

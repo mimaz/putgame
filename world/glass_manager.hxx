@@ -28,6 +28,8 @@ namespace world
         void draw_all();
 
     private:
+        void draw(bool specular);
+
         std::set<glass_pane *> panes;
         std::set<glass_piece *> pieces;
 

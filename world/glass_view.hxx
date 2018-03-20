@@ -15,6 +15,7 @@ namespace world
 {
     class context;
     class camera;
+    class lighting;
     class glass_pane;
     class glass_piece;
 
@@ -23,23 +24,35 @@ namespace world
     public:
         glass_view(context *ctx);
 
-        void begin();
+        void begin(bool specular);
 
-        void bind_pane();
-        void bind_piece();
+        void bind_pane(bool specular);
+        void bind_piece(bool specular);
 
-        void draw(const glass_pane *pane);
-        void draw(const glass_piece *piece);
+        void draw(const glass_pane *pane, 
+                  bool specular);
 
-        void end();
+        void draw(const glass_piece *piece, 
+                  bool specular);
+
+        void end(bool specular);
 
     private:
         glutils::shader vsh;
-        glutils::shader fsh;
-        glutils::program prog;
-        glutils::attribute a_coord;
-        glutils::uniform u_mvp;
-        glutils::uniform u_color;
+
+        glutils::shader fsh_tr;
+        glutils::program prog_tr;
+        glutils::attribute a_coord_tr;
+        glutils::uniform u_mvp_tr;
+        glutils::uniform u_color_tr;
+
+        glutils::shader fsh_sp;
+        glutils::program prog_sp;
+        glutils::attribute a_coord_sp;
+        glutils::uniform u_model_sp;
+        glutils::uniform u_mvp_sp;
+
+        std::shared_ptr<lighting> light;
 
         camera *cam;
     };

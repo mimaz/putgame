@@ -28,7 +28,11 @@ void main()
             color = vec3(0.5, 0.5, 0.5);
         }
 
-        color = enlight(color, v_normal, v_coord);
+        color = enlight(color, color,
+                        v_normal, v_coord, 
+                        -1.0,
+                        true, false,
+                        false);
     }
 
     gl_FragColor = vec4(color, 1.0);

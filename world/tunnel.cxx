@@ -21,7 +21,7 @@ namespace world
         : context_part(ctx)
         , view(nullptr)
         , width(2)
-        , quality(12)
+        , quality(16)
         , stripped(false)
     {}
 

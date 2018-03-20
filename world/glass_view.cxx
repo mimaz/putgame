@@ -12,6 +12,7 @@
 #include "glass_piece.hxx"
 #include "context.hxx"
 #include "camera.hxx"
+#include "lighting.hxx"
 
 namespace 
 {
@@ -37,60 +38,108 @@ namespace world
 {
     glass_view::glass_view(context *ctx)
         : vsh(GL_VERTEX_SHADER, glass_vsh)
-        , fsh(GL_FRAGMENT_SHADER, glass_fsh)
-        , prog(&vsh, &fsh)
-        , a_coord(&prog, "a_coord")
-        , u_mvp(&prog, "u_mvp")
-        , u_color(&prog, "u_color")
+        , fsh_tr(GL_FRAGMENT_SHADER, 
+                 lighting_fsh,
+                 glass_transparency_fsh)
+        , prog_tr(&vsh, &fsh_tr)
+        , a_coord_tr(&prog_tr, "a_coord")
+        , u_mvp_tr(&prog_tr, "u_mvp")
+        , u_color_tr(&prog_tr, "u_color")
+        , fsh_sp(GL_FRAGMENT_SHADER, 
+                 lighting_fsh,
+                 glass_specular_fsh)
+        , prog_sp(&vsh, &fsh_sp)
+        , a_coord_sp(&prog_sp, "a_coord")
+        , u_model_sp(&prog_sp, "u_model")
+        , u_mvp_sp(&prog_sp, "u_mvp")
+        , light(std::make_shared<lighting>(ctx, &prog_sp))
         , cam(ctx->get_part<camera>())
     {}
 
-    void glass_view::begin()
+    void glass_view::begin(bool specular)
     {
         glDisable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
-        glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 
-        prog.use();
+        if (specular)
+        {
+            glDisable(GL_DEPTH_TEST);
+            glBlendFunc(GL_ONE, GL_ONE);
 
-        a_coord.enable();
+            prog_sp.use();
+            a_coord_sp.enable();
+
+            light->calculate();
+        }
+        else
+        {
+            glEnable(GL_DEPTH_TEST);
+            glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+
+            prog_tr.use();
+            a_coord_tr.enable();
+        }
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    void glass_view::bind_pane()
+    void glass_view::bind_pane(bool specular)
     {
-        glVertexAttribPointer(a_coord, 2, GL_FLOAT,
+        auto &coord = specular ? a_coord_sp : a_coord_tr;
+
+        glVertexAttribPointer(coord, 2, GL_FLOAT,
                               GL_FALSE, sizeof(float) * 2,
                               pane_mesh);
     }
 
-    void glass_view::bind_piece()
+    void glass_view::bind_piece(bool specular)
     {
-        glVertexAttribPointer(a_coord, 2, GL_FLOAT,
+        auto &coord = specular ? a_coord_sp : a_coord_tr;
+
+        glVertexAttribPointer(coord, 2, GL_FLOAT,
                               GL_FALSE, sizeof(float) * 2,
                               piece_mesh);
     }
 
-    void glass_view::draw(const glass_pane *pane)
+    void glass_view::draw(const glass_pane *pane, 
+                          bool specular)
     {
-        u_mvp = cam->make_mvp(pane->get_model());
-        u_color = pane->get_color();
+        if (specular)
+        {
+            u_model_sp = pane->get_model();
+            u_mvp_sp = cam->make_mvp(pane->get_model());
+        }
+        else
+        {
+            u_mvp_tr = cam->make_mvp(pane->get_model());
+            u_color_tr = pane->get_color();
+        }
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 
-    void glass_view::draw(const glass_piece *piece)
+    void glass_view::draw(const glass_piece *piece,
+                          bool specular)
     {
-        u_mvp = cam->make_mvp(piece->get_model());
-        u_color = piece->get_color();
+        if (specular)
+        {
+            u_model_sp = piece->get_model();
+            u_mvp_sp = cam->make_mvp(piece->get_model());
+        }
+        else
+        {
+            u_mvp_tr = cam->make_mvp(piece->get_model());
+            u_color_tr = piece->get_color();
+        }
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
-    void glass_view::end()
+    void glass_view::end(bool specular)
     {
-        a_coord.disable();
+        if (specular)
+            a_coord_sp.disable();
+        else
+            a_coord_tr.disable();
     }
 }
