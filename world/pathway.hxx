@@ -3,35 +3,35 @@
  * 2018
  */
 
-#ifndef __world_tunnel_path_hxx
-#define __world_tunnel_path_hxx
+#ifndef __world_pathway_hxx
+#define __world_pathway_hxx
 
 #include "context_part.hxx"
 
 namespace world
 {
-    class tunnel_path : public context_part
+    class pathway : public context_part
     {
     public:
-        class segment;
+        class point;
 
         static constexpr float step = 1;
 
-        tunnel_path(context *ctx);
+        pathway(context *ctx);
 
         void append(float angle, const glm::vec3 &axis);
 
-        const segment &get_last() const { return segments.back(); }
-        const segment &get_by_id(int id) const;
+        const point &get_last() const { return points.back(); }
+        const point &get_by_id(int id) const;
 
     private:
-        std::deque<segment> segments;
+        std::deque<point> points;
     };
 
-    class tunnel_path::segment
+    class pathway::point
     {
     public:
-        segment(glm::mat4 &&matrix, int index);
+        point(glm::mat4 &&matrix, int index);
 
         const glm::mat4 &get_matrix() const { return matrix; }
         int get_index() const { return index; }

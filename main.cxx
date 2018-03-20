@@ -9,7 +9,7 @@
 #include "world/tunnel.hxx"
 #include "world/tunnel_mesh.hxx"
 #include "world/light_box.hxx"
-#include "world/tunnel_path.hxx"
+#include "world/pathway.hxx"
 #include "world/camera.hxx"
 
 #include "glutils/exception.hxx"

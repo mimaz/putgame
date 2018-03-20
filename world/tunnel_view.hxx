@@ -19,7 +19,7 @@ namespace world
     class camera;
     class lighting;
     class tunnel;
-    class tunnel_path;
+    class pathway;
     class tunnel_blot;
 
     class tunnel_view
@@ -42,12 +42,12 @@ namespace world
         std::deque<frame> frames;
         tunnel_mesh mesh;
 
-        tunnel_path *path;
+        pathway *way;
         tunnel_blot *blot;
         camera *cam;
         std::unique_ptr<lighting> light;
 
-        int path_segment_id;
+        int way_point_id;
 
         glutils::shader vsh;
         glutils::shader fsh;

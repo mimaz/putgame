@@ -9,7 +9,7 @@
 #include "tunnel_view.hxx"
 
 #include "tunnel.hxx"
-#include "tunnel_path.hxx"
+#include "pathway.hxx"
 #include "tunnel_blot.hxx"
 #include "camera.hxx"
 #include "context.hxx"
@@ -47,11 +47,11 @@ namespace world
     tunnel_view::tunnel_view(float width, int quality, 
                              bool stripped, tunnel *tun)
         : mesh(quality, width, stripped)
-        , path(tun->get_context()->get_part<tunnel_path>())
+        , way(tun->get_context()->get_part<pathway>())
         , blot(tun->get_context()->get_part<tunnel_blot>())
         , cam(tun->get_context()->get_part<camera>())
         , light(std::make_unique<world::lighting>(tun->get_context(), &prog))
-        , path_segment_id(0)
+        , way_point_id(0)
         , vsh(GL_VERTEX_SHADER, 
               vsh_header(tunnel_blot::blot_size),
               tunnel_vsh)
@@ -90,7 +90,7 @@ namespace world
 
 
         auto calc_target_coord = [this](void) -> glm::vec3 {
-            auto mat = path->get_by_id(path_segment_id).get_matrix();
+            auto mat = way->get_by_id(way_point_id).get_matrix();
 
             return get_position(mat);
         };
@@ -105,7 +105,7 @@ namespace world
 
         while (glm::length(target_coord - last_coord) < gap)
         {
-            path_segment_id++;
+            way_point_id++;
             target_coord = calc_target_coord();
         }
 

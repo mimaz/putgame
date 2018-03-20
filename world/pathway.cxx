@@ -5,20 +5,20 @@
 
 #include <putgame-std>
 
-#include "tunnel_path.hxx"
+#include "pathway.hxx"
 
 namespace world
 {
-    tunnel_path::tunnel_path(context *ctx)
+    pathway::pathway(context *ctx)
         : context_part(ctx)
     {
-        segments.push_back(segment(glm::mat4(1), 0));
+        points.push_back(point(glm::mat4(1), 0));
 
         for (int i = 0; i < 200; i++)
             append(PI / 90, { 0, 1, 0 });
     }
 
-    void tunnel_path::append(float angle, const glm::vec3 &axis)
+    void pathway::append(float angle, const glm::vec3 &axis)
     {
         auto last = get_last();
 
@@ -31,22 +31,22 @@ namespace world
 
         auto point = glm::vec3(transform * glm::vec4(0, 0, 0, 1));
 
-        std::cout << "segment at point: " 
+        std::cout << "generated point at: " 
             << point.x << ", " << point.y << ", " << point.z
             << std::endl;
 
 
-        segments.emplace_back(std::move(transform), index);
+        points.emplace_back(std::move(transform), index);
     }
 
-    const tunnel_path::segment &tunnel_path::get_by_id(int id) const
+    const pathway::point &pathway::get_by_id(int id) const
     {
-        id -= segments.front().get_index();
+        id -= points.front().get_index();
 
-        return segments[id];
+        return points[id];
     }
 
-    tunnel_path::segment::segment(glm::mat4 &&matrix, int index)
+    pathway::point::point(glm::mat4 &&matrix, int index)
         : matrix(matrix)
         , index(index)
     {}
