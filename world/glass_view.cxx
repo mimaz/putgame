@@ -62,10 +62,11 @@ namespace world
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
 
+        glDepthFunc(GL_LEQUAL);
+
         if (specular)
         {
             glBlendFunc(GL_ONE, GL_ONE);
-            glDisable(GL_DEPTH_TEST);
 
             prog_sp.use();
             a_coord_sp.enable();
