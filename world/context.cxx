@@ -7,7 +7,6 @@
 
 #include "context.hxx"
 
-#include "trajak.hxx"
 #include "light_box.hxx"
 #include "light_box_manager.hxx"
 #include "tunnel.hxx"

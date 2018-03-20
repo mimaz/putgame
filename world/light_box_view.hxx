@@ -24,6 +24,9 @@ namespace world
     class light_box_view
     {
     public:
+        static const float mesh[];
+        static const size_t size_of_mesh;
+
         light_box_view(context *ctx);
 
         light_box_view(const light_box_view &) = delete;

@@ -52,8 +52,8 @@ namespace world
         , u_model(&prog, "u_model")
         , u_mvp(&prog, "u_mvp")
         , u_color(&prog, "u_color")
-        , vbo(GL_ARRAY_BUFFER, light_box_mesh,
-              light_box_mesh_size * sizeof(GLfloat))
+        , vbo(GL_ARRAY_BUFFER, 
+              mesh, size_of_mesh)
         , light(std::make_unique<lighting>(ctx, &prog))
         , cam(ctx->get_part<camera>())
     {}
@@ -79,7 +79,7 @@ namespace world
 
         auto stride = sizeof(GLfloat) * 7;
 
-        vertices = light_box_mesh_size / 3;
+        vertices = size_of_mesh / sizeof(float) / 3;
 
         if (stripped)
         {

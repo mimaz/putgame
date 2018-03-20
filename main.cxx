@@ -6,7 +6,6 @@
 #include <putgame-std>
 
 #include "world/context.hxx"
-#include "world/trajak.hxx"
 #include "world/tunnel.hxx"
 #include "world/tunnel_mesh.hxx"
 #include "world/light_box.hxx"

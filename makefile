@@ -15,8 +15,6 @@ TARGET_BUILD_DIR = ${BASE_BUILD_DIR}
 PRECOMPILER_BUILD_DIR = ${BASE_BUILD_DIR}
 GLSL_C_DIR = ${BASE_BUILD_DIR}/glsl-src
 GLSL_O_DIR = ${BASE_BUILD_DIR}/glsl-obj
-MESH_C_DIR = ${BASE_BUILD_DIR}/mesh-src
-MESH_O_DIR = ${BASE_BUILD_DIR}/mesh-obj
 
 ##
  # targets
@@ -32,10 +30,6 @@ RESOURCE_HEADER = ${TARGET_BUILD_DIR}/putgame-res
 GLSL = ${shell find glsl/ -type f -not -name ".*"}
 GLSL_C = ${GLSL:%=${GLSL_C_DIR}/%.c}
 GLSL_O = ${GLSL_C:${GLSL_C_DIR}/%=${GLSL_O_DIR}/%.o}
-
-MESH = ${shell find mesh/ -type f -not -name ".*"}
-MESH_C = ${MESH:%=${MESH_C_DIR}/%.c}
-MESH_O = ${MESH_C:${MESH_C_DIR}/%=${MESH_O_DIR}/%.o}
 
 ##
  # compile flags
@@ -71,7 +65,7 @@ TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC}.gch
 ##
  # target objects
  ##
-TARGET_OBJ = ${TARGET_SRC:%=${TARGET_BUILD_DIR}/%.o} ${GLSL_O} ${MESH_O}
+TARGET_OBJ = ${TARGET_SRC:%=${TARGET_BUILD_DIR}/%.o} ${GLSL_O}
 PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${PRECOMPILER_BUILD_DIR}/%.o}
 
 ALL_OBJ = ${TARGET_OBJ} ${PRECOMPILER_OBJ}
@@ -131,18 +125,8 @@ ${GLSL_C_DIR}/%.c: % ${PRECOMPILER}
 	@mkdir -p ${dir $@}
 	${PRECOMPILER} glsl $< $@
 	
-# mesh objects
-${MESH_O_DIR}/%.c.o: ${MESH_C_DIR}/%.c
-	@mkdir -p ${dir $@}
-	${CC} ${TARGET_CXXFLAGS} -c $< -o $@
-
-# mesh sources
-${MESH_C_DIR}/%.c: % ${PRECOMPILER}
-	@mkdir -p ${dir $@}
-	${PRECOMPILER} mesh $< $@
-	
 # auto-generated header
-${RESOURCE_HEADER}: ${GLSL_C} ${MESH_C}
+${RESOURCE_HEADER}: ${GLSL_C}
 	${PRECOMPILER} header $@ $^
 
 ##############################################
