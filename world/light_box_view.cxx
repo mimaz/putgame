@@ -15,29 +15,6 @@
 #include "context.hxx"
 #include "camera.hxx"
 
-namespace 
-{
-    common::rgb_color to_rgb(world::light_box::color col)
-    {
-        const auto bright = 1.0f;
-        const auto dim = 0.8f;
-
-        switch (col)
-        {
-            case world::light_box::red:
-                return common::rgb_color(bright, dim, dim);
-
-            case world::light_box::green:
-                return common::rgb_color(dim, bright, dim);
-
-            case world::light_box::blue:
-                return common::rgb_color(dim, dim, bright);
-        }
-
-        throw common::make_invalid_argument(col);
-    }
-}
-
 namespace world
 {
     light_box_view::light_box_view(context *ctx)
@@ -118,7 +95,7 @@ namespace world
 
         u_model = model;
         u_mvp = cam->make_mvp(model);
-        u_color = to_rgb(box->get_color());
+        u_color = box->get_surface_color();
 
 
         glDrawArrays(GL_TRIANGLES, 0, vertices);

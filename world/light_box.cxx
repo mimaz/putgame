@@ -26,12 +26,34 @@
 
 constexpr auto size = 1.0f;
 
+namespace 
+{
+    common::rgb_color to_rgb(world::light_box::color col, 
+                             float bright, float dim)
+    {
+        switch (col)
+        {
+            case world::light_box::red:
+                return common::rgb_color(bright, dim, dim);
+
+            case world::light_box::green:
+                return common::rgb_color(dim, bright, dim);
+
+            case world::light_box::blue:
+                return common::rgb_color(dim, dim, bright);
+        }
+
+        throw common::make_invalid_argument(col);
+    }
+}
+
 namespace world
 {
     light_box::light_box(context *ctx, color col)
         : visible_object(ctx)
         , light_source(ctx)
         , light_col(common::rgb_color::black)
+        , surface_col(common::rgb_color::black)
         , manager(ctx->get_part<light_box_manager>())
         , speed(0.05)
         , angle(PI * 2 * rand() / RAND_MAX)
@@ -51,25 +73,8 @@ namespace world
     {
         col = c;
 
-        auto dim = 0.0f;
-
-        switch (c)
-        {
-        case red:
-            light_col = common::rgb_color(1.f, dim, dim);
-            break;
-
-        case green:
-            light_col = common::rgb_color(dim, 1.0f, dim);
-            break;
-
-        case blue:
-            light_col = common::rgb_color(dim, dim, 1.0f);
-            break;
-
-        default:
-            throw common::make_invalid_argument(c);
-        }
+        light_col = to_rgb(c, 1.0f, 0.25f);
+        surface_col = to_rgb(c, 1.0f, 0.75f);
     }
 
     void light_box::set_speed(float spd)
@@ -80,6 +85,11 @@ namespace world
     void light_box::on_draw()
     {
         angle += get_speed();
+    }
+
+    common::rgb_color light_box::get_surface_color() const
+    {
+        return surface_col;
     }
 
     glm::vec3 light_box::get_light_position() 

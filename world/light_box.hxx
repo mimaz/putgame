@@ -37,6 +37,8 @@ namespace world
         float get_speed() const { return speed; }
         float get_angle() const { return angle; }
 
+        common::rgb_color get_surface_color() const;
+
         glm::vec3 get_light_position() override;
         glm::vec3 get_light_color() override;
         float get_light_range() override;
@@ -44,6 +46,7 @@ namespace world
     private:
         color col;
         common::rgb_color light_col;
+        common::rgb_color surface_col;
 
         light_box_manager *manager;
 
