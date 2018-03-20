@@ -14,7 +14,6 @@
 #include "world/light_box.hxx"
 #include "world/camera.hxx"
 #include "world/glass_pane.hxx"
-#include "world/glass_view.hxx"
 
 #include "glutils/exception.hxx"
 
@@ -164,9 +163,6 @@ int main(void)
 
     pane->move({ 0, 0, 2 });
 
-    auto view = std::make_unique<world::glass_view>(
-            ctx.get());
-
 
     glfwSetWindowUserPointer(win, ctx.get());
 
@@ -187,10 +183,6 @@ int main(void)
 
             try {
                 ctx->draw_frame();
-                view->begin();
-                view->bind_pane();
-                view->draw(pane.get());
-                view->end();
             } catch (glutils::location_error e) {
                 std::cerr << "location error: " << e.name << std::endl;
             }

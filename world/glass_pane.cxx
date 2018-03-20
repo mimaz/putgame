@@ -7,6 +7,9 @@
 
 #include "glass_pane.hxx"
 
+#include "glass_manager.hxx"
+#include "context.hxx"
+
 namespace world
 {
     glass_pane::glass_pane(context *ctx,
@@ -15,5 +18,12 @@ namespace world
         : visible_object(ctx)
         , color(col)
         , size(siz)
-    {}
+    {
+        ctx->get_part<glass_manager>()->add(this);
+    }
+
+    glass_pane::~glass_pane()
+    {
+        get_context()->get_part<glass_manager>()->remove(this);
+    }
 }

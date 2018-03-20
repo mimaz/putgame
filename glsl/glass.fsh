@@ -9,6 +9,5 @@ uniform lowp vec3 u_color;
 
 void main()
 {
-    //gl_FragColor = vec4(u_color, alpha);
-    gl_FragColor = vec4(1.0, 0.0, 0.0, alpha);
+    gl_FragColor = vec4(u_color, alpha);
 }

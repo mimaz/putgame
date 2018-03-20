@@ -19,6 +19,8 @@ namespace world
                    common::rgb_color color, 
                    glm::vec2 size);
 
+        ~glass_pane();
+
         common::rgb_color get_color() const { return color; }
         glm::vec2 get_size() const { return size; }
 
