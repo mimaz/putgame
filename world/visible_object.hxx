@@ -13,9 +13,6 @@ namespace world
     class visible_object
     {
     public:
-        class invalid_context {};
-
-
         visible_object(context *ctx);
 
         visible_object(const visible_object &) = delete;
@@ -32,7 +29,7 @@ namespace world
         void scale(float scalar);
         void scale(const glm::vec3 &vec);
 
-        context *get_context() const;
+        context *get_context() const { return ctx; }
 
         const glm::mat4 &get_model() const { return model; }
         glm::vec3 get_position() const;

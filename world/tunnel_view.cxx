@@ -61,14 +61,15 @@ namespace world
 
     void tunnel_view::draw()
     {
-        auto &points = path.get_points();
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_BLEND);
 
+
+        auto &points = path.get_points();
 
         if (points.empty())
             return;
-
-
-        glEnable(GL_CULL_FACE);
 
         prog.use();
 

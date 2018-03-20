@@ -48,14 +48,6 @@ namespace world
         model = glm::scale(glm::mat4(1), vec) * model;
     }
 
-    context *visible_object::get_context() const
-    {
-        if (ctx == nullptr)
-            throw invalid_context();
-
-        return ctx;
-    }
-
     glm::vec3 visible_object::get_position() const
     {
         return glm::vec3(get_model() * glm::vec4(0, 0, 0, 1));

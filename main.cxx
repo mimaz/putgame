@@ -5,12 +5,16 @@
 
 #include <putgame-std>
 
+#include "common/rgb_color.hxx"
+
 #include "world/context.hxx"
 #include "world/tunnel.hxx"
 #include "world/tunnel_mesh.hxx"
 #include "world/way_path.hxx"
 #include "world/light_box.hxx"
 #include "world/camera.hxx"
+#include "world/glass_pane.hxx"
+#include "world/glass_view.hxx"
 
 #include "glutils/exception.hxx"
 
@@ -136,7 +140,7 @@ int main(void)
 
     auto cam = ctx->get_part<world::camera>();
 
-    cam->move({ 0, 0, 0 });
+    cam->move({ 0, 0, -1 });
 
 
     auto box1 = std::make_unique<world::light_box>(
@@ -152,6 +156,16 @@ int main(void)
 
     box2->scale(0.25);
     box2->move({ 1.5, 0.5, 8 });
+
+
+
+    auto pane = std::make_unique<world::glass_pane>(
+            ctx.get(), common::rgb_color::green, glm::vec2(1, 1));
+
+    pane->move({ 0, 0, 2 });
+
+    auto view = std::make_unique<world::glass_view>(
+            ctx.get());
 
 
     glfwSetWindowUserPointer(win, ctx.get());
@@ -173,6 +187,10 @@ int main(void)
 
             try {
                 ctx->draw_frame();
+                view->begin();
+                view->bind_pane();
+                view->draw(pane.get());
+                view->end();
             } catch (glutils::location_error e) {
                 std::cerr << "location error: " << e.name << std::endl;
             }

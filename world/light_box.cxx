@@ -74,7 +74,7 @@ namespace world
         col = c;
 
         light_col = to_rgb(c, 1.0f, 0.25f);
-        surface_col = to_rgb(c, 1.0f, 0.75f);
+        surface_col = to_rgb(c, 1.0f, 0.25f);
     }
 
     void light_box::set_speed(float spd)
