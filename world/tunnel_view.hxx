@@ -13,6 +13,7 @@
 #include <glutils/buffer.hxx>
 
 #include "tunnel_mesh.hxx"
+#include "tunnel_path.hxx"
 
 namespace world
 {
@@ -25,29 +26,17 @@ namespace world
     class tunnel_view
     {
     public:
-        class frame;
-
         tunnel_view(float width, int quality, bool stripped, tunnel *tun);
-
-        ~tunnel_view();
-
-
-        void gen_frame();
 
         void draw();
 
-        const frame &get_last_frame() const { return frames.back(); }
-
     private:
-        std::deque<frame> frames;
         tunnel_mesh mesh;
+        tunnel_path path;
 
-        pathway *way;
         tunnel_blot *blot;
         camera *cam;
-        std::unique_ptr<lighting> light;
-
-        int way_point_id;
+        std::shared_ptr<lighting> light;
 
         glutils::shader vsh;
         glutils::shader fsh;
@@ -65,25 +54,6 @@ namespace world
         glutils::buffer ibo;
     };
 
-    class tunnel_view::frame
-    {
-    public:
-        frame(const glm::mat4 &matrix, int index);
-
-        frame(const frame &) = default;
-        frame(frame &&) = default;
-
-        const glm::mat4 &get_matrix() const { return matrix; }
-        int get_index() const { return index; }
-        int get_hash() const { return hash; }
-
-        float distance(const glm::vec3 &point) const;
-
-    private:
-        glm::mat4 matrix;
-        int index;
-        int hash;
-    };
 }
 
 #endif

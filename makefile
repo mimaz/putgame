@@ -132,7 +132,7 @@ ${RESOURCE_HEADER}: ${GLSL_C}
 ##############################################
 
 # target objects
-${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${TARGET_PCH_OBJ} | ${RESOURCE_HEADER}
+${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${RESOURCE_HEADER} ${TARGET_PCH_OBJ}
 	@mkdir -p ${dir $@}
 	${CXX} ${TARGET_CXXFLAGS} -c $< -o $@
 

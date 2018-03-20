@@ -17,25 +17,6 @@
 
 namespace
 {
-    inline glm::vec3 get_position(const glm::mat4 &matrix)
-    {
-        return glm::vec3(matrix * glm::vec4(0, 0, 0, 1));
-    }
-
-    inline glm::vec3 get_direction(const glm::mat4 &matrix)
-    {
-        return glm::vec3(matrix * glm::vec4(0, 0, 1, 0));
-    }
-
-    inline int frame_hash(const glm::mat4 &matrix, int index)
-    {
-        for (int y = 0; y < 4; y++)
-            for (int x = 0; x < 4; x++)
-                index += static_cast<int>(matrix[y][x]);
-
-        return std::hash<int>()(rand() + index);
-    }
-
     std::string vsh_header(int blot_size)
     {
         return "const int blot_size = " + std::to_string(blot_size) + ";\n";
@@ -47,11 +28,10 @@ namespace world
     tunnel_view::tunnel_view(float width, int quality, 
                              bool stripped, tunnel *tun)
         : mesh(quality, width, stripped)
-        , way(tun->get_context()->get_part<pathway>())
+        , path(tun->get_context()->get_part<pathway>(), mesh.get_gap())
         , blot(tun->get_context()->get_part<tunnel_blot>())
         , cam(tun->get_context()->get_part<camera>())
-        , light(std::make_unique<world::lighting>(tun->get_context(), &prog))
-        , way_point_id(0)
+        , light(std::make_shared<world::lighting>(tun->get_context(), &prog))
         , vsh(GL_VERTEX_SHADER, 
               vsh_header(tunnel_blot::blot_size),
               tunnel_vsh)
@@ -72,75 +52,15 @@ namespace world
               mesh.get_vertex_data_size())
         , ibo(GL_ELEMENT_ARRAY_BUFFER, mesh.get_index_ptr(),
               mesh.get_index_count())
-    {
-        for (int i = 0; i < 10; i++)
-            gen_frame();
-    }
-
-    tunnel_view::~tunnel_view()
     {}
-
-    void tunnel_view::gen_frame()
-    {
-        if (frames.empty())
-        {
-            frames.push_back(frame(glm::mat4(1), 0)); 
-            return;
-        }
-
-
-        auto calc_target_coord = [this](void) -> glm::vec3 {
-            auto mat = way->get_by_id(way_point_id).get_matrix();
-
-            return get_position(mat);
-        };
-
-
-        auto last_coord = get_position(get_last_frame().get_matrix());
-        auto target_coord = calc_target_coord();
-
-
-        auto gap = mesh.get_gap();
-
-
-        while (glm::length(target_coord - last_coord) < gap)
-        {
-            way_point_id++;
-            target_coord = calc_target_coord();
-        }
-
-
-
-        auto last_direction = glm::normalize(
-            get_direction(get_last_frame().get_matrix())
-        );
-
-        auto new_direction = glm::normalize(
-            target_coord - last_coord
-        );
-
-        auto axis = glm::normalize(
-            glm::cross(last_direction, new_direction)
-        );
-
-        auto angle = acosf(
-            glm::dot(new_direction, last_direction)
-        );
-
-        
-        auto index = get_last_frame().get_index() + 1;
-        auto transform = get_last_frame().get_matrix();
-
-        transform = glm::translate(transform, glm::vec3(0, 0, gap));
-        transform = glm::rotate(transform, angle, axis);
-
-
-
-        frames.emplace_back(transform, index);
-    }
 
     void tunnel_view::draw()
     {
+        using frame = tunnel_path::frame;
+
+        auto &frames = path.get_frames();
+
+
         if (frames.empty())
             return;
 
@@ -226,18 +146,5 @@ namespace world
         a_coord.disable();
         a_layer.disable();
         a_index.disable();
-    }
-
-    tunnel_view::frame::frame(const glm::mat4 &matrix, int index)
-        : matrix(matrix)
-        , index(index)
-        , hash(frame_hash(matrix, index))
-    {}
-
-    float tunnel_view::frame::distance(const glm::vec3 &point) const
-    {
-        glm::vec3 coord = glm::vec3(get_matrix() * glm::vec4(0, 0, 0, 1));
-
-        return glm::length(coord - point);
     }
 }
