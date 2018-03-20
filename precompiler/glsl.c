@@ -100,14 +100,14 @@ void glsl(int argc, char **argv)
         {
             fprintf(output, "0x%02x, ", buff[i]);
 
-            if (byteno++ % 8 == 0)
+            if (++byteno % 8 == 0)
                 fprintf(output, "\n\t");
         }
 
         readno = fread(buff, 1, sizeof(buff), input);
     }
 
-    fprintf(output, "0x%02x\n};\n\n// size %d\n", 0, byteno);
+    fprintf(output, "0x%02x\n};\n\n", 0);
 
 
     fclose(output);

@@ -50,7 +50,6 @@ static void findpatt(const char *patt)
 static void handlefile(void)
 {
     char symbol[64], datatype[64];
-    int size;
 
     findpatt("data_type");
     fscanf(input, "%s", datatype);
@@ -60,13 +59,7 @@ static void handlefile(void)
     fscanf(input, "%s", symbol);
     symbol[strlen(symbol) - 2] = 0;
 
-
-    findpatt("size");
-    fscanf(input, "%d", &size);
-
-
     buffptr += sprintf(buffptr, "extern const %s %s[];\n", datatype, symbol);
-    buffptr += sprintf(buffptr, "#define %s_size %d\n\n", symbol, size);
 }
 
 static void update(const char *outname)

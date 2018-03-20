@@ -111,7 +111,7 @@ ${PRECOMPILER}: ${PRECOMPILER_OBJ}
 # pre-compiled header
 ${TARGET_PCH_OBJ}: ${TARGET_PCH_SRC}
 	@mkdir -p ${dir $@}
-	${CXX} ${TARGET_CXXFLAGS} -c -xc++-header $< -o $@
+	${CXX} ${TARGET_CXXFLAGS} -xc++-header $< -o $@
 
 ##############################################
 
