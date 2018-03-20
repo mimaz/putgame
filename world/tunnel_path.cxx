@@ -7,7 +7,7 @@
 
 #include "tunnel_path.hxx"
 
-#include "pathway.hxx"
+#include "way_path.hxx"
 
 namespace 
 {
@@ -33,10 +33,10 @@ namespace
 
 namespace world
 {
-    tunnel_path::tunnel_path(pathway *way, float gap)
-        : way(way)
-        , gap(gap)
-        , way_point_id(0)
+    tunnel_path::tunnel_path(path_line *pattern, float gap)
+        : path_line(gap)
+        , pattern(pattern)
+        , pattern_id(0)
     {
         for (int i = 0; i < 10; i++)
             gen_frame();
@@ -44,35 +44,35 @@ namespace world
 
     void tunnel_path::gen_frame()
     {
-        if (frames.empty())
+        if (get_points().empty())
         {
-            frames.push_back(frame(glm::mat4(1), 0)); 
+            append();
             return;
         }
 
 
         auto calc_target_coord = [this](void) -> glm::vec3 {
-            auto mat = way->get_by_id(way_point_id).get_matrix();
+            auto mat = pattern->get_point(pattern_id).get_matrix();
 
             return get_position(mat);
         };
 
 
-        auto last_coord = get_position(get_last_frame().get_matrix());
+        auto last_coord = get_position(get_last_point().get_matrix());
         auto target_coord = calc_target_coord();
 
 
 
-        while (glm::length(target_coord - last_coord) < gap)
+        while (glm::length(target_coord - last_coord) < get_gap())
         {
-            way_point_id++;
+            pattern_id++;
             target_coord = calc_target_coord();
         }
 
 
 
         auto last_direction = glm::normalize(
-            get_direction(get_last_frame().get_matrix())
+            get_direction(get_last_point().get_matrix())
         );
 
         auto new_direction = glm::normalize(
@@ -87,28 +87,7 @@ namespace world
             glm::dot(new_direction, last_direction)
         );
 
-        
-        auto index = get_last_frame().get_index() + 1;
-        auto transform = get_last_frame().get_matrix();
 
-        transform = glm::translate(transform, glm::vec3(0, 0, gap));
-        transform = glm::rotate(transform, angle, axis);
-
-
-
-        frames.emplace_back(transform, index);
-    }
-
-    tunnel_path::frame::frame(const glm::mat4 &matrix, int index)
-        : matrix(matrix)
-        , index(index)
-        , hash(frame_hash(matrix, index))
-    {}
-
-    float tunnel_path::frame::distance(const glm::vec3 &point) const
-    {
-        glm::vec3 coord = glm::vec3(get_matrix() * glm::vec4(0, 0, 0, 1));
-
-        return glm::length(coord - point);
+        append(angle, axis);
     }
 }

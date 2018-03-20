@@ -8,8 +8,8 @@
 #include "world/context.hxx"
 #include "world/tunnel.hxx"
 #include "world/tunnel_mesh.hxx"
+#include "world/way_path.hxx"
 #include "world/light_box.hxx"
-#include "world/pathway.hxx"
 #include "world/camera.hxx"
 
 #include "glutils/exception.hxx"
@@ -96,8 +96,8 @@ static void resize_callback(GLFWwindow *win,
 
 int main(void)
 {
-    constexpr auto default_width = 640;
-    constexpr auto default_height = 480;
+    constexpr auto default_width = 1920;
+    constexpr auto default_height = 1080;
 
     assert(glfwInit());
 
@@ -128,6 +128,9 @@ int main(void)
 
 
     auto ctx = std::make_unique<world::context>(default_width, default_height);
+
+    for (int i = 0; i < 100; i++)
+        ctx->get_part<world::way_path>()->generate();
 
     ctx->get_part<world::tunnel>()->set_stripped(false);
 

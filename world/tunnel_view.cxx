@@ -9,7 +9,7 @@
 #include "tunnel_view.hxx"
 
 #include "tunnel.hxx"
-#include "pathway.hxx"
+#include "way_path.hxx"
 #include "tunnel_blot.hxx"
 #include "camera.hxx"
 #include "context.hxx"
@@ -21,6 +21,11 @@ namespace
     {
         return "const int blot_size = " + std::to_string(blot_size) + ";\n";
     }
+
+    int frame_hash(const world::path_point &pt)
+    {
+        return pt.get_index();
+    }
 }
 
 namespace world
@@ -28,7 +33,7 @@ namespace world
     tunnel_view::tunnel_view(float width, int quality, 
                              bool stripped, tunnel *tun)
         : mesh(quality, width, stripped)
-        , path(tun->get_context()->get_part<pathway>(), mesh.get_gap())
+        , path(tun->get_context()->get_part<way_path>(), mesh.get_gap())
         , blot(tun->get_context()->get_part<tunnel_blot>())
         , cam(tun->get_context()->get_part<camera>())
         , light(std::make_shared<world::lighting>(tun->get_context(), &prog))
@@ -56,12 +61,10 @@ namespace world
 
     void tunnel_view::draw()
     {
-        using frame = tunnel_path::frame;
-
-        auto &frames = path.get_frames();
+        auto &points = path.get_points();
 
 
-        if (frames.empty())
+        if (points.empty())
             return;
 
 
@@ -103,25 +106,26 @@ namespace world
 
 
 
-        for (auto it = frames.begin() + 1; it != frames.end(); it++)
+        for (auto it = points.begin() + 1; it != points.end(); it++)
         {
-            auto &fr0 = it[-1];
-            auto &fr1 = it[0];
+            auto &pt0 = it[-1];
+            auto &pt1 = it[0];
 
-            auto rotate_model = [this](const frame &fr) -> glm::mat4 {
-                auto idx = fr.get_index();
+            auto rotate_model = [this](const path_point &pt) -> glm::mat4 {
+                auto idx = pt.get_index();
 
                 auto angle = -PI / mesh.get_quality() * idx;
                 auto axis = glm::vec3(0, 0, 1);
 
                 auto rot = glm::rotate(glm::mat4(1), angle, axis);
 
-                return fr.get_matrix() * rot;
+                return pt.get_matrix() * rot;
             };
 
 
-            auto model_0 = rotate_model(fr0);
-            auto model_1 = rotate_model(fr1);
+            auto model_0 = rotate_model(pt0);
+            auto model_1 = rotate_model(pt1);
+
 
             u_model_0 = model_0;
             u_model_1 = model_1;
@@ -130,8 +134,8 @@ namespace world
             u_mvp_1 = cam->make_mvp(model_1);
 
 
-            auto random0 = blot->get(fr0.get_hash()).data();
-            auto random1 = blot->get(fr1.get_hash()).data();
+            auto random0 = blot->get(frame_hash(pt0)).data();
+            auto random1 = blot->get(frame_hash(pt1)).data();
 
             auto blot_size = tunnel_blot::blot_size;
 
