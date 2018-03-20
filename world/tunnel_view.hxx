@@ -20,7 +20,7 @@ namespace world
     class lighting;
     class tunnel;
     class tunnel_path;
-    class tunnel_data;
+    class tunnel_blot;
 
     class tunnel_view
     {
@@ -43,7 +43,7 @@ namespace world
         tunnel_mesh mesh;
 
         tunnel_path *path;
-        tunnel_data *data;
+        tunnel_blot *blot;
         camera *cam;
         std::unique_ptr<lighting> light;
 

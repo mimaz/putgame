@@ -11,7 +11,7 @@ namespace glutils
     class shader
     {
     public:
-        using srcitem = const GLchar *;
+        using srcitem = std::string;
         using srclist = std::initializer_list<srcitem>;
         using srcvec = std::vector<srcitem>;
 

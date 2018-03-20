@@ -60,7 +60,14 @@ namespace glutils
         }
 
 
-        glShaderSource(handle, srcv.size(), srcv.data(), nullptr);
+        const char *arr[srcv.size()];
+
+        std::transform(srcv.begin(), srcv.end(), arr,
+                       [](const srcitem &item) -> const char * {
+            return item.c_str();
+        });
+
+        glShaderSource(handle, srcv.size(), arr, nullptr);
         glCompileShader(handle);
 
 

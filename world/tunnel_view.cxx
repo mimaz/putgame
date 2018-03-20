@@ -10,7 +10,7 @@
 
 #include "tunnel.hxx"
 #include "tunnel_path.hxx"
-#include "tunnel_data.hxx"
+#include "tunnel_blot.hxx"
 #include "camera.hxx"
 #include "context.hxx"
 #include "lighting.hxx"
@@ -35,19 +35,26 @@ namespace
 
         return std::hash<int>()(rand() + index);
     }
+
+    std::string vsh_header(int blot_size)
+    {
+        return "const int blot_size = " + std::to_string(blot_size) + ";\n";
+    }
 }
 
 namespace world
 {
     tunnel_view::tunnel_view(float width, int quality, 
-                               bool stripped, tunnel *tun)
+                             bool stripped, tunnel *tun)
         : mesh(quality, width, stripped)
         , path(tun->get_context()->get_part<tunnel_path>())
-        , data(tun->get_context()->get_part<tunnel_data>())
+        , blot(tun->get_context()->get_part<tunnel_blot>())
         , cam(tun->get_context()->get_part<camera>())
         , light(std::make_unique<world::lighting>(tun->get_context(), &prog))
         , path_segment_id(0)
-        , vsh(GL_VERTEX_SHADER, tunnel_vsh)
+        , vsh(GL_VERTEX_SHADER, 
+              vsh_header(tunnel_blot::blot_size),
+              tunnel_vsh)
         , fsh(GL_FRAGMENT_SHADER, 
               world::lighting::fragment_source,
               tunnel_fsh)
@@ -203,11 +210,13 @@ namespace world
             u_mvp_1 = cam->make_mvp(model_1);
 
 
-            auto random0 = data->get(fr0.get_hash()).data();
-            auto random1 = data->get(fr1.get_hash()).data();
+            auto random0 = blot->get(fr0.get_hash()).data();
+            auto random1 = blot->get(fr1.get_hash()).data();
 
-            glUniform1fv(u_random_0.get_handle(), 8, random0);
-            glUniform1fv(u_random_1.get_handle(), 8, random1);
+            auto blot_size = tunnel_blot::blot_size;
+
+            glUniform1fv(u_random_0.get_handle(), blot_size, random0);
+            glUniform1fv(u_random_1.get_handle(), blot_size, random1);
 
 
             glDrawElements(GL_TRIANGLES, mesh.get_index_count(), 

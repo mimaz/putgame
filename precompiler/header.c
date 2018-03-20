@@ -59,7 +59,7 @@ static void handlefile(void)
     fscanf(input, "%s", symbol);
     symbol[strlen(symbol) - 2] = 0;
 
-    buffptr += sprintf(buffptr, "extern const %s %s[];\n", datatype, symbol);
+    buffptr += sprintf(buffptr, "extern const %s %s[];\n\n", datatype, symbol);
 }
 
 static void update(const char *outname)
@@ -67,7 +67,7 @@ static void update(const char *outname)
     static char lastbuf[16386];
 
     FILE *last, *output;
-    int lastsiz, bufsiz, skip;
+    int lastsiz, bufsiz;
 
 
     bufsiz = buffptr - headerbuf;
@@ -87,24 +87,22 @@ static void update(const char *outname)
     }
 
 
-    skip = lastsiz == bufsiz && memcmp(lastbuf, headerbuf, bufsiz) == 0;
 
-
-
-
-    output = fopen(outname, "w");
-
-    if (output == NULL)
+    if (lastsiz != bufsiz || memcpy(lastbuf, headerbuf, bufsiz) != 0)
     {
-        fprintf(stderr, "failed to open file %s to write: %s\n",
-                outname, strerror(errno));
-        exit(1);
+        output = fopen(outname, "w");
+
+        if (output == NULL)
+        {
+            fprintf(stderr, "failed to open file %s to write: %s\n",
+                    outname, strerror(errno));
+            exit(1);
+        }
+
+        fwrite(headerbuf, 1, bufsiz, output);
+
+        fclose(output);
     }
-
-    if (! skip)
-        fwrite(headerbuf, 1, buffptr - headerbuf, output);
-
-    fclose(output);
 }
 
 static void closefiles(void)
@@ -144,7 +142,7 @@ void header(int argc, char **argv)
 
     buffptr += sprintf(buffptr, "%s\n", author_message);
     buffptr += sprintf(buffptr, "#ifndef __%s\n", unitname);
-    buffptr += sprintf(buffptr, "#define __%s\n", unitname);
+    buffptr += sprintf(buffptr, "#define __%s\n\n", unitname);
 
     
     for (i = 3; i < argc; i++)

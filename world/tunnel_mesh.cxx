@@ -7,6 +7,8 @@
 
 #include "tunnel_mesh.hxx"
 
+#include "tunnel_blot.hxx"
+
 namespace 
 {
     // determine the final shape of triangle
@@ -59,7 +61,7 @@ namespace world
             GLfloat x = cosf(angle) * width / 2;
             GLfloat y = sinf(angle) * width / 2;
             GLfloat z = 0;
-            GLfloat index = i % 8 + 0.5f;
+            GLfloat index = i % tunnel_blot::blot_size + 0.5f;
 
             pushvert(x, y, z, 0, index);
             pushvert(x, y, z, 1, index);
