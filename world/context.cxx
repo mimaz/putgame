@@ -33,6 +33,7 @@ namespace world
         get_part<tunnel>()->draw();
         get_part<light_box_manager>()->draw_all();
         get_part<glass_manager>()->draw_all();
+        get_part<glass_manager>()->draw_all_specular();
     }
 
     void context::resize_frame(int w, int h)

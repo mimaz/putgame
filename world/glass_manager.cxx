@@ -43,6 +43,10 @@ namespace world
             piece->on_draw();
 
         draw(false);
+    }
+
+    void glass_manager::draw_all_specular()
+    {
         draw(true);
     }
 

@@ -59,12 +59,13 @@ namespace world
     void glass_view::begin(bool specular)
     {
         glDisable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
 
         if (specular)
         {
-            glDisable(GL_DEPTH_TEST);
             glBlendFunc(GL_ONE, GL_ONE);
+            glDisable(GL_DEPTH_TEST);
 
             prog_sp.use();
             a_coord_sp.enable();
@@ -73,7 +74,6 @@ namespace world
         }
         else
         {
-            glEnable(GL_DEPTH_TEST);
             glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 
             prog_tr.use();

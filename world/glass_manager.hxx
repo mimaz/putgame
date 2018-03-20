@@ -26,6 +26,7 @@ namespace world
         void remove(glass_piece *pane);
 
         void draw_all();
+        void draw_all_specular();
 
     private:
         void draw(bool specular);

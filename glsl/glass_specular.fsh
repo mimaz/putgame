@@ -12,7 +12,7 @@ void main()
 
     lowp vec3 color = enlight(black, white, 
                               normal, v_coord,
-                              40.0,
+                              140.0,
                               false, true,
                               true);
 

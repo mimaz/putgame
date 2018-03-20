@@ -59,8 +59,7 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
         // specular light calculation sucks
         if (specular)
         {
-            mediump vec3 diff = ray - normal;
-            mediump vec3 ref = ray - (diff * 2.0);
+            mediump vec3 ref = ray * 2.0 * normal * dot(normal, ray);
             mediump float reflen = length(ref);
 
             lowp float specular_cosine = dot(view, ref) 
