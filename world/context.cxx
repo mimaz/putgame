@@ -9,6 +9,7 @@
 
 #include "light_box_manager.hxx"
 #include "glass_manager.hxx"
+#include "obstacle_manager.hxx"
 #include "tunnel.hxx"
 #include "camera.hxx"
 
@@ -34,6 +35,7 @@ namespace world
         get_part<light_box_manager>()->draw_all();
         get_part<glass_manager>()->draw_all();
         get_part<glass_manager>()->draw_all_specular();
+        get_part<obstacle_manager>()->draw_all();
     }
 
     void context::resize_frame(int w, int h)

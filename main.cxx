@@ -15,6 +15,7 @@
 #include "world/camera.hxx"
 #include "world/glass_pane.hxx"
 #include "world/glass_piece.hxx"
+#include "world/wall_obstacle.hxx"
 
 #include "glutils/exception.hxx"
 
@@ -143,6 +144,10 @@ int main(void)
     cam->move({ 0, 0, -1 });
 
 
+    auto wall = std::make_unique<world::wall_obstacle>(
+            ctx.get(), glm::vec2(2, 2));
+
+
     auto box1 = std::make_unique<world::light_box>(
             ctx.get(), world::light_box::blue);
 
@@ -162,7 +167,7 @@ int main(void)
     auto pane = std::make_unique<world::glass_pane>(
             ctx.get(), common::rgb_color::green, glm::vec2(1, 1));
 
-    pane->move({ 0, 0, 2 });
+    pane->move({ 0, 0, 4 });
 
     auto piece = std::make_unique<world::glass_piece>(pane.get());
 
