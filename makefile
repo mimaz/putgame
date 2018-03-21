@@ -20,7 +20,7 @@ GLSL_O_DIR = ${BASE_BUILD_DIR}/glsl-obj
  # targets
  ##
 TARGET = ${TARGET_BUILD_DIR}/${PROJECT}
-PRECOMPILER = ${PRECOMPILER_BUILD_DIR}/precompiler/precompiler
+PRECOMPILER = ${PRECOMPILER_BUILD_DIR}/resource-precompiler
 
 ##
  # resources
