@@ -15,7 +15,12 @@ void main()
 
     if (v_type < 0.5)
     {
-        color = u_color;
+        color = enlight(color, white,
+                        v_normal, v_coord, 
+                        false, true,
+                        false);
+
+        color += u_color;
     }
     else
     {

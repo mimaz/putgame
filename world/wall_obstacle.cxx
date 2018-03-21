@@ -14,11 +14,22 @@ namespace
 
 namespace world
 {
-    wall_obstacle::wall_obstacle(context *ctx, glm::vec2 siz)
+    wall_obstacle::wall_obstacle(context *ctx, int w, int h)
+        : wall_obstacle(ctx, w, h, 1)
+    {}
+
+    wall_obstacle::wall_obstacle(context *ctx, 
+                                 int w, int h, int d)
         : abstract_obstacle(ctx)
-        , size(siz)
+        , width(w)
+        , height(h)
+        , depth(d)
     {
-        scale(glm::vec3(siz * scale_factor, 1.0f));
+        auto xscale = w * scale_factor;
+        auto yscale = h * scale_factor;
+        auto zscale = d * scale_factor;
+
+        scale(glm::vec3(xscale, yscale, zscale));
 
         register_self(this);
     }

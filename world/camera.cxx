@@ -69,8 +69,6 @@ namespace world
                                         get_view_ratio(),
                                         near_plane,
                                         get_view_range());
-
-            proj_mat[2] *= -1;
         }
 
         return proj_mat;

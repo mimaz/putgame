@@ -6,13 +6,16 @@
 attribute lowp vec3 a_coord;
 attribute lowp vec3 a_normal;
 attribute lowp vec2 a_tex_coord;
+attribute lowp float a_mode;
 
 uniform highp mat4 u_model;
 uniform highp mat4 u_mvp;
+uniform lowp vec2 u_tex_factor;
 
 varying lowp vec3 v_coord;
 varying lowp vec3 v_normal;
 varying lowp vec2 v_tex_coord;
+varying lowp float v_mode;
 
 void main()
 {
@@ -21,7 +24,8 @@ void main()
 
     v_coord = vec3(u_model * coord4);
     v_normal = vec3(u_model * normal4);
-    v_tex_coord = a_tex_coord;
+    v_tex_coord = a_tex_coord * u_tex_factor;
+    v_mode = a_mode;
 
     gl_Position = u_mvp * coord4;
 }

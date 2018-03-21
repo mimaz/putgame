@@ -63,27 +63,27 @@ static void key_callback(GLFWwindow *win,
             break;
 
         case GLFW_KEY_F:
-            cam->move({ 0, 0, step });
-            break;
-
-        case GLFW_KEY_B:
             cam->move({ 0, 0, -step });
             break;
 
-        case GLFW_KEY_A:
-            cam->rotate(-angle, { 0, 1, 0 });
+        case GLFW_KEY_B:
+            cam->move({ 0, 0, step });
             break;
 
-        case GLFW_KEY_D:
+        case GLFW_KEY_A:
             cam->rotate(angle, { 0, 1, 0 });
             break;
 
+        case GLFW_KEY_D:
+            cam->rotate(-angle, { 0, 1, 0 });
+            break;
+
         case GLFW_KEY_W:
-            cam->rotate(-angle, { 1, 0, 0 });
+            cam->rotate(angle, { 1, 0, 0 });
             break;
 
         case GLFW_KEY_X:
-            cam->rotate(angle, { 1, 0, 0 });
+            cam->rotate(-angle, { 1, 0, 0 });
             break;
     }
 }
@@ -145,7 +145,7 @@ int main(void)
 
 
     auto wall = std::make_unique<world::wall_obstacle>(
-            ctx.get(), glm::vec2(2, 2));
+            ctx.get(), 2, 5);
 
     wall->move({ 0, 0, 3 });
 

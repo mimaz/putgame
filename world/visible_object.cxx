@@ -30,12 +30,12 @@ namespace world
 
     void visible_object::move(const glm::vec3 &vec)
     {
-        model = glm::translate(glm::mat4(1), vec) * model;
+        model = glm::translate(glm::mat4(1), -vec) * model;
     }
 
     void visible_object::rotate(float angle, const glm::vec3 &axis)
     {
-        model = glm::rotate(model, angle, axis);
+        model = glm::rotate(model, -angle, axis);
     }
 
     void visible_object::scale(float scalar)

@@ -11,7 +11,9 @@ namespace world
 {
     path_line::path_line(float gap)
         : gap(gap)
-    {}
+    {
+        reset();
+    }
 
     void path_line::append()
     {
@@ -36,6 +38,17 @@ namespace world
 
 
         points.emplace_back(matrix, index);
+    }
+
+    void path_line::reset()
+    {
+        reset(glm::rotate(glm::mat4(1), PI, { 0, 1, 0 }));
+    }
+
+    void path_line::reset(const glm::mat4 &matrix)
+    {
+        points.clear();
+        points.emplace_back(matrix, 0);
     }
 
     const path_point &path_line::get_point(int id) const

@@ -13,12 +13,17 @@ namespace world
     class wall_obstacle : public abstract_obstacle
     {
     public:
-        wall_obstacle(context *ctx, glm::vec2 siz);
+        wall_obstacle(context *ctx, int w, int h);
+        wall_obstacle(context *ctx, int w, int h, int d);
 
-        glm::vec2 get_size() const { return size; }
+        int get_width() const { return width; }
+        int get_height() const { return height; }
+        int get_depth() const { return depth; }
 
     private:
-        glm::vec2 size;
+        int width;
+        int height;
+        int depth;
     };
 }
 

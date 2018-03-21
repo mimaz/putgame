@@ -21,6 +21,11 @@ namespace world
         void append(float angle, const glm::vec3 &axis);
 
 
+        void reset();
+
+        void reset(const glm::mat4 &matrix);
+
+
         const path_point &get_first_point() const
         { return points.front(); }
 

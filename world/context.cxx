@@ -19,7 +19,7 @@ namespace world
         : width(0), height(0)
     {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
 
         resize_frame(w, h);
     }
@@ -33,9 +33,9 @@ namespace world
 
         get_part<tunnel>()->draw();
         get_part<light_box_manager>()->draw_all();
+        get_part<obstacle_manager>()->draw_all();
         get_part<glass_manager>()->draw_all();
         get_part<glass_manager>()->draw_all_specular();
-        get_part<obstacle_manager>()->draw_all();
     }
 
     void context::resize_frame(int w, int h)

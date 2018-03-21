@@ -40,6 +40,7 @@ namespace world
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
+        glCullFace(GL_BACK);
 
         prog.use();
 

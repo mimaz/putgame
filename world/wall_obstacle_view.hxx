@@ -22,6 +22,9 @@ namespace world
     class wall_obstacle_view
     {
     public:
+        static const float mesh[];
+        static const size_t size_of_mesh;
+
         wall_obstacle_view(context *ctx);
         ~wall_obstacle_view();
 
@@ -38,8 +41,10 @@ namespace world
         glutils::attribute a_coord;
         glutils::attribute a_normal;
         glutils::attribute a_tex_coord;
+        glutils::attribute a_mode;
         glutils::uniform u_model;
         glutils::uniform u_mvp;
+        glutils::uniform u_tex_factor;
 
         std::shared_ptr<lighting> light;
 
