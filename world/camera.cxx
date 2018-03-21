@@ -88,16 +88,9 @@ namespace world
 
     glm::vec3 camera::get_position() const
     {
-        // TODO it may be needed to invert w-axis
         auto inv = glm::inverse(get_view());
 
         return glm::vec3(inv * glm::vec4(0, 0, 0, 1));
-    }
-
-    glm::vec3 camera::get_direction() const
-    {
-        // TODO it may be needed to invert z-axis
-        return glm::vec3(get_view() * glm::vec4(0, 0, -1, 0));
     }
 
     glm::vec3 camera::get_light_position()

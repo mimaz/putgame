@@ -147,6 +147,8 @@ int main(void)
     auto wall = std::make_unique<world::wall_obstacle>(
             ctx.get(), glm::vec2(2, 2));
 
+    wall->move({ 0, 0, 3 });
+
 
     auto box1 = std::make_unique<world::light_box>(
             ctx.get(), world::light_box::blue);

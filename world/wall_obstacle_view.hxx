@@ -16,6 +16,7 @@ namespace world
 {
     class context;
     class camera;
+    class lighting;
     class wall_obstacle;
 
     class wall_obstacle_view
@@ -39,6 +40,8 @@ namespace world
         glutils::attribute a_tex_coord;
         glutils::uniform u_model;
         glutils::uniform u_mvp;
+
+        std::shared_ptr<lighting> light;
 
         GLuint texhandle;
     };

@@ -35,7 +35,6 @@ void main()
 
     color = enlight(color, white,
                     normal, v_coord, 
-                    180.0,
                     true, true,
                     false);
 

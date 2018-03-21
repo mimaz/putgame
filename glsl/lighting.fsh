@@ -4,6 +4,7 @@
  */
 
 const int max_light_count = 4;
+const mediump float specular_pow = 200.0;
 
 const lowp vec3 white = vec3(1.0, 1.0, 1.0);
 const lowp vec3 black = vec3(0.0, 0.0, 0.0);
@@ -19,7 +20,6 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
                   lowp vec3 material_specular,
                   lowp vec3 normal,
                   mediump vec3 coord,
-                  lowp float specular_pow,
                   bool diffuse,
                   bool specular,
                   bool backface)
@@ -59,12 +59,11 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
         // specular light calculation sucks
         if (specular)
         {
-            mediump vec3 ref = ray * 2.0 * normal * dot(normal, ray);
+            mediump vec3 ref = ray - normal;
             mediump float reflen = length(ref);
 
             lowp float specular_cosine = dot(view, ref) 
                 / (reflen * viewlen);
-
 
             lowp float specular_coef = 
                 pow(specular_cosine, specular_pow);

@@ -28,10 +28,9 @@ void main()
             color = vec3(0.5, 0.5, 0.5);
         }
 
-        color = enlight(color, color,
+        color = enlight(color, white,
                         v_normal, v_coord, 
-                        -1.0,
-                        true, false,
+                        true, true,
                         false);
     }
 

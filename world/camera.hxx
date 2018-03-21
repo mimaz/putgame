@@ -30,7 +30,6 @@ namespace world
         glm::mat4 make_mvp(const glm::mat4 &model) const;
 
         glm::vec3 get_position() const;
-        glm::vec3 get_direction() const;
 
         float get_view_angle() const { return view_angle; }
         float get_view_ratio() const { return view_ratio; }
