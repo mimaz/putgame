@@ -88,7 +88,7 @@ static void update(const char *outname)
 
 
 
-    if (lastsiz != bufsiz || memcpy(lastbuf, headerbuf, bufsiz) != 0)
+    if (lastsiz != bufsiz || memcmp(lastbuf, headerbuf, bufsiz) != 0)
     {
         output = fopen(outname, "w");
 
