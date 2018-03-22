@@ -12,9 +12,13 @@ void main()
 {
     lowp vec3 normal = normalize(v_normal);
 
-    lowp vec3 color = enlight(black, white, 
-                              normal, v_coord,
-                              false, true,
+    lowp vec3 color = enlight(black, 
+                              white, 
+                              normal, 
+                              v_coord,
+                              120.0,
+                              false, 
+                              true,
                               true);
 
     out_color = vec4(color, 1.0);

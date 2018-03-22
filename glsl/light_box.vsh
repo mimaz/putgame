@@ -11,10 +11,10 @@ uniform highp mat4 u_mvp_v[2];
 uniform highp mat4 u_model_v[2];
 uniform lowp vec3 u_color_v[2];
 
-out lowp float v_type;
+flat out lowp int v_type;
+flat out lowp vec3 v_normal;
+flat out lowp vec3 v_color;
 out mediump vec3 v_coord;
-out lowp vec3 v_normal;
-out lowp vec3 v_color;
 
 void main()
 {
@@ -27,10 +27,11 @@ void main()
     lowp vec4 coord4 = vec4(a_coord, 1.0);
     lowp vec4 normal4 = vec4(a_normal, 0.0);
 
-    v_type = a_type;
-    v_coord = vec3(model * coord4);
+    v_type = int(a_type);
     v_normal = normalize(vec3(model * normal4));
     v_color = color;
+
+    v_coord = vec3(model * coord4);
 
     gl_Position = mvp * coord4;
 }

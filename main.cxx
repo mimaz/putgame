@@ -203,7 +203,8 @@ int main(void)
             glfwPollEvents();
         }
     } catch (glutils::shader_error e) {
-        std::cerr << "shader error: " << e.desc << std::endl;
+        std::cerr << e.code << std::endl
+                  << "shader error: " << e.log << std::endl;
     }
 
 

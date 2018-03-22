@@ -12,7 +12,8 @@ namespace glutils
     {
     public:
         GLenum type;
-        std::string desc;
+        std::string log;
+        std::string code;
     };
 
     class location_error

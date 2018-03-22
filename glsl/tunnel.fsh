@@ -35,9 +35,13 @@ void main()
 
     lowp vec3 normal = normalize(v_normal);
 
-    color = enlight(color, white,
-                    normal, v_coord, 
-                    true, true,
+    color = enlight(color, 
+                    white,
+                    normal, 
+                    v_coord, 
+                    120.0,
+                    true, 
+                    true,
                     false);
 
     out_color = vec4(color, 1.0);

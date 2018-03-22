@@ -78,12 +78,24 @@ namespace glutils
 
         if (not ok)
         {
-            GLchar msg[256];
+            auto msgsize = 2048;
+            auto msgptr = std::unique_ptr<char>(new char[msgsize]);
+            auto msg = msgptr.get();
 
-            glGetShaderInfoLog(handle, sizeof(msg), nullptr, msg);
+
+            glGetShaderInfoLog(handle, msgsize, nullptr, msg);
 
 
-            throw shader_error { type, msg };
+            std::string code;
+
+            for (auto &s : srcv)
+                code += s + "\n";
+
+
+            auto log = std::string(msg);
+
+
+            throw shader_error { type, log, std::move(code) };
         }
     }
 
