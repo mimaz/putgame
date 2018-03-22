@@ -9,6 +9,8 @@ in lowp float v_random;
 in highp vec3 v_normal;
 in highp vec3 v_coord;
 
+out lowp vec4 out_color;
+
 lowp float sharpen(lowp float val, int steps)
 {
     lowp float upscaled = float(int(val * float(steps)));
@@ -38,5 +40,5 @@ void main()
                     true, true,
                     false);
 
-    gl_FragColor = vec4(color, 1.0);
+    out_color = vec4(color, 1.0);
 }

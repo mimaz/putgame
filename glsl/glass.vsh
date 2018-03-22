@@ -3,13 +3,13 @@
  * 2018
  */
 
-attribute lowp vec2 a_coord;
+in lowp vec2 a_coord;
 
 uniform highp mat4 u_model;
 uniform highp mat4 u_mvp;
 
-varying lowp vec3 v_coord;
-varying lowp vec3 v_normal;
+out lowp vec3 v_coord;
+out lowp vec3 v_normal;
 
 void main()
 {

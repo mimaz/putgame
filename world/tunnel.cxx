@@ -22,7 +22,7 @@ namespace world
         , view(nullptr)
         , width(2)
         , quality(16)
-        , stripped(false)
+        , stripped(true)
     {}
 
     void tunnel::draw()

@@ -6,6 +6,8 @@
 in lowp vec3 v_coord;
 in lowp vec3 v_normal;
 
+out lowp vec4 out_color;
+
 void main()
 {
     lowp vec3 normal = normalize(v_normal);
@@ -15,5 +17,5 @@ void main()
                               false, true,
                               true);
 
-    gl_FragColor = vec4(color, 1.0);
+    out_color = vec4(color, 1.0);
 }

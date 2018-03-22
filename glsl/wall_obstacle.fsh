@@ -7,10 +7,12 @@ const lowp vec3 side_color = vec3(0.3, 0.3, 0.3);
 
 uniform sampler2D u_texture;
 
-varying lowp vec3 v_coord;
-varying lowp vec3 v_normal;
-varying lowp vec2 v_tex_coord;
-varying lowp float v_mode;
+in lowp vec3 v_coord;
+in lowp vec3 v_normal;
+in lowp vec2 v_tex_coord;
+in lowp float v_mode;
+
+out lowp vec4 out_color;
 
 void main()
 {
@@ -32,5 +34,5 @@ void main()
                     true, true,
                     false);
 
-    gl_FragColor = vec4(color, 1.0);
+    out_color = vec4(color, 1.0);
 }

@@ -5,9 +5,11 @@
 
 uniform lowp vec3 u_color;
 
-varying lowp float v_type;
-varying mediump vec3 v_coord;
-varying lowp vec3 v_normal;
+in lowp float v_type;
+in mediump vec3 v_coord;
+in lowp vec3 v_normal;
+
+lowp vec4 out_color;
 
 void main()
 {
@@ -39,5 +41,5 @@ void main()
                         false);
     }
 
-    gl_FragColor = vec4(color, 1.0);
+    out_color = vec4(color, 1.0);
 }

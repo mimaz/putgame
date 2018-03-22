@@ -42,7 +42,8 @@ namespace glutils
 
             glGetProgramInfoLog(handle, sizeof(msg), nullptr, msg);
 
-            std::cerr << "linking program failed: " << msg << std::endl;
+            std::cerr << "linking program failed: " 
+                      << msg << std::endl;
 
             exit(1);
         }

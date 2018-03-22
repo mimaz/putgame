@@ -37,7 +37,9 @@ namespace
 namespace world
 {
     glass_view::glass_view(context *ctx)
-        : vsh(GL_VERTEX_SHADER, glass_vsh)
+        : vsh(GL_VERTEX_SHADER,
+              "#version 300 es",
+              glass_vsh)
         , fsh_tr(GL_FRAGMENT_SHADER, 
                  "#version 300 es",
                  lighting_fsh,

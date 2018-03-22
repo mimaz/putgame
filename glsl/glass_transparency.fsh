@@ -10,7 +10,9 @@ uniform lowp vec3 u_color;
 in lowp vec3 v_coord;
 in lowp vec3 v_normal;
 
+out lowp vec4 out_color;
+
 void main()
 {
-    gl_FragColor = vec4(u_color, alpha);
+    out_color = vec4(u_color, alpha);
 }

@@ -3,19 +3,19 @@
  * 2018
  */
 
-attribute lowp vec3 a_coord;
-attribute lowp vec3 a_normal;
-attribute lowp vec2 a_tex_coord;
-attribute lowp float a_mode;
+in lowp vec3 a_coord;
+in lowp vec3 a_normal;
+in lowp vec2 a_tex_coord;
+in lowp float a_mode;
 
 uniform highp mat4 u_model;
 uniform highp mat4 u_mvp;
 uniform lowp vec2 u_tex_factor;
 
-varying lowp vec3 v_coord;
-varying lowp vec3 v_normal;
-varying lowp vec2 v_tex_coord;
-varying lowp float v_mode;
+out lowp vec3 v_coord;
+out lowp vec3 v_normal;
+out lowp vec2 v_tex_coord;
+out lowp float v_mode;
 
 void main()
 {
