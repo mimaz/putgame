@@ -34,12 +34,11 @@ namespace world
         , u_color_v(&prog, "u_color_v")
         , vbo(GL_ARRAY_BUFFER, 
               mesh, size_of_mesh)
-        , light(std::make_unique<lighting>(ctx, &prog))
+        , light(ctx, &prog)
         , cam(ctx->get_part<camera>())
     {}
 
-      template<typename _Iter>
-    void light_box_view::draw(_Iter begin, _Iter end)
+    void light_box_view::begin_drawing()
     {
         glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
@@ -51,13 +50,13 @@ namespace world
         prog.use();
         vbo.bind();
 
+        light.calculate();
+
         auto offset = [](int n) -> void * {
             return reinterpret_cast<void *>(n * sizeof(GLfloat));
         };
 
         auto stride = sizeof(GLfloat) * 7;
-
-        vertices = size_of_mesh / sizeof(float) / 3;
 
         a_coord.enable();
         a_type.enable();
@@ -73,27 +72,33 @@ namespace world
                               GL_FALSE, stride,
                               offset(4));
 
-        std::vector<glm::mat4> models;
-        std::vector<glm::mat4> mvps;
-        std::vector<glm::vec3> colors;
-        int count = 0;
+        count = 0;
+    }
 
-        for (auto it = begin; it != end; it++)
-        {
-            auto box = *it;
+    void light_box_view::draw(const light_box *box)
+    {
+        models[count] = box->get_model();
+        mvps[count] = cam->make_mvp(box->get_model());
+        colors[count] = box->get_surface_color();
 
-            auto model = box->get_model();
-            auto mvp = cam->make_mvp(model);
-            auto color = box->get_light_color();
+        count++;
 
-            models.push_back(model);
-            mvps.push_back(mvp);
-            colors.push_back(color);
-            count++;
-        }
+        if (count == boxes_per_draw)
+            draw_instances();
+    }
 
-        light->calculate();
+    void light_box_view::end_drawing()
+    {
+        if (count > 0)
+            draw_instances();
 
+        a_coord.disable();
+        a_type.disable();
+        a_normal.disable();
+    }
+
+    void light_box_view::draw_instances()
+    {
         glUniformMatrix4fv(u_model_v, count, GL_FALSE, 
                            glm::value_ptr(models.front()));
         glUniformMatrix4fv(u_mvp_v, count, GL_FALSE, 
@@ -101,24 +106,11 @@ namespace world
         glUniform3fv(u_color_v, count, 
                      glm::value_ptr(colors.front()));
 
+
+        auto vertices = size_of_mesh / sizeof(float) / 3;
+
         glDrawArraysInstanced(GL_TRIANGLES, 0, vertices, count);
 
-        a_coord.disable();
-        a_type.disable();
-        a_normal.disable();
+        count = 0;
     }
-
-    void light_box_view::begin_drawing(bool stripped)
-    {}
-
-    void light_box_view::draw(const light_box *box)
-    {}
-
-    void light_box_view::end_drawing()
-    {}
-
-    template void light_box_view::draw
-    <std::set<light_box *>::iterator>(
-            std::set<light_box *>::iterator begin, 
-            std::set<light_box *>::iterator end);
 }

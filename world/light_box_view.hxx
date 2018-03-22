@@ -24,6 +24,8 @@ namespace world
     class light_box_view
     {
     public:
+        static constexpr auto boxes_per_draw = 4;
+
         static const float mesh[];
         static const size_t size_of_mesh;
 
@@ -32,14 +34,13 @@ namespace world
         light_box_view(const light_box_view &) = delete;
         light_box_view(light_box_view &&) = delete;
 
-          template<typename _Iter>
-        void draw(_Iter begin, _Iter end);
-
-        void begin_drawing(bool stripped);
+        void begin_drawing();
         void draw(const light_box *box);
         void end_drawing();
 
     private:
+        void draw_instances();
+
         glutils::shader vsh;
         glutils::shader fsh;
         glutils::program prog;
@@ -51,11 +52,15 @@ namespace world
         glutils::uniform u_color_v;
         glutils::buffer vbo;
 
-        std::unique_ptr<lighting> light;
+        lighting light;
 
         camera *cam;
 
-        GLuint vertices;
+        std::array<glm::mat4, boxes_per_draw> models;
+        std::array<glm::mat4, boxes_per_draw> mvps;
+        std::array<glm::vec3, boxes_per_draw> colors;
+
+        int count;
     };
 }
 
