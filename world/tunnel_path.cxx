@@ -62,11 +62,20 @@ namespace world
         auto target_coord = calc_target_coord();
 
 
+        auto lastlen = std::numeric_limits<float>::max();
+        auto targetlen = glm::length(target_coord - last_coord);
 
-        while (glm::length(target_coord - last_coord) < get_gap())
+        while (targetlen < get_gap())
         {
+            if (targetlen > lastlen)
+                break;
+
             pattern_id++;
+
             target_coord = calc_target_coord();
+
+            lastlen = targetlen;
+            targetlen = glm::length(target_coord - last_coord);
         }
 
 
@@ -87,7 +96,13 @@ namespace world
             glm::dot(new_direction, last_direction)
         );
 
-
-        append(angle, axis);
+        if (angle == angle and axis == axis)
+        {
+            append(angle, axis);
+        }
+        else
+        {
+            append(0, { 0, 1, 0 });
+        }
     }
 }

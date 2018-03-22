@@ -14,6 +14,8 @@
 #include "tunnel.hxx"
 
 #include "tunnel_view.hxx"
+#include "tunnel_path.hxx"
+#include "context.hxx"
 
 namespace world
 {
@@ -22,8 +24,12 @@ namespace world
         , view(nullptr)
         , width(2)
         , quality(16)
-        , stripped(true)
     {}
+
+    void tunnel::clear()
+    {
+        get_view()->get_path()->reset();
+    }
 
     void tunnel::draw()
     {
@@ -50,23 +56,13 @@ namespace world
         }
     }
 
-    void tunnel::set_stripped(bool strip)
-    {
-        if (strip != is_stripped())
-        {
-            stripped = strip;
-
-            view = nullptr;
-        }
-    }
-
     tunnel_view *tunnel::get_view()
     {
         if (view == nullptr)
         {
             view = std::make_shared<tunnel_view>(
                     2, get_quality(), 
-                    is_stripped(), this);
+                    this);
         }
 
         return view.get();

@@ -14,44 +14,52 @@
 
 #include "tunnel_mesh.hxx"
 #include "tunnel_path.hxx"
+#include "lighting.hxx"
 
 namespace world
 {
     class camera;
-    class lighting;
     class tunnel;
-    class pathway;
-    class tunnel_blot;
 
     class tunnel_view
     {
     public:
-        tunnel_view(float width, int quality, bool stripped, tunnel *tun);
+        static constexpr auto max_count = 4;
+
+        tunnel_view(float width, int quality, tunnel *tun);
 
         void draw();
 
+        tunnel_path *get_path() { return &path; }
+
     private:
+        void begin_drawing();
+        void draw(const path_point &pt);
+        void end_drawing();
+        void draw_segments();
+
         tunnel_mesh mesh;
         tunnel_path path;
 
-        tunnel_blot *blot;
+        lighting light;
+
         camera *cam;
-        std::shared_ptr<lighting> light;
 
         glutils::shader vsh;
         glutils::shader fsh;
         glutils::program prog;
         glutils::attribute a_coord;
-        glutils::attribute a_layer;
-        glutils::attribute a_index;
-        glutils::uniform u_model_0;
-        glutils::uniform u_model_1;
-        glutils::uniform u_mvp_0;
-        glutils::uniform u_mvp_1;
-        glutils::uniform u_random_0;
-        glutils::uniform u_random_1;
+        glutils::uniform u_model_v;
+        glutils::uniform u_mvp_v;
+        glutils::uniform u_hash_v;
         glutils::buffer vbo;
         glutils::buffer ibo;
+
+        std::array<glm::mat4, max_count> models;
+        std::array<glm::mat4, max_count> mvps;
+        std::array<GLint, max_count> hashes;
+
+        int count;
     };
 
 }

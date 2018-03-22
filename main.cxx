@@ -137,7 +137,6 @@ int main(void)
     for (int i = 0; i < 100; i++)
         ctx->get_part<world::way_path>()->generate();
 
-    ctx->get_part<world::tunnel>()->set_stripped(false);
 
     auto cam = ctx->get_part<world::camera>();
 

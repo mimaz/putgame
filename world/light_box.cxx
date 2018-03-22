@@ -91,12 +91,10 @@ namespace world
     void light_box::rotate(float angle)
     {
         auto speedx = angle;
-        auto speedy = angle / sqrtf(2);
-        auto speedz = angle / sqrtf(3);
+        auto speedy = angle / 2;
 
         visible_object::rotate(speedx, { 1, 0, 0 });
         visible_object::rotate(speedy, { 0, 1, 0 });
-        visible_object::rotate(speedz, { 0, 0, 1 });
     }
 
     common::rgb_color light_box::get_surface_color() const

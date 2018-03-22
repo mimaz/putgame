@@ -11,7 +11,7 @@ namespace world
     class tunnel_mesh
     {
     public:
-        tunnel_mesh(int quality, float width, bool stripped);
+        tunnel_mesh(int quality, float width);
 
         void draw();
 

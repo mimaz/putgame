@@ -7,47 +7,35 @@
 
 #include "tunnel_mesh.hxx"
 
-#include "tunnel_blot.hxx"
-
 namespace 
 {
-    // determine the final shape of triangle
-    // basing on its base length
+    // determine triangle shape
     inline float triangle_height(float base)
     {
-        //return base * (sqrtf(3) / 2);
         return base * 2;
     }
 }
 
 namespace world
 {
-    tunnel_mesh::tunnel_mesh(int quality, float width, bool stripped)
+    tunnel_mesh::tunnel_mesh(int quality, float width)
         : quality(quality)
         , width(width)
-        , gap(triangle_height(PI * 2 * width / quality))
+        , gap(triangle_height(PI * width / quality))
     {
         const auto indices = quality * 2;
 
         /*
          * data layout
          *
-         * xyzli
+         * xy - coordinates
          *
-         * xyz - coordinates
-         * l   - layer
-         * i   - index
-         *
-         * therefore 5 bytes per vertex
+         * 2 bytes per vertex
          */
 
-        auto pushvert = [this](GLfloat x, GLfloat y, 
-                               GLfloat z, GLfloat l, GLfloat i) -> void {
+        auto pushvert = [this](float x, float y) -> void {
             vdata.push_back(x);
             vdata.push_back(y);
-            vdata.push_back(z);
-            vdata.push_back(l);
-            vdata.push_back(i);
         };
 
         auto pushindex = [this, indices](int i) -> void {
@@ -60,22 +48,17 @@ namespace world
 
             GLfloat x = cosf(angle) * width / 2;
             GLfloat y = sinf(angle) * width / 2;
-            GLfloat z = 0;
-            GLfloat index = i % tunnel_blot::blot_size + 0.5f;
 
-            pushvert(x, y, z, 0, index);
-            pushvert(x, y, z, 1, index);
+            pushvert(x, y);
+            pushvert(x, y);
 
             pushindex(i * 2);
             pushindex((i + 1) * 2 + 1);
             pushindex(i * 2 + 1);
 
-            if (not stripped)
-            {
-                pushindex(i * 2);
-                pushindex((i + 1) * 2);
-                pushindex((i + 1) * 2 + 1);
-            }
+            pushindex(i * 2);
+            pushindex((i + 1) * 2);
+            pushindex((i + 1) * 2 + 1);
         }
     }
 

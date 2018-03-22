@@ -19,15 +19,14 @@ namespace world
 
         tunnel(context *ctx);
 
+        void clear();
         void draw();
 
         void set_width(int width);
         void set_quality(int quality);
-        void set_stripped(bool stripped);
 
         int get_width() const { return width; }
         int get_quality() const { return quality; }
-        bool is_stripped() const { return stripped; }
 
         tunnel_view *get_view();
 
@@ -36,7 +35,6 @@ namespace world
 
         int width;
         int quality;
-        bool stripped;
     };
 }
 

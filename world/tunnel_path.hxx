@@ -17,9 +17,7 @@ namespace world
 
         tunnel_path(path_line *pattern, float gap);
 
-
         void gen_frame();
-
 
     private:
         path_line *pattern;
