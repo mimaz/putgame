@@ -28,14 +28,14 @@ namespace world
         light_box(context *ctx, color col);
         ~light_box();
 
-        void on_draw();
+        void rotate();
+        void rotate(float angle);
 
         void set_color(color col);
         void set_speed(float speed);
 
         color get_color() const { return col; }
         float get_speed() const { return speed; }
-        float get_angle() const { return angle; }
 
         common::rgb_color get_surface_color() const;
 
@@ -51,7 +51,6 @@ namespace world
         light_box_manager *manager;
 
         float speed;
-        float angle;
         float blur;
     };
 }

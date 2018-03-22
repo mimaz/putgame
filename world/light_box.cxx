@@ -56,12 +56,13 @@ namespace world
         , surface_col(common::rgb_color::black)
         , manager(ctx->get_part<light_box_manager>())
         , speed(0.05)
-        , angle(PI * 2 * rand() / RAND_MAX)
         , blur(0)
     {
         manager->register_box(this);
 
         set_color(col);
+
+        rotate(PI * rand() / RAND_MAX);
     }
 
     light_box::~light_box()
@@ -82,9 +83,20 @@ namespace world
         speed = spd;
     }
 
-    void light_box::on_draw()
+    void light_box::rotate()
     {
-        angle += get_speed();
+        rotate(get_speed());
+    }
+
+    void light_box::rotate(float angle)
+    {
+        auto speedx = angle;
+        auto speedy = angle / sqrtf(2);
+        auto speedz = angle / sqrtf(3);
+
+        visible_object::rotate(speedx, { 1, 0, 0 });
+        visible_object::rotate(speedy, { 0, 1, 0 });
+        visible_object::rotate(speedz, { 0, 0, 1 });
     }
 
     common::rgb_color light_box::get_surface_color() const

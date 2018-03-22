@@ -32,6 +32,9 @@ namespace world
         light_box_view(const light_box_view &) = delete;
         light_box_view(light_box_view &&) = delete;
 
+          template<typename _Iter>
+        void draw(_Iter begin, _Iter end);
+
         void begin_drawing(bool stripped);
         void draw(const light_box *box);
         void end_drawing();
@@ -43,9 +46,9 @@ namespace world
         glutils::attribute a_coord;
         glutils::attribute a_normal;
         glutils::attribute a_type;
-        glutils::uniform u_model;
-        glutils::uniform u_mvp;
-        glutils::uniform u_color;
+        glutils::uniform u_model_v;
+        glutils::uniform u_mvp_v;
+        glutils::uniform u_color_v;
         glutils::buffer vbo;
 
         std::unique_ptr<lighting> light;

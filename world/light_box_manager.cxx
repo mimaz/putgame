@@ -40,15 +40,9 @@ namespace world
 
     void light_box_manager::draw_all()
     {
-        get_view()->begin_drawing(is_stripped());
+        get_view()->draw(boxes.begin(), boxes.end());
 
         for (auto box : boxes)
-        {
-            box->on_draw();
-
-            get_view()->draw(box);
-        }
-
-        get_view()->end_drawing();
+            box->rotate();
     }
 }

@@ -29,33 +29,29 @@ namespace world
         , a_coord(&prog, "a_coord")
         , a_normal(&prog, "a_normal")
         , a_type(&prog, "a_type")
-        , u_model(&prog, "u_model")
-        , u_mvp(&prog, "u_mvp")
-        , u_color(&prog, "u_color")
+        , u_model_v(&prog, "u_model_v")
+        , u_mvp_v(&prog, "u_mvp_v")
+        , u_color_v(&prog, "u_color_v")
         , vbo(GL_ARRAY_BUFFER, 
               mesh, size_of_mesh)
         , light(std::make_unique<lighting>(ctx, &prog))
         , cam(ctx->get_part<camera>())
     {}
 
-    void light_box_view::begin_drawing(bool stripped)
+      template<typename _Iter>
+    void light_box_view::draw(_Iter begin, _Iter end)
     {
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
+
+
         prog.use();
+        vbo.bind();
 
-        a_coord.enable();
-        a_normal.enable();
-        a_type.enable();
-
-
-        light->calculate();
-
-
-        auto offset = [stripped](int n) -> void * {
+        auto offset = [](int n) -> void * {
             return reinterpret_cast<void *>(n * sizeof(GLfloat));
         };
 
@@ -63,16 +59,9 @@ namespace world
 
         vertices = size_of_mesh / sizeof(float) / 3;
 
-        if (stripped)
-        {
-            // TODO it's not working
-            stride *= 2;
-            vertices /= 4;
-        }
-
-
-        vbo.bind();
-
+        a_coord.enable();
+        a_type.enable();
+        a_normal.enable();
 
         glVertexAttribPointer(a_coord, 3, GL_FLOAT,
                               GL_FALSE, stride,
@@ -83,33 +72,53 @@ namespace world
         glVertexAttribPointer(a_normal, 3, GL_FLOAT,
                               GL_FALSE, stride,
                               offset(4));
-    }
 
-    void light_box_view::draw(const light_box *box)
-    {
-        auto model = box->get_model();
+        std::vector<glm::mat4> models;
+        std::vector<glm::mat4> mvps;
+        std::vector<glm::vec3> colors;
+        int count = 0;
 
+        for (auto it = begin; it != end; it++)
+        {
+            auto box = *it;
 
-        model = glm::rotate(model, box->get_angle(), 
-                            glm::vec3(0, 0, 1));
-        model = glm::rotate(model, box->get_angle() / 2, 
-                            glm::vec3(0, 1, 0));
-        model = glm::rotate(model, box->get_angle() / 3, 
-                            glm::vec3(1, 0, 0));
+            auto model = box->get_model();
+            auto mvp = cam->make_mvp(model);
+            auto color = box->get_light_color();
 
+            models.push_back(model);
+            mvps.push_back(mvp);
+            colors.push_back(color);
+            count++;
+        }
 
-        u_model = model;
-        u_mvp = cam->make_mvp(model);
-        u_color = box->get_surface_color();
+        light->calculate();
 
+        glUniformMatrix4fv(u_model_v, count, GL_FALSE, 
+                           glm::value_ptr(models.front()));
+        glUniformMatrix4fv(u_mvp_v, count, GL_FALSE, 
+                           glm::value_ptr(mvps.front()));
+        glUniform3fv(u_color_v, count, 
+                     glm::value_ptr(colors.front()));
 
-        glDrawArrays(GL_TRIANGLES, 0, vertices);
-    }
+        glDrawArraysInstanced(GL_TRIANGLES, 0, vertices, count);
 
-    void light_box_view::end_drawing()
-    {
         a_coord.disable();
         a_type.disable();
         a_normal.disable();
     }
+
+    void light_box_view::begin_drawing(bool stripped)
+    {}
+
+    void light_box_view::draw(const light_box *box)
+    {}
+
+    void light_box_view::end_drawing()
+    {}
+
+    template void light_box_view::draw
+    <std::set<light_box *>::iterator>(
+            std::set<light_box *>::iterator begin, 
+            std::set<light_box *>::iterator end);
 }

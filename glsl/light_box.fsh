@@ -3,13 +3,12 @@
  * 2018
  */
 
-uniform lowp vec3 u_color;
-
 in lowp float v_type;
 in mediump vec3 v_coord;
 in lowp vec3 v_normal;
+in lowp vec3 v_color;
 
-lowp vec4 out_color;
+out lowp vec4 out_color;
 
 void main()
 {
@@ -22,13 +21,13 @@ void main()
                         false, true,
                         false);
 
-        color += u_color;
+        color += v_color;
     }
     else
     {
         if (v_type < 1.5)
         {
-            color = u_color;
+            color = v_color;
         }
         else
         {
