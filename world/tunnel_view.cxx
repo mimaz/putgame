@@ -19,7 +19,10 @@ namespace
 {
     std::string vsh_header(int blot_size)
     {
-        return "const int blot_size = " + std::to_string(blot_size) + ";\n";
+        return "#version 300 es\n"
+               "const int blot_size = " + 
+               std::to_string(blot_size) + 
+               ";\n";
     }
 
     int frame_hash(const world::path_point &pt)
@@ -41,6 +44,7 @@ namespace world
               vsh_header(tunnel_blot::blot_size),
               tunnel_vsh)
         , fsh(GL_FRAGMENT_SHADER, 
+              "#version 300 es",
               world::lighting::fragment_source,
               tunnel_fsh)
         , prog(&vsh, &fsh)

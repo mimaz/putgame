@@ -18,8 +18,11 @@
 namespace world
 {
     light_box_view::light_box_view(context *ctx)
-        : vsh(GL_VERTEX_SHADER, light_box_vsh)
+        : vsh(GL_VERTEX_SHADER, 
+              "#version 300 es",
+              light_box_vsh)
         , fsh(GL_FRAGMENT_SHADER,
+              "#version 300 es",
               lighting::fragment_source,
               light_box_fsh)
         , prog(&vsh, &fsh)

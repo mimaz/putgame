@@ -3,8 +3,8 @@
  * 2018
  */
 
-varying lowp vec3 v_coord;
-varying lowp vec3 v_normal;
+in lowp vec3 v_coord;
+in lowp vec3 v_normal;
 
 void main()
 {

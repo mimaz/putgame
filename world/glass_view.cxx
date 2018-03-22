@@ -39,6 +39,7 @@ namespace world
     glass_view::glass_view(context *ctx)
         : vsh(GL_VERTEX_SHADER, glass_vsh)
         , fsh_tr(GL_FRAGMENT_SHADER, 
+                 "#version 300 es",
                  lighting_fsh,
                  glass_transparency_fsh)
         , prog_tr(&vsh, &fsh_tr)
@@ -46,6 +47,7 @@ namespace world
         , u_mvp_tr(&prog_tr, "u_mvp")
         , u_color_tr(&prog_tr, "u_color")
         , fsh_sp(GL_FRAGMENT_SHADER, 
+                 "#version 300 es",
                  lighting_fsh,
                  glass_specular_fsh)
         , prog_sp(&vsh, &fsh_sp)

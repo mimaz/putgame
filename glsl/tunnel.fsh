@@ -5,9 +5,9 @@
 
 const int steps = 4;
 
-varying lowp float v_random;
-varying highp vec3 v_normal;
-varying highp vec3 v_coord;
+in lowp float v_random;
+in highp vec3 v_normal;
+in highp vec3 v_coord;
 
 lowp float sharpen(lowp float val, int steps)
 {

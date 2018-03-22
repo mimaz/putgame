@@ -7,8 +7,8 @@ const lowp float alpha = 0.25;
 
 uniform lowp vec3 u_color;
 
-varying lowp vec3 v_coord;
-varying lowp vec3 v_normal;
+in lowp vec3 v_coord;
+in lowp vec3 v_normal;
 
 void main()
 {

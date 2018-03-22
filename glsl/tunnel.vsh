@@ -7,9 +7,9 @@
  * const int blot_size is defined at runtime
  */
 
-attribute lowp vec3 a_coord;
-attribute lowp float a_layer;
-attribute highp float a_index;
+in lowp vec3 a_coord;
+in lowp float a_layer;
+in highp float a_index;
 
 uniform highp mat4 u_model_0;
 uniform highp mat4 u_model_1;
@@ -20,9 +20,9 @@ uniform highp mat4 u_mvp_1;
 uniform lowp float u_random_0[blot_size];
 uniform lowp float u_random_1[blot_size];
 
-varying highp float v_random;
-varying highp vec3 v_normal;
-varying highp vec3 v_coord;
+out highp float v_random;
+out highp vec3 v_normal;
+out highp vec3 v_coord;
 
 void main()
 {

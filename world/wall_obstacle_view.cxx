@@ -28,8 +28,11 @@ namespace world
 {
     wall_obstacle_view::wall_obstacle_view(context *ctx)
         : cam(ctx->get_part<camera>())
-        , vsh(GL_VERTEX_SHADER, wall_obstacle_vsh)
+        , vsh(GL_VERTEX_SHADER, 
+              "#version 300 es",
+              wall_obstacle_vsh)
         , fsh(GL_FRAGMENT_SHADER, 
+              "#version 300 es",
               lighting_fsh,
               wall_obstacle_fsh)
         , pro(&vsh, &fsh)

@@ -36,7 +36,8 @@ namespace glutils
     }
 
     shader::shader(GLenum type, const srclist &list)
-        : type(type), srcv(list.begin(), list.end()), handle(0) {}
+        : type(type), srcv(list.begin(), list.end()), handle(0) 
+    {}
 
     shader::~shader() 
     {

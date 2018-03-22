@@ -3,16 +3,16 @@
  * 2018
  */
 
-attribute lowp vec3 a_coord;
-attribute lowp vec3 a_normal;
-attribute lowp float a_type;
+in lowp vec3 a_coord;
+in lowp vec3 a_normal;
+in lowp float a_type;
 
 uniform highp mat4 u_mvp;
 uniform highp mat4 u_model;
 
-varying lowp float v_type;
-varying mediump vec3 v_coord;
-varying lowp vec3 v_normal;
+out lowp float v_type;
+out mediump vec3 v_coord;
+out lowp vec3 v_normal;
 
 void main()
 {
