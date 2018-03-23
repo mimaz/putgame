@@ -7,14 +7,14 @@
 
 #include "glass_manager.hxx"
 
-#include "glass_view.hxx"
+#include "glass_pane_view.hxx"
 #include "glass_piece.hxx"
 
 namespace world
 {
     glass_manager::glass_manager(context *ctx)
         : context_part(ctx)
-        , view(std::make_shared<glass_view>(ctx))
+        , pane_view(std::make_shared<glass_pane_view>(ctx))
     {}
 
     void glass_manager::add(glass_pane *pane)
@@ -52,21 +52,11 @@ namespace world
 
     void glass_manager::draw(bool specular)
     {
-        view->begin(specular);
-
-
-        view->bind_pane(specular);
+        pane_view->begin_drawing();
 
         for (auto pane : panes)
-            view->draw(pane, specular);
+            pane_view->draw_instance(pane);
 
-
-        view->bind_piece(specular);
-
-        for (auto piece : pieces)
-            view->draw(piece, specular);
-
-
-        view->end(specular);
+        pane_view->end_drawing();
     }
 }

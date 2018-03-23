@@ -15,29 +15,22 @@
 
 namespace 
 {
-    std::string vertex_hdr()
-    {
-        auto inst = world::wall_obstacle_view::draw_instances;
+    const auto max_count = world::wall_obstacle_view::draw_instances;
+    const auto side_color = world::wall_obstacle_view::primary_color;
 
-        return "#version 300 es\n"
-               "const lowp int max_count = " +
-               std::to_string(inst) +
-               ";";
-    }
+    const auto vertex_hdr =
+        "const lowp int max_count = " + 
+        std::to_string(max_count) +
+        ";";
 
-    std::string fragment_hdr()
-    {
-        auto c = world::wall_obstacle_view::secondary_color;
-
-        return "#version 300 es\n"
-               "const lowp vec3 side_color = vec3(" +
-               std::to_string(c.r()) + 
-               ", " + 
-               std::to_string(c.g()) + 
-               ", " + 
-               std::to_string(c.b()) + 
-               ");";
-    }
+    const auto fragment_hdr =
+        "const lowp vec3 side_color = vec3(" +
+        std::to_string(side_color.r()) +
+        ", " +
+        std::to_string(side_color.g()) +
+        ", " +
+        std::to_string(side_color.b()) +
+        ");";
 }
 
 namespace world
@@ -51,11 +44,13 @@ namespace world
     wall_obstacle_view::wall_obstacle_view(context *ctx)
         : cam(ctx->get_part<camera>())
         , vsh(GL_VERTEX_SHADER, 
-              vertex_hdr(),
+              version_glsl,
+              vertex_hdr,
               wall_obstacle_vsh)
         , fsh(GL_FRAGMENT_SHADER, 
-              fragment_hdr(),
-              lighting_fsh,
+              version_glsl,
+              fragment_hdr,
+              lighting::fragment_source,
               wall_obstacle_fsh)
         , pro(&vsh, &fsh)
         , a_coord(&pro, "a_coord")
