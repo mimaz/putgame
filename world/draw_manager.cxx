@@ -11,6 +11,7 @@
 #include "light_box_view.hxx"
 #include "wall_obstacle_view.hxx"
 #include "glass_pane_view.hxx"
+#include "glass_pieces_view.hxx"
 #include "tunnel_view.hxx"
 
 namespace world
@@ -20,6 +21,7 @@ namespace world
         , light_box_drawer(std::make_shared<light_box_view>(ctx))
         , wall_obstacle_drawer(std::make_shared<wall_obstacle_view>(ctx))
         , glass_pane_drawer(std::make_shared<glass_pane_view>(ctx))
+        , glass_pieces_drawer(std::make_shared<glass_pieces_view>(ctx))
         , tunnel_drawer(std::make_shared<tunnel_view>(ctx, 16))
     {}
 
@@ -40,6 +42,12 @@ namespace world
 
     void draw_manager::remove(glass_pane *pane)
     { glass_panes.erase(pane); }
+
+    void draw_manager::add(glass_pieces *pieces)
+    { glass_pieces_set.insert(pieces); }
+
+    void draw_manager::remove(glass_pieces *pieces)
+    { glass_pieces_set.erase(pieces); }
 
     void draw_manager::draw_all()
     {
@@ -72,8 +80,17 @@ namespace world
         glass_pane_drawer->begin_drawing();
 
         for (auto pane : glass_panes)
-            glass_pane_drawer->draw_element(pane);
+            ;//glass_pane_drawer->draw_element(pane);
 
         glass_pane_drawer->end_drawing();
+
+
+
+        glass_pieces_drawer->begin();
+
+        for (auto pieces : glass_pieces_set)
+            glass_pieces_drawer->draw(pieces);
+
+        glass_pieces_drawer->end();
     }
 }

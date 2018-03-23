@@ -13,6 +13,7 @@
 #include "world/light_box.hxx"
 #include "world/camera.hxx"
 #include "world/glass_pane.hxx"
+#include "world/glass_pieces.hxx"
 #include "world/wall_obstacle.hxx"
 
 #include "glutils/exception.hxx"
@@ -164,10 +165,13 @@ int main(void)
 
 
     auto pane = std::make_unique<world::glass_pane>(
-            ctx.get(), common::rgb_color::green, glm::vec2(1, 1));
+            ctx.get(), common::rgb_color::green, glm::vec2(2, 2));
 
     pane->move({ 0, 0, 4 });
 
+
+    auto pieces = std::make_unique<world::glass_pieces>(
+            pane.get());
 
 
     glfwSetWindowUserPointer(win, ctx.get());

@@ -25,8 +25,9 @@ namespace world
         void move(const glm::vec3 &vec);
         void rotate(float angle, const glm::vec3 &axis);
 
-        glm::mat4 get_proj() const;
-        glm::mat4 get_view() const;
+        const glm::mat4 &get_proj() const;
+        const glm::mat4 &get_view() const;
+        const glm::mat4 &get_view_proj() const;
         glm::mat4 make_mvp(const glm::mat4 &model) const;
 
         glm::vec3 get_position() const;
@@ -42,8 +43,8 @@ namespace world
     private:
         mutable int flags;
 
-        mutable glm::mat4 mvp_mat;
         mutable glm::mat4 proj_mat;
+        mutable glm::mat4 view_proj_mat;
 
         glm::mat4 view_mat;
 

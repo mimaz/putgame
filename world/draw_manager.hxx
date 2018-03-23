@@ -19,6 +19,9 @@ namespace world
     class glass_pane;
     class glass_pane_view;
 
+    class glass_pieces;
+    class glass_pieces_view;
+
     class tunnel_view;
 
     class draw_manager : public context_part
@@ -29,11 +32,14 @@ namespace world
         void add(light_box *box);
         void remove(light_box *box);
 
-        void add(wall_obstacle *box);
-        void remove(wall_obstacle *box);
+        void add(wall_obstacle *wall);
+        void remove(wall_obstacle *wall);
 
-        void add(glass_pane *box);
-        void remove(glass_pane *box);
+        void add(glass_pane *pane);
+        void remove(glass_pane *pane);
+
+        void add(glass_pieces *pieces);
+        void remove(glass_pieces *pieces);
 
         void draw_all();
 
@@ -41,10 +47,12 @@ namespace world
         std::set<light_box *> light_boxes;
         std::set<wall_obstacle *> wall_obstacles;
         std::set<glass_pane *> glass_panes;
+        std::set<glass_pieces *> glass_pieces_set;
 
         std::shared_ptr<light_box_view> light_box_drawer;
         std::shared_ptr<wall_obstacle_view> wall_obstacle_drawer;
         std::shared_ptr<glass_pane_view> glass_pane_drawer;
+        std::shared_ptr<glass_pieces_view> glass_pieces_drawer;
         std::shared_ptr<tunnel_view> tunnel_drawer;
     };
 }

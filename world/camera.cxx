@@ -10,7 +10,7 @@
 enum
 {
     dirty_proj = 0x01,
-    dirty_mvp = 0x02,
+    dirty_view_proj = 0x02,
 };
 
 constexpr auto near_plane = 0.01f;
@@ -20,7 +20,7 @@ namespace world
     camera::camera(context *ctx)
         : context_part(ctx)
         , light_source(ctx)
-        , flags(dirty_proj | dirty_mvp)
+        , flags(dirty_proj | dirty_view_proj)
         , proj_mat(1)
         , view_mat(1)
         , view_angle(PI / 4)
@@ -33,33 +33,35 @@ namespace world
 
     void camera::move(const glm::vec3 &vec)
     {
+        flags |= dirty_view_proj;
         view_mat = glm::translate(glm::mat4(1), -vec) * view_mat;
     }
 
     void camera::rotate(float angle, const glm::vec3 &axis)
     {
+        flags |= dirty_view_proj;
         view_mat = glm::rotate(glm::mat4(1), -angle, axis) * view_mat;
     }
 
     void camera::set_view_angle(float angle)
     {
-        flags |= dirty_proj | dirty_mvp;
+        flags |= dirty_proj | dirty_view_proj;
         view_angle = angle;
     }
 
     void camera::set_view_ratio(float ratio)
     {
-        flags |= dirty_proj | dirty_mvp;
+        flags |= dirty_proj | dirty_view_proj;
         view_ratio = ratio;
     }
 
     void camera::set_view_range(float range)
     {
-        flags |= dirty_proj | dirty_mvp;
+        flags |= dirty_proj | dirty_view_proj;
         view_range = range;
     }
 
-    glm::mat4 camera::get_proj() const
+    const glm::mat4 &camera::get_proj() const
     {
         if (flags & dirty_proj)
         {
@@ -74,14 +76,26 @@ namespace world
         return proj_mat;
     }
 
-    glm::mat4 camera::get_view() const
+    const glm::mat4 &camera::get_view() const
     {
         return view_mat;
     }
 
+    const glm::mat4 &camera::get_view_proj() const
+    {
+        if (flags & dirty_view_proj)
+        {
+            flags &= ~dirty_view_proj;
+
+            view_proj_mat = get_proj() * get_view();
+        }
+
+        return view_proj_mat;
+    }
+
     glm::mat4 camera::make_mvp(const glm::mat4 &model) const
     {
-        return get_proj() * get_view() * model;
+        return get_view_proj() * model;
     }
 
     glm::vec3 camera::get_position() const
