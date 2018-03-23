@@ -6,7 +6,7 @@
 #ifndef __world_draw_manager_hxx
 #define __world_draw_manager_hxx
 
-#include "context_part.hxx"
+#include "context.hxx"
 
 namespace world
 {
@@ -24,7 +24,7 @@ namespace world
 
     class tunnel_view;
 
-    class draw_manager : public context_part
+    class draw_manager : public context::part
     {
     public:
         draw_manager(context *ctx);

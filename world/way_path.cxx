@@ -10,7 +10,7 @@
 namespace world
 {
     way_path::way_path(context *ctx)
-        : context_part(ctx)
+        : context::part(ctx)
         , path_line(1)
     {}
 

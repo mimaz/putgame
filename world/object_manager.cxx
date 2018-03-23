@@ -20,7 +20,7 @@ namespace world
 {
       template<typename _Object, typename _View>
     object_manager<_Object, _View>::object_manager(context *ctx)
-        : context_part(ctx)
+        : context::part(ctx)
     {}
 
       template<typename _Object, typename _View>

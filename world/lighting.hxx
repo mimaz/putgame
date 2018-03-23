@@ -11,7 +11,7 @@
 #include <glutils/uniform.hxx>
 
 #include "context.hxx"
-#include "context_part.hxx"
+#include "context.hxx"
 
 namespace world
 {

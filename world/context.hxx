@@ -11,6 +11,9 @@ namespace world
     class context
     {
     public:
+        class object;
+        class part;
+
         context() = default;
 
         context(const context &) = delete;
@@ -20,16 +23,36 @@ namespace world
         _Type *get_part();
 
     private:
-        using part_ref = std::unique_ptr<context_part>;
+        using part_ref = std::unique_ptr<context::part>;
 
         std::map<std::type_index, part_ref> part_map;
+    };
+
+    class context::object
+    {
+    protected:
+        object(context *ctx) : ctx(ctx) {}
+
+    public:
+        context *get_context() const { return ctx; }
+
+    private:
+        context *ctx;
+    };
+
+    class context::part : public object
+    {
+    protected:
+        part(context *ctx) : object(ctx) {}
+
+        friend class context;
     };
 
       template<typename _Type>
     _Type *context::get_part()
     {
-        static_assert(std::is_base_of<context_part, _Type>::value,
-                      "each part of context must derive from context_part");
+        static_assert(std::is_base_of<part, _Type>::value,
+                      "each part of context must derive from context::part");
 
         auto index = std::type_index(typeid(_Type));
         auto it = part_map.find(index);
@@ -37,10 +60,10 @@ namespace world
         if (it != part_map.end())
             return static_cast<_Type *>(it->second.get());
 
-        auto part = std::make_unique<_Type>(this);
-        auto raw = part.get();
+        auto uniq = std::make_unique<_Type>(this);
+        auto raw = uniq.get();
 
-        part_map[index] = std::move(part);
+        part_map[index] = std::move(uniq);
 
         return raw;
     }

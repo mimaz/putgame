@@ -6,13 +6,13 @@
 #ifndef __world_light_group_hxx
 #define __world_light_group_hxx
 
-#include "context_part.hxx"
+#include "context.hxx"
 
 namespace world
 {
     class light_source;
 
-    class light_group : public context_part
+    class light_group : public context::part
     {
     public:
         light_group(context *ctx);

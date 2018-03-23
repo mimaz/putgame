@@ -18,7 +18,7 @@
 #include "light_box.hxx"
 
 #include "draw_manager.hxx"
-#include "context_part.hxx"
+#include "context.hxx"
 #include "context.hxx"
 #include "camera.hxx"
 #include "lighting.hxx"

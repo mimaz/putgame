@@ -6,12 +6,12 @@
 #ifndef __world_camera_hxx
 #define __world_camera_hxx
 
-#include "context_part.hxx"
+#include "context.hxx"
 #include "light_source.hxx"
 
 namespace world
 {
-    class camera : public context_part, public light_source
+    class camera : public context::part, public light_source
     {
     public:
         camera(context *ctx);

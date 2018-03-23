@@ -6,12 +6,12 @@
 #ifndef __world_object_manager_hxx
 #define __world_object_manager_hxx
 
-#include "context_part.hxx"
+#include "context.hxx"
 
 namespace world
 {
       template<typename _Object, typename _View>
-    class object_manager : public context_part
+    class object_manager : public context::part
     {
     public:
         object_manager(context *ctx);

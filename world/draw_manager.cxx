@@ -17,7 +17,7 @@
 namespace world
 {
     draw_manager::draw_manager(context *ctx)
-        : context_part(ctx)
+        : context::part(ctx)
         , light_box_drawer(std::make_shared<light_box_view>(ctx))
         , wall_obstacle_drawer(std::make_shared<wall_obstacle_view>(ctx))
         , glass_pane_drawer(std::make_shared<glass_pane_view>(ctx))
