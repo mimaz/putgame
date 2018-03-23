@@ -6,36 +6,23 @@
 #ifndef __world_context_hxx
 #define __world_context_hxx
 
-#include "context_part.hxx"
-
 namespace world
 {
     class context
     {
     public:
-        context(int width, int height);
+        context() = default;
 
         context(const context &) = delete;
         context(context &&) = delete;
 
-        ~context();
-
-        void draw_frame();
-        void resize_frame(int width, int height);
-
           template<typename _Type>
         _Type *get_part();
-
-        int get_width() const { return width; }
-        int get_height() const { return height; }
 
     private:
         using part_ref = std::unique_ptr<context_part>;
 
-        std::map<std::type_index, part_ref> _m_part_map;
-
-        int width;
-        int height;
+        std::map<std::type_index, part_ref> part_map;
     };
 
       template<typename _Type>
@@ -44,19 +31,16 @@ namespace world
         static_assert(std::is_base_of<context_part, _Type>::value,
                       "each part of context must derive from context_part");
 
-
         auto index = std::type_index(typeid(_Type));
+        auto it = part_map.find(index);
 
-        auto it = _m_part_map.find(index);
-
-        if (it != _m_part_map.end())
+        if (it != part_map.end())
             return static_cast<_Type *>(it->second.get());
-
 
         auto part = std::make_unique<_Type>(this);
         auto raw = part.get();
 
-        _m_part_map[index] = std::move(part);
+        part_map[index] = std::move(part);
 
         return raw;
     }

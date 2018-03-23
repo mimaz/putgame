@@ -14,6 +14,7 @@
 #include "world/camera.hxx"
 #include "world/glass_pane.hxx"
 #include "world/glass_pieces.hxx"
+#include "world/draw_manager.hxx"
 #include "world/wall_obstacle.hxx"
 
 #include "glutils/exception.hxx"
@@ -95,7 +96,12 @@ static void resize_callback(GLFWwindow *win,
     auto ctxptr = glfwGetWindowUserPointer(win);
     auto ctx = reinterpret_cast<world::context *>(ctxptr);
 
-    ctx->resize_frame(width, height);
+    //ctx->resize_frame(width, height);
+
+    glViewport(0, 0, width, height);
+    
+    auto ratio = static_cast<float>(width) / height;
+    ctx->get_part<world::camera>()->set_view_ratio(ratio);
 }
 
 int main(void)
@@ -130,8 +136,11 @@ int main(void)
 
     glfwMakeContextCurrent(win);
 
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glFrontFace(GL_CW);
 
-    auto ctx = std::make_unique<world::context>(default_width, default_height);
+
+    auto ctx = std::make_unique<world::context>();
 
     for (int i = 0; i < 100; i++)
         ctx->get_part<world::way_path>()->generate();
@@ -192,7 +201,9 @@ int main(void)
 
 
             try {
-                ctx->draw_frame();
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                ctx->get_part<world::draw_manager>()->draw_all();
             } catch (glutils::location_error e) {
                 std::cerr << "location error: " << e.name << std::endl;
             }
