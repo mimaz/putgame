@@ -30,6 +30,10 @@ namespace common
         float &operator[](int idx) { return vec[idx]; }
         float operator[](int idx) const { return vec[idx]; }
 
+        float r() const { return vec.x; }
+        float g() const { return vec.y; }
+        float b() const { return vec.z; }
+
         operator glm::vec3() const { return vec; }
 
     private:

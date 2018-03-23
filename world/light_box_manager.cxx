@@ -14,7 +14,6 @@ namespace world
     light_box_manager::light_box_manager(context *ctx)
         : context_part(ctx)
         , view(std::make_shared<light_box_view>(ctx))
-        , stripped(false)
         , light_range(20)
     {}
 
@@ -26,11 +25,6 @@ namespace world
     void light_box_manager::unregister_box(light_box *box)
     {
         boxes.erase(box);
-    }
-
-    void light_box_manager::set_stripped(bool strip)
-    {
-        stripped = strip;
     }
 
     void light_box_manager::set_light_range(float range)

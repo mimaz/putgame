@@ -5,6 +5,8 @@
 
 #include <putgame-std>
 
+#include <common/rgb_color.hxx>
+
 #include "obstacle_manager.hxx"
 
 #include "wall_obstacle.hxx"
@@ -29,11 +31,11 @@ namespace world
 
     void obstacle_manager::draw_all()
     {
-        wall_view->begin();
+        wall_view->begin_drawing();
 
         for (auto wall : walls)
-            wall_view->draw(wall);
+            wall_view->draw_instance(wall);
 
-        wall_view->end();
+        wall_view->end_drawing();
     }
 }

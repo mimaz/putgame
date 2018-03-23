@@ -3,14 +3,17 @@
  * 2018
  */
 
-const lowp vec3 side_color = vec3(0.3, 0.3, 0.3);
+/*
+ * const lowp vec3 side_color = ...;
+ * defined at runtime
+ */
 
 uniform sampler2D u_texture;
 
+flat in lowp vec3 v_normal;
+flat in lowp int v_use_tex;
 in lowp vec3 v_coord;
-in lowp vec3 v_normal;
 in lowp vec2 v_tex_coord;
-in lowp float v_mode;
 
 out lowp vec4 out_color;
 
@@ -18,7 +21,7 @@ void main()
 {
     lowp vec3 color;
 
-    if (v_mode > 0.5)
+    if (v_use_tex != 0)
     {
         color = vec3(texture2D(u_texture, v_tex_coord));
     }
@@ -27,11 +30,9 @@ void main()
         color = side_color;
     }
 
-    lowp vec3 normal = normalize(v_normal);
-
     color = enlight(color, 
                     white,
-                    normal, 
+                    v_normal, 
                     v_coord,
                     160.0,
                     true, 

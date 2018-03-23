@@ -98,20 +98,20 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
                                        / (viewlen * reflen);
 
 
-            if (specular_cosine < 0.0)
-                continue;
+            if (with_backface || specular_cosine > 0.0)
+            {
+                lowp float specular_coefficient = pow(
+                    specular_cosine, 
+                    specular_pow
+                );
 
-            lowp float specular_coefficient = pow(
-                specular_cosine, 
-                specular_pow
-            );
 
-
-            outcolor += light_color(i) 
-                      * material_specular 
-                      * specular_coefficient
-                      * fog_factor
-                      ;
+                outcolor += light_color(i) 
+                          * material_specular 
+                          * specular_coefficient
+                          * fog_factor
+                          ;
+            }
         }
     }
 

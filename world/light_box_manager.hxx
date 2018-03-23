@@ -23,10 +23,8 @@ namespace world
 
         void draw_all();
 
-        void set_stripped(bool stripped);
         void set_light_range(float range);
 
-        bool is_stripped() const { return stripped; }
         float get_light_range() const { return light_range; }
 
         light_box_view *get_view() const { return view.get(); }
@@ -35,7 +33,6 @@ namespace world
         std::shared_ptr<light_box_view> view;
         std::set<light_box *> boxes;
 
-        bool stripped;
         float light_range;
     };
 }

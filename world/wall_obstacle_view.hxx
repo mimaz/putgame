@@ -12,6 +12,10 @@
 #include <glutils/uniform.hxx>
 #include <glutils/buffer.hxx>
 
+#include <common/rgb_color.hxx>
+
+#include "lighting.hxx"
+
 namespace world
 {
     class context;
@@ -25,15 +29,24 @@ namespace world
         static const float mesh[];
         static const size_t size_of_mesh;
 
+        static const common::rgb_color primary_color;;
+        static const common::rgb_color secondary_color;
+
+        static constexpr auto draw_instances = 4;
+
+
         wall_obstacle_view(context *ctx);
         ~wall_obstacle_view();
 
-        void begin();
-        void draw(const wall_obstacle *wall);
-        void end();
+        void begin_drawing();
+        void draw_instance(const wall_obstacle *wall);
+        void end_drawing();
 
     private:
+        void draw_walls();
+
         camera *cam;
+        glm::vec3 side_color;
 
         glutils::shader vsh;
         glutils::shader fsh;
@@ -45,10 +58,18 @@ namespace world
         glutils::uniform u_model;
         glutils::uniform u_mvp;
         glutils::uniform u_tex_factor;
+        glutils::uniform u_model_v;
+        glutils::uniform u_mvp_v;
+        glutils::uniform u_tex_factor_v;
 
-        std::shared_ptr<lighting> light;
+        lighting light;
 
         GLuint texhandle;
+
+        std::array<glm::mat4, draw_instances> models;
+        std::array<glm::mat4, draw_instances> mvps;
+        std::array<glm::vec2, draw_instances> tex_factors;
+        int instance_count;
     };
 }
 
