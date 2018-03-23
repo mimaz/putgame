@@ -7,7 +7,7 @@
 
 #include "glass_pane.hxx"
 
-#include "glass_pane_manager.hxx"
+#include "draw_manager.hxx"
 #include "context.hxx"
 
 namespace world
@@ -19,11 +19,11 @@ namespace world
         , color(col)
         , size(siz)
     {
-        get_context()->get_part<glass_pane_manager>()->add(this);
+        get_context()->get_part<draw_manager>()->add(this);
     }
 
     glass_pane::~glass_pane()
     {
-        get_context()->get_part<glass_pane_manager>()->remove(this);
+        get_context()->get_part<draw_manager>()->remove(this);
     }
 }

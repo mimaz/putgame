@@ -17,7 +17,7 @@
 
 #include "light_box.hxx"
 
-#include "light_box_manager.hxx"
+#include "draw_manager.hxx"
 #include "context_part.hxx"
 #include "context.hxx"
 #include "camera.hxx"
@@ -54,11 +54,10 @@ namespace world
         , light_source(ctx)
         , light_col(common::rgb_color::black)
         , surface_col(common::rgb_color::black)
-        , manager(ctx->get_part<light_box_manager>())
         , speed(0.05)
         , blur(0)
     {
-        manager->add(this);
+        get_context()->get_part<draw_manager>()->add(this);
 
         set_color(col);
 
@@ -67,7 +66,7 @@ namespace world
 
     light_box::~light_box()
     {
-        manager->remove(this);
+        get_context()->get_part<draw_manager>()->remove(this);
     }
 
     void light_box::set_color(color c)
@@ -114,6 +113,6 @@ namespace world
 
     float light_box::get_light_range()
     {
-        return manager->get_light_range();
+        return 50;
     }
 }

@@ -7,10 +7,7 @@
 
 #include "context.hxx"
 
-#include "light_box_manager.hxx"
-#include "glass_pane_manager.hxx"
-#include "tunnel_manager.hxx"
-#include "wall_obstacle_manager.hxx"
+#include "draw_manager.hxx"
 #include "camera.hxx"
 
 namespace world
@@ -31,10 +28,7 @@ namespace world
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        get_part<tunnel_manager>()->draw_all();
-        get_part<light_box_manager>()->draw_all();
-        get_part<wall_obstacle_manager>()->draw_all();
-        get_part<glass_pane_manager>()->draw_all();
+        get_part<draw_manager>()->draw_all();
     }
 
     void context::resize_frame(int w, int h)

@@ -8,7 +8,6 @@
 #include "common/rgb_color.hxx"
 
 #include "world/context.hxx"
-#include "world/tunnel_manager.hxx"
 #include "world/tunnel_mesh.hxx"
 #include "world/way_path.hxx"
 #include "world/light_box.hxx"

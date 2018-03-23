@@ -25,6 +25,10 @@ namespace
 
 namespace world
 {
+    tunnel_view::tunnel_view(context *ctx, int quality)
+        : tunnel_view(2, quality, ctx)
+    {}
+
     tunnel_view::tunnel_view(float width, int quality, 
                              context *ctx)
         : mesh(quality, width)

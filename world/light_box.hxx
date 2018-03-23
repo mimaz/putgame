@@ -48,8 +48,6 @@ namespace world
         common::rgb_color light_col;
         common::rgb_color surface_col;
 
-        light_box_manager *manager;
-
         float speed;
         float blur;
     };
