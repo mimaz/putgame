@@ -34,9 +34,9 @@ namespace world
         glutils::shader vsh;
         glutils::shader fsh;
         glutils::program pro;
+        glutils::uniform u_extra_v;
         glutils::uniform u_model_v;
         glutils::uniform u_view_proj;
-        glutils::uniform u_extra_v;
         glutils::uniform u_specular_mode;
 
         lighting light;

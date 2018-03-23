@@ -14,27 +14,20 @@
 
 namespace
 {
-    const auto extra_count = 17;
+    const auto max_count = 12;
 
-    const float unused_mesh[] = {
-        0.0f,
-        0.0f,
-        0.0f,
-    };
-
-    struct extra_data_initializer : std::array<glm::vec2, extra_count>
+    struct extra_data_initializer : std::array<glm::vec2, max_count>
     {
         extra_data_initializer()
         {
             std::default_random_engine gen;
             std::uniform_real_distribution<float> angledis(0, PI);
 
-            for (auto &v : *this)
-            {
+            std::generate(begin(), end(), [&]() -> glm::vec2 {
                 auto angle = angledis(gen);
 
-                v = glm::vec2(sinf(angle) * 0.5f, cosf(angle) * 0.5f);
-            }
+                return glm::vec2(cosf(angle) * 0.5f, sinf(angle) * 0.5f);
+            });
         }
     };
 
@@ -47,17 +40,17 @@ namespace world
         : cam(ctx->get_part<camera>())
         , vsh(GL_VERTEX_SHADER,
               version_glsl,
-              "const lowp int max_extras = " + 
-              std::to_string(extra_count) + ";",
+              "const lowp int max_count = " + 
+              std::to_string(max_count) + ";",
               glass_pieces_vsh)
         , fsh(GL_FRAGMENT_SHADER,
               version_glsl,
               lighting::fragment_source,
               glass_pieces_fsh)
         , pro(&vsh, &fsh)
+        , u_extra_v(&pro, "u_extra_v")
         , u_model_v(&pro, "u_model_v")
         , u_view_proj(&pro, "u_view_proj")
-        , u_extra_v(&pro, "u_extra_v")
         , u_specular_mode(&pro, "u_specular_mode")
         , light(ctx, &pro)
     {}
@@ -71,7 +64,7 @@ namespace world
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
 
-        glUniform2fv(u_extra_v, extra_count, 
+        glUniform2fv(u_extra_v, max_count, 
                      glm::value_ptr(extra_data.front()));
 
 
@@ -80,25 +73,35 @@ namespace world
 
     void glass_pieces_view::draw(const glass_pieces *pieces)
     {
-        glUniformMatrix4fv(u_model_v, pieces->get_count(),
-                           GL_FALSE,
-                           glm::value_ptr(*pieces->get_matrices()));
-
-
         u_view_proj = cam->get_view_proj();
 
+        auto matrices = pieces->get_matrices();
+        auto index = 0;
+        auto total = pieces->get_count();
 
-        u_specular_mode = 0;
+        while (index < total)
+        {
+            auto count = std::min(total - index, max_count);
 
-        glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 3, pieces->get_count());
+            glUniformMatrix4fv(u_model_v, count,
+                               GL_FALSE,
+                               glm::value_ptr(matrices[index]));
 
 
+            u_specular_mode = 0;
 
-        u_specular_mode = 1;
+            glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+            glDrawArraysInstanced(GL_TRIANGLES, 0, 3, count);
 
-        glBlendFunc(GL_ONE, GL_ONE);
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 3, pieces->get_count());
+
+            u_specular_mode = 1;
+
+            glBlendFunc(GL_ONE, GL_ONE);
+            glDrawArraysInstanced(GL_TRIANGLES, 0, 3, count);
+
+
+            index += count;
+        }
     }
 
     void glass_pieces_view::end()
