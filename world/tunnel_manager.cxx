@@ -26,14 +26,14 @@ namespace world
         , quality(16)
     {}
 
+    void tunnel_manager::draw_all()
+    {
+        get_view()->draw();
+    }
+
     void tunnel_manager::clear()
     {
         get_view()->get_path()->reset();
-    }
-
-    void tunnel_manager::draw()
-    {
-        get_view()->draw();
     }
 
     void tunnel_manager::set_width(int wid)

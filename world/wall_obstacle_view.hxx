@@ -39,7 +39,7 @@ namespace world
         ~wall_obstacle_view();
 
         void begin_drawing();
-        void draw_instance(const wall_obstacle *wall);
+        void draw_element(const wall_obstacle *wall);
         void end_drawing();
 
     private:

@@ -7,6 +7,9 @@
 
 #include "wall_obstacle.hxx"
 
+#include "context.hxx"
+#include "wall_obstacle_manager.hxx"
+
 namespace 
 {
     constexpr auto scale_factor = 0.1f;
@@ -14,13 +17,9 @@ namespace
 
 namespace world
 {
-    wall_obstacle::wall_obstacle(context *ctx, int w, int h)
-        : wall_obstacle(ctx, w, h, 1)
-    {}
-
     wall_obstacle::wall_obstacle(context *ctx, 
                                  int w, int h, int d)
-        : abstract_obstacle(ctx)
+        : visible_object(ctx)
         , width(w)
         , height(h)
         , depth(d)
@@ -31,6 +30,11 @@ namespace world
 
         scale(glm::vec3(xscale, yscale, zscale));
 
-        register_self(this);
+        get_context()->get_part<wall_obstacle_manager>()->add(this);
+    }
+
+    wall_obstacle::~wall_obstacle()
+    {
+        get_context()->get_part<wall_obstacle_manager>()->remove(this);
     }
 }

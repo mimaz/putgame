@@ -75,7 +75,7 @@ namespace world
         count = 0;
     }
 
-    void light_box_view::draw(const light_box *box)
+    void light_box_view::draw_element(const light_box *box)
     {
         models[count] = box->get_model();
         mvps[count] = cam->make_mvp(box->get_model());

@@ -35,7 +35,7 @@ namespace world
         light_box_view(light_box_view &&) = delete;
 
         void begin_drawing();
-        void draw(const light_box *box);
+        void draw_element(const light_box *box);
         void end_drawing();
 
     private:

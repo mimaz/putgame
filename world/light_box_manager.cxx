@@ -6,42 +6,29 @@
 #include <putgame-std>
 
 #include "light_box_manager.hxx"
-#include "light_box_view.hxx"
+
 #include "light_box.hxx"
+#include "light_box_view.hxx"
 
 namespace world
 {
     light_box_manager::light_box_manager(context *ctx)
-        : context_part(ctx)
-        , view(std::make_shared<light_box_view>(ctx))
+        : object_manager(ctx)
         , light_range(20)
     {}
-
-    void light_box_manager::register_box(light_box *box)
-    {
-        boxes.insert(box);
-    }
-
-    void light_box_manager::unregister_box(light_box *box)
-    {
-        boxes.erase(box);
-    }
 
     void light_box_manager::set_light_range(float range)
     {
         light_range = range;
     }
 
-    void light_box_manager::draw_all()
+    void light_box_manager::on_draw(light_box *box)
     {
-        get_view()->begin_drawing();
+        box->rotate();
+    }
 
-        for (auto box : boxes)
-        {
-            box->rotate();
-            get_view()->draw(box);
-        }
-
-        get_view()->end_drawing();
+    light_box_view *light_box_manager::new_view()
+    {
+        return new light_box_view(get_context());
     }
 }

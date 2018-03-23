@@ -6,32 +6,29 @@
 #ifndef __world_light_box_manager_hxx
 #define __world_light_box_manager_hxx
 
-#include "context_part.hxx"
+#include "object_manager.hxx"
 
 namespace world
 {
     class light_box;
     class light_box_view;
 
-    class light_box_manager : public context_part
+    class light_box_manager 
+    : public object_manager<light_box, light_box_view>
     {
     public:
         light_box_manager(context *ctx);
 
-        void register_box(light_box *box);
-        void unregister_box(light_box *box);
-
-        void draw_all();
-
         void set_light_range(float range);
 
         float get_light_range() const { return light_range; }
-        light_box_view *get_view() const { return view.get(); }
+
+    protected:
+        void on_draw(light_box *box) final;
+
+        light_box_view *new_view() final;
 
     private:
-        std::shared_ptr<light_box_view> view;
-        std::set<light_box *> boxes;
-
         float light_range;
     };
 }

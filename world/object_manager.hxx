@@ -26,6 +26,7 @@ namespace world
     protected:
         void clear_view();
 
+        virtual void on_draw(_Object *obj);
         virtual _View *new_view() = 0;
 
     private:

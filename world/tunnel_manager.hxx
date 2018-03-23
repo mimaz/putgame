@@ -15,12 +15,11 @@ namespace world
     class tunnel_manager : public context_part
     {
     public:
-        class frame;
-
         tunnel_manager(context *ctx);
 
+        void draw_all();
+
         void clear();
-        void draw();
 
         void set_width(int width);
         void set_quality(int quality);

@@ -58,7 +58,7 @@ namespace world
         , speed(0.05)
         , blur(0)
     {
-        manager->register_box(this);
+        manager->add(this);
 
         set_color(col);
 
@@ -67,7 +67,7 @@ namespace world
 
     light_box::~light_box()
     {
-        manager->unregister_box(this);
+        manager->remove(this);
     }
 
     void light_box::set_color(color c)

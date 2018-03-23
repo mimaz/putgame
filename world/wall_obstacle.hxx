@@ -6,15 +6,15 @@
 #ifndef __world_wall_obstacle_hxx
 #define __world_wall_obstacle_hxx
 
-#include "abstract_obstacle.hxx"
+#include "visible_object.hxx"
 
 namespace world
 {
-    class wall_obstacle : public abstract_obstacle
+    class wall_obstacle : public visible_object
     {
     public:
-        wall_obstacle(context *ctx, int w, int h);
-        wall_obstacle(context *ctx, int w, int h, int d);
+        wall_obstacle(context *ctx, int w, int h, int d = 1);
+        ~wall_obstacle();
 
         int get_width() const { return width; }
         int get_height() const { return height; }

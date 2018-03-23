@@ -148,7 +148,7 @@ namespace world
         instance_count = 0;
     }
 
-    void wall_obstacle_view::draw_instance(const wall_obstacle *wall)
+    void wall_obstacle_view::draw_element(const wall_obstacle *wall)
     {
         auto model = wall->get_model();
         auto tex_factor = glm::vec2(wall->get_width(), wall->get_height());
