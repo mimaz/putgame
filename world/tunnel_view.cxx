@@ -8,7 +8,6 @@
 
 #include "tunnel_view.hxx"
 
-#include "tunnel.hxx"
 #include "way_path.hxx"
 #include "camera.hxx"
 #include "context.hxx"
@@ -18,8 +17,7 @@ namespace
 {
     std::string vsh_header(int max_count)
     {
-        return "#version 300 es\n"
-               "const mediump int max_count = " +
+        return "const mediump int max_count = " +
                std::to_string(max_count) +
                ";\n";
     }
@@ -28,16 +26,17 @@ namespace
 namespace world
 {
     tunnel_view::tunnel_view(float width, int quality, 
-                             tunnel *tun)
+                             context *ctx)
         : mesh(quality, width)
-        , path(tun->get_context()->get_part<way_path>(), mesh.get_gap())
-        , light(tun->get_context(), &prog)
-        , cam(tun->get_context()->get_part<camera>())
+        , path(ctx->get_part<way_path>(), mesh.get_gap())
+        , light(ctx, &prog)
+        , cam(ctx->get_part<camera>())
         , vsh(GL_VERTEX_SHADER, 
+              version_glsl,
               vsh_header(max_count),
               tunnel_vsh)
         , fsh(GL_FRAGMENT_SHADER, 
-              "#version 300 es",
+              version_glsl,
               world::lighting::fragment_source,
               tunnel_fsh)
         , prog(&vsh, &fsh)

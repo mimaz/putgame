@@ -69,7 +69,7 @@ namespace world
         instance_count = 0;
     }
 
-    void glass_pane_view::draw_instance(const glass_pane *pane)
+    void glass_pane_view::draw_element(const glass_pane *pane)
     {
         models[instance_count] = pane->get_model();
         mvps[instance_count] = cam->make_mvp(pane->get_model());

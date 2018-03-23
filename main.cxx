@@ -8,13 +8,12 @@
 #include "common/rgb_color.hxx"
 
 #include "world/context.hxx"
-#include "world/tunnel.hxx"
+#include "world/tunnel_manager.hxx"
 #include "world/tunnel_mesh.hxx"
 #include "world/way_path.hxx"
 #include "world/light_box.hxx"
 #include "world/camera.hxx"
 #include "world/glass_pane.hxx"
-#include "world/glass_piece.hxx"
 #include "world/wall_obstacle.hxx"
 
 #include "glutils/exception.hxx"
@@ -170,9 +169,6 @@ int main(void)
 
     pane->move({ 0, 0, 4 });
 
-    auto piece = std::make_unique<world::glass_piece>(pane.get());
-
-    piece->move({ 0.3, 0, 6 });
 
 
     glfwSetWindowUserPointer(win, ctx.get());

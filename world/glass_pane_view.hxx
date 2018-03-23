@@ -28,7 +28,7 @@ namespace world
         glass_pane_view(context *ctx);
 
         void begin_drawing();
-        void draw_instance(const glass_pane *pane);
+        void draw_element(const glass_pane *pane);
         void end_drawing();
 
     private:

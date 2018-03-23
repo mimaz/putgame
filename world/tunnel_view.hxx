@@ -19,14 +19,13 @@
 namespace world
 {
     class camera;
-    class tunnel;
 
     class tunnel_view
     {
     public:
         static constexpr auto max_count = 4;
 
-        tunnel_view(float width, int quality, tunnel *tun);
+        tunnel_view(float width, int quality, context *ctx);
 
         void draw();
 

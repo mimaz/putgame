@@ -3,8 +3,8 @@
  * 2018
  */
 
-#ifndef __world_tunnel_hxx
-#define __world_tunnel_hxx
+#ifndef __world_tunnel_manager_hxx
+#define __world_tunnel_manager_hxx
 
 #include "context_part.hxx"
 
@@ -12,12 +12,12 @@ namespace world
 {
     class tunnel_view;
 
-    class tunnel : public context_part
+    class tunnel_manager : public context_part
     {
     public:
         class frame;
 
-        tunnel(context *ctx);
+        tunnel_manager(context *ctx);
 
         void clear();
         void draw();

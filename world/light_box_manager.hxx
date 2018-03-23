@@ -26,7 +26,6 @@ namespace world
         void set_light_range(float range);
 
         float get_light_range() const { return light_range; }
-
         light_box_view *get_view() const { return view.get(); }
 
     private:
