@@ -6,25 +6,168 @@
 #include <putgame/std>
 #include <putgame/res>
 #include <putgame/glutils>
+#include <putgame/common>
 
 #include "font_builder.hxx"
 
 namespace
 {
     constexpr auto max_count = 16;
-    constexpr auto texture_width = 64;
-    constexpr auto texture_height = 64;
+    constexpr auto texture_width = 100;
+    constexpr auto texture_height = 100;
 
-    using character_recipe = text::font_builder::character_recipe;
+    using seg_vec = std::vector<std::pair<glm::vec2, glm::vec2>>;
 
     const float mesh[] = {
         -1, -1,
         -1, 1,
         1, 1,
-
         -1, -1,
         1, 1,
         1, -1,
+    };
+
+    class mapped_character
+    {
+    public:
+        mapped_character(float thickness,
+                         int width, int height, 
+                         const text::font_builder::char_desc &desc)
+        {
+            auto ygap = 2.0f / (height - 1) - thickness / (height - 1);
+            auto xgap = 2.0f / (width - 1) - thickness / (width - 1);
+
+            auto xcoord = -1.0f + thickness / 2;
+            auto ycoord = -1.0f + thickness / 2;
+
+            auto ptr = desc.map;
+
+            auto valid_symbol = [](char c) -> bool {
+                return c > ' ';
+            };
+
+            std::map<char, glm::vec2> symbolmap;
+
+            for (auto y = 0; y < height; y++)
+            {
+                for (auto x = 0; x < width; x++)
+                {
+                    auto c = *ptr++;
+
+                    if (valid_symbol(c))
+                        symbolmap[c] = glm::vec2(xcoord, -ycoord);
+
+                    xcoord += xgap;
+                }
+
+                xcoord = -1.0f + thickness / 2;
+                ycoord += ygap;
+            }
+
+
+            ptr = desc.order;
+
+
+            auto nextsym = [&ptr, valid_symbol]() -> char {
+                if (valid_symbol(*ptr))
+                    return *ptr++;
+
+                return 0;
+            };
+
+
+            while (*ptr == '#')
+            {
+                ptr++;
+
+                switch (*ptr)
+                {
+                    case 'L': 
+                    {
+                        ptr++;
+
+                        bool strip = false;
+
+                        if (*ptr == 'S')
+                        {
+                            ptr++;
+                            strip = true;
+                        }
+
+
+
+
+                        char last = 0;
+                        char sym = nextsym();
+
+
+                        while (sym != 0)
+                        {
+                            if (last != 0 && sym != 0)
+                            {
+                                auto bit = symbolmap.find(last);
+                                auto eit = symbolmap.find(sym);
+                                auto itend = symbolmap.end();
+
+
+                                if (bit == itend)
+                                {
+                                    std::cerr << "symbol " << last 
+                                              << " not found" << std::endl;
+                                    throw new std::string("error1");
+                                }
+
+                                if (eit == itend)
+                                {
+                                    std::cerr << "symbol " << sym
+                                              << " not found" << std::endl;
+                                    throw new std::string("error2");
+                                }
+
+
+                                auto begin = bit->second;
+                                auto end = eit->second;
+
+                                auto seg = std::make_pair(begin, end);
+
+                                std::cout << "line: " << begin << " -> "
+                                          << end << std::endl;
+
+                                segments.push_back(seg);
+
+
+
+                                if (strip)
+                                {
+                                    last = sym;
+                                }
+                                else
+                                {
+                                    last = 0;
+                                }
+                            }
+                            else
+                            {
+                                last = sym;
+                            }
+
+                            sym = nextsym();
+                        }
+
+                        break;
+                    }
+
+                    case 'P':
+                        ptr++;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        seg_vec segments;
     };
 
     class renderer
@@ -41,10 +184,9 @@ namespace
                   text_font_fsh)
             , pro(&vsh, &fsh)
             , a_coord(&pro, "a_coord")
-            , u_point_count(&pro, "u_point_count")
-            , u_segment_count(&pro, "u_segment_count")
-            , u_point_v(&pro, "u_point_v")
-            , u_segment_v(&pro, "u_segment_v")
+            , u_count(&pro, "u_count")
+            , u_begin_v(&pro, "u_begin_v")
+            , u_end_v(&pro, "u_end_v")
             , u_thickness(&pro, "u_thickness")
         {
             glGenFramebuffers(1, &framebuffer);
@@ -61,11 +203,10 @@ namespace
             glDeleteFramebuffers(1, &framebuffer);
         }
 
-        void render(GLuint texhandle,
-                    const character_recipe *recipe)
+        void render(float thickness,
+                    GLuint texhandle, 
+                    const mapped_character &mchr)
         {
-            std::cout << "render character: " 
-                      << static_cast<int>(recipe->code) << std::endl;
             pro.use();
 
             a_coord.enable();
@@ -97,15 +238,26 @@ namespace
                 throw new std::string("framebuffer error");
             }
 
-            auto &points = recipe->points;
-            auto &segments = recipe->segments;
+
+            auto segments = mchr.segments;
+            auto count = segments.size();
+
+            std::vector<glm::vec2> begins;
+            std::vector<glm::vec2> ends;
+
+
+            for (auto &seg : segments)
+            {
+                begins.push_back(seg.first);
+                ends.push_back(seg.second);
+            }
 
             try {
-                glUniform1i(u_point_count, points.size());
-                glUniform2fv(u_point_v, points.size(),
-                             glm::value_ptr(points.front()));
+                glUniform1i(u_count, count);
+                glUniform2fv(u_begin_v, count,
+                             glm::value_ptr(begins.front()));
 
-                u_thickness = 0.5f;
+                u_thickness = thickness / 2;
             } catch(glutils::location_error e) {
                 std::cerr << "font_builder location error: " 
                           << e.name << std::endl;
@@ -118,10 +270,9 @@ namespace
         glutils::shader fsh;
         glutils::program pro;
         glutils::attribute a_coord;
-        glutils::uniform u_point_count;
-        glutils::uniform u_segment_count;
-        glutils::uniform u_point_v;
-        glutils::uniform u_segment_v;
+        glutils::uniform u_count;
+        glutils::uniform u_begin_v;
+        glutils::uniform u_end_v;
         glutils::uniform u_thickness;
 
         GLuint framebuffer;
@@ -130,19 +281,20 @@ namespace
 
 namespace text
 {
-    font_builder::font_builder(const character_recipe *recipes,
-                               int recipe_count)
+    font_builder::font_builder(float thickness,
+                               int width, int height,
+                               const data_map &font_data)
     {
         glGenTextures(128, textures);
 
         auto rdr = std::make_unique<renderer>();
 
-        for (int i = 0; i < recipe_count; i++)
+        for (auto p : font_data)
         {
-            auto recipe = &recipes[i];
-            auto texhandle = textures[recipe->code];
+            auto mchr = mapped_character(thickness, width, height, p.second);
+            auto than = textures[p.first];
 
-            rdr->render(texhandle, recipe);
+            rdr->render(thickness, than, mchr);
         }
     }
 

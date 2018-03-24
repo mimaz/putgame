@@ -71,22 +71,22 @@ int main(void)
 
     glfwMakeContextCurrent(win);
 
-
-    text::font_builder::character_recipe recipe = {
-        { { 0, 0 } },
-        {},
-        0
-    };
-
-    //auto font = std::make_unique<text::font_builder>(&recipe, 1);
-
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glFrontFace(GL_CW);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+    std::map<int, text::font_builder::char_desc> font_data = {
+        { 0, 
+            {   "  b  "
+                "     "
+                "     "
+                "     "
+                "a   c", "#LSabc" }
+        },
+    };
 
-    auto font = std::make_unique<text::font_builder>(&recipe, 1);
+    auto font = std::make_unique<text::font_builder>(0.25f, 5, 5, font_data);
     auto tst = std::make_unique<test>();
 
 

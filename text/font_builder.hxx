@@ -14,10 +14,13 @@ namespace text
     class font_builder
     {
     public:
-        class character_recipe;
+        class char_desc;
 
-        font_builder(const character_recipe *recipes, 
-                     int recipe_count);
+        using data_map = std::map<int, char_desc>;
+
+        font_builder(float thickness,
+                     int width, int height, 
+                     const data_map &font_data);
         ~font_builder();
 
         void bind_texture(int code);
@@ -26,12 +29,11 @@ namespace text
         GLuint textures[128];
     };
 
-    class font_builder::character_recipe
-    {
+    class font_builder::char_desc
+    {   
     public:
-        std::vector<point> points;
-        std::vector<segment> segments;
-        int code;
+        const char *map;
+        const char *order;
     };
 }
 
