@@ -12,19 +12,19 @@
 namespace
 {
     constexpr auto max_count = 16;
-    constexpr auto texture_width = 16;
-    constexpr auto texture_height = 16;
+    constexpr auto texture_width = 64;
+    constexpr auto texture_height = 64;
 
     using character_recipe = text::font_builder::character_recipe;
 
     const float mesh[] = {
-        -0.5f, -0.5f,
-        -0.5f, 0.5f,
-        0.5f, 0.5f,
+        -1, -1,
+        -1, 1,
+        1, 1,
 
-        -0.5f, -0.5f,
-        0.5f, 0.5f,
-        0.5f, -0.5f,
+        -1, -1,
+        1, 1,
+        1, -1,
     };
 
     class renderer
@@ -54,27 +54,27 @@ namespace
 
             GLenum attachement = GL_COLOR_ATTACHMENT0;
             glDrawBuffers(1, &attachement);
-
-
-            pro.use();
-
-
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glVertexAttribPointer(a_coord, 2, GL_FLOAT,
-                                  GL_FALSE, sizeof(float) * 2,
-                                  mesh);
         }
 
         ~renderer()
         {
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
             glDeleteFramebuffers(1, &framebuffer);
         }
 
         void render(GLuint texhandle,
                     const character_recipe *recipe)
         {
+            std::cout << "render character: " 
+                      << static_cast<int>(recipe->code) << std::endl;
+            pro.use();
+
+            a_coord.enable();
+
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glVertexAttribPointer(a_coord, 2, GL_FLOAT,
+                                  GL_FALSE, sizeof(float) * 2,
+                                  mesh);
+
             glBindTexture(GL_TEXTURE_2D, texhandle);
 
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 
@@ -100,11 +100,16 @@ namespace
             auto &points = recipe->points;
             auto &segments = recipe->segments;
 
-            glUniform2fv(u_point_v, points.size(), 
-                         glm::value_ptr(points.front()));
+            try {
+                glUniform1i(u_point_count, points.size());
+                glUniform2fv(u_point_v, points.size(),
+                             glm::value_ptr(points.front()));
 
-            glUniform4fv(u_segment_v, segments.size(),
-                         glm::value_ptr(segments.front().first));
+                u_thickness = 0.5f;
+            } catch(glutils::location_error e) {
+                std::cerr << "font_builder location error: " 
+                          << e.name << std::endl;
+            }
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
