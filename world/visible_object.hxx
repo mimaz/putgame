@@ -6,11 +6,13 @@
 #ifndef __world_visible_object_hxx
 #define __world_visible_object_hxx
 
+#include "context.hxx"
+
 namespace world
 {
     class context;
 
-    class visible_object
+    class visible_object : public context::object
     {
     public:
         visible_object(context *ctx);
@@ -18,25 +20,20 @@ namespace world
         visible_object(const visible_object &) = delete;
         visible_object(visible_object &&) = delete;
 
-        virtual ~visible_object();
-
-        void detach();
-
         void set_matrix(const glm::mat4 &mat);
 
-        void move(const glm::vec3 &vec);
-        void rotate(float angle, const glm::vec3 &axis);
+        void translate(float x, float y, float z);
         void scale(float scalar);
-        void scale(const glm::vec3 &vec);
 
-        context *get_context() const { return ctx; }
+        virtual void translate(const glm::vec3 &vec);
+        virtual void rotate(float angle, const glm::vec3 &axis);
+        virtual void scale(const glm::vec3 &vec);
 
-        const glm::mat4 &get_model() const { return model; }
+        const glm::mat4 &get_model() const;
+
         glm::vec3 get_position() const;
 
     private:
-        context *ctx;
-
         glm::mat4 model;
     };
 }

@@ -33,8 +33,14 @@ namespace world
     protected:
         object(context *ctx) : ctx(ctx) {}
 
+        virtual ~object() {}
+
     public:
         context *get_context() const { return ctx; }
+
+          template<typename _Type>
+        _Type *get_part()
+        { return get_context()->get_part<_Type>(); }
 
     private:
         context *ctx;
@@ -43,6 +49,9 @@ namespace world
     class context::part : public object
     {
     protected:
+        part(const part &) = delete;
+        part(part &&) = delete;
+
         part(context *ctx) : object(ctx) {}
 
         friend class context;

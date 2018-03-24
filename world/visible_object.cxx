@@ -12,30 +12,17 @@
 namespace world
 {
     visible_object::visible_object(context *ctx)
-        : ctx(ctx) 
+        : object(ctx) 
     {}
-
-    visible_object::~visible_object() 
-    {}
-
-    void visible_object::detach()
-    {
-        ctx = nullptr;
-    }
 
     void visible_object::set_matrix(const glm::mat4 &mat)
     {
         model = mat;
     }
 
-    void visible_object::move(const glm::vec3 &vec)
+    void visible_object::translate(float x, float y, float z)
     {
-        model = glm::translate(glm::mat4(1), -vec) * model;
-    }
-
-    void visible_object::rotate(float angle, const glm::vec3 &axis)
-    {
-        model = glm::rotate(model, -angle, axis);
+        translate(glm::vec3(x, y, z));
     }
 
     void visible_object::scale(float scalar)
@@ -43,9 +30,24 @@ namespace world
         scale(glm::vec3(scalar, scalar, scalar));
     }
 
+    void visible_object::translate(const glm::vec3 &vec)
+    {
+        model = glm::translate(model, vec);
+    }
+
+    void visible_object::rotate(float angle, const glm::vec3 &axis)
+    {
+        model = glm::rotate(model, angle, axis);
+    }
+
     void visible_object::scale(const glm::vec3 &vec)
     {
         model = glm::scale(model, vec);
+    }
+
+    const glm::mat4 &visible_object::get_model() const
+    {
+        return model;
     }
 
     glm::vec3 visible_object::get_position() const

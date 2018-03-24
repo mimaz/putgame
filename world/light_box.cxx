@@ -23,9 +23,6 @@
 #include "camera.hxx"
 #include "lighting.hxx"
 
-
-constexpr auto size = 1.0f;
-
 namespace 
 {
     common::rgb_color to_rgb(world::light_box::color col, 
@@ -57,16 +54,14 @@ namespace world
         , speed(0.05)
         , blur(0)
     {
-        get_context()->get_part<draw_manager>()->add(this);
+        get_part<draw_manager>()->add(this);
 
         set_color(col);
-
-        rotate(PI * rand() / RAND_MAX);
     }
 
     light_box::~light_box()
     {
-        get_context()->get_part<draw_manager>()->remove(this);
+        get_part<draw_manager>()->remove(this);
     }
 
     void light_box::set_color(color c)
@@ -89,10 +84,8 @@ namespace world
 
     void light_box::rotate(float angle)
     {
-        auto speedx = angle;
-        auto speedy = angle / 2;
+        auto speedy = angle;
 
-        visible_object::rotate(speedx, { 1, 0, 0 });
         visible_object::rotate(speedy, { 0, 1, 0 });
     }
 

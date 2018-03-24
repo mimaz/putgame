@@ -57,12 +57,12 @@ namespace world
 
     void glass_pieces_view::begin()
     {
-        pro.use();
-
-        glEnable(GL_CULL_FACE);
+        glDisable(GL_CULL_FACE);
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
+
+        pro.use();
 
         glUniform2fv(u_extra_v, max_count, 
                      glm::value_ptr(extra_data.front()));

@@ -16,12 +16,11 @@ namespace world
     public:
         camera(context *ctx);
 
-        ~camera();
-
         void set_view_angle(float angle);
         void set_view_ratio(float ratio);
         void set_view_range(float range);
 
+        void move(float x, float y, float z);
         void move(const glm::vec3 &vec);
         void rotate(float angle, const glm::vec3 &axis);
 

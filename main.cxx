@@ -148,35 +148,35 @@ int main(void)
 
     auto cam = ctx->get_part<world::camera>();
 
-    cam->move({ 0, 0, -1 });
+    cam->move(0, 0, 1);
 
 
     auto wall = std::make_unique<world::wall_obstacle>(
             ctx.get(), 2, 5);
 
-    wall->move({ 0, 0, 3 });
+    wall->translate(0, 0, -1);
 
 
     auto box1 = std::make_unique<world::light_box>(
             ctx.get(), world::light_box::blue);
 
+    box1->translate(-0.2, -0.5, -3);
     box1->scale(0.25);
-    box1->move({ 0.2, -0.5, 3 });
 
 
 
     auto box2 = std::make_unique<world::light_box>(
             ctx.get(), world::light_box::red);
 
+    box2->translate(-0.3, 0.4, -4);
     box2->scale(0.25);
-    box2->move({ 1.3, 0.4, 8 });
 
 
 
     auto pane = std::make_unique<world::glass_pane>(
             ctx.get(), common::rgb_color::green, glm::vec2(2, 2));
 
-    pane->move({ 0, 0, 4 });
+    pane->translate(0, 0, -2);
 
 
     auto pieces = std::make_unique<world::glass_pieces>(

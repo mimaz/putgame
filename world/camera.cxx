@@ -28,8 +28,10 @@ namespace world
         , view_range(64)
     {}
 
-    camera::~camera()
-    {}
+    void camera::move(float x, float y, float z)
+    {
+        move(glm::vec3(x, y, z));
+    }
 
     void camera::move(const glm::vec3 &vec)
     {
