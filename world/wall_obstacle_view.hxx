@@ -6,13 +6,8 @@
 #ifndef __world_wall_obstacle_view_hxx
 #define __world_wall_obstacle_view_hxx
 
-#include <glutils/shader.hxx>
-#include <glutils/program.hxx>
-#include <glutils/attribute.hxx>
-#include <glutils/uniform.hxx>
-#include <glutils/buffer.hxx>
-
-#include <common/rgb_color.hxx>
+#include <putgame/glutils>
+#include <putgame/common>
 
 #include "lighting.hxx"
 
@@ -29,8 +24,8 @@ namespace world
         static const float mesh[];
         static const size_t size_of_mesh;
 
-        static const common::rgb_color primary_color;;
-        static const common::rgb_color secondary_color;
+        static const glm::vec3 primary_color;
+        static const glm::vec3 secondary_color;
 
         static constexpr auto draw_instances = 4;
 

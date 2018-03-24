@@ -6,12 +6,6 @@
 #ifndef __world_light_box_view_hxx
 #define __world_light_box_view_hxx
 
-#include <glutils/program.hxx>
-#include <glutils/shader.hxx>
-#include <glutils/attribute.hxx>
-#include <glutils/uniform.hxx>
-#include <glutils/buffer.hxx>
-
 #include "lighting.hxx"
 
 namespace world

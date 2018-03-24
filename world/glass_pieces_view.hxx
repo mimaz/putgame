@@ -6,11 +6,6 @@
 #ifndef __glass_pieces_view_hxx
 #define __glass_pieces_view_hxx
 
-#include <glutils/shader.hxx>
-#include <glutils/program.hxx>
-#include <glutils/attribute.hxx>
-#include <glutils/uniform.hxx>
-
 #include "lighting.hxx"
 
 namespace world

@@ -25,11 +25,11 @@ namespace
 
     const auto fragment_hdr =
         "const lowp vec3 side_color = vec3(" +
-        std::to_string(side_color.r()) +
+        std::to_string(side_color.r) +
         ", " +
-        std::to_string(side_color.g()) +
+        std::to_string(side_color.g) +
         ", " +
-        std::to_string(side_color.b()) +
+        std::to_string(side_color.b) +
         ");";
 }
 
@@ -38,8 +38,8 @@ namespace world
     constexpr auto bri = 0.8f;
     constexpr auto dim = 0.4f;
 
-    const common::rgb_color wall_obstacle_view::primary_color(dim, dim, dim);
-    const common::rgb_color wall_obstacle_view::secondary_color(bri, bri, dim);
+    const glm::vec3 wall_obstacle_view::primary_color(dim, dim, dim);
+    const glm::vec3 wall_obstacle_view::secondary_color(bri, bri, dim);
 
     wall_obstacle_view::wall_obstacle_view(context *ctx)
         : cam(ctx->get_part<camera>())

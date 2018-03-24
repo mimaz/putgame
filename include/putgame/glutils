@@ -1,0 +1,12 @@
+/*
+ * Mieszko Mazurek <mimaz@gmx.com> 
+ * 2018
+ */
+
+#include "../../glutils/shader.hxx"
+#include "../../glutils/program.hxx"
+#include "../../glutils/uniform.hxx"
+#include "../../glutils/attribute.hxx"
+#include "../../glutils/uniform.hxx"
+#include "../../glutils/buffer.hxx"
+#include "../../glutils/exception.hxx"

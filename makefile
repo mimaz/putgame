@@ -37,7 +37,7 @@ GLSL_O = ${GLSL_C:${GLSL_C_DIR}/%=${GLSL_O_DIR}/%.o}
 CFLAGS = -Wall -O0 -MMD
 LDFLAGS = 
 
-TARGET_CFLAGS = -I. ${CFLAGS}
+TARGET_CFLAGS = -Iinclude/ ${CFLAGS}
 TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR} ${TARGET_CFLAGS}
 TARGET_LDFLAGS = -lglfw -lGLESv2 ${LDFLAGS}
 
@@ -111,7 +111,7 @@ ${PRECOMPILER}: ${PRECOMPILER_OBJ}
 # pre-compiled header
 ${TARGET_PCH_OBJ}: ${TARGET_PCH_SRC}
 	@mkdir -p ${dir $@}
-	${CXX} ${TARGET_CXXFLAGS} -xc++-header $< -o $@
+	${CXX} -xc++-header ${TARGET_CXXFLAGS} -c $< -o $@
 
 ##############################################
 

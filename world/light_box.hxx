@@ -6,7 +6,7 @@
 #ifndef __world_light_box_hxx
 #define __world_light_box_hxx
 
-#include <common/rgb_color.hxx>
+#include <putgame/common>
 
 #include "visible_object.hxx"
 #include "light_source.hxx"

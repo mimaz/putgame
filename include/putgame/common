@@ -1,0 +1,7 @@
+/*
+ * Mieszko Mazurek <mimaz@gmx.com> 
+ * 2018
+ */
+
+#include "../../common/rgb_color.hxx"
+#include "../../common/exception.hxx"

@@ -6,8 +6,7 @@
 #include <putgame-std>
 #include <putgame-res>
 
-#include <common/rgb_color.hxx>
-#include <common/exception.hxx>
+#include <putgame/common>
 
 #include "light_box_view.hxx"
 

@@ -6,15 +6,9 @@
 #ifndef __world_tunnel_view_hxx
 #define __world_tunnel_view_hxx
 
-#include <glutils/shader.hxx>
-#include <glutils/program.hxx>
-#include <glutils/uniform.hxx>
-#include <glutils/attribute.hxx>
-#include <glutils/buffer.hxx>
-
+#include "lighting.hxx"
 #include "tunnel_mesh.hxx"
 #include "tunnel_path.hxx"
-#include "lighting.hxx"
 
 namespace world
 {

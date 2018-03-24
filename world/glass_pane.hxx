@@ -6,7 +6,7 @@
 #ifndef __world_glass_pane_hxx
 #define __world_glass_pane_hxx
 
-#include <common/rgb_color.hxx>
+#include <putgame/common>
 
 #include "visible_object.hxx"
 

@@ -6,14 +6,7 @@
 #include <putgame-std>
 #include <putgame-res>
 
-#include <glutils/program.hxx>
-#include <glutils/shader.hxx>
-#include <glutils/attribute.hxx>
-#include <glutils/uniform.hxx>
-#include <glutils/buffer.hxx>
-
-#include <common/rgb_color.hxx>
-#include <common/exception.hxx>
+#include <putgame/common>
 
 #include "light_box.hxx"
 

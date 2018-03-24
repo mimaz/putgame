@@ -6,8 +6,6 @@
 #include <putgame-std>
 #include <putgame-res>
 
-#include <glutils/exception.hxx>
-
 #include "lighting.hxx"
 
 #include "camera.hxx"
