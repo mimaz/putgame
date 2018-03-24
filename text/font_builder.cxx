@@ -195,6 +195,18 @@ namespace
             glViewport(0, 0, texture_width, texture_height);
 
             GLenum attachement = GL_COLOR_ATTACHMENT0;
+
+
+
+            pro.use();
+
+            a_coord.enable();
+
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glVertexAttribPointer(a_coord, 2, GL_FLOAT,
+                                  GL_FALSE, sizeof(float) * 2,
+                                  mesh);
+
             glDrawBuffers(1, &attachement);
         }
 
@@ -207,15 +219,6 @@ namespace
                     GLuint texhandle, 
                     const mapped_character &mchr)
         {
-            pro.use();
-
-            a_coord.enable();
-
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glVertexAttribPointer(a_coord, 2, GL_FLOAT,
-                                  GL_FALSE, sizeof(float) * 2,
-                                  mesh);
-
             glBindTexture(GL_TEXTURE_2D, texhandle);
 
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 
@@ -254,8 +257,11 @@ namespace
 
             try {
                 glUniform1i(u_count, count);
+
                 glUniform2fv(u_begin_v, count,
                              glm::value_ptr(begins.front()));
+                glUniform2fv(u_end_v, count,
+                             glm::value_ptr(ends.front()));
 
                 u_thickness = thickness / 2;
             } catch(glutils::location_error e) {

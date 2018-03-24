@@ -21,22 +21,16 @@ uniform lowp float u_thickness;
 
 out lowp vec4 out_color;
 
-lowp float to_point(lowp int i)
-{
-    lowp vec2 point = u_begin_v[i];
-
-    return length(point - v_coord);
-}
-
 void main()
 {
     lowp vec3 color = black;
 
     for (int i = 0; i < u_count; i++)
     {
-        lowp float dist = to_point(i);
+        if (length(u_begin_v[i] - v_coord) < u_thickness)
+            color = white;
 
-        if (dist < u_thickness)
+        if (length(u_end_v[i] - v_coord) < u_thickness)
             color = white;
     }
 
