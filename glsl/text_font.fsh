@@ -21,16 +21,35 @@ uniform lowp float u_thickness;
 
 out lowp vec4 out_color;
 
+lowp float squared_distance(lowp vec2 p, lowp vec2 q)
+{
+    lowp vec2 d = q - p;
+
+    return d.x * d.x + d.y * d.y;
+}
+
+lowp float segment_distance(lowp vec2 v, lowp vec2 w, lowp vec2 p)
+{
+    /*
+     * TODO optimize
+     */
+    lowp float l2 = squared_distance(w, v);
+
+    lowp float t = dot(p - v, w - v) / l2;
+    t = max(0.0, min(1.0, t));
+
+    lowp vec2 proj = v + t * (w - v);
+
+    return distance(p, proj);
+}
+
 void main()
 {
     lowp vec3 color = black;
 
     for (int i = 0; i < u_count; i++)
     {
-        if (length(u_begin_v[i] - v_coord) < u_thickness)
-            color = white;
-
-        if (length(u_end_v[i] - v_coord) < u_thickness)
+        if (segment_distance(u_begin_v[i], u_end_v[i], v_coord) < u_thickness)
             color = white;
     }
 

@@ -43,7 +43,7 @@ namespace
             auto ptr = desc.map;
 
             auto valid_symbol = [](char c) -> bool {
-                return c > ' ';
+                return std::isalpha(c) and std::islower(c);
             };
 
             std::map<char, glm::vec2> symbolmap;

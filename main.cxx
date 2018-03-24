@@ -82,8 +82,8 @@ int main(void)
                 {   "  b  "
                     "     "
                     "     "
-                    "     "
-                    "a   c", "#LSabc" }
+                    "  d  "
+                    "a   c", "#LSabc#Pd" }
             },
         };
 
