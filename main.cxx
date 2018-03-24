@@ -4,8 +4,8 @@
  */
 
 #include <putgame/std>
-
 #include <putgame/common>
+#include <putgame/text>
 
 #include "world/context.hxx"
 #include "world/tunnel_mesh.hxx"
@@ -122,6 +122,7 @@ int main(void)
     GLFWwindow *win = glfwCreateWindow(default_width, default_height,
                                        "putgame", nullptr, nullptr);
 
+
     if (win == nullptr)
     {
         std::cerr << "creating window failed!" << std::endl;
@@ -135,6 +136,22 @@ int main(void)
     glfwSetFramebufferSizeCallback(win, resize_callback);
 
     glfwMakeContextCurrent(win);
+
+
+    text::font_builder::character_recipe recipe = {
+        { { 0, 0 } },
+        {},
+        0
+    };
+
+    try {
+        auto font = std::make_unique<text::font_builder>(&recipe, 1);
+    } catch (glutils::shader_error e) {
+        std::cout << "shader error: " << e.log << std::endl;
+    } catch (glutils::location_error e) {
+        std::cout << "location error: " << e.name << std::endl;
+    }
+
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glFrontFace(GL_CW);

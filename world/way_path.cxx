@@ -17,8 +17,6 @@ namespace world
 
     void way_path::generate()
     {
-        std::cout << "generate!" << std::endl;
-
         append(PI / 80, { 0, 1, 0 });
         // TODO generate default path
     }

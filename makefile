@@ -51,7 +51,8 @@ CXX = g++
 ##
  # target sources
  ##
-TARGET_SRC = ${shell find . world/ common/ glutils/ -maxdepth 1 -name "*.cxx"}
+TARGET_SRC_DIRS = . world/ common/ glutils/ text/
+TARGET_SRC = ${shell find ${TARGET_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 
 
