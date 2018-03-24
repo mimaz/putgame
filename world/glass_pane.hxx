@@ -16,18 +16,18 @@ namespace world
     {
     public:
         glass_pane(context *ctx, 
-                   common::rgb_color color, 
+                   glm::vec3 color, 
                    glm::vec2 size);
 
         ~glass_pane();
 
-        common::rgb_color get_color() const { return color; }
+        glm::vec3 get_color() const { return color; }
         glm::vec2 get_size() const { return size; }
 
         glm::mat4 get_piece_matrix() const;
 
     private:
-        common::rgb_color color;
+        glm::vec3 color;
         glm::vec2 size;
         glm::mat4 piece_matrix;
     };

@@ -3,7 +3,7 @@
  * 2018
  */
 
-#include <putgame-std>
+#include <putgame/std>
 
 #include "tunnel_path.hxx"
 

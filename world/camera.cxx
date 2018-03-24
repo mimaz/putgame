@@ -3,7 +3,8 @@
  * 2018
  */
 
-#include <putgame-std>
+#include <putgame/std>
+#include <putgame/common>
 
 #include "camera.hxx"
 

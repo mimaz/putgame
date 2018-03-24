@@ -3,5 +3,6 @@
  * 2018
  */
 
-#include "../../common/rgb_color.hxx"
+#include "../../common/color.hxx"
 #include "../../common/exception.hxx"
+#include "../../common/math.hxx"

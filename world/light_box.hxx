@@ -37,7 +37,7 @@ namespace world
         color get_color() const { return col; }
         float get_speed() const { return speed; }
 
-        common::rgb_color get_surface_color() const;
+        glm::vec3 get_surface_color() const;
 
         glm::vec3 get_light_position() override;
         glm::vec3 get_light_color() override;
@@ -45,8 +45,8 @@ namespace world
 
     private:
         color col;
-        common::rgb_color light_col;
-        common::rgb_color surface_col;
+        glm::vec3 light_col;
+        glm::vec3 surface_col;
 
         float speed;
         float blur;

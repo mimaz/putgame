@@ -3,8 +3,9 @@
  * 2018
  */
 
-#include <putgame-std>
-#include <putgame-res>
+#include <putgame/std>
+#include <putgame/res>
+#include <putgame/common>
 
 #include "glass_pieces_view.hxx"
 

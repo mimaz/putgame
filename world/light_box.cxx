@@ -3,8 +3,8 @@
  * 2018
  */
 
-#include <putgame-std>
-#include <putgame-res>
+#include <putgame/std>
+#include <putgame/res>
 
 #include <putgame/common>
 
@@ -18,19 +18,19 @@
 
 namespace 
 {
-    common::rgb_color to_rgb(world::light_box::color col, 
+    glm::vec3 to_rgb(world::light_box::color col, 
                              float bright, float dim)
     {
         switch (col)
         {
             case world::light_box::red:
-                return common::rgb_color(bright, dim, dim);
+                return glm::vec3(bright, dim, dim);
 
             case world::light_box::green:
-                return common::rgb_color(dim, bright, dim);
+                return glm::vec3(dim, bright, dim);
 
             case world::light_box::blue:
-                return common::rgb_color(dim, dim, bright);
+                return glm::vec3(dim, dim, bright);
         }
 
         throw common::make_invalid_argument(col);
@@ -42,8 +42,8 @@ namespace world
     light_box::light_box(context *ctx, color col)
         : visible_object(ctx)
         , light_source(ctx)
-        , light_col(common::rgb_color::black)
-        , surface_col(common::rgb_color::black)
+        , light_col(common::black())
+        , surface_col(common::black())
         , speed(0.05)
         , blur(0)
     {
@@ -82,7 +82,7 @@ namespace world
         visible_object::rotate(speedy, { 0, 1, 0 });
     }
 
-    common::rgb_color light_box::get_surface_color() const
+    glm::vec3 light_box::get_surface_color() const
     {
         return surface_col;
     }

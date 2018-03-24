@@ -3,7 +3,7 @@
  * 2018
  */
 
-#include <putgame-std>
+#include <putgame/std>
 
 #include "glass_pane.hxx"
 
@@ -13,7 +13,7 @@
 namespace world
 {
     glass_pane::glass_pane(context *ctx,
-                           common::rgb_color col, 
+                           glm::vec3 col, 
                            glm::vec2 siz)
         : visible_object(ctx)
         , color(col)

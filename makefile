@@ -19,13 +19,13 @@ GLSL_O_DIR = ${BASE_BUILD_DIR}/glsl-obj
 ##
  # targets
  ##
-TARGET = ${TARGET_BUILD_DIR}/${PROJECT}
+TARGET = ${TARGET_BUILD_DIR}/bin/${PROJECT}
 PRECOMPILER = ${PRECOMPILER_BUILD_DIR}/resource-precompiler
 
 ##
  # resources
  ##
-RESOURCE_HEADER = ${TARGET_BUILD_DIR}/putgame-res
+RESOURCE_HEADER = ${TARGET_BUILD_DIR}/putgame/res
 
 GLSL = ${shell find glsl/ -type f -not -name ".*"}
 GLSL_C = ${GLSL:%=${GLSL_C_DIR}/%.c}
@@ -58,7 +58,7 @@ PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 ##
  # pre-compiler header
  ##
-TARGET_PCH_SRC = putgame-std
+TARGET_PCH_SRC = putgame/std
 TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC}.gch
 
 
@@ -127,6 +127,7 @@ ${GLSL_C_DIR}/%.c: % ${PRECOMPILER}
 	
 # auto-generated header
 ${RESOURCE_HEADER}: ${GLSL_C}
+	@mkdir -p ${dir $@}
 	${PRECOMPILER} header $@ $^
 
 ##############################################
@@ -138,6 +139,7 @@ ${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${RESOURCE_HEADER} ${TARGET_PCH_OBJ}
 
 # target executable
 ${TARGET}: ${TARGET_OBJ}
+	@mkdir -p ${dir $@}
 	${CXX} ${TARGET_LDFLAGS} $^ -o $@
 
 -include ${ALL_DEP}

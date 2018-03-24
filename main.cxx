@@ -3,9 +3,9 @@
  * 2018
  */
 
-#include <putgame-std>
+#include <putgame/std>
 
-#include "common/rgb_color.hxx"
+#include <putgame/common>
 
 #include "world/context.hxx"
 #include "world/tunnel_mesh.hxx"
@@ -174,7 +174,7 @@ int main(void)
 
 
     auto pane = std::make_unique<world::glass_pane>(
-            ctx.get(), common::rgb_color::green, glm::vec2(2, 2));
+            ctx.get(), common::green(), glm::vec2(2, 2));
 
     pane->translate(0, 0, -2);
 
