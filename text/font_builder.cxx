@@ -10,11 +10,13 @@
 
 #include "font_builder.hxx"
 
+#include "default_font.hxx"
+
 namespace
 {
     constexpr auto max_count = 16;
-    constexpr auto texture_width = 64;
-    constexpr auto texture_height = 64;
+    constexpr auto texture_width = 128;
+    constexpr auto texture_height = 128;
 
     using seg_vec = std::vector<std::pair<glm::vec2, glm::vec2>>;
 
@@ -119,7 +121,7 @@ namespace
             }
 
             try {
-                u_thickness = vc.get_thickness() / 2;
+                u_thickness = vc.get_thickness();
 
 
                 glUniform1i(u_segment_count, segments.size());
@@ -161,6 +163,10 @@ namespace
 
 namespace text
 {
+    font_builder::font_builder()
+        : font_builder(default_font)
+    {}
+
     font_builder::font_builder(const ascii_font &font)
         : count(font.get_count())
         , textures(new GLuint[count])
@@ -182,7 +188,7 @@ namespace text
             auto texhandle = textures[id];
 
 
-            texmap[vc.get_code()] = id;
+            texmap[vc.get_code()] = id++;
 
 
             rdr->render(vc, texhandle);

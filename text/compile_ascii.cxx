@@ -12,7 +12,7 @@ namespace
 {
     bool valid_symbol(char c) 
     {
-        return std::isalpha(c) and std::islower(c) and c != '#';
+        return (c >= 'a' and c <= 'z') or (c >= '0' and c <= '9');
     }
 
     void line(const char *&ptr,
@@ -129,11 +129,15 @@ void text::compile_ascii(const ascii_character &ascii,
                          std::vector<point> &points,
                          std::vector<segment> &segments)
 {
-    auto ygap = 2.0f / (height - 1) - thickness / (height - 1);
-    auto xgap = 2.0f / (width - 1) - thickness / (width - 1);
+    auto margin = 0.05f;
 
-    auto xcoord = -1.0f + thickness / 2;
-    auto ycoord = -1.0f + thickness / 2;
+    auto ygap = 2.0f / (height - 1) - (thickness + margin) * 2 / (height - 1);
+    auto xgap = 2.0f / (width - 1) - (thickness + margin) * 2 / (width - 1);
+
+    auto start = -1.0f + thickness + margin;
+
+    auto xcoord = start;
+    auto ycoord = start;
 
     auto ptr = ascii.get_layout();
 
@@ -151,7 +155,7 @@ void text::compile_ascii(const ascii_character &ascii,
             xcoord += xgap;
         }
 
-        xcoord = -1.0f + thickness / 2;
+        xcoord = start;
         ycoord += ygap;
     }
 
