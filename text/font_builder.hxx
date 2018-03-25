@@ -6,34 +6,30 @@
 #ifndef __text_font_builder_hxx
 #define __text_font_builder_hxx
 
+#include "vector_character.hxx"
+
 namespace text
 {
-    using point = glm::vec2;
-    using segment = std::pair<point, point>;
-
     class font_builder
     {
     public:
-        class char_desc;
-
-        using data_map = std::map<int, char_desc>;
-
-        font_builder(float thickness,
-                     int width, int height, 
-                     const data_map &font_data);
+        font_builder(int count = 128),
         ~font_builder();
+
+        void render(const vector_character *begin, 
+                    const vector_character *end);
+
+        void render(const ascii_character *begin,
+                    const ascii_character *end,
+                    int ascii_width,
+                    int ascii_height,
+                    float thickness);
 
         void bind_texture(int code);
 
     private:
-        GLuint textures[128];
-    };
-
-    class font_builder::char_desc
-    {   
-    public:
-        const char *map;
-        const char *order;
+        GLuint *textures;
+        int count;
     };
 }
 

@@ -27,149 +27,6 @@ namespace
         1, -1,
     };
 
-    class mapped_character
-    {
-    public:
-        mapped_character(float thickness,
-                         int width, int height, 
-                         const text::font_builder::char_desc &desc)
-        {
-            auto ygap = 2.0f / (height - 1) - thickness / (height - 1);
-            auto xgap = 2.0f / (width - 1) - thickness / (width - 1);
-
-            auto xcoord = -1.0f + thickness / 2;
-            auto ycoord = -1.0f + thickness / 2;
-
-            auto ptr = desc.map;
-
-            auto valid_symbol = [](char c) -> bool {
-                return std::isalpha(c) and std::islower(c);
-            };
-
-            std::map<char, glm::vec2> symbolmap;
-
-            for (auto y = 0; y < height; y++)
-            {
-                for (auto x = 0; x < width; x++)
-                {
-                    auto c = *ptr++;
-
-                    if (valid_symbol(c))
-                        symbolmap[c] = glm::vec2(xcoord, -ycoord);
-
-                    xcoord += xgap;
-                }
-
-                xcoord = -1.0f + thickness / 2;
-                ycoord += ygap;
-            }
-
-
-            ptr = desc.order;
-
-
-            auto nextsym = [&ptr, valid_symbol]() -> char {
-                if (valid_symbol(*ptr))
-                    return *ptr++;
-
-                return 0;
-            };
-
-
-            while (*ptr == '#')
-            {
-                ptr++;
-
-                switch (*ptr)
-                {
-                    case 'L': 
-                    {
-                        ptr++;
-
-                        bool strip = false;
-
-                        if (*ptr == 'S')
-                        {
-                            ptr++;
-                            strip = true;
-                        }
-
-
-
-
-                        char last = 0;
-                        char sym = nextsym();
-
-
-                        while (sym != 0)
-                        {
-                            if (last != 0 && sym != 0)
-                            {
-                                auto bit = symbolmap.find(last);
-                                auto eit = symbolmap.find(sym);
-                                auto itend = symbolmap.end();
-
-
-                                if (bit == itend)
-                                {
-                                    std::cerr << "symbol " << last 
-                                              << " not found" << std::endl;
-                                    throw new std::string("error1");
-                                }
-
-                                if (eit == itend)
-                                {
-                                    std::cerr << "symbol " << sym
-                                              << " not found" << std::endl;
-                                    throw new std::string("error2");
-                                }
-
-
-                                auto begin = bit->second;
-                                auto end = eit->second;
-
-                                auto seg = std::make_pair(begin, end);
-
-                                std::cout << "line: " << begin << " -> "
-                                          << end << std::endl;
-
-                                segments.push_back(seg);
-
-
-
-                                if (strip)
-                                {
-                                    last = sym;
-                                }
-                                else
-                                {
-                                    last = 0;
-                                }
-                            }
-                            else
-                            {
-                                last = sym;
-                            }
-
-                            sym = nextsym();
-                        }
-
-                        break;
-                    }
-
-                    case 'P':
-                        ptr++;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-
-        seg_vec segments;
-    };
-
     class renderer
     {
     public:
@@ -215,9 +72,8 @@ namespace
             glDeleteFramebuffers(1, &framebuffer);
         }
 
-        void render(float thickness,
-                    GLuint texhandle, 
-                    const mapped_character &mchr)
+        void render(const text::vector_character &vc,
+                    GLuint texhandle)
         {
             glBindTexture(GL_TEXTURE_2D, texhandle);
 
@@ -242,7 +98,7 @@ namespace
             }
 
 
-            auto segments = mchr.segments;
+            auto segments = vc.get_segments();
             auto count = segments.size();
 
             std::vector<glm::vec2> begins;
@@ -263,7 +119,7 @@ namespace
                 glUniform2fv(u_end_v, count,
                              glm::value_ptr(ends.front()));
 
-                u_thickness = thickness / 2;
+                u_thickness = vc.get_thickness() / 2;
             } catch(glutils::location_error e) {
                 std::cerr << "font_builder location error: " 
                           << e.name << std::endl;
@@ -287,26 +143,47 @@ namespace
 
 namespace text
 {
-    font_builder::font_builder(float thickness,
-                               int width, int height,
-                               const data_map &font_data)
+    font_builder::font_builder(int count)
+        : textures(new GLuint[count])
+        , count(count)
     {
-        glGenTextures(128, textures);
-
-        auto rdr = std::make_unique<renderer>();
-
-        for (auto p : font_data)
-        {
-            auto mchr = mapped_character(thickness, width, height, p.second);
-            auto than = textures[p.first];
-
-            rdr->render(thickness, than, mchr);
-        }
+        glGenTextures(count, textures);
     }
 
     font_builder::~font_builder()
     {
-        glDeleteTextures(128, textures);
+        glDeleteTextures(count, textures);
+    }
+
+    void font_builder::render(const vector_character *begin, 
+                              const vector_character *end)
+    {
+        auto rdr = std::make_unique<renderer>();
+
+        auto ptr = begin;
+
+
+        while (ptr != end)
+        {
+            auto vc = *ptr++;
+            auto texhandle = textures[vc.get_code()];
+
+            rdr->render(vc, texhandle);
+        }
+    }
+
+    void font_builder::render(const ascii_character *begin,
+                              const ascii_character *end,
+                              int ascii_width,
+                              int ascii_height,
+                              float thickness)
+    {
+        std::vector<vector_character> vcs;
+
+        for (auto ptr = begin; ptr != end; ptr++)
+            vcs.emplace_back(*ptr, ascii_width, ascii_height, thickness);
+
+        render(vcs.data(), vcs.data() + vcs.size());
     }
 
     void font_builder::bind_texture(int code)

@@ -77,17 +77,20 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-        std::map<int, text::font_builder::char_desc> font_data = {
-            { 0, 
-                {   "  b  "
-                    "     "
-                    "     "
-                    "  d  "
-                    "a   c", "#LSabc#Pd" }
+        text::ascii_character ascii_map[] = {
+            {   "  b  "
+                "     "
+                "     "
+                "  d  "
+                "a   c", "#LSabc#Pd", 0
             },
         };
 
-        auto font = std::make_unique<text::font_builder>(0.25f, 5, 5, font_data);
+        auto font = std::make_unique<text::font_builder>();
+
+        font->render(ascii_map, ascii_map + 1, 5, 5, 0.25f);
+
+
         auto tst = std::make_unique<test>();
 
 

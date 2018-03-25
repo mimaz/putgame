@@ -30,12 +30,9 @@ lowp float squared_distance(lowp vec2 p, lowp vec2 q)
 
 lowp float segment_distance(lowp vec2 v, lowp vec2 w, lowp vec2 p)
 {
-    /*
-     * TODO optimize
-     */
-    lowp float l2 = squared_distance(w, v);
+    lowp float sqdist = squared_distance(w, v);
 
-    lowp float t = dot(p - v, w - v) / l2;
+    lowp float t = dot(p - v, w - v) / sqdist;
     t = max(0.0, min(1.0, t));
 
     lowp vec2 proj = v + t * (w - v);

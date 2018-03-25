@@ -4,3 +4,4 @@
  */
 
 #include "../../text/font_builder.hxx"
+#include "../../text/ascii_character.hxx"
