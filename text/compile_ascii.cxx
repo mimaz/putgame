@@ -129,12 +129,12 @@ void text::compile_ascii(const ascii_character &ascii,
                          std::vector<point> &points,
                          std::vector<segment> &segments)
 {
-    auto margin = 0.05f;
+    auto margin = 0.00f;
 
-    auto ygap = 2.0f / (height - 1) - (thickness + margin) * 2 / (height - 1);
-    auto xgap = 2.0f / (width - 1) - (thickness + margin) * 2 / (width - 1);
+    auto ygap = 2.0f / (height - 1) - thickness * 4 / (height - 1);
+    auto xgap = 2.0f / (width - 1) - thickness * 4 / (width - 1);
 
-    auto start = -1.0f + thickness + margin;
+    auto start = -1.0f + thickness * 2;
 
     auto xcoord = start;
     auto ycoord = start;

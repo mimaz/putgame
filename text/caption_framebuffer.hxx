@@ -19,8 +19,9 @@ namespace text
         caption_framebuffer(common::context *ctx);
         ~caption_framebuffer();
 
-        void begin(GLuint texhandle, buffered_caption *capt);
-        void draw();
+        void begin(GLuint texhandle, 
+                   buffered_caption *capt);
+        void draw(const glm::mat4 &matrix);
         void end();
 
     private:
@@ -30,6 +31,7 @@ namespace text
         glutils::attribute a_coord;
         glutils::uniform u_color;
         glutils::uniform u_text_color;
+        glutils::uniform u_matrix;
 
         GLuint fbhandle;
     };

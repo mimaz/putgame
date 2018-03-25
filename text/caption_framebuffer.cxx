@@ -13,10 +13,10 @@
 namespace
 {
     const float mesh[] = {
-        -1, 1, 0, 1,
-        1, 1, 1, 1,
-        -1, -1, 0, 0,
-        1, -1, 1, 0,
+        -0.5f, 0.5f,
+        0.5f, 0.5f,
+        -0.5f, -0.5f,
+        0.5f, -0.5f,
     };
 }
 
@@ -34,6 +34,7 @@ namespace text
         , a_coord(&pro, "a_coord")
         , u_color(&pro, "u_color")
         , u_text_color(&pro, "u_text_color")
+        , u_matrix(&pro, "u_matrix")
     {
         glGenFramebuffers(1, &fbhandle);
         glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
@@ -50,7 +51,7 @@ namespace text
 
         glVertexAttribPointer(a_coord, 2, GL_FLOAT,
                               GL_FALSE, 
-                              sizeof(float) * 4,
+                              sizeof(float) * 2,
                               mesh);
     }
 
@@ -59,7 +60,8 @@ namespace text
         glDeleteFramebuffers(1, &fbhandle);
     }
 
-    void caption_framebuffer::begin(GLuint texhandle, buffered_caption *capt)
+    void caption_framebuffer::begin(GLuint texhandle, 
+                                    buffered_caption *capt)
     {
         glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
 
@@ -75,15 +77,21 @@ namespace text
             throw new std::string("framebuffer error");
         }
 
+        glViewport(0, 0, capt->get_width(), capt->get_height());
+
+
         pro.use();
+
         a_coord.enable();
 
         u_color = capt->get_color();
         u_text_color = capt->get_text_color();
     }
 
-    void caption_framebuffer::draw()
+    void caption_framebuffer::draw(const glm::mat4 &matrix)
     {
+        u_matrix = matrix;
+
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 

@@ -81,8 +81,9 @@ int main(void)
         auto font = std::make_unique<text::font_builder>();
         auto capt = std::make_unique<text::buffered_caption>(ctx.get(), font.get());
 
-        capt->set_width(256);
-        capt->set_height(64);
+        capt->set_width(512);
+        capt->set_height(512);
+        capt->set_font_size(100, 100);
 
 
         auto tst = std::make_unique<test>();

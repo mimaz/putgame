@@ -13,6 +13,7 @@
 #include <memory>
 #include <limits>
 #include <random>
+#include <sstream>
 
 #include <cassert>
 #include <cstdlib>

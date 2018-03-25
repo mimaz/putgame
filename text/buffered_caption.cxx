@@ -12,6 +12,14 @@
 #include "font_builder.hxx"
 #include "caption_framebuffer.hxx"
 
+namespace
+{
+    int line_count(const std::string &str)
+    {
+        return std::count(str.begin(), str.end(), '\n') + 1;
+    }
+}
+
 namespace text
 {
     buffered_caption::buffered_caption(common::context *ctx,
@@ -21,9 +29,9 @@ namespace text
         , text("dupa")
         , color(common::red())
         , text_color(common::white())
+        , font_size({ 1, 1 })
         , width(2)
         , height(2)
-        , font_size(0.1f)
         , dirty(true)
         , resized(true)
     {
@@ -72,6 +80,12 @@ namespace text
         dirty = true;
     }
 
+    void buffered_caption::set_font_size(const glm::vec2 &siz)
+    {
+        font_size = siz;
+        dirty = true;
+    }
+
     void buffered_caption::set_width(int wid)
     {
         width = wid;
@@ -86,8 +100,19 @@ namespace text
         resized = true;
     }
 
+    GLuint buffered_caption::get_texture_handle()
+    {
+        if (dirty)
+            render();
+
+        return texhandle;
+    }
+
     void buffered_caption::render()
     {
+        auto fb = get_part<caption_framebuffer>();
+
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texhandle);
 
         if (resized)
@@ -102,29 +127,49 @@ namespace text
             resized = false;
         }
 
-        auto fb = get_part<caption_framebuffer>();
+        auto proj = glm::ortho(-get_width() / 2.0f, get_width() / 2.0f,
+                               -get_height() / 2.0f, get_height() / 2.0f);
 
         fb->begin(texhandle, this);
 
-        glViewport(0, 0, get_width() / 2, get_height() / 2);
+
+        std::stringstream ss(get_text());
+        std::string line;
 
 
-        glActiveTexture(GL_TEXTURE0);
-        builder->bind_texture(0);
+        auto ycoord = (line_count(get_text()) - 1) 
+                    * get_font_height() / 2.0f;
+       
 
+        while (std::getline(ss, line, '\n'))
+        {
+            auto xcoord = -((line.length() - 1) 
+                        * get_font_width()) / 2.0f;
 
-        fb->draw();
+            for (auto c : line)
+            {
+                auto trvec = glm::vec3(xcoord, ycoord, 0.0f);
+
+                auto scvec = glm::vec3(get_font_width(), 
+                                       get_font_height(), 
+                                       1.0f);
+
+                auto matrix = proj;
+
+                matrix = glm::translate(matrix, trvec);
+                matrix = glm::scale(matrix, scvec);
+
+                builder->bind_texture(c);
+                fb->draw(matrix);
+
+                xcoord += get_font_width();
+            }
+
+            ycoord -= get_font_height();
+        }
+
         fb->end();
 
         dirty = false;
-        std::cout << "render!" << std::endl;
-    }
-
-    GLuint buffered_caption::get_texture_handle()
-    {
-        if (dirty)
-            render();
-
-        return texhandle;
     }
 }
