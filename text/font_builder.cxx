@@ -13,8 +13,8 @@
 namespace
 {
     constexpr auto max_count = 16;
-    constexpr auto texture_width = 100;
-    constexpr auto texture_height = 100;
+    constexpr auto texture_width = 64;
+    constexpr auto texture_height = 64;
 
     using seg_vec = std::vector<std::pair<glm::vec2, glm::vec2>>;
 
@@ -41,10 +41,12 @@ namespace
                   text_font_fsh)
             , pro(&vsh, &fsh)
             , a_coord(&pro, "a_coord")
-            , u_count(&pro, "u_count")
-            , u_begin_v(&pro, "u_begin_v")
-            , u_end_v(&pro, "u_end_v")
             , u_thickness(&pro, "u_thickness")
+            , u_segment_count(&pro, "u_segment_count")
+            , u_segment_begin_v(&pro, "u_segment_begin_v")
+            , u_segment_end_v(&pro, "u_segment_end_v")
+            , u_point_count(&pro, "u_point_count")
+            , u_point_v(&pro, "u_point_v")
         {
             glGenFramebuffers(1, &framebuffer);
             glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -86,20 +88,25 @@ namespace
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
                             GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
-                            GL_NEAREST);
+                            GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                            GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+                            GL_CLAMP_TO_EDGE);
 
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
                                    GL_TEXTURE_2D, texhandle, 0);
 
-            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
-                    GL_FRAMEBUFFER_COMPLETE)
+            auto stat = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+            if (stat != GL_FRAMEBUFFER_COMPLETE)
             {
                 throw new std::string("framebuffer error");
             }
 
 
+            auto points = vc.get_points();
             auto segments = vc.get_segments();
-            auto count = segments.size();
 
             std::vector<glm::vec2> begins;
             std::vector<glm::vec2> ends;
@@ -112,14 +119,23 @@ namespace
             }
 
             try {
-                glUniform1i(u_count, count);
+                u_thickness = vc.get_thickness() / 2;
 
-                glUniform2fv(u_begin_v, count,
+
+                glUniform1i(u_segment_count, segments.size());
+
+                glUniform2fv(u_segment_begin_v, segments.size(),
                              glm::value_ptr(begins.front()));
-                glUniform2fv(u_end_v, count,
+                glUniform2fv(u_segment_end_v, segments.size(),
                              glm::value_ptr(ends.front()));
 
-                u_thickness = vc.get_thickness() / 2;
+
+
+                glUniform1i(u_point_count, points.size());
+
+                glUniform2fv(u_point_v, points.size(),
+                             glm::value_ptr(points.front()));
+
             } catch(glutils::location_error e) {
                 std::cerr << "font_builder location error: " 
                           << e.name << std::endl;
@@ -132,10 +148,12 @@ namespace
         glutils::shader fsh;
         glutils::program pro;
         glutils::attribute a_coord;
-        glutils::uniform u_count;
-        glutils::uniform u_begin_v;
-        glutils::uniform u_end_v;
         glutils::uniform u_thickness;
+        glutils::uniform u_segment_count;
+        glutils::uniform u_segment_begin_v;
+        glutils::uniform u_segment_end_v;
+        glutils::uniform u_point_count;
+        glutils::uniform u_point_v;
 
         GLuint framebuffer;
     };
@@ -143,51 +161,45 @@ namespace
 
 namespace text
 {
-    font_builder::font_builder(int count)
-        : textures(new GLuint[count])
-        , count(count)
+    font_builder::font_builder(const ascii_font &font)
+        : count(font.get_count())
+        , textures(new GLuint[count])
     {
         glGenTextures(count, textures);
-    }
 
-    font_builder::~font_builder()
-    {
-        glDeleteTextures(count, textures);
-    }
 
-    void font_builder::render(const vector_character *begin, 
-                              const vector_character *end)
-    {
         auto rdr = std::make_unique<renderer>();
 
-        auto ptr = begin;
+
+        int id = 0;
 
 
-        while (ptr != end)
+        for (auto ac : font)
         {
-            auto vc = *ptr++;
-            auto texhandle = textures[vc.get_code()];
+            auto vc = vector_character(ac, font.get_width(), 
+                                       font.get_height(), 
+                                       font.get_thickness());
+            auto texhandle = textures[id];
+
+
+            texmap[vc.get_code()] = id;
+
 
             rdr->render(vc, texhandle);
         }
     }
 
-    void font_builder::render(const ascii_character *begin,
-                              const ascii_character *end,
-                              int ascii_width,
-                              int ascii_height,
-                              float thickness)
+    font_builder::~font_builder()
     {
-        std::vector<vector_character> vcs;
+        glDeleteTextures(count, textures);
 
-        for (auto ptr = begin; ptr != end; ptr++)
-            vcs.emplace_back(*ptr, ascii_width, ascii_height, thickness);
-
-        render(vcs.data(), vcs.data() + vcs.size());
+        delete textures;
     }
 
     void font_builder::bind_texture(int code)
     {
-        glBindTexture(GL_TEXTURE_2D, textures[code]);
+        auto idx = texmap[code];
+
+        glBindTexture(GL_TEXTURE_2D, textures[idx]);
     }
 }

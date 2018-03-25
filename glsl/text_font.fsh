@@ -8,47 +8,71 @@
  * defined at runtime
  */
 
-in lowp vec2 v_coord;
+precision lowp float;
+precision lowp int;
 
-const lowp vec3 black = vec3(0.0, 0.0, 0.0);
-const lowp vec3 white = vec3(1.0, 1.0, 1.0);
+in vec2 v_coord;
 
-uniform lowp int u_count;
-uniform lowp vec2 u_begin_v[max_count];
-uniform lowp vec2 u_end_v[max_count];
+const vec3 black = vec3(0.0, 0.0, 0.0);
+const vec3 white = vec3(1.0, 1.0, 1.0);
 
-uniform lowp float u_thickness;
+uniform int u_segment_count;
+uniform vec2 u_segment_begin_v[max_count];
+uniform vec2 u_segment_end_v[max_count];
 
-out lowp vec4 out_color;
+uniform int u_point_count;
+uniform vec2 u_point_v[max_count];
 
-lowp float squared_distance(lowp vec2 p, lowp vec2 q)
+uniform float u_thickness;
+
+out vec4 out_color;
+
+float squared_distance(vec2 p, vec2 q)
 {
-    lowp vec2 d = q - p;
+    vec2 d = q - p;
 
     return d.x * d.x + d.y * d.y;
 }
 
-lowp float segment_distance(lowp vec2 v, lowp vec2 w, lowp vec2 p)
+float segment_distance(vec2 v, vec2 w, vec2 p)
 {
-    lowp float sqdist = squared_distance(w, v);
+    float sqdist = squared_distance(w, v);
 
-    lowp float t = dot(p - v, w - v) / sqdist;
+    float t = dot(p - v, w - v) / sqdist;
     t = max(0.0, min(1.0, t));
 
-    lowp vec2 proj = v + t * (w - v);
+    vec2 proj = v + t * (w - v);
 
     return distance(p, proj);
 }
 
-void main()
+bool covered()
 {
-    lowp vec3 color = black;
-
-    for (int i = 0; i < u_count; i++)
+    for (int i = 0; i < u_segment_count; i++)
     {
-        if (segment_distance(u_begin_v[i], u_end_v[i], v_coord) < u_thickness)
-            color = white;
+        if (segment_distance(u_segment_begin_v[i], 
+                             u_segment_end_v[i], 
+                             v_coord) < u_thickness)
+        {
+            return true;
+        }
     }
 
-    out_color = vec4(color, 1.0);
+    for (int i = 0; i < u_point_count; i++)
+    {
+        if (distance(u_point_v[i], v_coord) < u_thickness)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void main()
+{
+    if (covered())
+        out_color = vec4(1.0, 1.0, 1.0, 1.0);
+    else
+        out_color = vec4(0.0, 0.0, 0.0, 1.0);
 }

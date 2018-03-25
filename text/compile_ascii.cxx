@@ -8,6 +8,120 @@
 
 #include "compile_ascii.hxx"
 
+namespace 
+{
+    bool valid_symbol(char c) 
+    {
+        return std::isalpha(c) and std::islower(c) and c != '#';
+    }
+
+    void line(const char *&ptr,
+              const std::map<int, glm::vec2> &symbolmap,
+              std::vector<text::segment> &segments)
+    {
+        auto nextsym = [&ptr]() -> char {
+            if (valid_symbol(*ptr))
+                return *ptr++;
+
+            return 0;
+        };
+
+        ptr++;
+
+        bool strip = false;
+
+        if (*ptr == 'S')
+        {
+            ptr++;
+            strip = true;
+        }
+
+
+
+
+        char last = 0;
+
+
+        while (valid_symbol(*ptr))
+        {
+            char sym = nextsym();
+
+            if (last != 0)
+            {
+                auto bit = symbolmap.find(last);
+                auto eit = symbolmap.find(sym);
+                auto itend = symbolmap.end();
+
+
+                if (bit == itend)
+                {
+                    std::cerr << "symbol " << last 
+                              << " not found" << std::endl;
+                    throw new std::string("error1");
+                }
+
+                if (eit == itend)
+                {
+                    std::cerr << "symbol " << sym
+                              << " not found" << std::endl;
+                    throw new std::string("error2");
+                }
+
+
+                auto begin = bit->second;
+                auto end = eit->second;
+
+                auto seg = std::make_pair(begin, end);
+
+
+                segments.push_back(seg);
+
+
+
+                if (strip)
+                {
+                    last = sym;
+                }
+                else
+                {
+                    last = 0;
+                }
+            }
+            else
+            {
+                last = sym;
+            }
+        }
+    }
+
+    void point(const char *&ptr,
+               const std::map<int, glm::vec2> &symbolmap,
+               std::vector<text::point> &points)
+    {
+        ptr++;
+        ptr++;
+
+            std::cout << "sym: " << *ptr << std::endl;
+        while (valid_symbol(*ptr))
+        {
+            auto it = symbolmap.find(*ptr++);
+
+            if (it == symbolmap.end())
+            {
+                std::cerr << "symbol " << *ptr 
+                          << " not found" << std::endl;
+
+                throw std::string("error3");
+            }
+
+
+            auto pt = it->second;
+
+            points.push_back(pt);
+        }
+    }
+}
+
 void text::compile_ascii(const ascii_character &ascii,
                          int width,
                          int height,
@@ -23,11 +137,7 @@ void text::compile_ascii(const ascii_character &ascii,
 
     auto ptr = ascii.get_layout();
 
-    auto valid_symbol = [](char c) -> bool {
-        return std::isalpha(c) and std::islower(c);
-    };
-
-    std::map<char, glm::vec2> symbolmap;
+    std::map<int, glm::vec2> symbolmap;
 
     for (auto y = 0; y < height; y++)
     {
@@ -49,97 +159,19 @@ void text::compile_ascii(const ascii_character &ascii,
     ptr = ascii.get_order();
 
 
-    auto nextsym = [&ptr, valid_symbol]() -> char {
-        if (valid_symbol(*ptr))
-            return *ptr++;
-
-        return 0;
-    };
-
-
     while (*ptr == '#')
     {
+        std::cout << "hash!" << std::endl;
         ptr++;
 
         switch (*ptr)
         {
             case 'L': 
-            {
-                ptr++;
-
-                bool strip = false;
-
-                if (*ptr == 'S')
-                {
-                    ptr++;
-                    strip = true;
-                }
-
-
-
-
-                char last = 0;
-                char sym = nextsym();
-
-
-                while (sym != 0)
-                {
-                    if (last != 0 && sym != 0)
-                    {
-                        auto bit = symbolmap.find(last);
-                        auto eit = symbolmap.find(sym);
-                        auto itend = symbolmap.end();
-
-
-                        if (bit == itend)
-                        {
-                            std::cerr << "symbol " << last 
-                                      << " not found" << std::endl;
-                            throw new std::string("error1");
-                        }
-
-                        if (eit == itend)
-                        {
-                            std::cerr << "symbol " << sym
-                                      << " not found" << std::endl;
-                            throw new std::string("error2");
-                        }
-
-
-                        auto begin = bit->second;
-                        auto end = eit->second;
-
-                        auto seg = std::make_pair(begin, end);
-
-                        std::cout << "line: " << begin << " -> "
-                                  << end << std::endl;
-
-                        segments.push_back(seg);
-
-
-
-                        if (strip)
-                        {
-                            last = sym;
-                        }
-                        else
-                        {
-                            last = 0;
-                        }
-                    }
-                    else
-                    {
-                        last = sym;
-                    }
-
-                    sym = nextsym();
-                }
-
+                ::line(ptr, symbolmap, segments);
                 break;
-            }
 
             case 'P':
-                ptr++;
+                ::point(ptr, symbolmap, points);
                 break;
 
             default:
