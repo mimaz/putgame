@@ -32,6 +32,7 @@ namespace text
         void set_text_color(const glm::vec3 &color);
         void set_width(int width);
         void set_height(int height);
+        void set_font_size(float size);
 
         void render();
 
@@ -40,6 +41,7 @@ namespace text
         const glm::vec3 &get_text_color() const { return text_color; }
         int get_width() const { return width; }
         int get_height() const { return height; }
+        float get_font_size() const { return font_size; }
 
         GLuint get_texture_handle();
 
@@ -53,8 +55,10 @@ namespace text
         std::string text;
         glm::vec3 color;
         glm::vec3 text_color;
+
         int width;
         int height;
+        float font_size;
 
         bool dirty;
         bool resized;

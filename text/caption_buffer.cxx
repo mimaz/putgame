@@ -14,12 +14,9 @@
 namespace
 {
     const float mesh[] = {
-        -1, -1, 0, 0,
         -1, 1, 0, 1,
         1, 1, 1, 1,
-
         -1, -1, 0, 0,
-        1, 1, 1, 1,
         1, -1, 1, 0,
     };
 
@@ -53,7 +50,8 @@ namespace
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             glVertexAttribPointer(a_coord, 2, GL_FLOAT,
-                                  GL_FALSE, sizeof(float) * 4,
+                                  GL_FALSE, 
+                                  sizeof(float) * 4,
                                   mesh);
         }
 
@@ -93,7 +91,7 @@ namespace
 
         void draw()
         {
-            glDrawArrays(GL_TRIANGLES, 0, 6);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         }
 
         GLuint handle;
@@ -116,8 +114,9 @@ namespace text
         , text("dupa")
         , color(common::red())
         , text_color(common::white())
-        , width(16)
-        , height(16)
+        , width(2)
+        , height(2)
+        , font_size(0.1f)
         , dirty(true)
         , resized(true)
     {
