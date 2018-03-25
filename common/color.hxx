@@ -8,7 +8,7 @@
 
 namespace common
 {
-    inline glm::vec3 white(float v)
+    inline glm::vec3 white(float v = 1)
     {
         return glm::vec3(v, v, v);
     }

@@ -40,44 +40,49 @@ static void resize_callback(GLFWwindow *win,
 
 int main(void)
 {
+    constexpr auto default_width = 1920;
+    constexpr auto default_height = 1080;
+
+    assert(glfwInit());
+
+    glfwSetErrorCallback(error_callback);
+
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+
+    GLFWwindow *win = glfwCreateWindow(default_width, default_height,
+                                       "putgame", nullptr, nullptr);
+
+
+    if (win == nullptr)
+    {
+        std::cerr << "creating window failed!" << std::endl;
+
+        glfwTerminate();
+        return 1;
+    }
+
+
+    glfwSetKeyCallback(win, key_callback);
+    glfwSetFramebufferSizeCallback(win, resize_callback);
+
+    glfwMakeContextCurrent(win);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glFrontFace(GL_CW);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
     try {
-        constexpr auto default_width = 1920;
-        constexpr auto default_height = 1080;
-
-        assert(glfwInit());
-
-        glfwSetErrorCallback(error_callback);
-
-
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-
-        GLFWwindow *win = glfwCreateWindow(default_width, default_height,
-                                           "putgame", nullptr, nullptr);
-
-
-        if (win == nullptr)
-        {
-            std::cerr << "creating window failed!" << std::endl;
-
-            glfwTerminate();
-            return 1;
-        }
-
-
-        glfwSetKeyCallback(win, key_callback);
-        glfwSetFramebufferSizeCallback(win, resize_callback);
-
-        glfwMakeContextCurrent(win);
-
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glFrontFace(GL_CW);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
+        auto ctx = std::make_unique<common::context>();
         auto font = std::make_unique<text::font_builder>();
+        auto capt = std::make_unique<text::caption_buffer>(ctx.get(), font.get());
+
+        capt->set_width(256);
+        capt->set_height(64);
 
 
         auto tst = std::make_unique<test>();
@@ -99,7 +104,7 @@ int main(void)
             try {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                tst->draw(font.get());
+                tst->draw(capt->get_texture_handle());
             } catch (glutils::location_error e) {
                 std::cerr << "location error: " << e.name << std::endl;
             }
@@ -107,12 +112,12 @@ int main(void)
             glfwSwapBuffers(win);
             glfwPollEvents();
         }
-
-        glfwDestroyWindow(win);
-        glfwTerminate();
     } catch (glutils::shader_error e) {
         std::cerr << "shader_error: " << e.log << std::endl;
     }
+
+    glfwDestroyWindow(win);
+    glfwTerminate();
 
     return 0;
 }

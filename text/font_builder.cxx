@@ -15,8 +15,8 @@
 namespace
 {
     constexpr auto max_count = 16;
-    constexpr auto texture_width = 128;
-    constexpr auto texture_height = 128;
+    constexpr auto texture_width = 64;
+    constexpr auto texture_height = 64;
 
     using seg_vec = std::vector<std::pair<glm::vec2, glm::vec2>>;
 
@@ -87,14 +87,18 @@ namespace
                          GL_UNSIGNED_BYTE,
                          nullptr);
 
+
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
                             GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
-                            GL_LINEAR);
+                            GL_NEAREST);
+
+
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
                             GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
                             GL_CLAMP_TO_EDGE);
+
 
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
                                    GL_TEXTURE_2D, texhandle, 0);

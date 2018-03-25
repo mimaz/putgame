@@ -9,7 +9,7 @@ class test
 public:
     test();
 
-    void draw(text::font_builder *builder);
+    void draw(GLuint tex);
 
 private:
     glutils::shader vsh;

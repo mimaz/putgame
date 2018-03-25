@@ -26,7 +26,7 @@ test::test()
     , u_texture(&pro, "u_texture")
 {}
 
-void test::draw(text::font_builder *builder)
+void test::draw(GLuint tex)
 {
     pro.use();
 
@@ -35,7 +35,7 @@ void test::draw(text::font_builder *builder)
 
 
     glActiveTexture(GL_TEXTURE0);
-    builder->bind_texture(0);
+    glBindTexture(GL_TEXTURE_2D, tex);
 
     u_texture = 0;
 
