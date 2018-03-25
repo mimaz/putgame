@@ -79,7 +79,7 @@ int main(void)
     try {
         auto ctx = std::make_unique<common::context>();
         auto font = std::make_unique<text::font_builder>();
-        auto capt = std::make_unique<text::caption_buffer>(ctx.get(), font.get());
+        auto capt = std::make_unique<text::buffered_caption>(ctx.get(), font.get());
 
         capt->set_width(256);
         capt->set_height(64);
