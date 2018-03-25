@@ -12,14 +12,6 @@
 #include "font_builder.hxx"
 #include "caption_framebuffer.hxx"
 
-namespace
-{
-    int line_count(const std::string &str)
-    {
-        return std::count(str.begin(), str.end(), '\n') + 1;
-    }
-}
-
 namespace text
 {
     buffered_caption::buffered_caption(common::context *ctx,
@@ -27,9 +19,9 @@ namespace text
         : object(ctx)
         , builder(builder)
         , text("dupa")
-        , color(common::red())
-        , text_color(common::white())
-        , font_size({ 1, 1 })
+        , color(1, 0, 0, 1)
+        , text_color(0, 1, 0, 1)
+        , font_size(1, 1)
         , width(2)
         , height(2)
         , dirty(true)
@@ -68,13 +60,13 @@ namespace text
         dirty = true;
     }
     
-    void buffered_caption::set_color(const glm::vec3 &col)
+    void buffered_caption::set_color(const glm::vec4 &col)
     {
         color = col;
         dirty = true;
     }
 
-    void buffered_caption::set_text_color(const glm::vec3 &col)
+    void buffered_caption::set_text_color(const glm::vec4 &col)
     {
         text_color = col;
         dirty = true;
@@ -137,8 +129,11 @@ namespace text
         std::string line;
 
 
-        auto ycoord = (line_count(get_text()) - 1) 
-                    * get_font_height() / 2.0f;
+        auto linecnt = std::count(get_text().begin(), 
+                                  get_text().end(), 
+                                  '\n') + 1;
+
+        auto ycoord = (linecnt - 1) * get_font_height() / 2.0f;
        
 
         while (std::getline(ss, line, '\n'))

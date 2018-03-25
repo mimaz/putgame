@@ -8,8 +8,8 @@ precision lowp int;
 
 in vec2 v_tex_coord;
 
-uniform vec3 u_color;
-uniform vec3 u_text_color;
+uniform vec4 u_color;
+uniform vec4 u_text_color;
 
 uniform sampler2D u_texture;
 
@@ -22,7 +22,7 @@ void main()
     const float alpha = 1.0;
 
     if (texv < 0.5)
-        out_color = vec4(u_color, alpha);
+        out_color = u_color;
     else
-        out_color = vec4(u_text_color, alpha);
+        out_color = u_text_color;
 }

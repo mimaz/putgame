@@ -77,8 +77,8 @@ namespace text
             throw new std::string("framebuffer error");
         }
 
-        glViewport(0, 0, capt->get_width(), capt->get_height());
 
+        glViewport(0, 0, capt->get_width(), capt->get_height());
 
         pro.use();
 

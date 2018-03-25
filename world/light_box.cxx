@@ -17,7 +17,7 @@
 namespace 
 {
     glm::vec3 to_rgb(world::light_box::color col, 
-                             float bright, float dim)
+                     float bright, float dim)
     {
         switch (col)
         {
@@ -40,8 +40,8 @@ namespace world
     light_box::light_box(common::context *ctx, color col)
         : visible_object(ctx)
         , light_source(ctx)
-        , light_col(common::black())
-        , surface_col(common::black())
+        , light_col(common::black3())
+        , surface_col(common::black3())
         , speed(0.05)
         , blur(0)
     {
