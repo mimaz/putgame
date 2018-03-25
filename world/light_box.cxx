@@ -11,8 +11,6 @@
 #include "light_box.hxx"
 
 #include "draw_manager.hxx"
-#include "context.hxx"
-#include "context.hxx"
 #include "camera.hxx"
 #include "lighting.hxx"
 
@@ -39,7 +37,7 @@ namespace
 
 namespace world
 {
-    light_box::light_box(context *ctx, color col)
+    light_box::light_box(common::context *ctx, color col)
         : visible_object(ctx)
         , light_source(ctx)
         , light_col(common::black())

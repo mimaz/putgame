@@ -9,7 +9,6 @@
 #include "wall_obstacle_view.hxx"
 
 #include "wall_obstacle.hxx"
-#include "context.hxx"
 #include "camera.hxx"
 #include "lighting.hxx"
 
@@ -41,7 +40,7 @@ namespace world
     const glm::vec3 wall_obstacle_view::primary_color(dim, dim, dim);
     const glm::vec3 wall_obstacle_view::secondary_color(bri, bri, dim);
 
-    wall_obstacle_view::wall_obstacle_view(context *ctx)
+    wall_obstacle_view::wall_obstacle_view(common::context *ctx)
         : cam(ctx->get_part<camera>())
         , vsh(GL_VERTEX_SHADER, 
               version_glsl,

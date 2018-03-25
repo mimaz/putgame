@@ -6,11 +6,12 @@
 #ifndef __world_light_box_view_hxx
 #define __world_light_box_view_hxx
 
+#include <putgame/common-fwd>
+
 #include "lighting.hxx"
 
 namespace world
 {
-    class context;
     class camera;
     class lighting;
     class light_box;
@@ -23,7 +24,7 @@ namespace world
         static const float mesh[];
         static const size_t size_of_mesh;
 
-        light_box_view(context *ctx);
+        light_box_view(common::context *ctx);
 
         light_box_view(const light_box_view &) = delete;
         light_box_view(light_box_view &&) = delete;

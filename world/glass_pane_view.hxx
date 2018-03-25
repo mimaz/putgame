@@ -6,12 +6,13 @@
 #ifndef __world_glass_pane_view_hxx
 #define __world_glass_pane_view_hxx
 
+#include <putgame/common-fwd>
+
 #include "lighting.hxx"
 
 namespace world
 {
     class camera;
-    class context;
     class glass_pane;
 
     class glass_pane_view
@@ -19,7 +20,7 @@ namespace world
     public:
         static constexpr auto instances_per_call = 4;
 
-        glass_pane_view(context *ctx);
+        glass_pane_view(common::context *ctx);
 
         void begin_drawing();
         void draw_element(const glass_pane *pane);

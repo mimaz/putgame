@@ -13,7 +13,6 @@
 
 namespace world
 {
-    class context;
     class camera;
     class lighting;
     class wall_obstacle;
@@ -30,7 +29,7 @@ namespace world
         static constexpr auto draw_instances = 4;
 
 
-        wall_obstacle_view(context *ctx);
+        wall_obstacle_view(common::context *ctx);
         ~wall_obstacle_view();
 
         void begin_drawing();

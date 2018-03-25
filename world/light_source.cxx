@@ -8,11 +8,10 @@
 #include "light_source.hxx"
 
 #include "light_group.hxx"
-#include "context.hxx"
 
 namespace world
 {
-    light_source::light_source(context *ctx)
+    light_source::light_source(common::context *ctx)
         : light_source(ctx->get_part<light_group>()) {}
 
     light_source::light_source(light_group *grp)

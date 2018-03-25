@@ -8,7 +8,6 @@
 #include "glass_pieces.hxx"
 
 #include "glass_pane.hxx"
-#include "context.hxx"
 #include "draw_manager.hxx"
 
 namespace world
@@ -48,12 +47,12 @@ namespace world
         set_matrix(base_matrix);
 
 
-        get_context()->get_part<draw_manager>()->add(this);
+        get_part<draw_manager>()->add(this);
     }
 
     glass_pieces::~glass_pieces()
     {
-        get_context()->get_part<draw_manager>()->remove(this);
+        get_part<draw_manager>()->remove(this);
     }
 
     int glass_pieces::get_count() const

@@ -7,14 +7,13 @@
 
 #include "wall_obstacle.hxx"
 
-#include "context.hxx"
 #include "draw_manager.hxx"
 
 namespace world
 {
     constexpr auto scale_factor = 0.1f;
 
-    wall_obstacle::wall_obstacle(context *ctx, 
+    wall_obstacle::wall_obstacle(common::context *ctx, 
                                  int w, int h, int d)
         : visible_object(ctx)
         , width(w)
@@ -27,11 +26,11 @@ namespace world
 
         scale(glm::vec3(xscale, yscale, zscale));
 
-        get_context()->get_part<draw_manager>()->add(this);
+        get_part<draw_manager>()->add(this);
     }
 
     wall_obstacle::~wall_obstacle()
     {
-        get_context()->get_part<draw_manager>()->remove(this);
+        get_part<draw_manager>()->remove(this);
     }
 }

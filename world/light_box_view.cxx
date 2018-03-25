@@ -11,12 +11,11 @@
 #include "light_box_view.hxx"
 
 #include "light_box.hxx"
-#include "context.hxx"
 #include "camera.hxx"
 
 namespace world
 {
-    light_box_view::light_box_view(context *ctx)
+    light_box_view::light_box_view(common::context *ctx)
         : vsh(GL_VERTEX_SHADER, 
               "#version 300 es",
               light_box_vsh)

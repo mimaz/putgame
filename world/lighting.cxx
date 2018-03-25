@@ -16,7 +16,7 @@ namespace world
 {
     const GLchar *const lighting::fragment_source = lighting_glsl;
 
-    lighting::lighting(context *ctx, glutils::program *prog)
+    lighting::lighting(common::context *ctx, glutils::program *prog)
         : u_camera_coord(prog, "u_camera_coord")
         , u_light_count(prog, "u_light_count")
         , u_light_coord_v(prog, "u_light_coord_v")

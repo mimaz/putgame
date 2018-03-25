@@ -6,7 +6,7 @@
 #ifndef __world_draw_manager_hxx
 #define __world_draw_manager_hxx
 
-#include "context.hxx"
+#include <putgame/common>
 
 namespace world
 {
@@ -24,10 +24,10 @@ namespace world
 
     class tunnel_view;
 
-    class draw_manager : public context::part
+    class draw_manager : public common::context::part
     {
     public:
-        draw_manager(context *ctx);
+        draw_manager(common::context *ctx);
 
         void add(light_box *box);
         void remove(light_box *box);

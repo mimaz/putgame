@@ -6,15 +6,16 @@
 #ifndef __world_camera_hxx
 #define __world_camera_hxx
 
-#include "context.hxx"
+#include <putgame/common>
+
 #include "light_source.hxx"
 
 namespace world
 {
-    class camera : public context::part, public light_source
+    class camera : public common::context::part, public light_source
     {
     public:
-        camera(context *ctx);
+        camera(common::context *ctx);
 
         void set_view_angle(float angle);
         void set_view_ratio(float ratio);

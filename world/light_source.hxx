@@ -6,15 +6,16 @@
 #ifndef __world_light_source_hxx
 #define __world_light_source_hxx
 
+#include <putgame/common-fwd>
+
 namespace world
 {
-    class context;
     class light_group;
 
     class light_source
     {
     public:
-        light_source(context *ctx);
+        light_source(common::context *ctx);
         light_source(light_group *grp);
 
         light_source(const light_source &) = delete;

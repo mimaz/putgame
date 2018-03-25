@@ -6,18 +6,19 @@
 #ifndef __glass_pieces_view_hxx
 #define __glass_pieces_view_hxx
 
+#include <putgame/common-fwd>
+
 #include "lighting.hxx"
 
 namespace world
 {
-    class context;
     class camera;
     class glass_pieces;
 
     class glass_pieces_view
     {
     public:
-        glass_pieces_view(context *ctx);
+        glass_pieces_view(common::context *ctx);
 
         void begin();
         void draw(const glass_pieces *pieces);

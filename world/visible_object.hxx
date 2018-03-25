@@ -6,16 +6,14 @@
 #ifndef __world_visible_object_hxx
 #define __world_visible_object_hxx
 
-#include "context.hxx"
+#include <putgame/common>
 
 namespace world
 {
-    class context;
-
-    class visible_object : public context::object
+    class visible_object : public common::context::object
     {
     public:
-        visible_object(context *ctx);
+        visible_object(common::context *ctx);
 
         visible_object(const visible_object &) = delete;
         visible_object(visible_object &&) = delete;

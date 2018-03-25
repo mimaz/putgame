@@ -7,8 +7,7 @@
 #define __world_lighting_hxx
 
 #include <putgame/glutils>
-
-#include "context.hxx"
+#include <putgame/common>
 
 namespace world
 {
@@ -20,7 +19,7 @@ namespace world
     public:
         static const GLchar *const fragment_source;
 
-        lighting(context *ctx, glutils::program *prog);
+        lighting(common::context *ctx, glutils::program *prog);
 
         void calculate();
 

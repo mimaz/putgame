@@ -11,7 +11,6 @@
 
 #include "way_path.hxx"
 #include "camera.hxx"
-#include "context.hxx"
 #include "lighting.hxx"
 
 namespace
@@ -26,12 +25,12 @@ namespace
 
 namespace world
 {
-    tunnel_view::tunnel_view(context *ctx, int quality)
+    tunnel_view::tunnel_view(common::context *ctx, int quality)
         : tunnel_view(2, quality, ctx)
     {}
 
     tunnel_view::tunnel_view(float width, int quality, 
-                             context *ctx)
+                             common::context *ctx)
         : mesh(quality, width)
         , path(ctx->get_part<way_path>(), mesh.get_gap())
         , light(ctx, &prog)

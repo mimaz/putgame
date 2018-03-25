@@ -8,7 +8,6 @@
 
 #include "glass_pane_view.hxx"
 
-#include "context.hxx"
 #include "camera.hxx"
 #include "glass_pane.hxx"
 
@@ -27,7 +26,7 @@ namespace
 
 namespace world
 {
-    glass_pane_view::glass_pane_view(context *ctx)
+    glass_pane_view::glass_pane_view(common::context *ctx)
         : cam(ctx->get_part<camera>())
         , vsh(GL_VERTEX_SHADER,
               version_glsl,

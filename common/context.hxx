@@ -3,10 +3,10 @@
  * 2018
  */
 
-#ifndef __world_context_hxx
-#define __world_context_hxx
+#ifndef __common_context_hxx
+#define __common_context_hxx
 
-namespace world
+namespace common
 {
     class context
     {

@@ -10,8 +10,8 @@
 
 namespace world
 {
-    way_path::way_path(context *ctx)
-        : context::part(ctx)
+    way_path::way_path(common::context *ctx)
+        : common::context::part(ctx)
         , path_line(1)
     {}
 

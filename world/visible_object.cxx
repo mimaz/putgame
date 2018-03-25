@@ -7,11 +7,9 @@
 
 #include "visible_object.hxx"
 
-#include "context.hxx"
-
 namespace world
 {
-    visible_object::visible_object(context *ctx)
+    visible_object::visible_object(common::context *ctx)
         : object(ctx) 
     {}
 
