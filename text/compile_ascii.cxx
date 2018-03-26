@@ -101,7 +101,6 @@ namespace
         ptr++;
         ptr++;
 
-            std::cout << "sym: " << *ptr << std::endl;
         while (valid_symbol(*ptr))
         {
             auto it = symbolmap.find(*ptr++);
@@ -165,7 +164,6 @@ void text::compile_ascii(const ascii_character &ascii,
 
     while (*ptr == '#')
     {
-        std::cout << "hash!" << std::endl;
         ptr++;
 
         switch (*ptr)

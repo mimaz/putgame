@@ -3,8 +3,8 @@
  * 2018
  */
 
-#ifndef __text_buffered_caption_hxx
-#define __text_buffered_caption_hxx
+#ifndef __text_text_buffer_hxx
+#define __text_text_buffer_hxx
 
 #include <putgame/common>
 
@@ -12,19 +12,19 @@ namespace text
 {
     class font_builder;
 
-    class buffered_caption : public common::context::object
+    class text_buffer : public common::context::object
     {
     public:
-        buffered_caption(common::context *ctx,
+        text_buffer(common::context *ctx,
                        font_builder *builder);
-        buffered_caption(common::context *ctx, 
+        text_buffer(common::context *ctx, 
                        font_builder *builder,
                        const std::string &text);
 
-        buffered_caption(const buffered_caption &) = delete;
-        buffered_caption(buffered_caption &&) = default;
+        text_buffer(const text_buffer &) = delete;
+        text_buffer(text_buffer &&) = default;
 
-        ~buffered_caption();
+        ~text_buffer();
 
 
         void set_text(const std::string &text);

@@ -7,14 +7,14 @@
 #include <putgame/res>
 #include <putgame/glutils>
 
-#include "buffered_caption.hxx"
+#include "text_buffer.hxx"
 
 #include "font_builder.hxx"
-#include "caption_framebuffer.hxx"
+#include "text_framebuffer.hxx"
 
 namespace text
 {
-    buffered_caption::buffered_caption(common::context *ctx,
+    text_buffer::text_buffer(common::context *ctx,
                                    font_builder *builder)
         : object(ctx)
         , builder(builder)
@@ -32,67 +32,67 @@ namespace text
         glBindTexture(GL_TEXTURE_2D, texhandle);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
-                        GL_NEAREST);
+                        GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
-                        GL_NEAREST);
+                        GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
                         GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
                         GL_CLAMP_TO_EDGE);
     }
 
-    buffered_caption::buffered_caption(common::context *ctx,
+    text_buffer::text_buffer(common::context *ctx,
                                    font_builder *builder,
                                    const std::string &text)
-        : buffered_caption(ctx, builder)
+        : text_buffer(ctx, builder)
     {
         set_text(text);
     }
 
-    buffered_caption::~buffered_caption()
+    text_buffer::~text_buffer()
     {
         glDeleteTextures(1, &texhandle);
     }
 
-    void buffered_caption::set_text(const std::string &txt)
+    void text_buffer::set_text(const std::string &txt)
     {
         text = txt;
         dirty = true;
     }
     
-    void buffered_caption::set_color(const glm::vec4 &col)
+    void text_buffer::set_color(const glm::vec4 &col)
     {
         color = col;
         dirty = true;
     }
 
-    void buffered_caption::set_text_color(const glm::vec4 &col)
+    void text_buffer::set_text_color(const glm::vec4 &col)
     {
         text_color = col;
         dirty = true;
     }
 
-    void buffered_caption::set_font_size(const glm::vec2 &siz)
+    void text_buffer::set_font_size(const glm::vec2 &siz)
     {
         font_size = siz;
         dirty = true;
     }
 
-    void buffered_caption::set_width(int wid)
+    void text_buffer::set_width(int wid)
     {
         width = wid;
         dirty = true;
         resized = true;
     }
 
-    void buffered_caption::set_height(int hei)
+    void text_buffer::set_height(int hei)
     {
         height = hei;
         dirty = true;
         resized = true;
     }
 
-    GLuint buffered_caption::get_texture_handle()
+    GLuint text_buffer::get_texture_handle()
     {
         if (dirty)
             render();
@@ -100,9 +100,9 @@ namespace text
         return texhandle;
     }
 
-    void buffered_caption::render()
+    void text_buffer::render()
     {
-        auto fb = get_part<caption_framebuffer>();
+        auto fb = get_part<text_framebuffer>();
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texhandle);

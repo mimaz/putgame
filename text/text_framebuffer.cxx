@@ -6,9 +6,9 @@
 #include <putgame/std>
 #include <putgame/res>
 
-#include "caption_framebuffer.hxx"
+#include "text_framebuffer.hxx"
 
-#include "buffered_caption.hxx"
+#include "text_buffer.hxx"
 
 namespace
 {
@@ -22,7 +22,7 @@ namespace
 
 namespace text
 {
-    caption_framebuffer::caption_framebuffer(common::context *ctx)
+    text_framebuffer::text_framebuffer(common::context *ctx)
         : part(ctx)
         , vsh(GL_VERTEX_SHADER,
               version_glsl,
@@ -55,13 +55,13 @@ namespace text
                               mesh);
     }
 
-    caption_framebuffer::~caption_framebuffer()
+    text_framebuffer::~text_framebuffer()
     {
         glDeleteFramebuffers(1, &fbhandle);
     }
 
-    void caption_framebuffer::begin(GLuint texhandle, 
-                                    buffered_caption *capt)
+    void text_framebuffer::begin(GLuint texhandle, 
+                                    text_buffer *capt)
     {
         glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
 
@@ -88,14 +88,14 @@ namespace text
         u_text_color = capt->get_text_color();
     }
 
-    void caption_framebuffer::draw(const glm::mat4 &matrix)
+    void text_framebuffer::draw(const glm::mat4 &matrix)
     {
         u_matrix = matrix;
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
-    void caption_framebuffer::end()
+    void text_framebuffer::end()
     {
         a_coord.disable();
 

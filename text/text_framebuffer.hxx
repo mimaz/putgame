@@ -3,24 +3,24 @@
  * 2018
  */
 
-#ifndef __caption_framebuffer_hxx
-#define __caption_framebuffer_hxx
+#ifndef __text_framebuffer_hxx
+#define __text_framebuffer_hxx
 
 #include <putgame/common>
 #include <putgame/glutils>
 
 namespace text
 {
-    class buffered_caption;
+    class text_buffer;
 
-    class caption_framebuffer : public common::context::part
+    class text_framebuffer : public common::context::part
     {
     public:
-        caption_framebuffer(common::context *ctx);
-        ~caption_framebuffer();
+        text_framebuffer(common::context *ctx);
+        ~text_framebuffer();
 
         void begin(GLuint texhandle, 
-                   buffered_caption *capt);
+                   text_buffer *capt);
         void draw(const glm::mat4 &matrix);
         void end();
 
