@@ -29,8 +29,6 @@ namespace text
         glutils::shader fsh;
         glutils::program pro;
         glutils::attribute a_coord;
-        glutils::uniform u_color;
-        glutils::uniform u_text_color;
         glutils::uniform u_matrix;
 
         GLuint fbhandle;

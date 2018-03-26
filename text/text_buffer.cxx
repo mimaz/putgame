@@ -19,8 +19,6 @@ namespace text
         : object(ctx)
         , builder(builder)
         , text("dupa")
-        , color(1, 0, 0, 1)
-        , text_color(0, 1, 0, 1)
         , font_size(1, 1)
         , width(2)
         , height(2)
@@ -57,18 +55,6 @@ namespace text
     void text_buffer::set_text(const std::string &txt)
     {
         text = txt;
-        dirty = true;
-    }
-    
-    void text_buffer::set_color(const glm::vec4 &col)
-    {
-        color = col;
-        dirty = true;
-    }
-
-    void text_buffer::set_text_color(const glm::vec4 &col)
-    {
-        text_color = col;
         dirty = true;
     }
 

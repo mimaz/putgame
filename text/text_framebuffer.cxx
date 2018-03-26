@@ -26,14 +26,12 @@ namespace text
         : part(ctx)
         , vsh(GL_VERTEX_SHADER,
               version_glsl,
-              caption_vsh)
+              text_buffer_vsh)
         , fsh(GL_FRAGMENT_SHADER,
               version_glsl,
-              caption_fsh)
+              text_buffer_fsh)
         , pro(&vsh, &fsh)
         , a_coord(&pro, "a_coord")
-        , u_color(&pro, "u_color")
-        , u_text_color(&pro, "u_text_color")
         , u_matrix(&pro, "u_matrix")
     {
         glGenFramebuffers(1, &fbhandle);
@@ -83,9 +81,6 @@ namespace text
         pro.use();
 
         a_coord.enable();
-
-        u_color = capt->get_color();
-        u_text_color = capt->get_text_color();
     }
 
     void text_framebuffer::draw(const glm::mat4 &matrix)
