@@ -26,7 +26,7 @@ namespace text
         : part(ctx)
         , vsh(GL_VERTEX_SHADER,
               version_glsl,
-              text_buffer_vsh)
+              textured_rect_vsh)
         , fsh(GL_FRAGMENT_SHADER,
               version_glsl,
               text_buffer_fsh)
