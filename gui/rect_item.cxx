@@ -25,8 +25,7 @@ namespace gui
 
     rect_item::~rect_item()
     {
-        std::cout << "removing item" << std::endl;
-        //get_part<surface>()->remove_item(this);
+        get_part<surface>()->remove_item(this);
     }
 
     void rect_item::set_position(int x, int y)
@@ -36,7 +35,7 @@ namespace gui
         dirty_matrix = true;
     }
 
-    void rect_item::set_size(int w, int h)
+    void rect_item::resize(int w, int h)
     {
         width = w;
         height = h;

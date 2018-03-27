@@ -44,9 +44,6 @@ public:
 
         win = glfwCreateWindow(width, height, title.c_str(), 
                                nullptr, nullptr);
-        glfwMakeContextCurrent(win);
-
-        glFrontFace(GL_CW);
 
         if (win == nullptr)
             throw glfw_window::exception("creating glfw window failed ");
@@ -57,7 +54,13 @@ public:
         glfwSetKeyCallback(win, key_callback);
         glfwSetWindowSizeCallback(win, resize_callback);
 
+        glfwMakeContextCurrent(win);
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glFrontFace(GL_CW);
+
         btn = std::make_unique<gui::color_button>(ctx.get());
+        btn->resize(400, 400);
     }
 
     ~internal()

@@ -20,9 +20,7 @@ namespace gui
     {}
 
     surface::~surface()
-    {
-        std::cout << "deleting surface" << std::endl;
-    }
+    {}
 
     void surface::resize(int w, int h)
     {

@@ -37,12 +37,12 @@ int main(void)
         {
             auto time = glfwGetTime();
 
-            if (time < next_time)
-                continue;
+            if (time >= next_time)
+            {
+                next_time += 1.0 / 60;
 
-            next_time += 1.0 / 60;
-
-            win->draw();
+                win->draw();
+            }
         }
     } catch (glutils::shader_error e) {
         std::cerr << "shader_error: " << e.log << std::endl;

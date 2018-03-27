@@ -19,7 +19,7 @@ namespace gui
         ~rect_item();
 
         void set_position(int x, int y);
-        void set_size(int w, int h);
+        void resize(int w, int h);
 
         virtual void draw();
         virtual void preprocess();
