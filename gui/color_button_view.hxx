@@ -12,6 +12,8 @@
 namespace gui
 {
     class color_button;
+    class surface;
+    class buffered_text;
 
     class color_button_view : public common::context::part
     {
@@ -19,7 +21,7 @@ namespace gui
         color_button_view(common::context *ctx);
 
         void begin();
-        void draw(const color_button *btn);
+        void draw(color_button *btn);
         void end();
 
     private:

@@ -8,6 +8,9 @@
 
 #include "color_button_view.hxx"
 
+#include "color_button.hxx"
+#include "surface.hxx"
+
 namespace
 {
     const float mesh[] = {
@@ -42,11 +45,15 @@ namespace gui
         glVertexAttribPointer(a_coord, 2, GL_FLOAT,
                               GL_FALSE, sizeof(float) * 2,
                               mesh);
+
+        glActiveTexture(GL_TEXTURE0);
     }
 
-    void color_button_view::draw(const color_button *btn)
+    void color_button_view::draw(color_button *btn)
     {
-        // TODO
+        u_matrix = get_part<surface>()->get_proj() * btn->get_matrix();
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
     void color_button_view::end()

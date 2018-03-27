@@ -6,3 +6,4 @@
 #include "../../text/font_builder.hxx"
 #include "../../text/ascii_character.hxx"
 #include "../../text/text_buffer.hxx"
+#include "../../text/default_font.hxx"

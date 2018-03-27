@@ -7,6 +7,7 @@
 #include <putgame/common>
 #include <putgame/text>
 #include <putgame/glutils>
+#include <putgame/gui>
 
 #include "test.hxx"
 
@@ -34,8 +35,14 @@ static void key_callback(GLFWwindow *win,
 static void resize_callback(GLFWwindow *win,
                             int width, int height)
 {
+    auto ctx = reinterpret_cast<common::context *>
+        (glfwGetWindowUserPointer(win));
+
     std::cout << "resize: " << width << " x " << height << std::endl;
+
     glViewport(0, 0, width, height);
+
+    ctx->get_part<gui::surface>()->resize(width, height);
 }
 
 int main(void)
@@ -53,6 +60,9 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
+
+    auto ctx = std::make_unique<common::context>();
+
     GLFWwindow *win = glfwCreateWindow(default_width, default_height,
                                        "putgame", nullptr, nullptr);
 
@@ -69,6 +79,8 @@ int main(void)
     glfwSetKeyCallback(win, key_callback);
     glfwSetFramebufferSizeCallback(win, resize_callback);
 
+    glfwSetWindowUserPointer(win, ctx.get());
+
     glfwMakeContextCurrent(win);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -77,17 +89,11 @@ int main(void)
 
 
     try {
-        auto ctx = std::make_unique<common::context>();
         auto font = std::make_unique<text::font_builder>();
-        auto capt = std::make_unique<text::text_buffer>(ctx.get(), font.get());
+        auto btn = std::make_unique<gui::color_button>(ctx.get());
 
-        capt->set_width(512);
-        capt->set_height(512);
-        capt->set_font_size(100, 100);
-
-
-        auto tst = std::make_unique<test>();
-
+        btn->set_size(679 / 2, 724 / 2);
+        btn->set_position(0, 0);
 
         double next_time = glfwGetTime();
 
@@ -105,7 +111,7 @@ int main(void)
             try {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                tst->draw(capt->get_texture_handle());
+                btn->draw();
             } catch (glutils::location_error e) {
                 std::cerr << "location error: " << e.name << std::endl;
             }

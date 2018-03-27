@@ -15,7 +15,7 @@
 namespace text
 {
     text_buffer::text_buffer(common::context *ctx,
-                                   font_builder *builder)
+                             font_builder *builder)
         : object(ctx)
         , builder(builder)
         , text("dupa")
@@ -40,8 +40,8 @@ namespace text
     }
 
     text_buffer::text_buffer(common::context *ctx,
-                                   font_builder *builder,
-                                   const std::string &text)
+                             font_builder *builder,
+                             const std::string &text)
         : text_buffer(ctx, builder)
     {
         set_text(text);
@@ -58,24 +58,18 @@ namespace text
         dirty = true;
     }
 
+    void text_buffer::set_size(int w, int h)
+    {
+        width = w;
+        height = h;
+        dirty = true;
+        resized = true;
+    }
+
     void text_buffer::set_font_size(const glm::vec2 &siz)
     {
         font_size = siz;
         dirty = true;
-    }
-
-    void text_buffer::set_width(int wid)
-    {
-        width = wid;
-        dirty = true;
-        resized = true;
-    }
-
-    void text_buffer::set_height(int hei)
-    {
-        height = hei;
-        dirty = true;
-        resized = true;
     }
 
     GLuint text_buffer::get_texture_handle()

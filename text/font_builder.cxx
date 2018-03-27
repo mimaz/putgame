@@ -53,6 +53,7 @@ namespace
             glGenFramebuffers(1, &framebuffer);
             glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
+            glGetIntegerv(GL_VIEWPORT, vpdata);
             glViewport(0, 0, texture_width, texture_height);
 
             GLenum attachement = GL_COLOR_ATTACHMENT0;
@@ -73,6 +74,8 @@ namespace
 
         ~renderer()
         {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glViewport(vpdata[0], vpdata[1], vpdata[2], vpdata[3]);
             glDeleteFramebuffers(1, &framebuffer);
         }
 
@@ -162,6 +165,8 @@ namespace
         glutils::uniform u_point_v;
 
         GLuint framebuffer;
+
+        int vpdata[4];
     };
 }
 
@@ -172,8 +177,8 @@ namespace text
     {}
 
     font_builder::font_builder(const ascii_font &font)
-        : count(font.get_count())
-        , textures(new GLuint[count])
+        : textures(new GLuint[font.get_count()])
+        , count(font.get_count())
     {
         glGenTextures(count, textures);
 

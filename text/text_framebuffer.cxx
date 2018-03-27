@@ -76,6 +76,7 @@ namespace text
         }
 
 
+        glGetIntegerv(GL_VIEWPORT, vpdata);
         glViewport(0, 0, capt->get_width(), capt->get_height());
 
         pro.use();
@@ -95,5 +96,6 @@ namespace text
         a_coord.disable();
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(vpdata[0], vpdata[1], vpdata[2], vpdata[3]);
     }
 }

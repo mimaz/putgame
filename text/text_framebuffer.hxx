@@ -32,6 +32,8 @@ namespace text
         glutils::uniform u_matrix;
 
         GLuint fbhandle;
+
+        int vpdata[4];
     };
 }
 

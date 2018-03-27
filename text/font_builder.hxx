@@ -24,8 +24,8 @@ namespace text
 
     private:
         std::map<int, GLuint> texmap;
-        int count;
         GLuint *textures;
+        int count;
     };
 }
 

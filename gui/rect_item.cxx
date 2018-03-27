@@ -32,7 +32,7 @@ namespace gui
         dirty_matrix = true;
     }
 
-    const glm::mat4 &rect_item::get_matrix() const
+    glm::mat4 rect_item::get_matrix()
     {
         if (dirty_matrix)
         {
@@ -43,9 +43,14 @@ namespace gui
 
             matrix = glm::mat4(1);
             matrix = glm::translate(matrix, trvec);
-            matrix = glm::translate(matrix, scvec);
+            matrix = glm::scale(matrix, scvec);
+
+            on_size_changed();
         }
 
         return matrix;
     }
+
+    void rect_item::on_size_changed()
+    {}
 }

@@ -18,12 +18,17 @@ namespace gui
         void set_position(int x, int y);
         void set_size(int w, int h);
 
+        virtual void draw() = 0;
+
         int get_xpos() const { return xpos; }
         int get_ypos() const { return ypos; }
         int get_width() const { return width; }
         int get_height() const { return height; }
 
-        const glm::mat4 &get_matrix() const;
+        glm::mat4 get_matrix();
+
+    protected:
+        virtual void on_size_changed();
 
     private:
         int xpos;
@@ -31,8 +36,8 @@ namespace gui
         int width;
         int height;
 
-        mutable glm::mat4 matrix;
-        mutable bool dirty_matrix;
+        glm::mat4 matrix;
+        bool dirty_matrix;
     };
 }
 
