@@ -61,19 +61,7 @@ namespace gui
         auto shadows = btn->get_shadows();
         auto count = static_cast<int>(shadows.size());
 
-        for (auto i = 0; i < count; i++)
-        {
-            auto sh = shadows[i];
-
-            exposures[i] = glm::vec2(std::get<0>(sh), std::get<1>(sh));
-            origins[i] = glm::vec2(std::get<2>(sh), std::get<3>(sh));
-        }
-
         glUniform1i(u_shadows, count);
-        glUniform2fv(u_exposure_v, count, 
-                     glm::value_ptr(exposures.front()));
-        glUniform2fv(u_origin_v, count,
-                     glm::value_ptr(origins.front()));
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
