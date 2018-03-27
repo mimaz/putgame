@@ -19,6 +19,11 @@ namespace gui
         , font_builder(text::default_font)
     {}
 
+    surface::~surface()
+    {
+        std::cout << "deleting surface" << std::endl;
+    }
+
     void surface::resize(int w, int h)
     {
         width = w;

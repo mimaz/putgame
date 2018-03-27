@@ -25,7 +25,8 @@ namespace gui
 
     rect_item::~rect_item()
     {
-        get_part<surface>()->remove_item(this);
+        std::cout << "removing item" << std::endl;
+        //get_part<surface>()->remove_item(this);
     }
 
     void rect_item::set_position(int x, int y)

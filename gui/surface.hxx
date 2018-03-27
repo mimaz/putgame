@@ -19,6 +19,7 @@ namespace gui
     {
     public:
         surface(common::context *ctx);
+        ~surface();
 
         void resize(int width, int height);
 
