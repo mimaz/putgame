@@ -7,6 +7,8 @@
 
 #include "rect_item.hxx"
 
+#include "surface.hxx"
+
 namespace gui
 {
     rect_item::rect_item(common::context *ctx)
@@ -15,8 +17,16 @@ namespace gui
         , ypos(0)
         , width(1)
         , height(1)
+        , pressed(false)
         , dirty_matrix(true)
-    {}
+    {
+        get_part<surface>()->add_item(this);
+    }
+
+    rect_item::~rect_item()
+    {
+        get_part<surface>()->remove_item(this);
+    }
 
     void rect_item::set_position(int x, int y)
     {
@@ -30,6 +40,43 @@ namespace gui
         width = w;
         height = h;
         dirty_matrix = true;
+    }
+
+    void rect_item::draw()
+    {}
+
+    void rect_item::preprocess()
+    {}
+
+    void rect_item::touch(touch_event event)
+    {
+        switch (event.type)
+        {
+            case touch_event::press:
+                pressed = true;
+                break;
+
+            case touch_event::release:
+                pressed = false;
+                break;
+
+            default:
+                break;
+        }
+
+        std::cout << "touch: " << event.type 
+                  << ": " << event.x 
+                  << " x " << event.y << std::endl;
+    }
+
+    bool rect_item::contains(int xp, int yp) const
+    {
+        auto l = get_xpos() - get_width() / 2;
+        auto r = get_xpos() + get_width() / 2;
+        auto b = get_ypos() - get_height() / 2;
+        auto t = get_ypos() + get_height() / 2;
+
+        return xp >= l and xp <= r and yp >= b and yp <= t;
     }
 
     glm::mat4 rect_item::get_matrix()

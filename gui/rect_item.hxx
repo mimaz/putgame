@@ -8,22 +8,30 @@
 
 #include <putgame/common>
 
+#include "touch_event.hxx"
+
 namespace gui
 {
     class rect_item : public common::context::object
     {
     public:
         rect_item(common::context *ctx);
+        ~rect_item();
 
         void set_position(int x, int y);
         void set_size(int w, int h);
 
-        virtual void draw() = 0;
+        virtual void draw();
+        virtual void preprocess();
+        virtual void touch(touch_event event);
+
+        bool contains(int x, int y) const;
 
         int get_xpos() const { return xpos; }
         int get_ypos() const { return ypos; }
         int get_width() const { return width; }
         int get_height() const { return height; }
+        bool is_pressed() const { return pressed; }
 
         glm::mat4 get_matrix();
 
@@ -35,6 +43,7 @@ namespace gui
         int ypos;
         int width;
         int height;
+        bool pressed;
 
         glm::mat4 matrix;
         bool dirty_matrix;

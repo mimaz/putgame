@@ -23,7 +23,7 @@ namespace gui
         void set_text_highlight_color(glm::vec4 color);
 
         void draw() override;
-        void bind_texture();
+        void preprocess() override;
 
         glm::vec4 get_back_normal_color() const
         { return back_normal_color; }

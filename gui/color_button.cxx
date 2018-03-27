@@ -39,6 +39,8 @@ namespace gui
 
     void color_button::draw()
     {
+        rect_item::draw();
+
         auto view = get_part<color_button_view>();
 
         view->begin();
@@ -47,6 +49,11 @@ namespace gui
         view->draw(this);
 
         view->end();
+    }
+
+    void color_button::preprocess()
+    {
+        rect_item::preprocess();
     }
 
     void color_button::on_size_changed()

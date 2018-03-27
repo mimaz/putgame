@@ -7,6 +7,8 @@
 
 #include "surface.hxx"
 
+#include "rect_item.hxx"
+
 namespace gui
 {
     surface::surface(common::context *ctx)
@@ -22,6 +24,29 @@ namespace gui
         width = w;
         height = h;
         dirty_proj = true;
+    }
+
+    void surface::preprocess()
+    {
+        for (auto item : items)
+            item->preprocess();
+    }
+
+    void surface::touch(touch_event event)
+    {
+        for (auto item : items)
+            if (item->contains(event.x, event.y) or item->is_pressed())
+                item->touch(event);
+    }
+
+    void surface::add_item(rect_item *item)
+    {
+        items.insert(item);
+    }
+
+    void surface::remove_item(rect_item *item)
+    {
+        items.erase(item);
     }
 
     glm::mat4 surface::get_proj() const
