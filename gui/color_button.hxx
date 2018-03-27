@@ -15,6 +15,9 @@ namespace gui
     class color_button : public rect_item
     {
     public:
+        using shadow = std::tuple<float, float, int, int>;
+        using shadow_vec = std::vector<shadow>;
+
         color_button(common::context *ctx);
 
         void set_back_normal_color(glm::vec4 color);
@@ -37,6 +40,8 @@ namespace gui
         glm::vec4 get_text_highlight_color() const
         { return text_highlight_color; }
 
+        const shadow_vec &get_shadows() const { return shadows; }
+
     protected:
         void on_size_changed() override;
 
@@ -47,6 +52,8 @@ namespace gui
         glm::vec4 text_highlight_color;
 
         text::text_buffer text;
+
+        shadow_vec shadows;
     };
 }
 

@@ -30,10 +30,15 @@ namespace gui
               textured_rect_vsh)
         , fsh(GL_FRAGMENT_SHADER,
               version_glsl,
+              "const lowp int max_shadows = " + 
+              std::to_string(max_shadows) + ";",
               color_button_fsh)
         , pro(&vsh, &fsh)
         , a_coord(&pro, "a_coord")
         , u_matrix(&pro, "u_matrix")
+        , u_shadows(&pro, "u_shadows")
+        , u_exposure_v(&pro, "u_exposure_v")
+        , u_origin_v(&pro, "u_origin_v")
     {}
 
     void color_button_view::begin()
@@ -52,6 +57,23 @@ namespace gui
     void color_button_view::draw(color_button *btn)
     {
         u_matrix = get_part<surface>()->get_proj() * btn->get_matrix();
+
+        auto shadows = btn->get_shadows();
+        auto count = static_cast<int>(shadows.size());
+
+        for (auto i = 0; i < count; i++)
+        {
+            auto sh = shadows[i];
+
+            exposures[i] = glm::vec2(std::get<0>(sh), std::get<1>(sh));
+            origins[i] = glm::vec2(std::get<2>(sh), std::get<3>(sh));
+        }
+
+        glUniform1i(u_shadows, count);
+        glUniform2fv(u_exposure_v, count, 
+                     glm::value_ptr(exposures.front()));
+        glUniform2fv(u_origin_v, count,
+                     glm::value_ptr(origins.front()));
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
