@@ -102,10 +102,55 @@ void glfw_window::key(int key, int action)
     if (action != GLFW_RELEASE)
         return;
 
+    auto cam = get_part<world::camera>();
+
+    auto angle = PI / 20;
+    auto step = 0.25f;
+
     switch (key)
     {
         case GLFW_KEY_ESCAPE:
             glfwSetWindowShouldClose(win, GLFW_TRUE);
+            break;
+
+        case GLFW_KEY_H:
+            cam->move({ -step, 0, 0 });
+            break;
+
+        case GLFW_KEY_J:
+            cam->move({ 0, -step, 0 });
+            break;
+
+        case GLFW_KEY_K:
+            cam->move({ 0, step, 0 });
+            break;
+
+        case GLFW_KEY_L:
+            cam->move({ step, 0, 0 });
+            break;
+
+        case GLFW_KEY_F:
+            cam->move({ 0, 0, -step });
+            break;
+
+        case GLFW_KEY_B:
+            cam->move({ 0, 0, step });
+            break;
+
+        case GLFW_KEY_A:
+            cam->rotate(angle, { 0, 1, 0 });
+            break;
+
+        case GLFW_KEY_D:
+            cam->rotate(-angle, { 0, 1, 0 });
+            break;
+
+        case GLFW_KEY_W:
+            cam->rotate(angle, { 1, 0, 0 });
+            break;
+
+        case GLFW_KEY_X:
+            cam->rotate(-angle, { 1, 0, 0 });
             break;
 
         default:
