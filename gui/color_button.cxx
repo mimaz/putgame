@@ -56,8 +56,8 @@ namespace gui
 
 
         auto newend = std::remove_if(shadows.begin(), shadows.end(),
-                [](const glm::vec4 &v) -> bool {
-                    return v[1] > sqrtf(2);
+                [this](const glm::vec4 &v) -> bool {
+                    return v[1] > sqrtf(2) * get_width() / get_height();
                 });
 
         auto newsiz = std::distance(shadows.begin(), newend);

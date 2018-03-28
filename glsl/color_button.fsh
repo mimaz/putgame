@@ -16,6 +16,7 @@ in vec2 v_tex_coord;
 uniform sampler2D u_texture;
 uniform vec4 u_primary_color;
 uniform vec4 u_secondary_color;
+uniform float u_ratio;
 uniform int u_shadows;
 uniform vec4 u_shadow_v[max_shadows];
 
@@ -29,9 +30,11 @@ bool highlighted()
 
         vec2 orgvec = v_tex_coord - sh.zw;
 
+        float sqratio = u_ratio * u_ratio;
+
         float sqexp_x = sh.x * sh.x;
         float sqexp_y = sh.y * sh.y;
-        float sqdis = orgvec.x * orgvec.x + orgvec.y * orgvec.y;
+        float sqdis = orgvec.x * orgvec.x * sqratio + orgvec.y * orgvec.y;
 
         if (sqdis <= sqexp_x && sqdis > sqexp_y)
             return true;

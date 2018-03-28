@@ -40,6 +40,7 @@ namespace gui
         , u_matrix(&pro, "u_matrix")
         , u_primary_color(&pro, "u_primary_color")
         , u_secondary_color(&pro, "u_secondary_color")
+        , u_ratio(&pro, "u_ratio")
         , u_shadows(&pro, "u_shadows")
         , u_shadow_v(&pro, "u_shadow_v")
     {}
@@ -63,11 +64,12 @@ namespace gui
         auto shadows = btn->get_shadows();
         auto count = std::min(static_cast<int>(shadows.size()), max_shadows);
 
-        glUniform4fv(u_primary_color, 1, 
-                     glm::value_ptr(btn->get_primary_color()));
-        glUniform4fv(u_secondary_color, 1, 
-                     glm::value_ptr(btn->get_secondary_color()));
-        glUniform1i(u_shadows, count);
+        u_primary_color = btn->get_primary_color();
+        u_secondary_color = btn->get_secondary_color();
+        u_ratio = static_cast<float>(btn->get_width()) / btn->get_height();
+
+        u_shadows = count;
+
         glUniform4fv(u_shadow_v, count, 
                      glm::value_ptr(shadows.front()));
 

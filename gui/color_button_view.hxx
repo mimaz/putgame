@@ -28,6 +28,7 @@ namespace gui
         glutils::uniform u_matrix;
         glutils::uniform u_primary_color;
         glutils::uniform u_secondary_color;
+        glutils::uniform u_ratio;
         glutils::uniform u_shadows;
         glutils::uniform u_shadow_v;
     };
