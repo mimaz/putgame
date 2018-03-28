@@ -6,32 +6,31 @@
 #ifndef __glfw_window_hxx
 #define __glfw_window_hxx
 
-class glfw_window
+#include <putgame/common>
+
+class glfw_window : public common::context
 {
 public:
-    class exception;
-    class internal;
-
     glfw_window(int width, int height,
                 const std::string &title = "putgame");
 
     ~glfw_window();
 
     void draw();
-
     bool should_close() const;
 
 private:
-    internal *priv;
-};
+    static glfw_window *from_window(GLFWwindow *win);
+    static void key_callback(GLFWwindow *win,
+                             int key, int code,
+                             int action, int mode);
+    static void resize_callback(GLFWwindow *win,
+                                int width, int height);
 
-class glfw_window::exception
-{
-public:
-    exception(const std::string &desc)
-        : desc(desc) {}
+    void key(int key, int action);
+    void resize(int width, int height);
 
-    std::string desc;
+    GLFWwindow *win;
 };
 
 #endif
