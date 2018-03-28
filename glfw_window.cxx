@@ -7,11 +7,9 @@
 #include <putgame/common>
 #include <putgame/glutils>
 #include <putgame/gui>
+#include <putgame/world>
 
 #include "glfw_window.hxx"
-
-#include "world/draw_manager.hxx"
-#include "world/camera.hxx"
 
 glfw_window::glfw_window(int width, int height,
                          const std::string &title)

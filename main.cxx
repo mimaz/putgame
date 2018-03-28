@@ -8,10 +8,9 @@
 #include <putgame/text>
 #include <putgame/glutils>
 #include <putgame/gui>
+#include <putgame/world>
 
 #include "glfw_window.hxx"
-
-#include "world/way_path.hxx"
 
 static void error_callback(int code, const char *desc)
 {
