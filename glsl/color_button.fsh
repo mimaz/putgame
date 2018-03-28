@@ -5,10 +5,6 @@
 
 /*
  * const lowp int max_shadows = ...;
- * const lowp int back_normal = ...;
- * const lowp int back_highlight = ...;
- * const lowp int text_normal = ...;
- * const lowp int text_highlight = ...;
  * defined at runtime
  */
 
@@ -18,7 +14,8 @@ precision lowp int;
 in vec2 v_tex_coord;
 
 uniform sampler2D u_texture;
-uniform vec4 u_color_v[4];
+uniform vec4 u_primary_color;
+uniform vec4 u_secondary_color;
 uniform int u_shadows;
 uniform vec4 u_shadow_v[max_shadows];
 
@@ -53,15 +50,15 @@ void main()
     if (highlighted())
     {
         if (textured())
-            out_color = u_color_v[text_highlight];
+            out_color = u_primary_color;
         else
-            out_color = u_color_v[text_normal];
+            out_color = u_secondary_color;
     }
     else
     {
         if (textured())
-            out_color = u_color_v[back_highlight];
+            out_color = u_secondary_color;
         else
-            out_color = u_color_v[back_normal];
+            out_color = u_primary_color;
     }
 }

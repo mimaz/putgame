@@ -17,10 +17,8 @@ namespace gui
     public:
         color_button(common::context *ctx);
 
-        void set_back_normal_color(glm::vec4 color);
-        void set_back_highlight_color(glm::vec4 color);
-        void set_text_normal_color(glm::vec4 color);
-        void set_text_highlight_color(glm::vec4 color);
+        void set_primary_color(glm::vec4 color);
+        void set_secondary_color(glm::vec4 color);
 
         void draw() override;
         void preprocess() override;
@@ -31,8 +29,11 @@ namespace gui
         glm::vec4 get_text_normal_color() const;
         glm::vec4 get_text_highlight_color() const;
 
-        const std::array<glm::vec4, 4> &get_color_array() const
-        { return colors; }
+        glm::vec4 get_primary_color() const
+        { return primary_color; }
+
+        glm::vec4 get_secondary_color() const
+        { return secondary_color; }
 
         const std::vector<glm::vec4> &get_shadows() const 
         { return shadows; }
@@ -41,7 +42,8 @@ namespace gui
         void on_size_changed() override;
 
     private:
-        std::array<glm::vec4, 4> colors;
+        glm::vec4 primary_color;
+        glm::vec4 secondary_color;
 
         text::text_buffer text;
 

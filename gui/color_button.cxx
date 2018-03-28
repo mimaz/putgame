@@ -16,33 +16,21 @@ namespace gui
         : rect_item(ctx)
         , text(ctx, get_part<surface>()->get_font_builder())
     {
-        set_back_normal_color({ 0.5f, 0.5f, 0.5f, 0.5f });
-        set_back_highlight_color({ 0.25f, 0.25f, 0.25f, 0.5f });
-        set_text_normal_color({ 1.0f, 1.0f, 0.0f, 1.0f });
-        set_text_highlight_color({ 0.0f, 1.0f, 1.0f, 1.0f });
+        set_primary_color(glm::vec4(0.7f, 0.5f, 0.3f, 1.0f));
+        set_secondary_color(glm::vec4(0.3f, 0.5f, 0.7f, 1.0));
 
         shadows.push_back(glm::vec4(0.4f, 0.1f, 0.9f, 0.8f));
     }
 
-    void color_button::set_back_normal_color(glm::vec4 color)
-	{
-        colors[color_button_view::back_normal] = color;
-	}
+    void color_button::set_primary_color(glm::vec4 color)
+    {
+        primary_color = color;
+    }
 
-    void color_button::set_back_highlight_color(glm::vec4 color)
-	{
-        colors[color_button_view::back_highlight] = color;
-	}
-
-    void color_button::set_text_normal_color(glm::vec4 color)
-	{
-        colors[color_button_view::text_normal] = color;
-	}
-
-    void color_button::set_text_highlight_color(glm::vec4 color)
-	{
-        colors[color_button_view::text_highlight] = color;
-	}
+    void color_button::set_secondary_color(glm::vec4 color)
+    {
+        secondary_color = color;
+    }
 
     void color_button::draw()
     {
