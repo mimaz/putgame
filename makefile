@@ -38,7 +38,7 @@ CFLAGS = -Wall -O0 -MMD
 LDFLAGS = 
 
 TARGET_CFLAGS = -Iinclude/ ${CFLAGS}
-TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR} ${TARGET_CFLAGS}
+TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR} ${TARGET_CFLAGS} -std=c++17
 TARGET_LDFLAGS = -lglfw -lGLESv2 ${LDFLAGS}
 
 PRECOMPILER_CFLAGS = ${CFLAGS}
@@ -119,7 +119,7 @@ ${TARGET_PCH_OBJ}: ${TARGET_PCH_SRC}
 # glsl objects
 ${GLSL_O_DIR}/%.c.o: ${GLSL_C_DIR}/%.c
 	@mkdir -p ${dir $@}
-	${CC} ${TARGET_CXXFLAGS} -c $< -o $@
+	${CC} ${TARGET_CFLAGS} -c $< -o $@
 
 # glsl sources
 ${GLSL_C_DIR}/%.c: % ${PRECOMPILER}
