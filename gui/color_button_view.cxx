@@ -33,11 +33,20 @@ namespace gui
         , fsh(GL_FRAGMENT_SHADER,
               version_glsl,
               "const lowp int max_shadows = " + 
-              std::to_string(max_shadows) + ";",
+              std::to_string(max_shadows) + ";\n" +
+              "const lowp int back_normal = " +
+              std::to_string(back_normal) + ";\n" +
+              "const lowp int back_highlight = " +
+              std::to_string(back_highlight) + ";\n" + 
+              "const lowp int text_normal = " +
+              std::to_string(text_normal) + ";\n" +
+              "const lowp int text_highlight = " +
+              std::to_string(text_highlight) + ";\n",
               color_button_fsh)
         , pro(&vsh, &fsh)
         , a_coord(&pro, "a_coord")
         , u_matrix(&pro, "u_matrix")
+        , u_color_v(&pro, "u_color_v")
         , u_shadows(&pro, "u_shadows")
         , u_shadow_v(&pro, "u_shadow_v")
     {}
@@ -61,6 +70,8 @@ namespace gui
         auto shadows = btn->get_shadows();
         auto count = static_cast<int>(shadows.size());
 
+        glUniform4fv(u_color_v, color_count,
+                     glm::value_ptr(btn->get_color_array().front()));
         glUniform1i(u_shadows, count);
         glUniform4fv(u_shadow_v, count, 
                      glm::value_ptr(shadows.front()));

@@ -5,6 +5,10 @@
 
 /*
  * const lowp int max_shadows = ...;
+ * const lowp int back_normal = ...;
+ * const lowp int back_highlight = ...;
+ * const lowp int text_normal = ...;
+ * const lowp int text_highlight = ...;
  * defined at runtime
  */
 
@@ -14,6 +18,7 @@ precision lowp int;
 in vec2 v_tex_coord;
 
 uniform sampler2D u_texture;
+uniform vec4 u_color_v[4];
 uniform int u_shadows;
 uniform vec4 u_shadow_v[max_shadows];
 
@@ -38,16 +43,25 @@ bool highlighted()
     return false;
 }
 
+bool textured()
+{
+    return texture2D(u_texture, v_tex_coord).r > 0.5;
+}
+
 void main()
 {
-    out_color = texture2D(u_texture, v_tex_coord);
-
     if (highlighted())
     {
-        out_color += vec4(0.0, 0.25, 0.0, 0.0);
+        if (textured())
+            out_color = u_color_v[text_highlight];
+        else
+            out_color = u_color_v[text_normal];
     }
     else
     {
-        out_color += vec4(0.25, 0.0, 0.0, 0.0);
+        if (textured())
+            out_color = u_color_v[back_highlight];
+        else
+            out_color = u_color_v[back_normal];
     }
 }

@@ -26,17 +26,13 @@ namespace gui
         void preprocess() override;
         void bind_texture();
 
-        glm::vec4 get_back_normal_color() const
-        { return back_normal_color; }
+        glm::vec4 get_back_normal_color() const;
+        glm::vec4 get_back_highlight_color() const;
+        glm::vec4 get_text_normal_color() const;
+        glm::vec4 get_text_highlight_color() const;
 
-        glm::vec4 get_back_highlight_color() const
-        { return back_highlight_color; }
-
-        glm::vec4 get_text_normal_color() const
-        { return text_normal_color; }
-
-        glm::vec4 get_text_highlight_color() const
-        { return text_highlight_color; }
+        const std::array<glm::vec4, 4> &get_color_array() const
+        { return colors; }
 
         const std::vector<glm::vec4> &get_shadows() const 
         { return shadows; }
@@ -45,10 +41,7 @@ namespace gui
         void on_size_changed() override;
 
     private:
-        glm::vec4 back_normal_color;
-        glm::vec4 back_highlight_color;
-        glm::vec4 text_normal_color;
-        glm::vec4 text_highlight_color;
+        std::array<glm::vec4, 4> colors;
 
         text::text_buffer text;
 
