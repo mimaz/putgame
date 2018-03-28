@@ -61,7 +61,7 @@ namespace gui
         u_matrix = get_part<surface>()->get_proj() * btn->get_matrix();
 
         auto shadows = btn->get_shadows();
-        auto count = static_cast<int>(shadows.size());
+        auto count = std::min(static_cast<int>(shadows.size()), max_shadows);
 
         glUniform4fv(u_primary_color, 1, 
                      glm::value_ptr(btn->get_primary_color()));

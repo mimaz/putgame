@@ -18,7 +18,7 @@ namespace text
                              font_builder *builder)
         : object(ctx)
         , builder(builder)
-        , text("text")
+        , text("dupa")
         , font_size(1, 1)
         , width(2)
         , height(2)

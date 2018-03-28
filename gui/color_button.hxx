@@ -22,6 +22,8 @@ namespace gui
 
         void draw() override;
         void preprocess() override;
+        void touch(touch_event event) override;
+
         void bind_texture();
 
         glm::vec4 get_back_normal_color() const;

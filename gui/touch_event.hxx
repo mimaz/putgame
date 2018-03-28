@@ -19,10 +19,10 @@ namespace gui
         };
 
         touch_event(event_type type, int x, int y)
-            : type(type), x(x), y(y) {}
+            : type(type), xpos(x), ypos(y) {}
 
         event_type type;
-        int x, y;
+        int xpos, ypos;
     };
 }
 

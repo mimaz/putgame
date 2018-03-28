@@ -38,8 +38,15 @@ namespace gui
     void surface::touch(touch_event event)
     {
         for (auto item : items)
-            if (item->contains(event.x, event.y) or item->is_pressed())
-                item->touch(event);
+            if (item->contains(event.xpos, event.ypos) or item->is_pressed())
+            {
+                auto itemev = event;
+
+                itemev.xpos -= item->get_xpos();
+                itemev.ypos -= item->get_ypos();
+
+                item->touch(itemev);
+            }
     }
 
     void surface::draw()
