@@ -3,13 +3,18 @@
  * 2018
  */
 
+/*
+ * const lowp int max_count = ...;
+ * defined at runtime
+ */
+
 in lowp vec3 a_coord;
 in lowp vec3 a_normal;
 in lowp float a_type;
 
-uniform highp mat4 u_mvp_v[2];
-uniform highp mat4 u_model_v[2];
-uniform lowp vec3 u_color_v[2];
+uniform highp mat4 u_mvp_v[max_count];
+uniform highp mat4 u_model_v[max_count];
+uniform lowp vec3 u_color_v[max_count];
 
 flat out lowp int v_type;
 flat out lowp vec3 v_normal;

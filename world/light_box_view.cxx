@@ -17,10 +17,12 @@ namespace world
 {
     light_box_view::light_box_view(common::context *ctx)
         : vsh(GL_VERTEX_SHADER, 
-              "#version 300 es",
+              version_glsl,
+              "const lowp int max_count = " +
+              std::to_string(boxes_per_draw) + ";",
               light_box_vsh)
         , fsh(GL_FRAGMENT_SHADER,
-              "#version 300 es",
+              version_glsl,
               lighting::fragment_source,
               light_box_fsh)
         , prog(&vsh, &fsh)
