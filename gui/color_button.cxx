@@ -16,8 +16,8 @@ namespace gui
         : rect_item(ctx)
         , text(ctx, get_part<surface>()->get_font_builder())
     {
-        set_primary_color(glm::vec4(1.0f, 1.0f, 0.5f, 1.0f));
-        set_secondary_color(glm::vec4(0.4f, 0.4f, 0.4f, 1.0));
+        set_primary_color(glm::vec4(1.0f, 1.0f, 0.5f, 0.4f));
+        set_secondary_color(glm::vec4(0.4f, 0.4f, 0.4f, 0.2));
     }
 
     void color_button::set_primary_color(glm::vec4 color)

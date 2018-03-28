@@ -11,6 +11,8 @@
 
 #include "glfw_window.hxx"
 
+#include "world/way_path.hxx"
+
 static void error_callback(int code, const char *desc)
 {
     std::cerr << "GLFW error: " << code << ": " << desc << std::endl;
@@ -23,6 +25,9 @@ int main(void)
     glfwSetErrorCallback(error_callback);
 
     auto win = new glfw_window(1920, 1080, "putgame");
+
+    for (int i = 0; i < 100; i++)
+        win->get_part<world::way_path>()->generate();
 
     try {
         auto btn = std::make_unique<gui::color_button>(win);

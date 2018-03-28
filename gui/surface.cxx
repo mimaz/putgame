@@ -51,6 +51,9 @@ namespace gui
 
     void surface::draw()
     {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         for (auto item : items)
             item->draw();
     }

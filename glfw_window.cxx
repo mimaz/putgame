@@ -10,6 +10,9 @@
 
 #include "glfw_window.hxx"
 
+#include "world/draw_manager.hxx"
+#include "world/camera.hxx"
+
 glfw_window::glfw_window(int width, int height,
                          const std::string &title)
     : win(nullptr)
@@ -46,6 +49,8 @@ void glfw_window::draw()
 {
     try {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        get_part<world::draw_manager>()->draw_all();
 
         get_part<gui::surface>()->preprocess();
         get_part<gui::surface>()->draw();
@@ -117,7 +122,10 @@ void glfw_window::resize(int w, int h)
 
     glViewport(0, 0, w, h);
 
+    auto ratio = static_cast<float>(w) / h;
+
     get_part<gui::surface>()->resize(w, h);
+    get_part<world::camera>()->set_view_ratio(ratio);
 }
 
 void glfw_window::cursor(double cursorx, double cursory)
