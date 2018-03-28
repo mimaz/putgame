@@ -70,11 +70,15 @@ namespace gui
         rect_item::touch(event);
 
 
-        auto orgx = static_cast<float>(event.xpos) 
-                  / get_width() + 0.5f;
+        auto normalize = [](float pos, float dim) -> float {
+            pos = std::min(dim / 2, pos);
+            pos = std::max(-dim / 2, pos);
 
-        auto orgy = static_cast<float>(event.ypos) 
-                  / get_height() + 0.5f;
+            return pos / dim + 0.5f;
+        };
+
+        auto orgx = normalize(event.xpos, get_width());
+        auto orgy = normalize(event.ypos, get_height());
 
 
         switch (event.type)
