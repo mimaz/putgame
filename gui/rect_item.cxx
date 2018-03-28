@@ -63,10 +63,6 @@ namespace gui
             default:
                 break;
         }
-
-        std::cout << "touch: " << event.type 
-                  << ": " << event.x 
-                  << " x " << event.y << std::endl;
     }
 
     bool rect_item::contains(int xp, int yp) const

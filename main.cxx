@@ -19,17 +19,14 @@ static void error_callback(int code, const char *desc)
 
 int main(void)
 {
-    constexpr auto default_width = 1920;
-    constexpr auto default_height = 1080;
-
     assert(glfwInit());
     glfwSetErrorCallback(error_callback);
 
+    auto win = new glfw_window(1920, 1080, "putgame");
 
     try {
-        auto win = std::make_unique<glfw_window>
-            (default_width, default_height, "putgame");
-
+        auto btn = std::make_unique<gui::color_button>(win);
+        btn->resize(400, 400);
 
         auto next_time = glfwGetTime();
 
@@ -39,7 +36,7 @@ int main(void)
 
             if (time >= next_time)
             {
-                next_time += 1.0 / 60;
+                next_time += 1.0 / 50;
 
                 win->draw();
             }
@@ -48,6 +45,8 @@ int main(void)
         std::cerr << "shader_error: " << e.log << std::endl;
     }
 
+
+    delete win;
 
     glfwTerminate();
 

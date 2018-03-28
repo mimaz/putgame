@@ -28,6 +28,8 @@ glfw_window::glfw_window(int width, int height,
     glfwSetWindowUserPointer(win, this);
     glfwSetKeyCallback(win, key_callback);
     glfwSetWindowSizeCallback(win, resize_callback);
+    glfwSetCursorPosCallback(win, cursor_callback);
+    glfwSetMouseButtonCallback(win, touch_callback);
 
     glfwMakeContextCurrent(win);
 
@@ -45,7 +47,8 @@ void glfw_window::draw()
     try {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //btn->draw();
+        get_part<gui::surface>()->preprocess();
+        get_part<gui::surface>()->draw();
     } catch (glutils::location_error e) {
         std::cerr << "location error: " << e.name << std::endl;
     }
@@ -79,6 +82,18 @@ void glfw_window::resize_callback(GLFWwindow *win,
     from_window(win)->resize(width, height);
 }
 
+void glfw_window::cursor_callback(GLFWwindow *win,
+                                  double cursorx, double cursory)
+{
+    from_window(win)->cursor(cursorx, cursory);
+}
+
+void glfw_window::touch_callback(GLFWwindow *win,
+                                 int button, int action, int mods)
+{
+    from_window(win)->touch(button, action, mods);
+}
+
 void glfw_window::key(int key, int action)
 {
     if (action != GLFW_RELEASE)
@@ -95,9 +110,40 @@ void glfw_window::key(int key, int action)
     }
 }
 
-void glfw_window::resize(int width, int height)
+void glfw_window::resize(int w, int h)
 {
-    glViewport(0, 0, width, height);
+    width = w;
+    height = h;
 
-    get_part<gui::surface>()->resize(width, height);
+    glViewport(0, 0, w, h);
+
+    get_part<gui::surface>()->resize(w, h);
+}
+
+void glfw_window::cursor(double cursorx, double cursory)
+{
+    cursor_xpos = static_cast<int>(cursorx) - width / 2;
+    cursor_ypos = static_cast<int>(cursory) - height / 2;
+
+    gui::touch_event event(gui::touch_event::move, 
+                           cursor_xpos, cursor_ypos);
+
+    get_part<gui::surface>()->touch(event);
+}
+
+void glfw_window::touch(int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT)
+    {
+        gui::touch_event::event_type type;
+
+        if (action == GLFW_PRESS)
+            type = gui::touch_event::press;
+        else
+            type = gui::touch_event::release;
+
+        gui::touch_event event(type, cursor_xpos, cursor_ypos);
+
+        get_part<gui::surface>()->touch(event);
+    }
 }

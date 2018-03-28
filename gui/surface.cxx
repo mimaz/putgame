@@ -42,6 +42,12 @@ namespace gui
                 item->touch(event);
     }
 
+    void surface::draw()
+    {
+        for (auto item : items)
+            item->draw();
+    }
+
     void surface::add_item(rect_item *item)
     {
         items.insert(item);

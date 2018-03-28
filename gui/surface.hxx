@@ -25,6 +25,7 @@ namespace gui
 
         void preprocess();
         void touch(touch_event event);
+        void draw();
 
         void add_item(rect_item *item);
         void remove_item(rect_item *item);

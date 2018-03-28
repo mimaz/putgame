@@ -22,9 +22,7 @@ namespace gui
 
         color_button_view(common::context *ctx);
 
-        void begin();
         void draw(color_button *btn);
-        void end();
 
     private:
         glutils::shader vsh;

@@ -41,7 +41,7 @@ namespace gui
         , u_origin_v(&pro, "u_origin_v")
     {}
 
-    void color_button_view::begin()
+    void color_button_view::draw(color_button *btn)
     {
         pro.use();
         a_coord.enable();
@@ -52,10 +52,9 @@ namespace gui
                               mesh);
 
         glActiveTexture(GL_TEXTURE0);
-    }
+        btn->bind_texture();
 
-    void color_button_view::draw(color_button *btn)
-    {
+
         u_matrix = get_part<surface>()->get_proj() * btn->get_matrix();
 
         auto shadows = btn->get_shadows();
@@ -64,10 +63,8 @@ namespace gui
         glUniform1i(u_shadows, count);
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    }
 
-    void color_button_view::end()
-    {
+
         a_coord.disable();
     }
 }

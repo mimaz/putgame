@@ -41,19 +41,17 @@ namespace gui
     {
         rect_item::draw();
 
-        auto view = get_part<color_button_view>();
-
-        view->begin();
-
-        glBindTexture(GL_TEXTURE_2D, text.get_texture_handle());
-        view->draw(this);
-
-        view->end();
+        get_part<color_button_view>()->draw(this);
     }
 
     void color_button::preprocess()
     {
         rect_item::preprocess();
+    }
+
+    void color_button::bind_texture()
+    {
+        glBindTexture(GL_TEXTURE_2D, text.get_texture_handle());
     }
 
     void color_button::on_size_changed()
