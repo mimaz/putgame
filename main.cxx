@@ -35,7 +35,6 @@ int main(void)
             (win, glm::vec3(1, 0, 0), glm::vec2(3.0f, 0.75f));
 
         pane->translate(glm::vec3(-0.1f, 0, -3.5f));
-        pane->rotate(PI / 8, glm::vec3(0, 1, 0));
 
 
         auto redbox = std::make_unique<world::light_box>
