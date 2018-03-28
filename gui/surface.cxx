@@ -27,6 +27,9 @@ namespace gui
         width = w;
         height = h;
         dirty_proj = true;
+
+        for (auto item : items)
+            item->on_surface_resize(w, h);
     }
 
     void surface::preprocess()

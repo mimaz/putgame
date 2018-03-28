@@ -129,7 +129,7 @@ void glfw_window::resize(int w, int h)
 void glfw_window::cursor(double cursorx, double cursory)
 {
     cursor_xpos = static_cast<int>(cursorx) - width / 2;
-    cursor_ypos = static_cast<int>(cursory) - height / 2;
+    cursor_ypos = -static_cast<int>(cursory) + height / 2;
 
     gui::touch_event event(gui::touch_event::move, 
                            cursor_xpos, cursor_ypos);

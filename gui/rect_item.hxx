@@ -18,12 +18,14 @@ namespace gui
         rect_item(common::context *ctx);
         ~rect_item();
 
-        void set_position(int x, int y);
-        void resize(int w, int h);
+        virtual void set_position(int x, int y);
+        virtual void resize(int w, int h);
 
         virtual void draw();
         virtual void preprocess();
         virtual void touch(touch_event event);
+
+        virtual void on_surface_resize(int x, int y);
 
         bool contains(int x, int y) const;
 

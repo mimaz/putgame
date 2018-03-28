@@ -11,6 +11,7 @@
 #include <putgame/world>
 
 #include "glfw_window.hxx"
+#include "main_menu.hxx"
 
 static void error_callback(int code, const char *desc)
 {
@@ -25,13 +26,11 @@ int main(void)
 
     auto win = new glfw_window(1920, 1080, "putgame");
 
-    for (int i = 0; i < 100; i++)
+    for (auto i = 0; i < 100; i++)
         win->get_part<world::way_path>()->generate();
 
     try {
-        auto btn = std::make_unique<gui::color_button>(win);
-        btn->resize(400, 400);
-
+        auto menu = std::make_unique<main_menu>(win);
         auto next_time = glfwGetTime();
 
         while (not win->should_close())

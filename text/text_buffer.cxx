@@ -18,8 +18,8 @@ namespace text
                              font_builder *builder)
         : object(ctx)
         , builder(builder)
-        , text("audp")
-        , font_size(1, 1)
+        , text("dupa")
+        , font_size(1)
         , width(2)
         , height(2)
         , dirty(true)
@@ -66,9 +66,9 @@ namespace text
         resized = true;
     }
 
-    void text_buffer::set_font_size(const glm::vec2 &siz)
+    void text_buffer::set_font_size(float size)
     {
-        font_size = siz;
+        font_size = size;
         dirty = true;
     }
 
@@ -113,20 +113,20 @@ namespace text
                                   get_text().end(), 
                                   '\n') + 1;
 
-        auto ycoord = (linecnt - 1) * get_font_height() / 2.0f;
+        auto ycoord = (linecnt - 1) * get_font_size() / 2.0f;
        
 
         while (std::getline(ss, line, '\n'))
         {
             auto xcoord = -((line.length() - 1) 
-                        * get_font_width()) / 2.0f;
+                        * get_font_size()) / 2.0f;
 
             for (auto c : line)
             {
                 auto trvec = glm::vec3(xcoord, ycoord, 0.0f);
 
-                auto scvec = glm::vec3(get_font_width(), 
-                                       get_font_height(), 
+                auto scvec = glm::vec3(get_font_size(), 
+                                       get_font_size(), 
                                        1.0f);
 
                 auto matrix = proj;
@@ -137,10 +137,10 @@ namespace text
                 builder->bind_texture(c);
                 fb->draw(matrix);
 
-                xcoord += get_font_width();
+                xcoord += get_font_size();
             }
 
-            ycoord -= get_font_height();
+            ycoord -= get_font_size();
         }
 
         fb->end();

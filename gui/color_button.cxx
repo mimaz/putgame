@@ -73,7 +73,7 @@ namespace gui
         auto orgx = static_cast<float>(event.xpos) 
                   / get_width() + 0.5f;
 
-        auto orgy = -static_cast<float>(event.ypos) 
+        auto orgy = static_cast<float>(event.ypos) 
                   / get_height() + 0.5f;
 
 
@@ -110,6 +110,6 @@ namespace gui
         rect_item::on_size_changed();
 
         text.set_size(get_width(), get_height());
-        text.set_font_size(get_width() / 6, get_height() / 6);
+        text.set_font_size(get_height() / 2);
     }
 }

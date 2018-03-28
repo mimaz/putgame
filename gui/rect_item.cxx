@@ -65,6 +65,9 @@ namespace gui
         }
     }
 
+    void rect_item::on_surface_resize(int x, int y)
+    {}
+
     bool rect_item::contains(int xp, int yp) const
     {
         auto l = get_xpos() - get_width() / 2;
