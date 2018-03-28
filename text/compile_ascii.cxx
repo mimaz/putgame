@@ -57,14 +57,14 @@ namespace
                 {
                     std::cerr << "symbol " << last 
                               << " not found" << std::endl;
-                    throw new std::string("error1");
+                    throw std::string("error1");
                 }
 
                 if (eit == itend)
                 {
                     std::cerr << "symbol " << sym
                               << " not found" << std::endl;
-                    throw new std::string("error2");
+                    throw std::string("error2");
                 }
 
 

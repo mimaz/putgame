@@ -110,7 +110,7 @@ namespace
 
             if (stat != GL_FRAMEBUFFER_COMPLETE)
             {
-                throw new std::string("framebuffer error");
+                throw std::string("framebuffer error");
             }
 
 
@@ -177,10 +177,9 @@ namespace text
     {}
 
     font_builder::font_builder(const ascii_font &font)
-        : textures(new GLuint[font.get_count()])
-        , count(font.get_count())
+        : textures(font.get_count())
     {
-        glGenTextures(count, textures);
+        glGenTextures(textures.size(), textures.data());
 
 
         auto rdr = std::make_unique<renderer>();
@@ -206,9 +205,7 @@ namespace text
 
     font_builder::~font_builder()
     {
-        glDeleteTextures(count, textures);
-
-        delete textures;
+        glDeleteTextures(textures.size(), textures.data());
     }
 
     void font_builder::bind_texture(int code)

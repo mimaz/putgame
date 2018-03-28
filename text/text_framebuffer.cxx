@@ -72,7 +72,7 @@ namespace text
         if (stat != GL_FRAMEBUFFER_COMPLETE)
         {
             std::cerr << "framebuffer error: " << stat << std::endl;
-            throw new std::string("framebuffer error");
+            throw std::string("framebuffer error");
         }
 
 
