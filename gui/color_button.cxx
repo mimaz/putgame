@@ -19,7 +19,9 @@ namespace gui
         , text_normal_color(1.0f, 1.0f, 0.0f, 1.0f)
         , text_highlight_color(0.0f, 1.0f, 1.0f, 1.0f)
         , text(ctx, get_part<surface>()->get_font_builder())
-    {}
+    {
+        shadows.push_back(glm::vec4(0.4f, 0.1f, 0.9f, 0.8f));
+    }
 
     void color_button::set_back_normal_color(glm::vec4 color)
 	{

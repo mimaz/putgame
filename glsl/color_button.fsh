@@ -13,9 +13,9 @@ precision lowp int;
 
 in vec2 v_tex_coord;
 
+uniform sampler2D u_texture;
 uniform int u_shadows;
 uniform vec4 u_shadow_v[max_shadows];
-uniform sampler2D u_texture;
 
 out vec4 out_color;
 

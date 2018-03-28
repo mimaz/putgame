@@ -13,6 +13,8 @@
 
 namespace
 {
+    constexpr auto max_shadows = 4;
+
     const float mesh[] = {
         -0.5f, 0.5f,
         0.5f, 0.5f,
@@ -37,8 +39,7 @@ namespace gui
         , a_coord(&pro, "a_coord")
         , u_matrix(&pro, "u_matrix")
         , u_shadows(&pro, "u_shadows")
-        , u_exposure_v(&pro, "u_exposure_v")
-        , u_origin_v(&pro, "u_origin_v")
+        , u_shadow_v(&pro, "u_shadow_v")
     {}
 
     void color_button_view::draw(color_button *btn)
@@ -61,6 +62,8 @@ namespace gui
         auto count = static_cast<int>(shadows.size());
 
         glUniform1i(u_shadows, count);
+        glUniform4fv(u_shadow_v, count, 
+                     glm::value_ptr(shadows.front()));
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
