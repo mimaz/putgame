@@ -20,6 +20,7 @@ namespace world
 
         void set_matrix(const glm::mat4 &mat);
 
+        void apply(const glm::mat4 &mat);
         void translate(float x, float y, float z);
         void scale(float scalar);
 

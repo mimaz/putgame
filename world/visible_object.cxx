@@ -18,6 +18,11 @@ namespace world
         model = mat;
     }
 
+    void visible_object::apply(const glm::mat4 &mat)
+    {
+        model *= mat;
+    }
+
     void visible_object::translate(float x, float y, float z)
     {
         translate(glm::vec3(x, y, z));

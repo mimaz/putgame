@@ -8,10 +8,17 @@
 
 namespace
 {
+    void exit_with_error(const std::string &err)
+    {
+        std::cerr << err << std::endl;
+
+        glfwTerminate();
+        exit(1);
+    }
+
     void error_callback(int code, const char *desc)
     {
-        std::cerr << "GLFW error: " << code << ": " << desc << std::endl;
-        exit(1);
+        exit_with_error(desc);
     }
 
     class glfw_window : public game::application::window
@@ -33,7 +40,8 @@ namespace
                                    nullptr, nullptr);
 
             if (win == nullptr)
-                throw std::string("creating glfw window failed ");
+                exit_with_error("creating glfw window failed");
+
 
             glfwSetWindowUserPointer(win, this);
             glfwSetKeyCallback(win, key_callback);
@@ -204,7 +212,12 @@ namespace
 
 int glfw_application(int argc, char **argv)
 {
-    assert(glfwInit());
+    if (not glfwInit())
+    {
+        std::cerr << "intializing GLFW failed" << std::endl;
+        exit(1);
+    }
+
     glfwSetErrorCallback(error_callback);
 
     {
