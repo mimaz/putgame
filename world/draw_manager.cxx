@@ -52,7 +52,6 @@ namespace world
     void draw_manager::draw_all()
     {
         tunnel_drawer->draw();
-        return;
         
 
 

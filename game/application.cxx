@@ -54,7 +54,7 @@ namespace game
 
             next_time += 1000 / 50;
 
-            get_part<world::camera>()->rotate(PI / 50, glm::vec3(0, 1, 0));
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             get_part<world::draw_manager>()->draw_all();
 
@@ -67,12 +67,12 @@ namespace game
 
     void application::rotate(float angle, glm::vec3 axis)
     {
-
+        get_part<world::camera>()->rotate(angle, axis);
     }
 
     void application::move(glm::vec3 vec)
     {
-
+        get_part<world::camera>()->move(vec);
     }
 
     void application::resize(int width, int height)
