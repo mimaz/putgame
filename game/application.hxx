@@ -21,6 +21,10 @@ namespace game
 
         void rotate(float angle, glm::vec3 axis);
         void move(glm::vec3 vec);
+        void resize(int width, int height);
+        void cursor(int x, int y);
+        void press();
+        void release();
         void exit();
 
     protected:
@@ -30,7 +34,7 @@ namespace game
 
     private:
         shared_window window;
-        int flags;
+        int flags, xpos, ypos;
     };
 
     class application::window

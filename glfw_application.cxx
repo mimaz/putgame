@@ -165,43 +165,25 @@ namespace
 
             glViewport(0, 0, w, h);
 
-            /*
-            auto ratio = static_cast<float>(w) / h;
-
-            get_part<gui::surface>()->resize(w, h);
-            get_part<world::camera>()->set_view_ratio(ratio);
-            */
+            app->resize(w, h);
         }
 
         void cursor(double cursorx, double cursory)
         {
-            cursor_xpos = static_cast<int>(cursorx) - width / 2;
-            cursor_ypos = -static_cast<int>(cursory) + height / 2;
+            auto xpos = static_cast<int>(cursorx) - width / 2;
+            auto ypos = -static_cast<int>(cursory) + height / 2;
 
-            /*
-            gui::touch_event event(gui::touch_event::move, 
-                                   cursor_xpos, cursor_ypos);
-
-            get_part<gui::surface>()->touch(event);
-            */
+            app->cursor(xpos, ypos);
         }
 
         void touch(int button, int action, int mods)
         {
             if (button == GLFW_MOUSE_BUTTON_LEFT)
             {
-                /*
-                gui::touch_event::event_type type;
-
                 if (action == GLFW_PRESS)
-                    type = gui::touch_event::press;
+                    app->press();
                 else
-                    type = gui::touch_event::release;
-
-                gui::touch_event event(type, cursor_xpos, cursor_ypos);
-
-                get_part<gui::surface>()->touch(event);
-                */
+                    app->release();
             }
         }
 
