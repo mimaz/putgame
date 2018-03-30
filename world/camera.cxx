@@ -120,6 +120,6 @@ namespace world
 
     float camera::get_light_range()
     {
-        return 100;
+        return 15;
     }
 }

@@ -30,7 +30,12 @@ namespace world
 
     void visible_object::scale(float scalar)
     {
-        scale(glm::vec3(scalar, scalar, scalar));
+        scale(scalar, scalar, scalar);
+    }
+
+    void visible_object::scale(float x, float y, float z)
+    {
+        scale(glm::vec3(x, y, z));
     }
 
     void visible_object::translate(const glm::vec3 &vec)

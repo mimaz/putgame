@@ -97,6 +97,6 @@ namespace world
 
     float light_box::get_light_range()
     {
-        return 50;
+        return 20;
     }
 }

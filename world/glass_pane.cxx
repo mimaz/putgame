@@ -18,7 +18,7 @@ namespace world
         , color(col)
         , size(siz)
     {
-        scale(glm::vec3(siz, 1.0f));
+        scale(siz.x, siz.y, 1.0f);
 
         get_part<draw_manager>()->add(this);
     }

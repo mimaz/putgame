@@ -18,7 +18,7 @@ void main()
     if (u_specular_mode != 0)
     {
         color = enlight(white,
-                        white,
+                        v_color,
                         v_normal,
                         v_coord,
                         180.0,

@@ -24,7 +24,7 @@ namespace world
         auto yscale = h * scale_factor;
         auto zscale = d * scale_factor;
 
-        scale(glm::vec3(xscale, yscale, zscale));
+        scale(xscale, yscale, zscale);
 
         get_part<draw_manager>()->add(this);
     }

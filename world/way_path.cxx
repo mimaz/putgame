@@ -14,7 +14,7 @@ namespace
     {
         std::pair<float, glm::vec3> generate() override
         {
-            return std::make_pair(PI / 80, glm::vec3(0, 1, 0));
+            return std::make_pair(0, glm::vec3(0, 1, 0));
         }
     };
 }

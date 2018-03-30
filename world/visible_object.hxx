@@ -23,6 +23,7 @@ namespace world
         void apply(const glm::mat4 &mat);
         void translate(float x, float y, float z);
         void scale(float scalar);
+        void scale(float x, float y, float z);
 
         virtual void translate(const glm::vec3 &vec);
         virtual void rotate(float angle, const glm::vec3 &axis);
