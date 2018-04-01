@@ -33,12 +33,13 @@ namespace
 
 namespace world
 {
-    tunnel_path::tunnel_path(path_line *pattern, float gap)
+    tunnel_path::tunnel_path(way_path *way, float gap)
         : path_line(gap)
-        , pattern(pattern)
+        , way(way)
         , pattern_id(0)
     {
-        for (int i = 0; i < 20; i++)
+        std::cout << "------------" << std::endl;
+        for (int i = 0; i < 10; i++)
             gen_frame();
     }
 
@@ -46,38 +47,38 @@ namespace world
     {
         if (get_points().empty())
         {
-            append();
+            auto matrix = way->get_first_point().get_matrix();
+            reset(matrix);
             return;
         }
 
 
         auto calc_target_coord = [this](void) -> glm::vec3 {
-            auto mat = pattern->get_point(pattern_id).get_matrix();
+            auto mat = way->get_point(pattern_id).get_matrix();
 
             return get_position(mat);
         };
 
 
         auto last_coord = get_position(get_last_point().get_matrix());
-        auto target_coord = calc_target_coord();
+        //auto target_coord = calc_target_coord();
+        auto target_coord = get_position(way->get_last_point().get_matrix());
 
 
-        auto lastlen = std::numeric_limits<float>::max();
+        /*
         auto targetlen = glm::length(target_coord - last_coord);
 
-        while (targetlen < get_gap())
+        while (targetlen < get_gap() * 5)
         {
-            if (targetlen > lastlen)
-                break;
-
             pattern_id++;
 
             target_coord = calc_target_coord();
 
-            lastlen = targetlen;
             targetlen = glm::length(target_coord - last_coord);
         }
 
+        std::cout << "id: " << pattern_id << " : " << targetlen << std::endl;
+        */
 
 
         auto last_direction = glm::normalize(

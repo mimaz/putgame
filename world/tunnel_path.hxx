@@ -10,17 +10,19 @@
 
 namespace world
 {
+    class way_path;
+
     class tunnel_path : public path_line
     {
     public:
         class frame;
 
-        tunnel_path(path_line *pattern, float gap);
+        tunnel_path(way_path *way, float gap);
 
         void gen_frame();
 
     private:
-        path_line *pattern;
+        way_path *way;
 
         int pattern_id;
     };

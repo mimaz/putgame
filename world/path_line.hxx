@@ -15,16 +15,11 @@ namespace world
     public:
         path_line(float gap);
 
-
-        void append();
-
-        void append(float angle, const glm::vec3 &axis);
-
-
-        void reset();
+        void append(float angle, glm::vec3 axis);
+        void append(const glm::mat4 &mat);
+        void prepend(float angle, glm::vec3 axis);
 
         void reset(const glm::mat4 &matrix);
-
 
         const path_point &get_first_point() const
         { return points.front(); }
@@ -40,6 +35,8 @@ namespace world
         float get_gap() const { return gap; }
 
     private:
+        glm::mat4 make_matrix(float angle, glm::vec3 axis) const;
+
         std::deque<path_point> points;
         float gap;
     };

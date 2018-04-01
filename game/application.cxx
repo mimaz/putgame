@@ -34,9 +34,6 @@ namespace game
         flags |= flag_running;
 
 
-        for (auto i = 0; i < 100; i++)
-            get_part<world::way_path>()->generate();
-
 
         auto menu = std::make_unique<main_menu>(this);
         auto green_box = std::make_unique<world::light_box>

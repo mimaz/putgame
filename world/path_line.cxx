@@ -12,38 +12,40 @@ namespace world
 {
     path_line::path_line(float gap)
         : gap(gap)
-    {
-        reset();
-    }
+    {}
 
-    void path_line::append()
+    void path_line::append(float angle, glm::vec3 axis)
     {
-        append(0, { 1, 0, 0 });
-    }
-
-    void path_line::append(float angle, const glm::vec3 &axis)
-    {
-        auto matrix = glm::mat4(1);
+        auto matrix = make_matrix(angle, axis);
         auto index = 0;
-
 
         if (not points.empty())
         {
-            matrix = get_last_point().get_matrix();
-            index = get_last_point().get_index() + 1;
+            auto last = get_last_point();
+
+            matrix *= last.get_matrix();
+            index = last.get_index() + 1;
         }
 
-
-        matrix = glm::translate(matrix, glm::vec3(0, 0, gap));
-        matrix = glm::rotate(matrix, angle, axis);
-
-
         points.emplace_back(matrix, index);
+        std::cout << "new point: " << glm::vec3(matrix * glm::vec4(0, 0, 0, 1)) << std::endl;
     }
 
-    void path_line::reset()
+    void path_line::append(const glm::mat4 &mat)
     {
-        reset(glm::rotate(glm::mat4(1), PI, { 0, 1, 0 }));
+        int index;
+
+        if (points.empty())
+            index = 0;
+        else
+            index = get_last_point().get_index() + 1;
+
+        points.emplace_back(mat, index);
+    }
+
+    void path_line::prepend(float angle, glm::vec3 axis)
+    {
+
     }
 
     void path_line::reset(const glm::mat4 &matrix)
@@ -55,5 +57,16 @@ namespace world
     const path_point &path_line::get_point(int id) const
     {
         return points[id - points.front().get_index()];
+    }
+
+    glm::mat4 path_line::make_matrix(float angle, glm::vec3 axis) const
+    {
+        glm::mat4 matrix(1);
+        glm::vec3 offset(0, 0, gap);
+
+        matrix = glm::translate(matrix, offset);
+        matrix = glm::rotate(matrix, angle, axis);
+
+        return matrix;
     }
 }

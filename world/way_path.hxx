@@ -15,39 +15,20 @@ namespace world
     class way_path : public common::context::part, public path_line
     {
     public:
-        class generator;
-
-        using shared_generator = std::shared_ptr<generator>;
-
+        class segment;
+        using segment_ptr = std::shared_ptr<segment>;
 
         way_path(common::context *ctx);
 
-        void set_generator(shared_generator gen);
-
-          template<typename _Type, typename ..._Args>
-        void set_generator(const _Args &...args);
-
-        void generate();
+        void generate_back();
+        void generate_front();
 
     private:
-        shared_generator gen;
+        segment_ptr generate() const;
+
+        segment_ptr back;
+        segment_ptr front;
     };
-
-    class way_path::generator
-    {
-    public:
-        virtual ~generator() {}
-
-        virtual std::pair<float, glm::vec3> generate() = 0;
-    };
-
-      template<typename _Type, typename ..._Args>
-    void way_path::set_generator(const _Args &...args)
-    {
-        auto gen = std::make_shared<_Type>(args...);
-
-        set_generator(gen);
-    }
 }
 
 #endif
