@@ -8,6 +8,8 @@
 
 #include "camera.hxx"
 
+#include "way_path.hxx"
+
 enum
 {
     dirty_proj = 0x01,
@@ -38,6 +40,8 @@ namespace world
     {
         flags |= dirty_view_proj;
         view_mat = glm::translate(glm::mat4(1), -vec) * view_mat;
+
+        get_part<way_path>()->update_camera_frame();
     }
 
     void camera::rotate(float angle, const glm::vec3 &axis)
