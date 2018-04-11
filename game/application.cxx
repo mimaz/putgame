@@ -39,26 +39,26 @@ namespace game
         auto green_box = std::make_unique<world::light_box>
             (this, world::light_box::green);
 
-        green_box->translate(-0.8f, -0.1f, -7.2f);
+        green_box->translate(-0.8f, -0.1f, 7.2f);
         green_box->scale(0.25f);
 
         auto red_box = std::make_unique<world::light_box>
             (this, world::light_box::red);
 
-        red_box->translate(0.5f, 0.2f, -3.4f);
+        red_box->translate(0.5f, 0.2f, 3.4f);
         red_box->scale(0.25f);
 
 
         auto wall = std::make_unique<world::wall_obstacle>
             (this, 12, 8);
 
-        wall->translate(-0.0f, 0.0f, -76.8f);
+        wall->translate(-0.0f, 0.0f, 76.8f);
 
 
         auto pane = std::make_unique<world::glass_pane>
             (this, glm::vec3(0, 0, 1), glm::vec2(2, 2));
 
-        pane->translate(0.0f, 0.0f, -4.0f);
+        pane->translate(0.0f, 0.0f, 4.0f);
 
 
         auto next_time = window->get_time_millis();
