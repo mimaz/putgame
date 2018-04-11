@@ -17,6 +17,7 @@ namespace gui
     public:
         color_button(common::context *ctx);
 
+        void set_text(const std::string &text);
         void set_primary_color(glm::vec4 color);
         void set_secondary_color(glm::vec4 color);
 
@@ -26,10 +27,7 @@ namespace gui
 
         void bind_texture();
 
-        glm::vec4 get_back_normal_color() const;
-        glm::vec4 get_back_highlight_color() const;
-        glm::vec4 get_text_normal_color() const;
-        glm::vec4 get_text_highlight_color() const;
+        std::string get_text() const;
 
         glm::vec4 get_primary_color() const
         { return primary_color; }

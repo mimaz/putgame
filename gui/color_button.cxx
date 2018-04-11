@@ -20,6 +20,11 @@ namespace gui
         set_secondary_color(glm::vec4(0.4f, 0.4f, 0.4f, 0.2));
     }
 
+    void color_button::set_text(const std::string &txt)
+    {
+        text.set_text(txt);
+    }
+
     void color_button::set_primary_color(glm::vec4 color)
     {
         primary_color = color;
@@ -109,11 +114,16 @@ namespace gui
         glBindTexture(GL_TEXTURE_2D, text.get_texture_handle());
     }
 
+    std::string color_button::get_text() const
+    {
+        return text.get_text();
+    }
+
     void color_button::on_size_changed()
     {
         rect_item::on_size_changed();
 
         text.set_size(get_width(), get_height());
-        text.set_font_size(get_height() / 2);
+        text.set_font_size(get_height() / 3);
     }
 }
