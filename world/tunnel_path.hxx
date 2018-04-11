@@ -24,7 +24,7 @@ namespace world
     private:
         way_path *way;
 
-        int pattern_id;
+        int way_back_id;
     };
 }
 

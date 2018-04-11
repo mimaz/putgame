@@ -16,12 +16,17 @@ namespace world
             , index(index) {}
 
         const glm::mat4 &get_matrix() const { return matrix; }
+        glm::vec3 get_position() const;
         int get_index() const { return index; }
+
+        operator glm::mat4() const;
 
     private:
         glm::mat4 matrix;
         int index;
     };
 }
+
+std::ostream &operator<<(std::ostream &os, const world::path_point &pt);
 
 #endif

@@ -17,7 +17,6 @@ namespace world
 
         void append(float angle, glm::vec3 axis);
         void append(const glm::mat4 &mat);
-        void prepend(float angle, glm::vec3 axis);
 
         void reset(const glm::mat4 &matrix);
 

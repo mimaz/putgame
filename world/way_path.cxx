@@ -26,13 +26,10 @@ namespace world
 
     way_path::way_path(common::context *ctx)
         : common::context::part(ctx)
-        , path_line(1)
+        , path_line(0.05)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1000; i++)
             generate_back();
-
-        for (int i = 0; i < 10; i++)
-            generate_front();
     }
 
     void way_path::generate_back()
@@ -45,19 +42,9 @@ namespace world
         append(back->angle, back->axis);
     }
 
-    void way_path::generate_front()
-    {
-        if (front == nullptr or front->count < 1)
-            front = generate();
-
-        front->count--;
-
-        prepend(front->angle, front->axis);
-    }
-
     way_path::segment_ptr way_path::generate() const
     {
         return std::make_shared<segment>
-            (10, PI / 4, glm::vec3(0, 1, 0));
+            (10, PI / 4000, glm::vec3(0, 1, 0));
     }
 }

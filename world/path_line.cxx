@@ -43,11 +43,6 @@ namespace world
         points.emplace_back(mat, index);
     }
 
-    void path_line::prepend(float angle, glm::vec3 axis)
-    {
-
-    }
-
     void path_line::reset(const glm::mat4 &matrix)
     {
         points.clear();

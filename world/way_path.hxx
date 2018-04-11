@@ -21,13 +21,11 @@ namespace world
         way_path(common::context *ctx);
 
         void generate_back();
-        void generate_front();
 
     private:
         segment_ptr generate() const;
 
         segment_ptr back;
-        segment_ptr front;
     };
 }
 

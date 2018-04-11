@@ -36,74 +36,34 @@ namespace world
     tunnel_path::tunnel_path(way_path *way, float gap)
         : path_line(gap)
         , way(way)
-        , pattern_id(0)
+        , way_back_id(0)
     {
         std::cout << "------------" << std::endl;
         for (int i = 0; i < 10; i++)
             gen_frame();
+
+        std::cout << "gap: " << gap << std::endl;
     }
 
     void tunnel_path::gen_frame()
     {
         if (get_points().empty())
         {
-            auto matrix = way->get_first_point().get_matrix();
-            reset(matrix);
+            std::cout << "init" << std::endl;
+            reset(way->get_first_point().get_matrix());
             return;
         }
 
+        auto dist = [this](int id, const path_point &pt) -> bool {
+            auto pv = way->get_point(id).get_position();
+            auto qv = pt.get_position();
 
-        auto calc_target_coord = [this](void) -> glm::vec3 {
-            auto mat = way->get_point(pattern_id).get_matrix();
-
-            return get_position(mat);
+            return glm::distance(pv, qv) < get_gap();
         };
 
+        while (dist(way_back_id, get_last_point()))
+            way_back_id++;
 
-        auto last_coord = get_position(get_last_point().get_matrix());
-        //auto target_coord = calc_target_coord();
-        auto target_coord = get_position(way->get_last_point().get_matrix());
-
-
-        /*
-        auto targetlen = glm::length(target_coord - last_coord);
-
-        while (targetlen < get_gap() * 5)
-        {
-            pattern_id++;
-
-            target_coord = calc_target_coord();
-
-            targetlen = glm::length(target_coord - last_coord);
-        }
-
-        std::cout << "id: " << pattern_id << " : " << targetlen << std::endl;
-        */
-
-
-        auto last_direction = glm::normalize(
-            get_direction(get_last_point().get_matrix())
-        );
-
-        auto new_direction = glm::normalize(
-            target_coord - last_coord
-        );
-
-        auto axis = glm::normalize(
-            glm::cross(last_direction, new_direction)
-        );
-
-        auto angle = acosf(
-            glm::dot(new_direction, last_direction)
-        );
-
-        if (angle == angle and axis == axis)
-        {
-            append(angle, axis);
-        }
-        else
-        {
-            append(0, { 0, 1, 0 });
-        }
+        append(way->get_point(way_back_id));
     }
 }
