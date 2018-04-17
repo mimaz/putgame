@@ -34,6 +34,8 @@ namespace game
         flags |= flag_running;
 
 
+        get_part<world::camera>()->rotate(PI, glm::vec3(0, 1, 0));
+
 
         auto menu = std::make_unique<main_menu>(this);
         auto green_box = std::make_unique<world::light_box>
@@ -59,6 +61,9 @@ namespace game
             (this, glm::vec3(0, 0, 1), glm::vec2(2, 2));
 
         pane->translate(0.0f, 0.0f, 4.0f);
+
+
+        auto pieces = std::make_unique<world::glass_pieces>(pane.get());
 
 
         auto next_time = window->get_time_millis();

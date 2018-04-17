@@ -33,7 +33,7 @@ void main_menu::on_surface_resize(int w, int h)
     gui::rect_item::on_surface_resize(w, h);
 
     auto btn_height = h / 6;
-    auto btn_width = btn_height * 3;
+    auto btn_width = btn_height * 5;
 
     auto btn_posx = w / 2 - btn_width / 2;
 

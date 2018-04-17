@@ -80,7 +80,7 @@ namespace world
         glass_pane_drawer->begin_drawing();
 
         for (auto pane : glass_panes)
-            glass_pane_drawer->draw_element(pane);
+            ;//glass_pane_drawer->draw_element(pane);
 
         glass_pane_drawer->end_drawing();
 
