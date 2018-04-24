@@ -5,6 +5,7 @@
 
 #include <putgame/std>
 #include <putgame/game>
+#include <putgame/math>
 
 namespace
 {
@@ -112,7 +113,7 @@ namespace
             if (action != GLFW_RELEASE)
                 return;
 
-            auto angle = PI / 20;
+            auto angle = math::pi / 20;
             auto step = 0.25f;
 
             switch (key)

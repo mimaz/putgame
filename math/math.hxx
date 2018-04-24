@@ -3,20 +3,24 @@
  * 2018
  */
 
-#ifndef __common_math_hxx
-#define __common_math_hxx
+#ifndef __math_math_hxx
+#define __math_math_hxx
 
-constexpr auto PI = static_cast<float>(M_PI);
+namespace math
+{
+    extern const float pi;
+
+    glm::vec3 coord3d(const glm::mat4 &mat);
+
+    float sqdist(glm::vec3 p, glm::vec3 q);
+
+    float sqdist(const glm::mat4 &p, const glm::mat4 &q);
+}
 
 std::ostream &operator<<(std::ostream &os, const glm::vec4 &vec);
 
 std::ostream &operator<<(std::ostream &os, const glm::vec3 &vec);
 
 std::ostream &operator<<(std::ostream &os, const glm::vec2 &vec);
-
-namespace common
-{
-    glm::vec3 position(const glm::mat4 &mat);
-}
 
 #endif

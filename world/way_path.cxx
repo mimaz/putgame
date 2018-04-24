@@ -5,6 +5,7 @@
 
 #include <putgame/std>
 #include <putgame/common>
+#include <putgame/math>
 
 #include "way_path.hxx"
 
@@ -84,6 +85,6 @@ namespace world
     way_path::segment_ptr way_path::generate() const
     {
         return std::make_shared<segment>
-            (10, PI / 4000, glm::vec3(0, 1, 0));
+            (10, math::pi / 4000, glm::vec3(0, 1, 0));
     }
 }

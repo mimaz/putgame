@@ -5,6 +5,7 @@
 
 #include <putgame/std>
 #include <putgame/common>
+#include <putgame/math>
 
 #include "tunnel_mesh.hxx"
 
@@ -22,7 +23,7 @@ namespace world
     tunnel_mesh::tunnel_mesh(int quality, float width)
         : quality(quality)
         , width(width)
-        , gap(triangle_height(PI * width / quality))
+        , gap(triangle_height(math::pi * width / quality))
     {
         const auto indices = quality * 2;
 
@@ -45,7 +46,7 @@ namespace world
 
         for (int i = 0; i < quality; i++)
         {
-            auto angle = PI * 2 * i / quality;
+            auto angle = math::pi * 2 * i / quality;
 
             GLfloat x = cosf(angle) * width / 2;
             GLfloat y = sinf(angle) * width / 2;

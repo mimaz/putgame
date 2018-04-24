@@ -5,5 +5,4 @@
 
 #include "../../common/color.hxx"
 #include "../../common/exception.hxx"
-#include "../../common/math.hxx"
 #include "../../common/context.hxx"

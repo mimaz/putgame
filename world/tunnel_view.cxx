@@ -6,6 +6,7 @@
 #include <putgame/std>
 #include <putgame/res>
 #include <putgame/common>
+#include <putgame/math>
 
 #include "tunnel_view.hxx"
 
@@ -91,7 +92,7 @@ namespace world
 
     void tunnel_view::draw(const path_point &pt)
     {
-        auto angle = -PI / mesh.get_quality() * pt.get_index();
+        auto angle = -math::pi / mesh.get_quality() * pt.get_index();
         auto axis = glm::vec3(0, 0, 1);
 
         auto matrix = pt.get_matrix() 

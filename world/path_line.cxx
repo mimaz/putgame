@@ -5,6 +5,7 @@
 
 #include <putgame/std>
 #include <putgame/common>
+#include <putgame/math>
 
 #include "path_line.hxx"
 

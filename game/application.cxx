@@ -5,6 +5,7 @@
 
 #include <putgame/std>
 #include <putgame/gui>
+#include <putgame/math>
 #include <putgame/world>
 
 #include "application.hxx"
@@ -34,7 +35,7 @@ namespace game
         flags |= flag_running;
 
 
-        get_part<world::camera>()->rotate(PI, glm::vec3(0, 1, 0));
+        get_part<world::camera>()->rotate(math::pi, glm::vec3(0, 1, 0));
 
 
         auto menu = std::make_unique<main_menu>(this);

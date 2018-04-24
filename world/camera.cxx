@@ -5,6 +5,7 @@
 
 #include <putgame/std>
 #include <putgame/common>
+#include <putgame/math>
 
 #include "camera.hxx"
 
@@ -26,7 +27,7 @@ namespace world
         , flags(dirty_proj | dirty_view_proj)
         , proj_mat(1)
         , view_mat(1)
-        , view_angle(PI / 4)
+        , view_angle(math::pi / 4)
         , view_ratio(1)
         , view_range(64)
     {}

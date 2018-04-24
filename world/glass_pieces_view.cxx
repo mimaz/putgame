@@ -6,6 +6,7 @@
 #include <putgame/std>
 #include <putgame/res>
 #include <putgame/common>
+#include <putgame/math>
 
 #include "glass_pieces_view.hxx"
 
@@ -21,7 +22,7 @@ namespace
         extra_data_initializer()
         {
             std::default_random_engine gen;
-            std::uniform_real_distribution<float> angledis(0, PI);
+            std::uniform_real_distribution<float> angledis(0, math::pi);
 
             std::generate(begin(), end(), [&]() -> glm::vec2 {
                 auto angle = angledis(gen);
