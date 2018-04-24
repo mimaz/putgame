@@ -12,6 +12,7 @@
 #include "wall_obstacle_view.hxx"
 #include "glass_pane_view.hxx"
 #include "glass_pieces_view.hxx"
+#include "glass_pieces.hxx"
 #include "tunnel_view.hxx"
 
 namespace world
@@ -89,7 +90,11 @@ namespace world
         glass_pieces_drawer->begin();
 
         for (auto pieces : glass_pieces_set)
+        {
+            pieces->update();
+
             glass_pieces_drawer->draw(pieces);
+        }
 
         glass_pieces_drawer->end();
     }

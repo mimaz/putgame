@@ -21,7 +21,7 @@ namespace world
         glass_pieces_view(common::context *ctx);
 
         void begin();
-        void draw(const glass_pieces *pieces);
+        void draw(glass_pieces *pieces);
         void end();
 
     private:

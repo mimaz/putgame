@@ -70,6 +70,11 @@ namespace world
         return points[id - points.front().get_index()];
     }
 
+    int path_line::updated_id(const glm::mat4 &mat, int id) const
+    {
+        return updated_id(math::coord3d(mat), id);
+    }
+
     int path_line::updated_id(glm::vec3 coord, int id) const
     {
         auto dist = [coord, this](int i) -> float {

@@ -18,13 +18,18 @@ namespace world
         glass_pieces(const glass_pane *pane);
         ~glass_pieces();
 
-        int get_count() const;
+        void update();
 
+        int get_count() const;
         const glm::mat4 *get_matrices() const;
+
+        std::mutex datamtx;
 
     private:
         glm::vec3 color;
-        std::vector<glm::mat4> matrices;
+
+        std::vector<glm::mat4> matrixv;
+        std::vector<int> frameidv;
     };
 }
 
