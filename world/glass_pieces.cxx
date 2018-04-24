@@ -11,19 +11,32 @@
 #include "glass_pane.hxx"
 #include "draw_manager.hxx"
 #include "way_path.hxx"
+#include "constants.hxx"
 
 namespace world
 {
     constexpr auto piece_size = 0.2f;
 
-    glass_pieces::glass_pieces(const glass_pane *pane)
-        : visible_object(pane->get_context())
-        , color(pane->get_color())
-    {
-        // TODO
-        auto frameid = 0;
-        auto area = pane->get_size();
+    glass_pieces::glass_pieces(common::context *ctx,
+                               int frameid,
+                               glm::vec3 color)
+        : glass_pieces(ctx, frameid, color, tunnel_square_area)
+    {}
 
+    glass_pieces::glass_pieces(common::context *ctx,
+                               int frameid,
+                               glm::vec3 color,
+                               glm::vec2 area)
+        : glass_pieces(ctx, frameid, color, area, glm::mat4(1))
+    {}
+
+    glass_pieces::glass_pieces(common::context *ctx,
+                               int frameid,
+                               glm::vec3 color,
+                               glm::vec2 area,
+                               const glm::mat4 &transform)
+        : visible_object(ctx)
+    {
         auto xcount = static_cast<int>(area.x / piece_size);
         auto ycount = static_cast<int>(area.y / piece_size);
 
@@ -31,7 +44,9 @@ namespace world
         auto ygap = area.y / (ycount - 1);
         auto scale_vec = glm::vec3(xgap, ygap, 1.0f);
 
-        auto base_matrix = pane->get_piece_matrix();
+        auto way = get_part<way_path>();
+        auto framemat = way->get_point(frameid).get_matrix();
+        auto base_matrix = transform * framemat;
 
         for (int y = 0; y < ycount; y++)
             for (int x = 0; x < xcount; x++)

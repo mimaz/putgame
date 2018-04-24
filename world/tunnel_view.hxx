@@ -20,7 +20,6 @@ namespace world
         static constexpr auto max_count = 4;
 
         tunnel_view(common::context *ctx, int quality);
-        tunnel_view(float width, int quality, common::context *ctx);
 
         void draw();
 

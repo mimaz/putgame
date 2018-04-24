@@ -15,7 +15,18 @@ namespace world
     class glass_pieces : public visible_object
     {
     public:
-        glass_pieces(const glass_pane *pane);
+        glass_pieces(common::context *ctx,
+                     int frameid,
+                     glm::vec3 color);
+        glass_pieces(common::context *ctx,
+                     int frameid,
+                     glm::vec3 color,
+                     glm::vec2 area);
+        glass_pieces(common::context *ctx,
+                     int frameid,
+                     glm::vec3 color,
+                     glm::vec2 area,
+                     const glm::mat4 &transform);
         ~glass_pieces();
 
         void update();

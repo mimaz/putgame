@@ -64,7 +64,8 @@ namespace game
         pane->translate(0.0f, 0.0f, 4.0f);
 
 
-        auto pieces = std::make_unique<world::glass_pieces>(pane.get());
+        auto pieces = std::make_unique<world::glass_pieces>
+            (this, 100, glm::vec3(0, 0, 1), glm::vec2(4, 4), glm::mat4(1));
 
 
         auto next_time = window->get_time_millis();

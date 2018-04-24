@@ -8,9 +8,15 @@
 #include "glass_pane.hxx"
 
 #include "draw_manager.hxx"
+#include "constants.hxx"
 
 namespace world
 {
+    glass_pane::glass_pane(common::context *ctx,
+                           glm::vec3 col)
+        : glass_pane(ctx, color, tunnel_square_area)
+    {}
+
     glass_pane::glass_pane(common::context *ctx,
                            glm::vec3 col, 
                            glm::vec2 siz)

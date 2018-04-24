@@ -15,6 +15,8 @@ namespace world
     class glass_pane : public visible_object
     {
     public:
+        glass_pane(common::context *ctx,
+                   glm::vec3 color);
         glass_pane(common::context *ctx, 
                    glm::vec3 color, 
                    glm::vec2 size);
