@@ -20,18 +20,15 @@ namespace world
 
         void reset(const glm::mat4 &matrix);
 
-        const path_point &get_first_point() const
-        { return points.front(); }
-
-        const path_point &get_last_point() const
-        { return points.back(); }
-
-        const std::deque<path_point> &get_points() const
-        { return points; }
-
+        const path_point &get_first_point() const;
+        const path_point &get_last_point() const;
+        const std::deque<path_point> &get_points() const;
         const path_point &get_point(int id) const;
 
         float get_gap() const { return gap; }
+
+        int updated_id(glm::vec3 coord, int id) const;
+        int updated_id(const glm::mat4 &mat, int id) const;
 
     private:
         glm::mat4 make_matrix(float angle, glm::vec3 axis) const;

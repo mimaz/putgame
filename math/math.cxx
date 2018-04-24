@@ -29,6 +29,16 @@ namespace math
     {
         return sqdist(coord3d(p), coord3d(q));
     }
+
+    float sqdist(glm::vec3 p, const glm::mat4 &q)
+    {
+        return sqdist(p, coord3d(q));
+    }
+
+    float sqdist(const glm::mat4 &p, glm::vec3 q)
+    {
+        return sqdist(coord3d(p), q);
+    }
 }
 
 std::ostream &operator<<(std::ostream &os, const glm::vec4 &vec)

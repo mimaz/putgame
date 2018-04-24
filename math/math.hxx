@@ -15,6 +15,10 @@ namespace math
     float sqdist(glm::vec3 p, glm::vec3 q);
 
     float sqdist(const glm::mat4 &p, const glm::mat4 &q);
+
+    float sqdist(glm::vec3 p, const glm::mat4 &q);
+
+    float sqdist(const glm::mat4 &p, glm::vec3 q);
 }
 
 std::ostream &operator<<(std::ostream &os, const glm::vec4 &vec);

@@ -50,9 +50,43 @@ namespace world
         points.emplace_back(matrix, 0);
     }
 
+    const path_point &path_line::get_first_point() const
+    { 
+        return get_points().front();
+    }
+
+    const path_point &path_line::get_last_point() const
+    { 
+        return get_points().back();
+    }
+
+    const std::deque<path_point> &path_line::get_points() const
+    {
+        return points;
+    }
+
     const path_point &path_line::get_point(int id) const
     {
         return points[id - points.front().get_index()];
+    }
+
+    int path_line::updated_id(glm::vec3 coord, int id) const
+    {
+        auto dist = [coord, this](int i) -> float {
+            auto mat = get_point(i).get_matrix();
+
+            return math::sqdist(coord, mat);
+        };
+
+        auto cdst = dist(id);
+
+        if (id > get_first_point().get_index() and dist(id - 1) < cdst)
+            return id - 1;
+
+        if (id < get_last_point().get_index() and dist(id + 1) < cdst)
+            return id + 1;
+
+        return id;
     }
 
     glm::mat4 path_line::make_matrix(float angle, glm::vec3 axis) const
