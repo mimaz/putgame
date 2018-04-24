@@ -9,21 +9,28 @@
 
 #include "draw_manager.hxx"
 #include "constants.hxx"
+#include "way_path.hxx"
 
 namespace world
 {
     glass_pane::glass_pane(common::context *ctx,
+                           int frameid,
                            glm::vec3 col)
-        : glass_pane(ctx, color, tunnel_square_area)
+        : glass_pane(ctx, frameid, color, tunnel_square_area)
     {}
 
     glass_pane::glass_pane(common::context *ctx,
+                           int frameid,
                            glm::vec3 col, 
                            glm::vec2 siz)
         : visible_object(ctx)
         , color(col)
         , size(siz)
     {
+        auto way = get_part<way_path>();
+        auto framemat = way->get_point(frameid).get_matrix();
+
+        apply(framemat);
         scale(siz.x, siz.y, 1.0f);
 
         get_part<draw_manager>()->add(this);

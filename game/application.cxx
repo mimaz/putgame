@@ -59,9 +59,7 @@ namespace game
 
 
         auto pane = std::make_unique<world::glass_pane>
-            (this, glm::vec3(0, 0, 1), glm::vec2(2, 2));
-
-        pane->translate(0.0f, 0.0f, 4.0f);
+            (this, 75, glm::vec3(0, 0, 1), glm::vec2(2, 2));
 
 
         auto pieces = std::make_unique<world::glass_pieces>

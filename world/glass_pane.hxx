@@ -16,8 +16,10 @@ namespace world
     {
     public:
         glass_pane(common::context *ctx,
+                   int frameid,
                    glm::vec3 color);
         glass_pane(common::context *ctx, 
+                   int frameid,
                    glm::vec3 color, 
                    glm::vec2 size);
 
