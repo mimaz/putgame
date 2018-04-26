@@ -37,8 +37,8 @@ namespace
 
 namespace world
 {
-    light_box::light_box(common::context *ctx, color col)
-        : visible_object(ctx)
+    light_box::light_box(common::context *ctx, int frameid, color col)
+        : visible_object(ctx, frameid)
         , light_source(ctx)
         , light_col(common::black3())
         , surface_col(common::black3())

@@ -14,8 +14,9 @@ namespace world
     constexpr auto scale_factor = 0.1f;
 
     wall_obstacle::wall_obstacle(common::context *ctx, 
+                                 int frameid,
                                  int w, int h, int d)
-        : visible_object(ctx)
+        : visible_object(ctx, frameid)
         , width(w)
         , height(h)
         , depth(d)

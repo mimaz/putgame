@@ -25,7 +25,7 @@ namespace world
             blue,
         };
 
-        light_box(common::context *ctx, color col);
+        light_box(common::context *ctx, int frameid, color col);
         ~light_box();
 
         void rotate();

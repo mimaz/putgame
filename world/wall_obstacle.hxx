@@ -13,7 +13,9 @@ namespace world
     class wall_obstacle : public visible_object
     {
     public:
-        wall_obstacle(common::context *ctx, int w, int h, int d = 1);
+        wall_obstacle(common::context *ctx, 
+                      int frameid, 
+                      int w, int h, int d = 1);
         ~wall_obstacle();
 
         int get_width() const { return width; }

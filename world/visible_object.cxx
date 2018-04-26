@@ -6,12 +6,18 @@
 #include <putgame/std>
 
 #include "visible_object.hxx"
+#include "way_path.hxx"
 
 namespace world
 {
-    visible_object::visible_object(common::context *ctx)
+    visible_object::visible_object(common::context *ctx,
+                                   int frameid)
         : object(ctx) 
-    {}
+    {
+        auto point = get_part<way_path>()->get_point(frameid);
+
+        apply(point.get_matrix());
+    }
 
     void visible_object::set_matrix(const glm::mat4 &mat)
     {

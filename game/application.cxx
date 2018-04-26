@@ -40,22 +40,18 @@ namespace game
 
         auto menu = std::make_unique<main_menu>(this);
         auto green_box = std::make_unique<world::light_box>
-            (this, world::light_box::green);
+            (this, 40, world::light_box::green);
 
-        green_box->translate(-0.8f, -0.1f, 7.2f);
         green_box->scale(0.25f);
 
         auto red_box = std::make_unique<world::light_box>
-            (this, world::light_box::red);
+            (this, 20, world::light_box::red);
 
-        red_box->translate(0.5f, 0.2f, 3.4f);
         red_box->scale(0.25f);
 
 
         auto wall = std::make_unique<world::wall_obstacle>
-            (this, 12, 8);
-
-        wall->translate(-0.0f, 0.0f, 76.8f);
+            (this, 5, 12, 8);
 
 
         auto pane = std::make_unique<world::glass_pane>

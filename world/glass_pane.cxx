@@ -23,14 +23,10 @@ namespace world
                            int frameid,
                            glm::vec3 col, 
                            glm::vec2 siz)
-        : visible_object(ctx)
+        : visible_object(ctx, frameid)
         , color(col)
         , size(siz)
     {
-        auto way = get_part<way_path>();
-        auto framemat = way->get_point(frameid).get_matrix();
-
-        apply(framemat);
         scale(siz.x, siz.y, 1.0f);
 
         get_part<draw_manager>()->add(this);

@@ -13,7 +13,8 @@ namespace world
     class visible_object : public common::context::object
     {
     public:
-        visible_object(common::context *ctx);
+        visible_object(common::context *ctx,
+                       int frameid);
 
         visible_object(const visible_object &) = delete;
         visible_object(visible_object &&) = delete;

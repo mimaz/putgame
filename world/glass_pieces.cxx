@@ -35,7 +35,7 @@ namespace world
                                glm::vec3 color,
                                glm::vec2 area,
                                const glm::mat4 &transform)
-        : visible_object(ctx)
+        : visible_object(ctx, frameid)
     {
         auto xcount = static_cast<int>(area.x / piece_size);
         auto ycount = static_cast<int>(area.y / piece_size);
@@ -44,9 +44,7 @@ namespace world
         auto ygap = area.y / (ycount - 1);
         auto scale_vec = glm::vec3(xgap, ygap, 1.0f);
 
-        auto way = get_part<way_path>();
-        auto framemat = way->get_point(frameid).get_matrix();
-        auto base_matrix = transform * framemat;
+        auto base_matrix = transform * get_model();
 
         for (int y = 0; y < ycount; y++)
             for (int x = 0; x < xcount; x++)
