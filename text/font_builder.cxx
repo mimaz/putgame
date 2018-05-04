@@ -114,6 +114,9 @@ namespace
             }
 
 
+            glClear(GL_COLOR_BUFFER_BIT);
+
+
             auto points = vc.get_points();
             auto segments = vc.get_segments();
 

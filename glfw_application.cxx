@@ -28,8 +28,8 @@ namespace
         glfw_window(game::application *app) 
             : app(app)
             , win(nullptr)
-            , width(1)
-            , height(1)
+            , width(480)
+            , height(800)
         {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
             glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
@@ -38,7 +38,8 @@ namespace
 
             win = glfwCreateWindow(width, height, 
                                    "putgame", 
-                                   nullptr, nullptr);
+                                   glfwGetPrimaryMonitor(),
+                                   nullptr);
 
             if (win == nullptr)
                 exit_with_error("creating glfw window failed");
@@ -54,6 +55,8 @@ namespace
 
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glFrontFace(GL_CW);
+
+            resize(width, height);
         }
 
         ~glfw_window()

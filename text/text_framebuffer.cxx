@@ -78,6 +78,7 @@ namespace text
 
         glGetIntegerv(GL_VIEWPORT, vpdata);
         glViewport(0, 0, capt->get_width(), capt->get_height());
+        glClear(GL_COLOR_BUFFER_BIT);
 
         pro.use();
 
