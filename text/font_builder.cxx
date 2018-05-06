@@ -15,8 +15,8 @@
 namespace
 {
     constexpr auto max_count = 16;
-    constexpr auto texture_width = 256;
-    constexpr auto texture_height = 256;
+    constexpr auto texture_width = 40;
+    constexpr auto texture_height = 40;
 
     using seg_vec = std::vector<std::pair<glm::vec2, glm::vec2>>;
 
