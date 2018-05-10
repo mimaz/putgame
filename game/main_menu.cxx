@@ -15,7 +15,7 @@ main_menu::main_menu(common::context *ctx)
 {
     auto primary = glm::vec4(0.15f, 0.15f, 0.15f, 0.75f);
 
-    start_button.set_text("start");
+    start_button.set_text("0123456789");
     start_button.set_primary_color(primary);
     start_button.set_secondary_color(glm::vec4(1, 1, 0, 0.5f));
 
