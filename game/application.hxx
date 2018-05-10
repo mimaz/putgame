@@ -35,14 +35,13 @@ namespace game
     private:
         shared_window window;
         int flags, xpos, ypos;
+        time_t start_time;
     };
 
     class application::window
     {
     public:
         virtual void swap_buffers() = 0;
-
-        virtual time_t get_time_millis() = 0;
     };
 }
 

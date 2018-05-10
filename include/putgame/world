@@ -10,3 +10,4 @@
 #include "../../world/light_box.hxx"
 #include "../../world/wall_obstacle.hxx"
 #include "../../world/way_path.hxx"
+#include "../../world/activity.hxx"

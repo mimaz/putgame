@@ -35,7 +35,7 @@ GLSL_O = ${GLSL_C:${GLSL_C_DIR}/%=${GLSL_O_DIR}/%.o}
  # compile flags
  ##
 CFLAGS = -Wall -O0 -MMD
-LDFLAGS = 
+LDFLAGS = -pthread
 
 TARGET_CFLAGS = -Iinclude/ ${CFLAGS}
 TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR} ${TARGET_CFLAGS} -std=c++17

@@ -32,7 +32,8 @@ namespace
             , height(540)
         {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-            glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
+            glfwWindowHint(GLFW_CONTEXT_CREATION_API, 
+                           GLFW_NATIVE_CONTEXT_API);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
@@ -72,11 +73,6 @@ namespace
 
             if (glfwWindowShouldClose(win))
                 app->exit();
-        }
-
-        time_t get_time_millis() override
-        {
-            return static_cast<time_t>(glfwGetTime() * 1000);
         }
 
     private:
@@ -211,6 +207,11 @@ namespace
         shared_window make_window() override
         {
             return std::make_shared<glfw_window>(this);
+        }
+
+        time_t time_millis() override
+        {
+            return static_cast<time_t>(glfwGetTime() * 1000);
         }
     };
 }

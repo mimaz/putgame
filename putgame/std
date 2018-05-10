@@ -15,6 +15,9 @@
 #include <random>
 #include <sstream>
 #include <mutex>
+#include <thread>
+#include <functional>
+#include <chrono>
 
 #include <cassert>
 #include <cstdlib>

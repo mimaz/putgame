@@ -36,6 +36,7 @@ namespace game
 
 
         get_part<world::camera>()->rotate(math::pi, glm::vec3(0, 1, 0));
+        get_part<world::activity>()->start();
 
 
         auto menu = std::make_unique<main_menu>(this);
@@ -62,11 +63,11 @@ namespace game
             (this, 100, glm::vec3(0, 0, 1), glm::vec2(4, 4), glm::mat4(1));
 
 
-        auto next_time = window->get_time_millis();
+        auto next_time = time_millis();
 
         while (flags & flag_running)
         {
-            auto time = window->get_time_millis();
+            auto time = time_millis();
 
             if (time < next_time)
                 continue;
@@ -82,6 +83,9 @@ namespace game
 
             window->swap_buffers();
         }
+
+
+        get_part<world::activity>()->stop();
     }
 
     void application::rotate(float angle, glm::vec3 axis)

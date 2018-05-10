@@ -22,6 +22,8 @@ namespace common
           template<typename _Type>
         _Type *get_part();
 
+        virtual time_t time_millis() = 0;
+
     private:
         using part_ref = std::unique_ptr<context::part>;
 
