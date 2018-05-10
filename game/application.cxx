@@ -45,11 +45,6 @@ namespace game
 
         green_box->scale(0.25f);
 
-        auto red_box = std::make_unique<world::light_box>
-            (this, 20, world::light_box::red);
-
-        red_box->scale(0.25f);
-
 
         auto wall = std::make_unique<world::wall_obstacle>
             (this, 5, 12, 8);

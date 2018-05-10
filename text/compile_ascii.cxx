@@ -55,16 +55,17 @@ namespace
 
                 if (bit == itend)
                 {
-                    std::cerr << "symbol " << last 
+                    std::cerr << "symbol " << static_cast<char>(last) 
                               << " not found" << std::endl;
                     throw std::string("error1");
                 }
 
                 if (eit == itend)
                 {
-                    std::cerr << "symbol " << sym
-                              << " not found" << std::endl;
-                    throw std::string("error2");
+                    auto excmsg = "symbol " + std::to_string(sym) +
+                                  " not found";
+
+                    throw std::string(excmsg);
                 }
 
 
@@ -166,18 +167,26 @@ void text::compile_ascii(const ascii_character &ascii,
     {
         ptr++;
 
-        switch (*ptr)
-        {
-            case 'L': 
-                ::line(ptr, symbolmap, segments);
-                break;
+        try {
+            switch (*ptr)
+            {
+                case 'L': 
+                    ::line(ptr, symbolmap, segments);
+                    break;
 
-            case 'P':
-                ::point(ptr, symbolmap, points);
-                break;
+                case 'P':
+                    ::point(ptr, symbolmap, points);
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
+        } catch (std::string excmsg) {
+            std::cerr << "compiling " 
+                      << static_cast<char>(ascii.get_code())
+                      << " failed: " << excmsg;
+
+            throw excmsg;
         }
     }
 }
