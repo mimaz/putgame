@@ -6,3 +6,4 @@
 #include "../../common/color.hxx"
 #include "../../common/exception.hxx"
 #include "../../common/context.hxx"
+#include "../../common/assertion.hxx"

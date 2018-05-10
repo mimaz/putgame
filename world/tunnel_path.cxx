@@ -38,30 +38,26 @@ namespace world
         , way(way)
         , way_back_id(0)
     {
-        std::cout << "------------" << std::endl;
         for (int i = 0; i < 10; i++)
-            gen_frame();
-
-        std::cout << "gap: " << gap << std::endl;
+            gen_frame_back();
     }
 
-    void tunnel_path::gen_frame()
+    void tunnel_path::gen_frame_back()
     {
         if (get_points().empty())
         {
-            std::cout << "init" << std::endl;
             reset(way->get_first_point().get_matrix());
             return;
         }
 
-        auto dist = [this](int id, const path_point &pt) -> bool {
+        auto too_close = [this](int id, const path_point &pt) -> bool {
             auto pv = way->get_point(id).get_position();
             auto qv = pt.get_position();
 
             return glm::distance(pv, qv) < get_gap();
         };
 
-        while (dist(way_back_id, get_last_point()))
+        while (too_close(way_back_id, get_last_point()))
             way_back_id++;
 
         append(way->get_point(way_back_id));

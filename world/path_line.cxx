@@ -11,6 +11,8 @@
 
 namespace world
 {
+    constexpr auto start_id = 0;
+
     path_line::path_line(float gap)
         : gap(gap)
     {}
@@ -18,7 +20,7 @@ namespace world
     void path_line::append(float angle, glm::vec3 axis)
     {
         auto matrix = make_matrix(angle, axis);
-        auto index = 0;
+        auto index = start_id;
 
         if (not points.empty())
         {
@@ -29,7 +31,6 @@ namespace world
         }
 
         points.emplace_back(matrix, index);
-        std::cout << "new point: " << glm::vec3(matrix * glm::vec4(0, 0, 0, 1)) << std::endl;
     }
 
     void path_line::append(const glm::mat4 &mat)
@@ -37,7 +38,7 @@ namespace world
         int index;
 
         if (points.empty())
-            index = 0;
+            index = start_id;
         else
             index = get_last_point().get_index() + 1;
 

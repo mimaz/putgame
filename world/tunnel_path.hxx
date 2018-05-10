@@ -19,7 +19,7 @@ namespace world
 
         tunnel_path(way_path *way, float gap);
 
-        void gen_frame();
+        void gen_frame_back();
 
     private:
         way_path *way;
