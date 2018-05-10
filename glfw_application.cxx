@@ -28,8 +28,8 @@ namespace
         glfw_window(game::application *app) 
             : app(app)
             , win(nullptr)
-            , width(480)
-            , height(800)
+            , width(960)
+            , height(540)
         {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
             glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
@@ -38,7 +38,8 @@ namespace
 
             win = glfwCreateWindow(width, height, 
                                    "putgame", 
-                                   glfwGetPrimaryMonitor(),
+                                   nullptr,
+                                   //glfwGetPrimaryMonitor(),
                                    nullptr);
 
             if (win == nullptr)

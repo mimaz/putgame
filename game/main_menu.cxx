@@ -19,11 +19,11 @@ main_menu::main_menu(common::context *ctx)
     start_button.set_primary_color(primary);
     start_button.set_secondary_color(glm::vec4(1, 1, 0, 0.5f));
 
-    leaderboard_button.set_text("leaderboardsjki");
+    leaderboard_button.set_text("abcdefghijkl");
     leaderboard_button.set_primary_color(primary);
     leaderboard_button.set_secondary_color(glm::vec4(1, 0, 1, 0.5f));
 
-    achievements_button.set_text("achievements");
+    achievements_button.set_text("mnoprstuvwxyz");
     achievements_button.set_primary_color(primary);
     achievements_button.set_secondary_color(glm::vec4(0, 1, 1, 0.5f));
 }
