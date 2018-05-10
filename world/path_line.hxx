@@ -18,6 +18,9 @@ namespace world
         void append(float angle, glm::vec3 axis);
         void append(const glm::mat4 &mat);
 
+        void remove_back();
+        void remove_front();
+
         void reset(const glm::mat4 &matrix);
 
         const path_point &get_first_point() const;

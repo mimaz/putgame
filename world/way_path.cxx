@@ -51,6 +51,29 @@ namespace world
         dirty_camera_frame = true;
     }
 
+    void way_path::preprocess()
+    {
+        auto camid = get_camera_frame();
+        auto range = static_cast<int>
+            (get_part<camera>()->get_view_range() / get_gap());
+
+        auto too_far = [camid, range](const path_point &pt) -> bool {
+            return std::abs(pt.get_index() - camid) > range;
+        };
+
+        while (too_far(get_first_point()))
+        {
+            std::cout << "remove front!" << std::endl;
+            remove_front();
+        }
+
+        while (too_far(get_last_point()))
+        {
+            std::cout << "remove back!" << std::endl;
+            remove_back();
+        }
+    }
+
     int way_path::get_camera_frame()
     {
         if (dirty_camera_frame)

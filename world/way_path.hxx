@@ -21,12 +21,11 @@ namespace world
         way_path(common::context *ctx);
 
         void generate_back();
-        void generate_front();
         void update_camera_frame();
-
-        int get_camera_frame();
+        void preprocess();
 
     private:
+        int get_camera_frame();
         segment_ptr generate() const;
 
         segment_ptr back;

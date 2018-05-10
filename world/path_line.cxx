@@ -45,6 +45,16 @@ namespace world
         points.emplace_back(mat, index);
     }
 
+    void path_line::remove_back()
+    {
+        points.pop_back();
+    }
+
+    void path_line::remove_front()
+    {
+        points.pop_front();
+    }
+
     void path_line::reset(const glm::mat4 &matrix)
     {
         points.clear();
