@@ -7,7 +7,7 @@
 
 #include "wall_obstacle.hxx"
 
-#include "draw_manager.hxx"
+#include "object_manager.hxx"
 
 namespace world
 {
@@ -27,11 +27,11 @@ namespace world
 
         scale(xscale, yscale, zscale);
 
-        get_part<draw_manager>()->add(this);
+        get_part<object_manager>()->add(this);
     }
 
     wall_obstacle::~wall_obstacle()
     {
-        get_part<draw_manager>()->remove(this);
+        get_part<object_manager>()->remove(this);
     }
 }

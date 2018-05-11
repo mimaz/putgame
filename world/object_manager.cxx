@@ -5,7 +5,7 @@
 
 #include <putgame/std>
 
-#include "draw_manager.hxx"
+#include "object_manager.hxx"
 
 #include "light_box.hxx"
 #include "light_box_view.hxx"
@@ -17,7 +17,7 @@
 
 namespace world
 {
-    draw_manager::draw_manager(common::context *ctx)
+    object_manager::object_manager(common::context *ctx)
         : common::context::part(ctx)
         , light_box_drawer(std::make_shared<light_box_view>(ctx))
         , wall_obstacle_drawer(std::make_shared<wall_obstacle_view>(ctx))
@@ -26,31 +26,45 @@ namespace world
         , tunnel_drawer(std::make_shared<tunnel_view>(ctx, 16))
     {}
 
-    void draw_manager::add(light_box *box)
+    object_manager::~object_manager()
+    {
+        if (process_thread != nullptr)
+            process_thread->join();
+    }
+
+    void object_manager::add(light_box *box)
     { light_boxes.insert(box); }
 
-    void draw_manager::remove(light_box *box)
+    void object_manager::remove(light_box *box)
     { light_boxes.erase(box); }
 
-    void draw_manager::add(wall_obstacle *wall)
+    void object_manager::add(wall_obstacle *wall)
     { wall_obstacles.insert(wall); }
 
-    void draw_manager::remove(wall_obstacle *wall)
+    void object_manager::remove(wall_obstacle *wall)
     { wall_obstacles.erase(wall); }
 
-    void draw_manager::add(glass_pane *pane)
+    void object_manager::add(glass_pane *pane)
     { glass_panes.insert(pane); }
 
-    void draw_manager::remove(glass_pane *pane)
+    void object_manager::remove(glass_pane *pane)
     { glass_panes.erase(pane); }
 
-    void draw_manager::add(glass_pieces *pieces)
-    { glass_pieces_set.insert(pieces); }
+    void object_manager::add(glass_pieces *pieces)
+    { 
+        std::lock_guard<std::mutex> guard(process_lock);
 
-    void draw_manager::remove(glass_pieces *pieces)
-    { glass_pieces_set.erase(pieces); }
+        glass_pieces_set.insert(pieces); 
+    }
 
-    void draw_manager::draw_all()
+    void object_manager::remove(glass_pieces *pieces)
+    { 
+        std::lock_guard<std::mutex> guard(process_lock);
+
+        glass_pieces_set.erase(pieces); 
+    }
+
+    void object_manager::draw_all()
     {
         tunnel_drawer->draw();
         
@@ -90,12 +104,22 @@ namespace world
         glass_pieces_drawer->begin();
 
         for (auto pieces : glass_pieces_set)
-        {
-            pieces->update();
-
             glass_pieces_drawer->draw(pieces);
-        }
 
         glass_pieces_drawer->end();
+    }
+
+    void object_manager::process_all()
+    {
+        if (process_thread != nullptr)
+            process_thread->join();
+
+        process_thread = std::make_unique<std::thread>
+            ([this]() -> void {
+                std::lock_guard<std::mutex> guard(process_lock);
+
+                for (auto pieces : glass_pieces_set)
+                    pieces->update();
+             });
     }
 }

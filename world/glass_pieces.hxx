@@ -40,6 +40,8 @@ namespace world
         glm::vec3 color;
 
         std::vector<glm::mat4> matrixv;
+        std::vector<glm::mat4> rotatev;
+        std::vector<glm::mat4> translatev;
         std::vector<int> frameidv;
     };
 }

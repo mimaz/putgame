@@ -36,22 +36,18 @@ namespace game
 
 
         get_part<world::camera>()->rotate(math::pi, glm::vec3(0, 1, 0));
-        get_part<world::activity>()->start();
+        get_part<world::camera>()->move(glm::vec3(0, 0, -4));
 
 
-        auto menu = std::make_unique<main_menu>(this);
-        auto green_box = std::make_unique<world::light_box>
-            (this, 40, world::light_box::green);
+        //auto menu = std::make_unique<main_menu>(this);
+        auto white_box = std::make_unique<world::light_box>
+            (this, 40, world::light_box::white);
 
-        green_box->scale(0.25f);
+        white_box->scale(0.25f);
 
 
         auto wall = std::make_unique<world::wall_obstacle>
             (this, 5, 12, 8);
-
-
-        auto pane = std::make_unique<world::glass_pane>
-            (this, 75, glm::vec3(0, 0, 1), glm::vec2(2, 2));
 
 
         auto pieces = std::make_unique<world::glass_pieces>
@@ -71,16 +67,14 @@ namespace game
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            get_part<world::draw_manager>()->draw_all();
+            get_part<world::object_manager>()->process_all();
+            get_part<world::object_manager>()->draw_all();
 
             get_part<gui::surface>()->preprocess();
             get_part<gui::surface>()->draw();
 
             window->swap_buffers();
         }
-
-
-        get_part<world::activity>()->stop();
     }
 
     void application::rotate(float angle, glm::vec3 axis)

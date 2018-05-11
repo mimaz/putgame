@@ -23,6 +23,7 @@ namespace world
             red,
             green,
             blue,
+            white,
         };
 
         light_box(common::context *ctx, int frameid, color col);

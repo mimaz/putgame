@@ -10,7 +10,7 @@
 
 #include "light_box.hxx"
 
-#include "draw_manager.hxx"
+#include "object_manager.hxx"
 #include "camera.hxx"
 #include "lighting.hxx"
 
@@ -29,6 +29,9 @@ namespace
 
             case world::light_box::blue:
                 return glm::vec3(dim, dim, bright);
+
+            case world::light_box::white:
+                return glm::vec3(bright, bright, bright);
         }
 
         throw common::make_invalid_argument(col);
@@ -45,14 +48,14 @@ namespace world
         , speed(0.05)
         , blur(0)
     {
-        get_part<draw_manager>()->add(this);
+        get_part<object_manager>()->add(this);
 
         set_color(col);
     }
 
     light_box::~light_box()
     {
-        get_part<draw_manager>()->remove(this);
+        get_part<object_manager>()->remove(this);
     }
 
     void light_box::set_color(color c)

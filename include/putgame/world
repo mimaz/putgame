@@ -4,10 +4,9 @@
  */
 
 #include "../../world/camera.hxx"
-#include "../../world/draw_manager.hxx"
+#include "../../world/object_manager.hxx"
 #include "../../world/glass_pane.hxx"
 #include "../../world/glass_pieces.hxx"
 #include "../../world/light_box.hxx"
 #include "../../world/wall_obstacle.hxx"
 #include "../../world/way_path.hxx"
-#include "../../world/activity.hxx"
