@@ -7,16 +7,16 @@ module game.game_instance;
 
 import std.stdio;
 
-class GameInstance
+class Application
 {
     this()
     {
-        writeln("created GameInstance");
+        writeln("created Application");
     }
 
     ~this()
     {
-        writeln("destroyed GameInstance");
+        writeln("destroyed Application");
     }
 
     void start()

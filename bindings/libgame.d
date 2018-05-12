@@ -8,18 +8,18 @@ module bindings.libgame;
 import std.conv;
 import core.stdc.stdlib;
 
-import game.game_instance;
+import game.application;
 
 extern (C)
 {
-    alias libgame = GameInstance;
+    alias libgame = Application;
 
     libgame libgame_create()
     {
-        auto object_size = __traits(classInstanceSize, GameInstance);
+        auto object_size = __traits(classInstanceSize, libgame);
         auto memory = malloc(object_size)[0..object_size];
 
-        return emplace!(GameInstance)(memory);
+        return emplace!(libgame)(memory);
     }
 
     void libgame_destroy(libgame self)
