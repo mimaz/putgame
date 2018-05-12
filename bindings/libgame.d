@@ -5,38 +5,42 @@
 
 module bindings.libgame;
 
-import std.stdio;
+import std.conv;
+import core.stdc.stdlib;
+
+import game.game_instance;
 
 extern (C)
 {
-    alias libgame = ulong;
+    alias libgame = GameInstance;
 
     libgame libgame_create()
     {
-        long self = 1234;
+        auto object_size = __traits(classInstanceSize, GameInstance);
+        auto memory = malloc(object_size)[0..object_size];
 
-        writeln("created: ", self);
-
-        return self;
+        return emplace!(GameInstance)(memory);
     }
 
     void libgame_destroy(libgame self)
     {
-        writeln("destroy: ", self);
+        destroy(self);
+
+        free(cast(void *) self);
     }
 
     void libgame_start(libgame self)
     {
-        writeln("start: ", self);
+        self.start();
     }
 
     void libgame_stop(libgame self)
     {
-        writeln("stop: ", self);
+        self.stop();
     }
 
     void libgame_draw(libgame self)
     {
-        writeln("draw: ", self);
+        self.draw();
     }
 }

@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-typedef unsigned long long libgame;
+typedef void *libgame;
 
 libgame     libgame_create      ();
 

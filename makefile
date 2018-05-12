@@ -26,7 +26,7 @@ LIBCORE_CXXFLAGS = -O2 -Wall -MMD -fPIC -std=c++17
 LIBCORE_CXXFLAGS += -I${BUILD_DIR}/ -Iinclude/
 LIBCORE_LDFLAGS = -pthread -lGL
 
-LIBGAME_DFLAGS = -O -fPIC
+LIBGAME_DFLAGS = -O -fPIC -I${BUILD_DIR}
 LIBGAME_LDFLAGS =
 
 EXECUTABLE_CFLAGS = -O2
@@ -90,6 +90,7 @@ ${EXECUTABLE}: ${EXECUTABLE_OBJ} ${LIBGAME}
 	${CC} -o $@ ${EXECUTABLE_LDFLAGS} $^
 
 ${BUILD_DIR}/%.c.o: %.c
+	@mkdir -p ${dir $@}
 	${CC} -o $@ ${EXECUTABLE_CFLAGS} -c $<
 
 ##
