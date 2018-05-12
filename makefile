@@ -29,8 +29,8 @@ LIBCORE_LDFLAGS = -pthread -lGL
 LIBGAME_DFLAGS = -O -fPIC
 LIBGAME_LDFLAGS =
 
-EXECUTABLE_DFLAGS = -O
-EXECUTABLE_LDFLAGS = 
+EXECUTABLE_CFLAGS = -O2
+EXECUTABLE_LDFLAGS = -lphobos2
 
 CC = gcc
 CXX = g++
@@ -47,9 +47,9 @@ LIBCORE_GLSL = ${shell find glsl/ -type f}
 LIBCORE_GLSL_SRC = ${LIBCORE_GLSL:%=${BUILD_DIR}/%.c}
 LIBCORE_SRC = ${shell find ${LIBCORE_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 
-LIBGAME_SRC = ${shell find game/ -name "*.d"}
+LIBGAME_SRC = ${shell find game/ bindings/ -name "*.d"}
 
-EXECUTABLE_SRC = ${shell find elf/ -name "*.d"}
+EXECUTABLE_SRC = ${shell find elf/ -name "*.c"}
 
 ##
  # objects
@@ -87,7 +87,10 @@ run: ${EXECUTABLE}
  # executable rules
  ##
 ${EXECUTABLE}: ${EXECUTABLE_OBJ} ${LIBGAME}
-	${CD} -of=$@ ${EXECUTABLE_LDFLAGS} $^
+	${CC} -o $@ ${EXECUTABLE_LDFLAGS} $^
+
+${BUILD_DIR}/%.c.o: %.c
+	${CC} -o $@ ${EXECUTABLE_CFLAGS} -c $<
 
 ##
  # libgame rules
