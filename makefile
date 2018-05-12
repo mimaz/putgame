@@ -10,31 +10,33 @@ BUILD_DIR = /tmp/putgame-build
  ##
 PRECOMPILER = ${BUILD_DIR}/putgame-precompiler
 LIBCORE = ${BUILD_DIR}/libputgame-core.so
-LIBCORE_PCH = ${BUILD_DIR}/putgame/std.gch
-LIBCORE_RES = ${BUILD_DIR}/putgame/res
 LIBGAME = ${BUILD_DIR}/libputgame.so
+RES_HEADER = ${BUILD_DIR}/putgame/res
+STD_HEADER = ${BUILD_DIR}/putgame/std.gch
 EXECUTABLE = ${BUILD_DIR}/putgame.elf
 
 ##
  # compile flags
  ##
-PRECOMPILER_CFLAGS = -O0 -Wall -MMD
+COMMON_FLAGS = -O0 -Wall -MMD -fPIC -Iinclude/ -I${BUILD_DIR}
+COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
+COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++17
+
+PRECOMPILER_CFLAGS = ${COMMON_FLAGS} -O1
 PRECOMPILER_LDFLAGS = 
 
-LIBCORE_CFLAGS = -O2 -Wall -MMD -fPIC -std=c11
-LIBCORE_CXXFLAGS = -O2 -Wall -MMD -fPIC -std=c++17
-LIBCORE_CXXFLAGS += -I${BUILD_DIR}/ -Iinclude/
+LIBCORE_CFLAGS = ${COMMON_CFLAGS}
+LIBCORE_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBCORE_LDFLAGS = -pthread -lGL
 
-LIBGAME_DFLAGS = -O -fPIC -I${BUILD_DIR}
+LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBGAME_LDFLAGS =
 
-EXECUTABLE_CFLAGS = -O2
-EXECUTABLE_LDFLAGS = -lphobos2
+EXECUTABLE_CFLAGS = ${COMMON_CFLAGS}
+EXECUTABLE_LDFLAGS =
 
 CC = gcc
 CXX = g++
-CD = dmd
 
 ##
  # sources
@@ -47,7 +49,7 @@ LIBCORE_GLSL = ${shell find glsl/ -type f}
 LIBCORE_GLSL_SRC = ${LIBCORE_GLSL:%=${BUILD_DIR}/%.c}
 LIBCORE_SRC = ${shell find ${LIBCORE_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 
-LIBGAME_SRC = ${shell find game/ bindings/ -name "*.d" -or -name "*.cxx"}
+LIBGAME_SRC = ${shell find game/ -name "*.cxx"}
 
 EXECUTABLE_SRC = ${shell find elf/ -name "*.c"}
 
@@ -100,16 +102,13 @@ ${LIBGAME}: ${LIBGAME_OBJ}
 	@mkdir -p ${dir $@}
 	${CXX} -o ${LIBGAME_LDFLAGS} $@ -shared $^
 
-${BUILD_DIR}/%.d.o: %.d
-	${CD} -of=$@ ${LIBGAME_DFLAGS} -c $<
-
 ##
  # libcore rules
  ##
 ${LIBCORE}: ${LIBCORE_OBJ}
 	${CXX} ${LIBCORE_LDFLAGS} -o $@ -shared $^
 
-${BUILD_DIR}/%.cxx.o: %.cxx ${LIBCORE_PCH} ${LIBCORE_RES}
+${BUILD_DIR}/%.cxx.o: %.cxx ${STD_HEADER} ${RES_HEADER}
 	@mkdir -p ${dir $@}
 	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -c $<
 
@@ -121,11 +120,11 @@ ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 	@mkdir -p ${dir $@}
 	${PRECOMPILER} glsl $< $@
 
-${LIBCORE_PCH}: putgame/std
+${STD_HEADER}: putgame/std
 	@mkdir -p ${dir $@}
 	${CXX} -o $@ ${LIBCORE_CXXFLAGS} -xc++-header -c $<
 
-${LIBCORE_RES}: ${LIBCORE_GLSL_SRC}
+${RES_HEADER}: ${LIBCORE_GLSL_SRC}
 	@mkdir -p ${dir $@}
 	${PRECOMPILER} header $@ $^
 
