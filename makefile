@@ -13,7 +13,7 @@ LIBCORE = ${BUILD_DIR}/libputgame-core.so
 LIBGAME = ${BUILD_DIR}/libputgame.so
 RES_HEADER = ${BUILD_DIR}/putgame/res
 STD_HEADER = ${BUILD_DIR}/putgame/std.gch
-EXECUTABLE = ${BUILD_DIR}/putgame.elf
+GLFWAPP = ${BUILD_DIR}/putgame.elf
 
 ##
  # compile flags
@@ -32,8 +32,8 @@ LIBCORE_LDFLAGS = -pthread -lGL
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBGAME_LDFLAGS =
 
-EXECUTABLE_CFLAGS = ${COMMON_CFLAGS}
-EXECUTABLE_LDFLAGS =
+GLFWAPP_CXXFLAGS = ${COMMON_CFLAGS}
+GLFWAPP_LDFLAGS = -lGL -lglfw
 
 CC = gcc
 CXX = g++
@@ -51,7 +51,7 @@ LIBCORE_SRC = ${shell find ${LIBCORE_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 
 LIBGAME_SRC = ${shell find game/ -name "*.cxx"}
 
-EXECUTABLE_SRC = ${shell find elf/ -name "*.c"}
+GLFWAPP_SRC = ${shell find glfw/ -name "*.cxx"}
 
 ##
  # objects
@@ -63,7 +63,7 @@ LIBCORE_OBJ = ${LIBCORE_SRC:%=${BUILD_DIR}/%.o} ${LIBCORE_GLSL_OBJ}
 
 LIBGAME_OBJ = ${LIBGAME_SRC:%=${BUILD_DIR}/%.o}
 
-EXECUTABLE_OBJ = ${EXECUTABLE_SRC:%=${BUILD_DIR}/%.o}
+GLFWAPP_OBJ = ${GLFWAPP_SRC:%=${BUILD_DIR}/%.o}
 
 ##
  # basic rules
@@ -77,23 +77,19 @@ libcore: ${LIBCORE}
 
 libgame: ${LIBGAME}
 
-executable: ${EXECUTABLE}
+executable: ${GLFWAPP}
 
 clean:
 	rm -rf ${BUILD_DIR}
 
-run: ${EXECUTABLE}
-	${EXECUTABLE}
+run: ${GLFWAPP}
+	${GLFWAPP}
 
 ##
  # executable rules
  ##
-${EXECUTABLE}: ${EXECUTABLE_OBJ} ${LIBGAME} ${LIBCORE}
-	${CC} -o $@ ${EXECUTABLE_LDFLAGS} $^
-
-${BUILD_DIR}/%.c.o: %.c
-	@mkdir -p ${dir $@}
-	${CC} -o $@ ${EXECUTABLE_CFLAGS} -c $<
+${GLFWAPP}: ${GLFWAPP_OBJ} ${LIBGAME} ${LIBCORE}
+	${CXX} -o $@ ${GLFWAPP_LDFLAGS} $^
 
 ##
  # libgame rules
@@ -110,11 +106,11 @@ ${LIBCORE}: ${LIBCORE_OBJ}
 
 ${BUILD_DIR}/%.cxx.o: %.cxx ${STD_HEADER} ${RES_HEADER}
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -c $<
+	${CXX} -o $@ ${LIBCORE_CXXFLAGS} -c $<
 
 ${BUILD_DIR}/glsl/%.c.o: ${BUILD_DIR}/glsl/%.c
 	@mkdir -p ${dir $@}
-	${CC} ${LIBCORE_CFLAGS} -o $@ -c $<
+	${CC} -o $@ ${LIBCORE_CFLAGS} -c $<
 
 ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 	@mkdir -p ${dir $@}

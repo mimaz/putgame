@@ -216,7 +216,7 @@ namespace
     };
 }
 
-int glfw_application(int argc, char **argv)
+int main(int argc, char **argv)
 {
     if (not glfwInit())
     {
@@ -227,7 +227,7 @@ int glfw_application(int argc, char **argv)
     glfwSetErrorCallback(error_callback);
 
     {
-        class glfw_application app;
+        glfw_application app;
 
         app.run();
     }
