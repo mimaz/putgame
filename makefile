@@ -47,7 +47,7 @@ LIBCORE_GLSL = ${shell find glsl/ -type f}
 LIBCORE_GLSL_SRC = ${LIBCORE_GLSL:%=${BUILD_DIR}/%.c}
 LIBCORE_SRC = ${shell find ${LIBCORE_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 
-LIBGAME_SRC = ${shell find game/ bindings/ -name "*.d"}
+LIBGAME_SRC = ${shell find game/ bindings/ -name "*.d" -or -name "*.cxx"}
 
 EXECUTABLE_SRC = ${shell find elf/ -name "*.c"}
 
@@ -86,7 +86,7 @@ run: ${EXECUTABLE}
 ##
  # executable rules
  ##
-${EXECUTABLE}: ${EXECUTABLE_OBJ} ${LIBGAME}
+${EXECUTABLE}: ${EXECUTABLE_OBJ} ${LIBGAME} ${LIBCORE}
 	${CC} -o $@ ${EXECUTABLE_LDFLAGS} $^
 
 ${BUILD_DIR}/%.c.o: %.c
@@ -96,12 +96,12 @@ ${BUILD_DIR}/%.c.o: %.c
 ##
  # libgame rules
  ##
-${LIBGAME}: ${LIBGAME_OBJ} ${LIBCORE}
+${LIBGAME}: ${LIBGAME_OBJ}
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBGAME_LDFLAGS} -o $@ -shared $^
+	${CXX} -o ${LIBGAME_LDFLAGS} $@ -shared $^
 
 ${BUILD_DIR}/%.d.o: %.d
-	${CD} ${LIBGAME_DFLAGS} -of=$@ -c $<
+	${CD} -of=$@ ${LIBGAME_DFLAGS} -c $<
 
 ##
  # libcore rules
@@ -123,7 +123,7 @@ ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 
 ${LIBCORE_PCH}: putgame/std
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -xc++-header -c $<
+	${CXX} -o $@ ${LIBCORE_CXXFLAGS} -xc++-header -c $<
 
 ${LIBCORE_RES}: ${LIBCORE_GLSL_SRC}
 	@mkdir -p ${dir $@}
@@ -133,8 +133,8 @@ ${LIBCORE_RES}: ${LIBCORE_GLSL_SRC}
  # precompiler rules
  ##
 ${PRECOMPILER}: ${PRECOMPILER_OBJ}
-	${CC} ${PRECOMPILER_LDFLAGS} -o $@ $^
+	${CC} -o $@ ${PRECOMPILER_LDFLAGS} $^
 
 ${BUILD_DIR}/precompiler/%.c.o: precompiler/%.c
 	@mkdir -p ${dir $@}
-	${CC} ${PRECOMPILER_CFLAGS} -o $@ -c $< 
+	${CC} -o $@ ${PRECOMPILER_CFLAGS} -c $< 

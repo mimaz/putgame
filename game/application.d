@@ -7,6 +7,8 @@ module game.game_instance;
 
 import std.stdio;
 
+import bindings.camera;
+
 class Application
 {
     this()
