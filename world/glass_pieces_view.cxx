@@ -47,6 +47,7 @@ namespace world
         , fsh(GL_FRAGMENT_SHADER,
               version_glsl,
               lighting::fragment_source,
+              glass_common_fsh,
               glass_pieces_fsh)
         , pro(&vsh, &fsh)
         , u_extra_v(&pro, "u_extra_v")

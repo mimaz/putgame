@@ -53,6 +53,9 @@ namespace game
         auto pieces = std::make_unique<world::glass_pieces>
             (this, 100, glm::vec3(0, 0, 1), glm::vec2(4, 4), glm::mat4(1));
 
+        auto pane = std::make_unique<world::glass_pane>
+            (this, 120, glm::vec3(0, 1, 0));
+
 
         auto next_time = time_millis();
 

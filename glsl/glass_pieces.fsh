@@ -13,23 +13,6 @@ out lowp vec4 out_color;
 
 void main()
 {
-    lowp vec3 color;
-
-    if (u_specular_mode != 0)
-    {
-        color = enlight(white,
-                        white,
-                        v_normal,
-                        v_coord,
-                        180.0,
-                        false,
-                        true,
-                        true);
-    }
-    else
-    {
-        color = u_color;
-    }
-
-    out_color = vec4(color, 1.0);
+    out_color = glass_color(u_specular_mode, u_color,
+                            v_normal, v_coord);
 }

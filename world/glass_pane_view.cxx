@@ -36,6 +36,7 @@ namespace world
         , fsh(GL_FRAGMENT_SHADER,
               version_glsl,
               lighting::fragment_source,
+              glass_common_fsh,
               glass_pane_fsh)
         , pro(&vsh, &fsh)
         , a_coord(&pro, "a_coord")
