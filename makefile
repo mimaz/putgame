@@ -79,6 +79,9 @@ libgame: ${LIBGAME}
 
 executable: ${GLFWAPP}
 
+debug: ${GLFWAPP}
+	gdb $<
+
 clean:
 	rm -rf ${BUILD_DIR}
 
@@ -102,7 +105,7 @@ ${LIBGAME}: ${LIBGAME_OBJ}
  # libcore rules
  ##
 ${LIBCORE}: ${LIBCORE_OBJ}
-	${CXX} ${LIBCORE_LDFLAGS} -o $@ -shared $^
+	${CXX} -o $@ ${LIBCORE_LDFLAGS} -shared $^
 
 ${BUILD_DIR}/%.cxx.o: %.cxx ${STD_HEADER} ${RES_HEADER}
 	@mkdir -p ${dir $@}

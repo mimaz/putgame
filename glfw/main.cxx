@@ -22,14 +22,19 @@ namespace
         exit_with_error(desc);
     }
 
-    class glfw_window : public game::application::window
+    struct glfw_application : public game::game_instance
     {
-    public:
-        glfw_window(game::application *app) 
-            : app(app)
-            , win(nullptr)
+        static glfw_application *from_window(GLFWwindow *win)
+        {
+            auto ptr = glfwGetWindowUserPointer(win);
+
+            return static_cast<glfw_application *>(ptr);
+        }
+
+        glfw_application() 
+            : win(nullptr)
             , width(960)
-            , height(540)
+            , height(540) 
         {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
             glfwWindowHint(GLFW_CONTEXT_CREATION_API, 
@@ -46,7 +51,6 @@ namespace
             if (win == nullptr)
                 exit_with_error("creating glfw window failed");
 
-
             glfwSetWindowUserPointer(win, this);
             glfwSetKeyCallback(win, key_callback);
             glfwSetWindowSizeCallback(win, resize_callback);
@@ -61,51 +65,27 @@ namespace
             resize(width, height);
         }
 
-        ~glfw_window()
+        ~glfw_application()
         {
             glfwDestroyWindow(win);
         }
 
-        void swap_buffers() override
+        void draw() final
+        {
+            glfwPollEvents();
+
+            game_instance::draw();
+        }
+
+        void swap_buffers() final
         {
             glfwSwapBuffers(win);
             glfwPollEvents();
-
-            if (glfwWindowShouldClose(win))
-                app->exit();
         }
 
-    private:
-        static glfw_window *from_window(GLFWwindow *win)
+        time_t time_millis() final
         {
-            auto ptr = glfwGetWindowUserPointer(win);
-
-            return reinterpret_cast<glfw_window *>(ptr);
-        }
-
-        static void key_callback(GLFWwindow *win,
-                                       int key, int code,
-                                       int action, int mode)
-        {
-            from_window(win)->key(key, action);
-        }
-
-        static void resize_callback(GLFWwindow *win,
-                                          int width, int height)
-        {
-            from_window(win)->resize(width, height);
-        }
-
-        static void cursor_callback(GLFWwindow *win,
-                                          double cursorx, double cursory)
-        {
-            from_window(win)->cursor(cursorx, cursory);
-        }
-
-        static void touch_callback(GLFWwindow *win,
-                                         int button, int action, int mods)
-        {
-            from_window(win)->touch(button, action, mods);
+            return static_cast<time_t>(glfwGetTime() * 1000);
         }
 
         void key(int key, int action)
@@ -122,71 +102,91 @@ namespace
                     glfwSetWindowShouldClose(win, GLFW_TRUE);
                     break;
 
+                /*
                 case GLFW_KEY_H:
-                    app->move({ -step, 0, 0 });
+                    move({ -step, 0, 0 });
                     break;
 
                 case GLFW_KEY_J:
-                    app->move({ 0, -step, 0 });
+                    move({ 0, -step, 0 });
                     break;
 
                 case GLFW_KEY_K:
-                    app->move({ 0, step, 0 });
+                    move({ 0, step, 0 });
                     break;
 
                 case GLFW_KEY_L:
-                    app->move({ step, 0, 0 });
+                    move({ step, 0, 0 });
                     break;
 
                 case GLFW_KEY_F:
-                    app->move({ 0, 0, -step });
+                    move({ 0, 0, -step });
                     break;
 
                 case GLFW_KEY_B:
-                    app->move({ 0, 0, step });
+                    move({ 0, 0, step });
                     break;
 
                 case GLFW_KEY_A:
-                    app->rotate(angle, { 0, 1, 0 });
+                    rotate(angle, { 0, 1, 0 });
                     break;
 
                 case GLFW_KEY_D:
-                    app->rotate(-angle, { 0, 1, 0 });
+                    rotate(-angle, { 0, 1, 0 });
                     break;
 
                 case GLFW_KEY_W:
-                    app->rotate(angle, { 1, 0, 0 });
+                    rotate(angle, { 1, 0, 0 });
                     break;
 
                 case GLFW_KEY_X:
-                    app->rotate(-angle, { 1, 0, 0 });
+                    rotate(-angle, { 1, 0, 0 });
                     break;
+                */
 
                 default:
                     break;
             }
         }
 
-        void resize(int w, int h)
+        bool should_close()
         {
-            width = w;
-            height = h;
-
-            glViewport(0, 0, w, h);
-
-            app->resize(w, h);
+            return glfwWindowShouldClose(win);
         }
 
-        void cursor(double cursorx, double cursory)
+        static void key_callback(GLFWwindow *win,
+                                 int key, int code,
+                                 int action, int mode)
         {
-            auto xpos = static_cast<int>(cursorx) - width / 2;
-            auto ypos = -static_cast<int>(cursory) + height / 2;
-
-            app->cursor(xpos, ypos);
+            from_window(win)->key(key, action);
         }
 
-        void touch(int button, int action, int mods)
+        static void resize_callback(GLFWwindow *win,
+                                    int width, int height)
         {
+            from_window(win)->resize(width, height);
+        }
+
+        static void cursor_callback(GLFWwindow *win,
+                                    double cursorx, 
+                                    double cursory)
+        {
+            auto app = from_window(win);
+
+            auto xpos = static_cast<int>(cursorx)
+                - app->get_width() / 2;
+
+            auto ypos = -static_cast<int>(cursory)
+                + app->get_height() / 2;
+
+            from_window(win)->cursor(xpos, ypos);
+        }
+
+        static void touch_callback(GLFWwindow *win,
+                                   int button, int action, int mods)
+        {
+            auto app = from_window(win);
+
             if (button == GLFW_MOUSE_BUTTON_LEFT)
             {
                 if (action == GLFW_PRESS)
@@ -196,23 +196,9 @@ namespace
             }
         }
 
-    private:
-        game::application *app;
+
         GLFWwindow *win;
         int cursor_xpos, cursor_ypos, width, height;
-    };
-
-    class glfw_application : public game::application
-    {
-        shared_window make_window() override
-        {
-            return std::make_shared<glfw_window>(this);
-        }
-
-        time_t time_millis() override
-        {
-            return static_cast<time_t>(glfwGetTime() * 1000);
-        }
     };
 }
 
@@ -221,15 +207,31 @@ int main(int argc, char **argv)
     if (not glfwInit())
     {
         std::cerr << "intializing GLFW failed" << std::endl;
-        exit(1);
+        return 1;
     }
 
     glfwSetErrorCallback(error_callback);
 
     {
         glfw_application app;
+        time_t nexttim = app.time_millis();
 
-        app.run();
+        app.start();
+
+        while (not app.should_close())
+        {
+            std::cout << "draw!" << std::endl;
+            app.draw();
+
+            nexttim += 1000 / 30;
+
+            while (not app.should_close() and 
+                   app.time_millis() < nexttim)
+                std::this_thread::sleep_for
+                    (std::chrono::milliseconds(1));
+        }
+
+        app.stop();
     }
 
     glfwTerminate();
