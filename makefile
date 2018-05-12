@@ -10,9 +10,9 @@ BUILD_DIR = /tmp/putgame-build
  ##
 PRECOMPILER = ${BUILD_DIR}/putgame-precompiler
 LIBCORE = ${BUILD_DIR}/libputgame-core.so
-EXECUTABLE = ${BUILD_DIR}/putgame.elf
 LIBCORE_PCH = ${BUILD_DIR}/putgame/std.gch
 LIBCORE_RES = ${BUILD_DIR}/putgame/res
+LIBGAME = ${BUILD_DIR}/libputgame.so
 
 ##
  # compile flags
@@ -25,8 +25,12 @@ LIBCORE_CXXFLAGS = -O2 -Wall -MMD -fPIC -std=c++17
 LIBCORE_CXXFLAGS += -I${BUILD_DIR}/ -Iinclude/
 LIBCORE_LDFLAGS = -pthread
 
+LIBGAME_DFLAGS = -O -fPIC
+LIBGAME_LDFLAGS =
+
 CC = gcc
 CXX = g++
+CD = dmd
 
 ##
  # sources
@@ -37,6 +41,7 @@ PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 LIBCORE_GLSL = ${shell find glsl/ -type f}
 LIBCORE_GLSL_SRC = ${LIBCORE_GLSL:%=${BUILD_DIR}/%.c}
 LIBCORE_SRC = ${shell find ${LIBCORE_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
+LIBGAME_SRC = ${shell find . -name "*.d"}
 
 ##
  # objects
@@ -44,15 +49,28 @@ LIBCORE_SRC = ${shell find ${LIBCORE_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${BUILD_DIR}/%.o}
 LIBCORE_GLSL_OBJ = ${LIBCORE_GLSL_SRC:%=%.o}
 LIBCORE_OBJ = ${LIBCORE_SRC:%=${BUILD_DIR}/%.o} ${LIBCORE_GLSL_OBJ}
+LIBGAME_OBJ = ${LIBGAME_SRC:%=${BUILD_DIR}/%.o}
 
-all: libcore
+all: libgame
 
 precompiler: ${PRECOMPILER}
 
 libcore: ${LIBCORE}
 
+libgame: ${LIBGAME}
+
 clean:
 	rm -rf ${BUILD_DIR}
+
+##
+ # libgame rules
+ ##
+${LIBGAME}: ${LIBGAME_OBJ} ${LIBCORE}
+	@mkdir -p ${dir $@}
+	${CXX} ${LIBGAME_LDFLAGS} -o $@ -shared $^
+
+${BUILD_DIR}/%.d.o: %.d
+	${CD} ${LIBGAME_DFLAGS} -of=$@ -c $<
 
 ##
  # libcore rules
