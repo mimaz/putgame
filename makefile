@@ -3,144 +3,89 @@
  # 2018
  ##
 
-
-PROJECT = putgame
-
-##
- # build directories
- ##
-BASE_BUILD_DIR = /tmp/${PROJECT}-build
-
-TARGET_BUILD_DIR = ${BASE_BUILD_DIR}
-PRECOMPILER_BUILD_DIR = ${BASE_BUILD_DIR}
-GLSL_C_DIR = ${BASE_BUILD_DIR}/glsl-src
-GLSL_O_DIR = ${BASE_BUILD_DIR}/glsl-obj
+BUILD_DIR = /tmp/putgame-build
 
 ##
  # targets
  ##
-TARGET = ${TARGET_BUILD_DIR}/bin/${PROJECT}
-PRECOMPILER = ${PRECOMPILER_BUILD_DIR}/resource-precompiler
-
-##
- # resources
- ##
-RESOURCE_HEADER = ${TARGET_BUILD_DIR}/putgame/res
-
-GLSL = ${shell find glsl/ -type f -not -name ".*"}
-GLSL_C = ${GLSL:%=${GLSL_C_DIR}/%.c}
-GLSL_O = ${GLSL_C:${GLSL_C_DIR}/%=${GLSL_O_DIR}/%.o}
+PRECOMPILER = ${BUILD_DIR}/putgame-precompiler
+LIBCORE = ${BUILD_DIR}/libputgame-core.so
+EXECUTABLE = ${BUILD_DIR}/putgame.elf
+LIBCORE_PCH = ${BUILD_DIR}/putgame/std.gch
+LIBCORE_RES = ${BUILD_DIR}/putgame/res
 
 ##
  # compile flags
  ##
-CFLAGS = -Wall -O2 -MMD
-LDFLAGS = -pthread
+PRECOMPILER_CFLAGS = -O0 -Wall -MMD
+PRECOMPILER_LDFLAGS = 
 
-TARGET_CFLAGS = -Iinclude/ ${CFLAGS}
-TARGET_CXXFLAGS = -I${TARGET_BUILD_DIR} ${TARGET_CFLAGS} -std=c++17
-TARGET_LDFLAGS = -lglfw -lGLESv2 ${LDFLAGS}
-
-PRECOMPILER_CFLAGS = ${CFLAGS}
-PRECOMPILER_LDFLAGS = ${LDFLAGS}
+LIBCORE_CFLAGS = -O2 -Wall -MMD -fPIC -std=c11
+LIBCORE_CXXFLAGS = -O2 -Wall -MMD -fPIC -std=c++17
+LIBCORE_CXXFLAGS += -I${BUILD_DIR}/ -Iinclude/
+LIBCORE_LDFLAGS = -pthread
 
 CC = gcc
 CXX = g++
 
-
 ##
- # target sources
+ # sources
  ##
-TARGET_SRC_DIRS = . world/ common/ glutils/ text/ gui/ game/ math/
-TARGET_SRC = ${shell find ${TARGET_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
+LIBCORE_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/
+
 PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
-
-
-##
- # pre-compiler header
- ##
-TARGET_PCH_SRC = putgame/std
-TARGET_PCH_OBJ = ${TARGET_BUILD_DIR}/${TARGET_PCH_SRC}.gch
-
+LIBCORE_GLSL = ${shell find glsl/ -type f}
+LIBCORE_GLSL_SRC = ${LIBCORE_GLSL:%=${BUILD_DIR}/%.c}
+LIBCORE_SRC = ${shell find ${LIBCORE_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
 
 ##
- # target objects
+ # objects
  ##
-TARGET_OBJ = ${TARGET_SRC:%=${TARGET_BUILD_DIR}/%.o} ${GLSL_O}
-PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${PRECOMPILER_BUILD_DIR}/%.o}
+PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${BUILD_DIR}/%.o}
+LIBCORE_GLSL_OBJ = ${LIBCORE_GLSL_SRC:%=%.o}
+LIBCORE_OBJ = ${LIBCORE_SRC:%=${BUILD_DIR}/%.o} ${LIBCORE_GLSL_OBJ}
 
-ALL_OBJ = ${TARGET_OBJ} ${PRECOMPILER_OBJ}
-ALL_DEP = ${ALL_OBJ:%.o=%.d}
+all: libcore
 
-##
- # phony rules
- ##
-all: ${TARGET}
+precompiler: ${PRECOMPILER}
 
-run: ${TARGET}
-	$<
+libcore: ${LIBCORE}
 
 clean:
-	rm -rf ${BASE_BUILD_DIR}
-
-pch: ${TARGET_PCH_OBJ}
-
-prec: ${PRECOMPILER}
-
-res: ${RESOURCE_HEADER}
-
-debug:
-	gdb ${TARGET}
-
-.PHONY: all run clean pch prec res debug
+	rm -rf ${BUILD_DIR}
 
 ##
- # build rules
+ # libcore rules
  ##
+${LIBCORE}: ${LIBCORE_OBJ}
+	${CXX} ${LIBCORE_LDFLAGS} -o $@ -shared $^
 
-# precompiler objects
-${PRECOMPILER_BUILD_DIR}/%.c.o: %.c
+${BUILD_DIR}/%.cxx.o: %.cxx ${LIBCORE_PCH} ${LIBCORE_RES}
 	@mkdir -p ${dir $@}
-	${CC} ${PRECOMPILER_CFLAGS} -c $< -o $@
+	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -c $<
 
-# precompiler executable
-${PRECOMPILER}: ${PRECOMPILER_OBJ}
-	${CC} ${PRECOMPILER_LDFLAGS} $^ -o $@
-	
-##############################################
-
-# pre-compiled header
-${TARGET_PCH_OBJ}: ${TARGET_PCH_SRC}
+${BUILD_DIR}/glsl/%.c.o: ${BUILD_DIR}/glsl/%.c
 	@mkdir -p ${dir $@}
-	${CXX} -xc++-header ${TARGET_CXXFLAGS} -c $< -o $@
+	${CC} ${LIBCORE_CFLAGS} -o $@ -c $<
 
-##############################################
-
-# glsl objects
-${GLSL_O_DIR}/%.c.o: ${GLSL_C_DIR}/%.c
-	@mkdir -p ${dir $@}
-	${CC} ${TARGET_CFLAGS} -c $< -o $@
-
-# glsl sources
-${GLSL_C_DIR}/%.c: % ${PRECOMPILER}
+${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 	@mkdir -p ${dir $@}
 	${PRECOMPILER} glsl $< $@
-	
-# auto-generated header
-${RESOURCE_HEADER}: ${GLSL_C}
+
+${LIBCORE_PCH}: putgame/std
+	@mkdir -p ${dir $@}
+	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -xc++-header -c $<
+
+${LIBCORE_RES}: ${LIBCORE_GLSL_SRC}
 	@mkdir -p ${dir $@}
 	${PRECOMPILER} header $@ $^
 
-##############################################
+##
+ # precompiler rules
+ ##
+${PRECOMPILER}: ${PRECOMPILER_OBJ}
+	${CC} ${PRECOMPILER_LDFLAGS} -o $@ $^
 
-# target objects
-${TARGET_BUILD_DIR}/%.cxx.o: %.cxx ${RESOURCE_HEADER} ${TARGET_PCH_OBJ}
+${BUILD_DIR}/precompiler/%.c.o: precompiler/%.c
 	@mkdir -p ${dir $@}
-	${CXX} ${TARGET_CXXFLAGS} -c $< -o $@
-
-# target executable
-${TARGET}: ${TARGET_OBJ}
-	@mkdir -p ${dir $@}
-	${CXX} ${TARGET_LDFLAGS} $^ -o $@
-
--include ${ALL_DEP}
+	${CC} ${PRECOMPILER_CFLAGS} -o $@ -c $< 
