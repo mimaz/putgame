@@ -21,19 +21,20 @@ GLFWAPP = ${BUILD_DIR}/putgame.elf
 COMMON_FLAGS = -O0 -Wall -MMD -fPIC -Iinclude/ -I${BUILD_DIR}
 COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
 COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++17
+COMMON_LDFLAGS = -O0
 
 PRECOMPILER_CFLAGS = ${COMMON_FLAGS} -O1
-PRECOMPILER_LDFLAGS = 
+PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
 
 LIBCORE_CFLAGS = ${COMMON_CFLAGS}
 LIBCORE_CXXFLAGS = ${COMMON_CXXFLAGS}
-LIBCORE_LDFLAGS = -pthread -lGL
+LIBCORE_LDFLAGS = ${COMMON_LDFLAGS} -pthread -lGL
 
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
-LIBGAME_LDFLAGS =
+LIBGAME_LDFLAGS = ${COMMON_LDFLAGS}
 
 GLFWAPP_CXXFLAGS = ${COMMON_CFLAGS}
-GLFWAPP_LDFLAGS = -lGL -lglfw
+GLFWAPP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw
 
 CC = gcc
 CXX = g++
@@ -91,29 +92,26 @@ run: ${GLFWAPP}
 ##
  # executable rules
  ##
-${GLFWAPP}: ${GLFWAPP_OBJ} ${LIBGAME} ${LIBCORE}
-	${CXX} -o $@ ${GLFWAPP_LDFLAGS} $^
+${GLFWAPP}: ${LIBCORE} ${LIBGAME} ${GLFWAPP_OBJ} 
+	${CXX} ${GLFWAPP_LDFLAGS} -o $@ $^
 
 ##
- # libgame rules
+ # libcore & libgame rules
  ##
 ${LIBGAME}: ${LIBGAME_OBJ}
 	@mkdir -p ${dir $@}
-	${CXX} -o ${LIBGAME_LDFLAGS} $@ -shared $^
+	${CXX} ${LIBGAME_LDFLAGS} -o $@ -shared $^
 
-##
- # libcore rules
- ##
 ${LIBCORE}: ${LIBCORE_OBJ}
-	${CXX} -o $@ ${LIBCORE_LDFLAGS} -shared $^
+	${CXX} ${LIBCORE_LDFLAGS} -o $@ -shared $^
 
 ${BUILD_DIR}/%.cxx.o: %.cxx ${STD_HEADER} ${RES_HEADER}
 	@mkdir -p ${dir $@}
-	${CXX} -o $@ ${LIBCORE_CXXFLAGS} -c $<
+	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -c $<
 
 ${BUILD_DIR}/glsl/%.c.o: ${BUILD_DIR}/glsl/%.c
 	@mkdir -p ${dir $@}
-	${CC} -o $@ ${LIBCORE_CFLAGS} -c $<
+	${CC} ${LIBCORE_CFLAGS} -o $@ -c $<
 
 ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 	@mkdir -p ${dir $@}
@@ -121,7 +119,7 @@ ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 
 ${STD_HEADER}: putgame/std
 	@mkdir -p ${dir $@}
-	${CXX} -o $@ ${LIBCORE_CXXFLAGS} -xc++-header -c $<
+	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -xc++-header -c $<
 
 ${RES_HEADER}: ${LIBCORE_GLSL_SRC}
 	@mkdir -p ${dir $@}
@@ -135,4 +133,4 @@ ${PRECOMPILER}: ${PRECOMPILER_OBJ}
 
 ${BUILD_DIR}/precompiler/%.c.o: precompiler/%.c
 	@mkdir -p ${dir $@}
-	${CC} -o $@ ${PRECOMPILER_CFLAGS} -c $< 
+	${CC} ${PRECOMPILER_CFLAGS} -o $@ -c $< 
