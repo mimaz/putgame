@@ -34,8 +34,6 @@ namespace world
         int get_count() const;
         const glm::mat4 *get_matrices() const;
 
-        std::mutex datamtx;
-
     private:
         glm::vec3 color;
 

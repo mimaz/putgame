@@ -113,10 +113,6 @@ namespace world
         auto way = get_part<way_path>();
         auto range = 1;
 
-
-        std::lock_guard<std::mutex> lock(datamtx);
-
-
         for (int i = 0; i < static_cast<int>(matrixv.size()); i++)
         {
             auto lastid = frameidv[i];

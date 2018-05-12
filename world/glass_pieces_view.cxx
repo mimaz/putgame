@@ -76,10 +76,6 @@ namespace world
     {
         u_view_proj = cam->get_view_proj();
 
-
-        std::lock_guard<std::mutex> lock(pieces->datamtx);
-
-
         auto matrices = pieces->get_matrices();
         auto index = 0;
         auto total = pieces->get_count();
