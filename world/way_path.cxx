@@ -108,6 +108,6 @@ namespace world
     way_path::segment_ptr way_path::generate() const
     {
         return std::make_shared<segment>
-            (10, math::pi / 100, glm::vec3(0, 1, 0));
+            (10, 0, glm::vec3(0, 1, 0));
     }
 }

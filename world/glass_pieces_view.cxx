@@ -53,6 +53,7 @@ namespace world
         , u_model_v(&pro, "u_model_v")
         , u_view_proj(&pro, "u_view_proj")
         , u_specular_mode(&pro, "u_specular_mode")
+        , u_color(&pro, "u_color")
         , light(ctx, &pro)
     {}
 
@@ -75,6 +76,7 @@ namespace world
     void glass_pieces_view::draw(glass_pieces *pieces)
     {
         u_view_proj = cam->get_view_proj();
+        u_color = pieces->get_color();
 
         auto matrices = pieces->get_matrices();
         auto index = 0;

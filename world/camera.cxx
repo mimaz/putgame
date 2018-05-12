@@ -108,9 +108,12 @@ namespace world
 
     glm::vec3 camera::get_position() const
     {
-        auto inv = glm::inverse(get_view());
+        return math::coord3d(inversed_view());
+    }
 
-        return glm::vec3(inv * glm::vec4(0, 0, 0, 1));
+    glm::vec3 camera::get_direction() const
+    {
+        return math::direction3d(inversed_view());
     }
 
     glm::vec3 camera::get_light_position()
@@ -126,5 +129,10 @@ namespace world
     float camera::get_light_range()
     {
         return 15;
+    }
+
+    glm::mat4 camera::inversed_view() const
+    {
+        return glm::inverse(get_view());
     }
 }

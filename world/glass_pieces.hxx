@@ -32,6 +32,7 @@ namespace world
         void update();
 
         int get_count() const;
+        glm::vec3 get_color() const;
         const glm::mat4 *get_matrices() const;
 
     private:

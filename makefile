@@ -34,7 +34,7 @@ GLSL_O = ${GLSL_C:${GLSL_C_DIR}/%=${GLSL_O_DIR}/%.o}
 ##
  # compile flags
  ##
-CFLAGS = -Wall -O0 -MMD
+CFLAGS = -Wall -O2 -MMD
 LDFLAGS = -pthread
 
 TARGET_CFLAGS = -Iinclude/ ${CFLAGS}

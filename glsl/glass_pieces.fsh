@@ -7,6 +7,7 @@ flat in lowp vec3 v_normal;
 in mediump vec3 v_coord;
 
 uniform lowp int u_specular_mode;
+uniform lowp vec3 u_color;
 
 out lowp vec4 out_color;
 
@@ -27,7 +28,7 @@ void main()
     }
     else
     {
-        color = vec3(1.0, 0.0, 0.0);
+        color = u_color;
     }
 
     out_color = vec4(color, 1.0);

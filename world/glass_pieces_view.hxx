@@ -34,6 +34,7 @@ namespace world
         glutils::uniform u_model_v;
         glutils::uniform u_view_proj;
         glutils::uniform u_specular_mode;
+        glutils::uniform u_color;
 
         lighting light;
     };

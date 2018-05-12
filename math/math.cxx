@@ -9,11 +9,14 @@
 
 namespace math
 {
-    const float pi = static_cast<float>(M_PI);
-
     glm::vec3 coord3d(const glm::mat4 &mat)
     {
         return glm::vec3(mat * glm::vec4(0, 0, 0, 1));
+    }
+
+    glm::vec3 direction3d(const glm::mat4 &mat)
+    {
+        return glm::vec3(mat * glm::vec4(0, 0, 1, 0));
     }
 
     float sqdist(glm::vec3 p, glm::vec3 q)

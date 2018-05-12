@@ -12,18 +12,13 @@
 #include "object_manager.hxx"
 #include "way_path.hxx"
 #include "constants.hxx"
+#include "camera.hxx"
 
 namespace world
 {
     namespace 
     {
         std::default_random_engine engine;
-        std::uniform_real_distribution<float> distribution(0, 1);
-
-        float random_float()
-        {
-            return distribution(engine);
-        }
     }
 
     constexpr auto piece_size = 0.2f;
@@ -47,17 +42,38 @@ namespace world
                                glm::vec2 area,
                                const glm::mat4 &transform)
         : visible_object(ctx, frameid)
+        , color(color)
     {
-        auto rand_angle = []() -> float {
-            auto distr = 0.75f;
-            auto factor = math::pi / 40;
+        auto cam = get_part<camera>();
+        auto cam_coord = cam->get_position();
+        auto cam_direction = cam->get_direction();
 
-            return (random_float() * distr + (1 - distr)) * factor;
+
+
+        auto rand_angle = []() -> float {
+            std::uniform_real_distribution<float> dist(0.02, 0.06);
+
+            return dist(engine);
         };
 
         auto rand_axis = []() -> glm::vec3 {
-            return glm::vec3(random_float(), random_float(), 1);
+            std::uniform_real_distribution<float> dist(0.25, 1.0);
+
+            return glm::vec3(dist(engine), dist(engine), dist(engine));
         };
+
+        auto rand_momentum = [=](const glm::mat4 &matrix) -> glm::mat4 {
+            std::uniform_real_distribution<float> dist(0.5, 1.0);
+
+            auto target = cam_coord + cam_direction * dist(engine);
+            auto coord = math::coord3d(matrix);
+
+            auto vector = (target - coord) * dist(engine);
+
+            return glm::translate(vector / 400.0f);
+        };
+
+
 
         auto xcount = static_cast<int>(area.x / piece_size);
         auto ycount = static_cast<int>(area.y / piece_size);
@@ -68,6 +84,7 @@ namespace world
         auto scale_vec = glm::vec3(xgap, ygap, zgap);
 
         auto base_matrix = transform * get_model();
+
 
         for (int y = 0; y < ycount; y++)
             for (int x = 0; x < xcount; x++)
@@ -87,8 +104,7 @@ namespace world
                                      rand_angle(), 
                                      rand_axis());
 
-                translate = glm::translate(translate,
-                                           glm::vec3(0, 0, -0.005));
+                translate = rand_momentum(matrix);
 
                 matrixv.push_back(matrix);
                 rotatev.push_back(rotate);
@@ -149,6 +165,11 @@ namespace world
     int glass_pieces::get_count() const
     {
         return static_cast<int>(matrixv.size());
+    }
+
+    glm::vec3 glass_pieces::get_color() const
+    {
+        return color;
     }
 
     const glm::mat4 *glass_pieces::get_matrices() const

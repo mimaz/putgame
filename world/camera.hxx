@@ -31,6 +31,7 @@ namespace world
         glm::mat4 make_mvp(const glm::mat4 &model) const;
 
         glm::vec3 get_position() const;
+        glm::vec3 get_direction() const;
 
         float get_view_angle() const { return view_angle; }
         float get_view_ratio() const { return view_ratio; }
@@ -41,6 +42,8 @@ namespace world
         float get_light_range() override;
 
     private:
+        glm::mat4 inversed_view() const;
+
         mutable int flags;
 
         mutable glm::mat4 proj_mat;

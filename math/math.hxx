@@ -8,9 +8,11 @@
 
 namespace math
 {
-    extern const float pi;
+    constexpr float pi = static_cast<float>(M_PI);
 
     glm::vec3 coord3d(const glm::mat4 &mat);
+
+    glm::vec3 direction3d(const glm::mat4 &mat);
 
     float sqdist(glm::vec3 p, glm::vec3 q);
 
