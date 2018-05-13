@@ -45,7 +45,7 @@ namespace gui
     void rect_item::draw()
     {}
 
-    void rect_item::preprocess()
+    void rect_item::process()
     {}
 
     void rect_item::touch(touch_event event)

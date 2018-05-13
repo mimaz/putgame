@@ -42,7 +42,7 @@ namespace world
         flags |= dirty_view_proj;
         view_mat = glm::translate(glm::mat4(1), -vec) * view_mat;
 
-        get_part<way_path>()->update_camera_frame();
+        get_part<way_path>()->camera_moved();
     }
 
     void camera::rotate(float angle, const glm::vec3 &axis)

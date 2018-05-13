@@ -14,6 +14,7 @@
 #include "glass_pieces_view.hxx"
 #include "glass_pieces.hxx"
 #include "tunnel_view.hxx"
+#include "way_path.hxx"
 
 namespace world
 {
@@ -120,6 +121,8 @@ namespace world
 
                 for (auto pieces : glass_pieces_set)
                     pieces->update();
+
+                get_part<way_path>()->update();
              });
     }
 }

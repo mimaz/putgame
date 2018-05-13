@@ -21,8 +21,8 @@ namespace world
         way_path(common::context *ctx);
 
         void generate_back();
-        void update_camera_frame();
-        void preprocess();
+        void camera_moved();
+        void update();
 
     private:
         int get_camera_frame();

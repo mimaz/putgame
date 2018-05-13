@@ -22,7 +22,7 @@ namespace gui
         virtual void resize(int w, int h);
 
         virtual void draw();
-        virtual void preprocess();
+        virtual void process();
         virtual void touch(touch_event event);
 
         virtual void on_surface_resize(int x, int y);

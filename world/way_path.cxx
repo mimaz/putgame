@@ -46,13 +46,15 @@ namespace world
         append(back->angle, back->axis);
     }
 
-    void way_path::update_camera_frame()
+    void way_path::camera_moved()
     {
         dirty_camera_frame = true;
     }
 
-    void way_path::preprocess()
+    void way_path::update()
     {
+        std::cout << "update" << std::endl;
+
         auto camid = get_camera_frame();
         auto range = static_cast<int>
             (get_part<camera>()->get_view_range() / get_gap());

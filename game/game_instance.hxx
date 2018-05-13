@@ -10,6 +10,8 @@
 
 namespace game
 {
+    class main_stage;
+
     class game_instance : public common::context
     {
     public:
@@ -33,6 +35,11 @@ namespace game
     private:
         int width;
         int height;
+        int mouse_x;
+        int mouse_y;
+        int mouse_pressed;
+
+        std::shared_ptr<main_stage> main_st;
     };
 }
 

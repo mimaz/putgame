@@ -22,7 +22,7 @@ namespace gui
         void set_secondary_color(glm::vec4 color);
 
         void draw() override;
-        void preprocess() override;
+        void process() override;
         void touch(touch_event event) override;
 
         void bind_texture();

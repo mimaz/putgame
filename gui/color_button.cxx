@@ -42,9 +42,9 @@ namespace gui
         get_part<color_button_view>()->draw(this);
     }
 
-    void color_button::preprocess()
+    void color_button::process()
     {
-        rect_item::preprocess();
+        rect_item::process();
 
         constexpr auto show_speed = 0.025f * 2;
         constexpr auto hide_speed = 0.0275f * 2;

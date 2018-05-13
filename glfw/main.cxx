@@ -220,7 +220,6 @@ int main(int argc, char **argv)
 
         while (not app.should_close())
         {
-            std::cout << "draw!" << std::endl;
             app.draw();
 
             nexttim += 1000 / 30;
