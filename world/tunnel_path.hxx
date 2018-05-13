@@ -22,7 +22,7 @@ namespace world
         tunnel_path(common::context *ctx, float gap);
 
         void reset();
-        void process();
+        void update();
 
     private:
         void gen_frame_back();

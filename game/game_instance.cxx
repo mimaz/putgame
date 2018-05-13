@@ -18,7 +18,7 @@ namespace game
 
     game_instance::~game_instance()
     {
-
+        get_part<world::object_manager>()->join_process();
     }
 
     void game_instance::start()
@@ -38,11 +38,11 @@ namespace game
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        get_part<world::object_manager>()->process_all();
-        get_part<gui::surface>()->process();
-
         get_part<world::object_manager>()->draw_all();
         get_part<gui::surface>()->draw();
+
+        get_part<world::object_manager>()->process_all();
+        get_part<gui::surface>()->process();
 
         swap_buffers();
     }

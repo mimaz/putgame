@@ -38,7 +38,8 @@ namespace
 namespace world
 {
     glass_pieces_view::glass_pieces_view(common::context *ctx)
-        : cam(ctx->get_part<camera>())
+        : object(ctx)
+        , cam(ctx->get_part<camera>())
         , vsh(GL_VERTEX_SHADER,
               version_glsl,
               "const lowp int max_count = " + 

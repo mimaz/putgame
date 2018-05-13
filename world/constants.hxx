@@ -10,6 +10,7 @@ namespace world
 {
     constexpr auto tunnel_radius = 1;
     constexpr auto tunnel_width = tunnel_radius * 2;
+    constexpr auto tunnel_quality = 12;
 
     constexpr auto tunnel_square_area = glm::vec2(tunnel_width);
 }

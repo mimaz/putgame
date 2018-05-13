@@ -6,6 +6,8 @@
 #ifndef __world_tunnel_view_hxx
 #define __world_tunnel_view_hxx
 
+#include <putgame/common>
+
 #include "lighting.hxx"
 #include "tunnel_mesh.hxx"
 #include "tunnel_path.hxx"
@@ -14,12 +16,12 @@ namespace world
 {
     class camera;
 
-    class tunnel_view
+    class tunnel_view : public common::context::object
     {
     public:
         static constexpr auto max_count = 4;
 
-        tunnel_view(common::context *ctx, int quality);
+        tunnel_view(common::context *ctx);
 
         void draw();
 

@@ -24,7 +24,6 @@ namespace world
         , wall_obstacle_drawer(std::make_shared<wall_obstacle_view>(ctx))
         , glass_pane_drawer(std::make_shared<glass_pane_view>(ctx))
         , glass_pieces_drawer(std::make_shared<glass_pieces_view>(ctx))
-        , tunnel_drawer(std::make_shared<tunnel_view>(ctx, 16))
     {}
 
     object_manager::~object_manager()
@@ -67,7 +66,7 @@ namespace world
 
     void object_manager::draw_all()
     {
-        tunnel_drawer->draw();
+        get_part<tunnel_view>()->draw();
         
 
 
@@ -112,8 +111,7 @@ namespace world
 
     void object_manager::process_all()
     {
-        if (process_thread != nullptr)
-            process_thread->join();
+        join_process();
 
         process_thread = std::make_unique<std::thread>
             ([this]() -> void {
@@ -121,8 +119,18 @@ namespace world
 
                 for (auto pieces : glass_pieces_set)
                     pieces->update();
-
-                get_part<way_path>()->update();
              });
+
+        get_part<tunnel_view>()->get_path()->update();
+        get_part<way_path>()->update();
+    }
+
+    void object_manager::join_process()
+    {
+        if (process_thread != nullptr)
+        {
+            process_thread->join();
+            process_thread = nullptr;
+        }
     }
 }

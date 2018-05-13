@@ -15,7 +15,7 @@ namespace world
     class camera;
     class glass_pieces;
 
-    class glass_pieces_view
+    class glass_pieces_view : public common::context::object
     {
     public:
         glass_pieces_view(common::context *ctx);

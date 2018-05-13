@@ -24,8 +24,9 @@ namespace world
         void camera_moved();
         void update();
 
-    private:
         int get_camera_frame();
+
+    private:
         segment_ptr generate() const;
 
         segment_ptr back;

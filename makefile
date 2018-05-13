@@ -18,10 +18,10 @@ GLFWAPP = ${BUILD_DIR}/putgame.elf
 ##
  # compile flags
  ##
-COMMON_FLAGS = -O0 -Wall -MMD -fPIC -Iinclude/ -I${BUILD_DIR}
+COMMON_FLAGS = -Og -g -Wall -MMD -fPIC -Iinclude/ -I${BUILD_DIR}
 COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
 COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++17
-COMMON_LDFLAGS = -O0
+COMMON_LDFLAGS = -Og
 
 PRECOMPILER_CFLAGS = ${COMMON_FLAGS} -O1
 PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
@@ -65,6 +65,12 @@ LIBCORE_OBJ = ${LIBCORE_SRC:%=${BUILD_DIR}/%.o} ${LIBCORE_GLSL_OBJ}
 LIBGAME_OBJ = ${LIBGAME_SRC:%=${BUILD_DIR}/%.o}
 
 GLFWAPP_OBJ = ${GLFWAPP_SRC:%=${BUILD_DIR}/%.o}
+
+##
+ # dependencies
+ ##
+ALL_OBJ = ${PRECOMPILER_OBJ} ${LIBCORE_OBJ} ${LIBGAME_OBJ} ${GLFWAPP_OBJ}
+ALL_DEP = ${ALL_OBJ:%.o=%.d}
 
 ##
  # basic rules
@@ -134,3 +140,5 @@ ${PRECOMPILER}: ${PRECOMPILER_OBJ}
 ${BUILD_DIR}/precompiler/%.c.o: precompiler/%.c
 	@mkdir -p ${dir $@}
 	${CC} ${PRECOMPILER_CFLAGS} -o $@ -c $< 
+
+-include ${ALL_DEP}

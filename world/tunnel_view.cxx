@@ -27,8 +27,9 @@ namespace
 
 namespace world
 {
-    tunnel_view::tunnel_view(common::context *ctx, int quality)
-        : mesh(quality, tunnel_width)
+    tunnel_view::tunnel_view(common::context *ctx)
+        : object(ctx)
+        , mesh(tunnel_quality, tunnel_width)
         , path(ctx, mesh.get_gap())
         , light(ctx, &prog)
         , cam(ctx->get_part<camera>())

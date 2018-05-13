@@ -40,12 +40,16 @@ namespace world
 
     void tunnel_path::reset()
     {
-        // TODO
+        auto way = get_part<way_path>();
+        auto camid = way->get_camera_frame();
+        auto matrix = way->get_point(camid).get_matrix();
+
+        path_line::reset(matrix);
     }
 
-    void tunnel_path::process()
+    void tunnel_path::update()
     {
-
+        std::cout << "process" << std::endl;
     }
 
     void tunnel_path::gen_frame_back()
@@ -53,10 +57,7 @@ namespace world
         auto way = get_part<way_path>();
 
         if (get_points().empty())
-        {
-            path_line::reset(way->get_first_point().get_matrix());
-            return;
-        }
+            reset();
 
         auto too_close = [this, way]
                          (int id, const path_point &pt) -> bool {
