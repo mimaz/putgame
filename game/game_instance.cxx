@@ -52,12 +52,15 @@ namespace game
 
     void game_instance::resize(int wid, int hei)
     {
+        auto ratio = static_cast<float>(wid) / hei;
+
         width = wid;
         height = hei;
 
-        glViewport(0, 0, wid, hei);
-
         get_part<gui::surface>()->resize(wid, hei);
+        get_part<world::camera>()->set_view_ratio(ratio);
+
+        glViewport(0, 0, wid, hei);
     }
 
     void game_instance::cursor(int x, int y)
