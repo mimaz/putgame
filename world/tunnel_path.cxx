@@ -8,6 +8,7 @@
 #include "tunnel_path.hxx"
 
 #include "way_path.hxx"
+#include "camera.hxx"
 
 namespace 
 {
@@ -36,7 +37,9 @@ namespace world
     tunnel_path::tunnel_path(common::context *ctx, float gap)
         : path_line(ctx, gap)
         , way_back_id(0)
-    {}
+    {
+        reset();
+    }
 
     void tunnel_path::reset()
     {
@@ -49,11 +52,17 @@ namespace world
 
     void tunnel_path::update()
     {
-        std::cout << "process" << std::endl;
+        auto range = get_part<camera>()->get_view_range();
+        auto campos = get_part<camera>()->get_position();
+        auto lastpos = get_last_point().get_position();
+
+        if (glm::distance(campos, lastpos) < range)
+            gen_frame_back();
     }
 
     void tunnel_path::gen_frame_back()
     {
+        std::cout << "generate frame back" << std::endl;
         auto way = get_part<way_path>();
 
         if (get_points().empty())
@@ -69,6 +78,7 @@ namespace world
 
         while (too_close(way_back_id, get_last_point()))
             way_back_id++;
+        std::cout << "id: " << way_back_id << std::endl;
 
         append(way->get_point(way_back_id));
     }

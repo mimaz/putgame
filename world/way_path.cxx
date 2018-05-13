@@ -31,7 +31,7 @@ namespace world
         : path_line(ctx, 0.05)
         , camera_frame(0)
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 10000; i++)
             generate_back();
     }
 

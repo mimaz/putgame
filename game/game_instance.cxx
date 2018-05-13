@@ -5,6 +5,7 @@
 
 #include <putgame/std>
 #include <putgame/world>
+#include <putgame/math>
 #include <putgame/gui>
 
 #include "game_instance.hxx"
@@ -27,6 +28,8 @@ namespace game
         glFrontFace(GL_CW);
 
         main_st = std::make_shared<main_stage>(this);
+
+        get_part<world::camera>()->rotate(math::pi, glm::vec3(0, 1, 0));
     }
 
     void game_instance::stop()

@@ -135,7 +135,7 @@ ${RES_HEADER}: ${LIBCORE_GLSL_SRC}
  # precompiler rules
  ##
 ${PRECOMPILER}: ${PRECOMPILER_OBJ}
-	${CC} -o $@ ${PRECOMPILER_LDFLAGS} $^
+	${CC} ${PRECOMPILER_LDFLAGS} -o $@ $^
 
 ${BUILD_DIR}/precompiler/%.c.o: precompiler/%.c
 	@mkdir -p ${dir $@}
