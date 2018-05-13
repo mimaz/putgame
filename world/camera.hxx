@@ -12,7 +12,7 @@
 
 namespace world
 {
-    class camera : public common::context::part, public light_source
+    class camera : public common::context::object, public light_source
     {
     public:
         camera(common::context *ctx);

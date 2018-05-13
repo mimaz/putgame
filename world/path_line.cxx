@@ -13,8 +13,9 @@ namespace world
 {
     constexpr auto start_id = 0;
 
-    path_line::path_line(float gap)
-        : gap(gap)
+    path_line::path_line(common::context *ctx, float gap)
+        : object(ctx)
+        , gap(gap)
     {}
 
     void path_line::append(float angle, glm::vec3 axis)

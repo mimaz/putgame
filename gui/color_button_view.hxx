@@ -13,7 +13,7 @@ namespace gui
 {
     class color_button;
 
-    class color_button_view : public common::context::part
+    class color_button_view : public common::context::object
     {
     public:
         color_button_view(common::context *ctx);

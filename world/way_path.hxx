@@ -12,7 +12,7 @@
 
 namespace world
 {
-    class way_path : public common::context::part, public path_line
+    class way_path : public path_line
     {
     public:
         class segment;

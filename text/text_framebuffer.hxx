@@ -13,7 +13,7 @@ namespace text
 {
     class text_buffer;
 
-    class text_framebuffer : public common::context::part
+    class text_framebuffer : public common::context::object
     {
     public:
         text_framebuffer(common::context *ctx);

@@ -12,7 +12,7 @@ namespace world
 {
     class light_source;
 
-    class light_group : public common::context::part
+    class light_group : public common::context::object
     {
     public:
         light_group(common::context *ctx);

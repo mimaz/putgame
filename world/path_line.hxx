@@ -6,14 +6,16 @@
 #ifndef __world_path_line_hxx
 #define __world_path_line_hxx
 
+#include <putgame/common>
+
 #include "path_point.hxx"
 
 namespace world
 {
-    class path_line
+    class path_line : public common::context::object
     {
     public:
-        path_line(float gap);
+        path_line(common::context *ctx, float gap);
 
         void append(float angle, glm::vec3 axis);
         void append(const glm::mat4 &mat);

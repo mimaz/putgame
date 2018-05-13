@@ -12,7 +12,7 @@
 namespace gui
 {
     surface::surface(common::context *ctx)
-        : part(ctx)
+        : object(ctx)
         , dirty_proj(true)
         , width(2)
         , height(2)

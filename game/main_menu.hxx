@@ -19,8 +19,6 @@ namespace game
 
     private:
         gui::color_button start_btn;
-        gui::color_button leaderboard_btn;
-        gui::color_button achievements_btn;
     };
 }
 

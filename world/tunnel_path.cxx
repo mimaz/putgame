@@ -33,24 +33,33 @@ namespace
 
 namespace world
 {
-    tunnel_path::tunnel_path(way_path *way, float gap)
-        : path_line(gap)
-        , way(way)
+    tunnel_path::tunnel_path(common::context *ctx, float gap)
+        : path_line(ctx, gap)
         , way_back_id(0)
+    {}
+
+    void tunnel_path::reset()
     {
-        for (int i = 0; i < 10; i++)
-            gen_frame_back();
+        // TODO
+    }
+
+    void tunnel_path::process()
+    {
+
     }
 
     void tunnel_path::gen_frame_back()
     {
+        auto way = get_part<way_path>();
+
         if (get_points().empty())
         {
-            reset(way->get_first_point().get_matrix());
+            path_line::reset(way->get_first_point().get_matrix());
             return;
         }
 
-        auto too_close = [this](int id, const path_point &pt) -> bool {
+        auto too_close = [this, way]
+                         (int id, const path_point &pt) -> bool {
             auto pv = way->get_point(id).get_position();
             auto qv = pt.get_position();
 

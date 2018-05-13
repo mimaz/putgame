@@ -22,6 +22,8 @@ namespace text
         , font_size(1)
         , width(2)
         , height(2)
+        , text_width(1)
+        , text_height(1)
         , dirty(true)
         , resized(true)
     {
@@ -56,6 +58,10 @@ namespace text
     {
         text = txt;
         dirty = true;
+
+        text_height = std::count(get_text().begin(), 
+                                 get_text().end(), 
+                                 '\n') + 1;
     }
 
     void text_buffer::set_size(int w, int h)
@@ -108,12 +114,7 @@ namespace text
         std::stringstream ss(get_text());
         std::string line;
 
-
-        auto linecnt = std::count(get_text().begin(), 
-                                  get_text().end(), 
-                                  '\n') + 1;
-
-        auto ycoord = (linecnt - 1) * get_font_size() / 2.0f;
+        auto ycoord = (text_height - 1) * get_font_size() / 2.0f;
        
 
         while (std::getline(ss, line, '\n'))

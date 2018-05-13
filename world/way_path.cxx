@@ -28,8 +28,7 @@ namespace world
     };
 
     way_path::way_path(common::context *ctx)
-        : common::context::part(ctx)
-        , path_line(0.05)
+        : path_line(ctx, 0.05)
         , camera_frame(0)
     {
         for (int i = 0; i < 1000; i++)

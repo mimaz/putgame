@@ -26,7 +26,7 @@ namespace
 namespace gui
 {
     color_button_view::color_button_view(common::context *ctx)
-        : part(ctx)
+        : object(ctx)
         , vsh(GL_VERTEX_SHADER,
               version_glsl,
               textured_rect_vsh)

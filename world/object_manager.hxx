@@ -24,7 +24,7 @@ namespace world
 
     class tunnel_view;
 
-    class object_manager : public common::context::part
+    class object_manager : public common::context::object
     {
     public:
         object_manager(common::context *ctx);

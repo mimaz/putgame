@@ -15,7 +15,7 @@ namespace gui
 {
     class rect_item;
 
-    class surface : public common::context::part
+    class surface : public common::context::object
     {
     public:
         surface(common::context *ctx);

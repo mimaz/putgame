@@ -22,7 +22,7 @@ constexpr auto near_plane = 0.01f;
 namespace world
 {
     camera::camera(common::context *ctx)
-        : common::context::part(ctx)
+        : object(ctx)
         , light_source(ctx)
         , flags(dirty_proj | dirty_view_proj)
         , proj_mat(1)

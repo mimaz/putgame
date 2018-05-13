@@ -29,7 +29,7 @@ namespace world
 {
     tunnel_view::tunnel_view(common::context *ctx, int quality)
         : mesh(quality, tunnel_width)
-        , path(ctx->get_part<way_path>(), mesh.get_gap())
+        , path(ctx, mesh.get_gap())
         , light(ctx, &prog)
         , cam(ctx->get_part<camera>())
         , vsh(GL_VERTEX_SHADER, 

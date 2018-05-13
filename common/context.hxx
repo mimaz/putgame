@@ -12,7 +12,6 @@ namespace common
     {
     public:
         class object;
-        class part;
 
         context() = default;
 
@@ -25,7 +24,7 @@ namespace common
         virtual time_t time_millis() = 0;
 
     private:
-        using part_ref = std::unique_ptr<context::part>;
+        using part_ref = std::unique_ptr<context::object>;
 
         std::map<std::type_index, part_ref> part_map;
     };
@@ -35,9 +34,9 @@ namespace common
     protected:
         object(context *ctx) : ctx(ctx) {}
 
+    public:
         virtual ~object() {}
 
-    public:
         context *get_context() const { return ctx; }
 
           template<typename _Type>
@@ -48,22 +47,11 @@ namespace common
         context *ctx;
     };
 
-    class context::part : public object
-    {
-    protected:
-        part(const part &) = delete;
-        part(part &&) = delete;
-
-        part(context *ctx) : object(ctx) {}
-
-        friend class context;
-    };
-
       template<typename _Type>
     _Type *context::get_part()
     {
-        static_assert(std::is_base_of<part, _Type>::value,
-                      "each part of context must derive from context::part");
+        static_assert(std::is_base_of<object, _Type>::value,
+                      "each part of context must derive from context::object");
 
         auto index = std::type_index(typeid(_Type));
         auto it = part_map.find(index);

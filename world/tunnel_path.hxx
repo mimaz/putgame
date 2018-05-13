@@ -6,6 +6,8 @@
 #ifndef __world_tunnel_path_hxx
 #define __world_tunnel_path_hxx
 
+#include <putgame/common>
+
 #include "path_line.hxx"
 
 namespace world
@@ -17,12 +19,13 @@ namespace world
     public:
         class frame;
 
-        tunnel_path(way_path *way, float gap);
+        tunnel_path(common::context *ctx, float gap);
 
-        void gen_frame_back();
+        void reset();
+        void process();
 
     private:
-        way_path *way;
+        void gen_frame_back();
 
         int way_back_id;
     };

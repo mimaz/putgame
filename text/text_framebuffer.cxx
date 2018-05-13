@@ -23,7 +23,7 @@ namespace
 namespace text
 {
     text_framebuffer::text_framebuffer(common::context *ctx)
-        : part(ctx)
+        : object(ctx)
         , vsh(GL_VERTEX_SHADER,
               version_glsl,
               textured_rect_vsh)

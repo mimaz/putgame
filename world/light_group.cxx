@@ -10,7 +10,7 @@
 namespace world
 {
     light_group::light_group(common::context *ctx)
-        : common::context::part(ctx)
+        : object(ctx)
     {}
 
     void light_group::register_source(light_source *src)
