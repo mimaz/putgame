@@ -3,23 +3,21 @@
  * 2018
  */
 
-#ifndef __game_play_stage_hxx
-#define __game_play_stage_hxx
+#ifndef __game_play_activity_hxx
+#define __game_play_activity_hxx
 
 #include <putgame/common>
 #include <putgame/world>
 
 namespace game
 {
-    class main_menu;
-
-    class play_stage : public common::context::object
+    class play_activity : public common::context::object
     {
     public:
         using object_ref = std::shared_ptr<world::visible_object>;
 
-        play_stage(common::context *ctx);
-        ~play_stage();
+        play_activity(common::context *ctx);
+        ~play_activity();
 
         void on_draw();
 
@@ -28,7 +26,6 @@ namespace game
         void delete_all_objects();
 
     private:
-        std::shared_ptr<main_menu> menu_ptr;
         std::set<object_ref> object_set;
     };
 }

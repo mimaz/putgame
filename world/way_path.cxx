@@ -39,7 +39,7 @@ namespace world
     {
         auto camid = get_camera_frame();
         auto range = get_part<camera>()->get_view_range() * 2;
-        auto range_gap = static_cast<int>(range) / get_gap();
+        auto range_gap = static_cast<int>(range / get_gap());
 
         auto head_too_close = [=]() -> bool {
             auto headidx = last_point().get_index();

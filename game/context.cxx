@@ -9,7 +9,7 @@
 #include <putgame/gui>
 
 #include "context.hxx"
-#include "play_stage.hxx"
+#include "play_activity.hxx"
 
 namespace game
 {
@@ -27,23 +27,26 @@ namespace game
         glClearColor(0, 0, 0, 1);
         glFrontFace(GL_CW);
 
-        stage = std::make_shared<play_stage>(this);
+        play = std::make_shared<play_activity>(this);
     }
 
     void context::stop()
     {
-        stage = nullptr;
+        play = nullptr;
     }
 
     void context::draw()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        get_part<world::object_manager>()->process_all();
+        get_part<gui::surface>()->process();
+
         get_part<world::object_manager>()->draw_all();
         get_part<gui::surface>()->draw();
 
-        get_part<world::object_manager>()->process_all();
-        get_part<gui::surface>()->process();
+        if (play != nullptr)
+            play->on_draw();
 
         swap_buffers();
     }

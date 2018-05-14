@@ -10,7 +10,7 @@
 
 namespace game
 {
-    class play_stage;
+    class play_activity;
 
     class context : public common::context
     {
@@ -39,7 +39,7 @@ namespace game
         int mouse_y;
         int mouse_pressed;
 
-        std::shared_ptr<play_stage> stage;
+        std::shared_ptr<play_activity> play;
     };
 }
 
