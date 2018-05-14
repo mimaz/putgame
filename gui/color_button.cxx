@@ -46,8 +46,8 @@ namespace gui
     {
         rect_item::process();
 
-        constexpr auto show_speed = 0.025f * 2;
-        constexpr auto hide_speed = 0.0275f * 2;
+        constexpr auto show_speed = 0.15f;
+        constexpr auto hide_speed = 0.175f;
 
         auto count = static_cast<int>(shadows.size());
 
