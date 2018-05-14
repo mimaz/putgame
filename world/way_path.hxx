@@ -18,7 +18,7 @@ namespace world
         class segment;
 
         using segment_ref = std::shared_ptr<segment>;
-        using segment_gen = std::function<segment_ref(void)>;
+        using segment_gen = std::function<segment_ref()>;
 
         way_path(common::context *ctx);
 
@@ -32,6 +32,7 @@ namespace world
     private:
         void generate_frame();
         void update_camera_frame();
+        segment_ref default_generator();
 
         std::shared_ptr<segment> seg;
         segment_gen generator;
@@ -42,11 +43,8 @@ namespace world
     class way_path::segment
     {
     public:
-        segment()
-            : segment(0, 0, glm::vec3(0, 1, 0)) {}
-
-        segment(int count, float angle, glm::vec3 axis)
-            : count(count), angle(angle / count), axis(axis) {}
+        segment();
+        segment(float length, float angle, glm::vec3 axis);
 
         int count;
         float angle;

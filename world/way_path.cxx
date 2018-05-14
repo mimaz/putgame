@@ -14,18 +14,9 @@
 
 namespace world
 {
-    namespace
-    {
-        way_path::segment_ref default_gen()
-        {
-            return std::make_shared<way_path::segment>
-                (10, 0, glm::vec3(0, 1, 0));
-        }
-    }
-
     way_path::way_path(common::context *ctx)
         : path_line(ctx, way_frame_gap)
-        , generator(default_gen)
+        , generator(std::bind(&way_path::default_generator, this))
         , camera_frame(0)
     {}
 
@@ -102,4 +93,26 @@ namespace world
             camera_frame++;
         }
     }
+
+    way_path::segment_ref way_path::default_generator()
+    {
+        std::uniform_real_distribution<float> dist(20, 40);
+
+        auto angle = dist(random_engine());
+
+        return std::make_shared<way_path::segment>
+            (angle, math::pi / 2, glm::vec3(0, 1, 0));
+    }
+
+    way_path::segment::segment()
+        : segment(0, 0, glm::vec3(0, 1, 0))
+    {}
+
+    way_path::segment::segment(float length, 
+                               float angle, 
+                               glm::vec3 axis)
+        : count(length / way_frame_gap)
+        , angle(angle / count)
+        , axis(axis)
+    {}
 }

@@ -23,10 +23,14 @@ namespace common
 
         virtual time_t time_millis() = 0;
 
+        std::default_random_engine &random_engine()
+        { return randeng; }
+
     private:
         using part_ref = std::unique_ptr<context::object>;
 
         std::map<std::type_index, part_ref> part_map;
+        std::default_random_engine randeng;
     };
 
     class context::object
@@ -43,6 +47,9 @@ namespace common
         _Type *get_part()
         { return get_context()->get_part<_Type>(); }
 
+        std::default_random_engine &random_engine()
+        { return get_context()->random_engine(); }
+
     private:
         context *ctx;
     };
@@ -51,7 +58,8 @@ namespace common
     _Type *context::get_part()
     {
         static_assert(std::is_base_of<object, _Type>::value,
-                      "each part of context must derive from context::object");
+                      "each part of context must derive "
+                      "from context::object");
 
         auto index = std::type_index(typeid(_Type));
         auto it = part_map.find(index);
