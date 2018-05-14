@@ -5,12 +5,12 @@
 
 #include <putgame/std>
 
-#include "main_stage.hxx"
+#include "play_stage.hxx"
 #include "main_menu.hxx"
 
 namespace game
 {
-    main_stage::main_stage(common::context *ctx)
+    play_stage::play_stage(common::context *ctx)
         : object(ctx)
     {
         menu_ptr = std::make_shared<main_menu>(ctx);
@@ -24,25 +24,25 @@ namespace game
         register_object(box);
     }
 
-    main_stage::~main_stage()
+    play_stage::~play_stage()
     {
     }
 
-    void main_stage::on_draw()
+    void play_stage::on_draw()
     {
     }
 
-    void main_stage::register_object(object_ref ref)
+    void play_stage::register_object(object_ref ref)
     {
         object_set.insert(ref);
     }
 
-    void main_stage::delete_unreachable_objects()
+    void play_stage::delete_unreachable_objects()
     {
 
     }
 
-    void main_stage::delete_all_objects()
+    void play_stage::delete_all_objects()
     {
         object_set.clear();
     }

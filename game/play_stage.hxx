@@ -3,8 +3,8 @@
  * 2018
  */
 
-#ifndef __game_main_stage_hxx
-#define __game_main_stage_hxx
+#ifndef __game_play_stage_hxx
+#define __game_play_stage_hxx
 
 #include <putgame/common>
 #include <putgame/world>
@@ -13,13 +13,13 @@ namespace game
 {
     class main_menu;
 
-    class main_stage : public common::context::object
+    class play_stage : public common::context::object
     {
     public:
         using object_ref = std::shared_ptr<world::visible_object>;
 
-        main_stage(common::context *ctx);
-        ~main_stage();
+        play_stage(common::context *ctx);
+        ~play_stage();
 
         void on_draw();
 

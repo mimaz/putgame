@@ -9,7 +9,7 @@
 #include <putgame/gui>
 
 #include "context.hxx"
-#include "main_stage.hxx"
+#include "play_stage.hxx"
 
 namespace game
 {
@@ -27,12 +27,12 @@ namespace game
         glClearColor(0, 0, 0, 1);
         glFrontFace(GL_CW);
 
-        main_st = std::make_shared<main_stage>(this);
+        stage = std::make_shared<play_stage>(this);
     }
 
     void context::stop()
     {
-        main_st = nullptr;
+        stage = nullptr;
     }
 
     void context::draw()
