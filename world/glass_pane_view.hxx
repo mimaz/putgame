@@ -6,7 +6,7 @@
 #ifndef __world_glass_pane_view_hxx
 #define __world_glass_pane_view_hxx
 
-#include <putgame/common-fwd>
+#include <putgame/common>
 
 #include "lighting.hxx"
 

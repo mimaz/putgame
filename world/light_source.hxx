@@ -6,7 +6,7 @@
 #ifndef __world_light_source_hxx
 #define __world_light_source_hxx
 
-#include <putgame/common-fwd>
+#include <putgame/common>
 
 namespace world
 {
