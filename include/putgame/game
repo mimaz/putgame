@@ -3,4 +3,4 @@
  * 2018
  */
 
-#include "../../game/game_instance.hxx"
+#include "../../game/context.hxx"

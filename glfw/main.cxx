@@ -22,7 +22,7 @@ namespace
         exit_with_error(desc);
     }
 
-    struct glfw_application : public game::game_instance
+    struct glfw_application : public game::context
     {
         static glfw_application *from_window(GLFWwindow *win)
         {
@@ -74,7 +74,7 @@ namespace
         {
             glfwPollEvents();
 
-            game_instance::draw();
+            context::draw();
         }
 
         void swap_buffers() final

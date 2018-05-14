@@ -3,8 +3,8 @@
  * 2018
  */
 
-#ifndef __game_game_instance_hxx
-#define __game_game_instance_hxx
+#ifndef __game_context_hxx
+#define __game_context_hxx
 
 #include <putgame/common>
 
@@ -12,11 +12,11 @@ namespace game
 {
     class main_stage;
 
-    class game_instance : public common::context
+    class context : public common::context
     {
     public:
-        game_instance();
-        ~game_instance();
+        context();
+        ~context();
 
         virtual void start();
         virtual void stop();
