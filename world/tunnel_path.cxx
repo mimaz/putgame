@@ -40,9 +40,7 @@ namespace world
         , way_frame_id(0)
         , way_frame_step(static_cast<int>
                 (gap / ctx->get_part<way_path>()->get_gap()))
-    {
-        reset();
-    }
+    {}
 
     void tunnel_path::reset()
     {
@@ -50,13 +48,12 @@ namespace world
         auto camid = way->get_camera_frame();
         auto matrix = way->point(camid).get_matrix();
 
-        path_line::reset(matrix);
+        path_line::reset_matrix(matrix);
     }
 
     void tunnel_path::update()
     {
-        if (points().empty())
-            reset();
+        reset_if_empty();
 
         auto way = get_part<way_path>();
         auto range = get_part<camera>()->get_view_range();

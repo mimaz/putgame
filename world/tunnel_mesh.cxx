@@ -55,12 +55,12 @@ namespace world
             pushvert(x, y);
 
             pushindex(i * 2);
-            pushindex((i + 1) * 2 + 1);
             pushindex(i * 2 + 1);
+            pushindex((i + 1) * 2 + 1);
 
             pushindex(i * 2);
-            pushindex((i + 1) * 2);
             pushindex((i + 1) * 2 + 1);
+            pushindex((i + 1) * 2);
         }
     }
 

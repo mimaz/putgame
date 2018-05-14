@@ -25,6 +25,7 @@ namespace world
         void set_generator(segment_gen gen);
 
         void camera_moved();
+        void reset() override;
         void update();
 
         int get_camera_frame();

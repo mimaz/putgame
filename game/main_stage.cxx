@@ -15,8 +15,9 @@ namespace game
     {
         menu_ptr = std::make_shared<main_menu>(ctx);
 
+        return;
         auto box = std::make_shared<world::light_box>
-            (ctx, 50, world::light_box::white);
+            (ctx, 0, world::light_box::white);
 
         box->translate(glm::vec3(0.5, 0, 0));
 

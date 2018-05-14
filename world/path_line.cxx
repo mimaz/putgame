@@ -16,34 +16,23 @@ namespace world
     path_line::path_line(common::context *ctx, float gap)
         : object(ctx)
         , gap(gap)
-    {
-        reset();
-    }
+    {}
 
     void path_line::append(float angle, glm::vec3 axis)
     {
-        auto matrix = make_matrix(angle, axis);
-        auto index = start_id;
+        if (empty())
+            reset();
 
-        if (not pointv.empty())
-        {
-            auto last = last_point();
-
-            matrix = last.get_matrix() * matrix;
-            index = last.get_index() + 1;
-        }
+        auto last = last_point();
+        auto matrix = last.get_matrix() * make_matrix(angle, axis);
+        auto index = last.get_index() + 1;
 
         pointv.emplace_back(matrix, index);
     }
 
     void path_line::append(const glm::mat4 &mat)
     {
-        int index;
-
-        if (pointv.empty())
-            index = start_id;
-        else
-            index = last_point().get_index() + 1;
+        auto index = last_point().get_index() + 1;
 
         pointv.emplace_back(mat, index);
     }
@@ -58,12 +47,13 @@ namespace world
         pointv.pop_front();
     }
 
-    void path_line::reset()
+    void path_line::reset_if_empty()
     {
-        reset(glm::mat4(1));
+        if (empty())
+            reset();
     }
 
-    void path_line::reset(const glm::mat4 &matrix)
+    void path_line::reset_matrix(const glm::mat4 &matrix)
     {
         pointv.clear();
         pointv.emplace_back(matrix, 0);
@@ -71,12 +61,18 @@ namespace world
 
     const path_point &path_line::first_point() const
     { 
-        return points().front();
+        if (pointv.empty())
+            throw no_point();
+
+        return pointv.front();
     }
 
     const path_point &path_line::last_point() const
     { 
-        return points().back();
+        if (pointv.empty())
+            throw no_point();
+
+        return pointv.back();
     }
 
     const std::deque<path_point> &path_line::points() const
@@ -86,7 +82,15 @@ namespace world
 
     const path_point &path_line::point(int id) const
     {
-        return pointv[id - pointv.front().get_index()];
+        if (id < first_point().get_index() 
+                or id > last_point().get_index())
+        {
+            throw no_point();
+        }
+
+        auto off = id - first_point().get_index();
+
+        return pointv[off];
     }
 
     int path_line::updated_id(const glm::mat4 &mat, int id) const
@@ -116,7 +120,7 @@ namespace world
     glm::mat4 path_line::make_matrix(float angle, glm::vec3 axis) const
     {
         glm::mat4 matrix(1);
-        glm::vec3 offset(0, 0, gap);
+        glm::vec3 offset(0, 0, -gap);
 
         matrix = glm::rotate(matrix, angle, axis);
         matrix = glm::translate(matrix, offset);

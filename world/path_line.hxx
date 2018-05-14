@@ -15,6 +15,8 @@ namespace world
     class path_line : public common::context::object
     {
     public:
+        class no_point {};
+
         path_line(common::context *ctx, float gap);
 
         void append(float angle, glm::vec3 axis);
@@ -23,13 +25,15 @@ namespace world
         void remove_back();
         void remove_front();
 
-        virtual void reset();
-        virtual void reset(const glm::mat4 &matrix);
+        virtual void reset() = 0;
+        void reset_if_empty();
+        void reset_matrix(const glm::mat4 &matrix);
 
         const path_point &first_point() const;
         const path_point &last_point() const;
         const std::deque<path_point> &points() const;
         const path_point &point(int id) const;
+        bool empty() { return pointv.empty(); }
 
         float get_gap() const { return gap; }
 

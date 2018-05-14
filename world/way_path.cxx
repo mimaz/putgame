@@ -30,6 +30,11 @@ namespace world
         dirty_camera_frame = true;
     }
 
+    void way_path::reset()
+    {
+        path_line::reset_matrix(glm::mat4(1));
+    }
+
     void way_path::update()
     {
         auto camid = get_camera_frame();
@@ -70,6 +75,8 @@ namespace world
 
     void way_path::update_camera_frame()
     {
+        reset_if_empty();
+
         auto campos = get_part<camera>()->get_position();
 
         auto cam_sqdist = [this, campos](int idx) -> float {
