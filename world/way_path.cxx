@@ -37,7 +37,7 @@ namespace world
         auto range_gap = static_cast<int>(range) / get_gap();
 
         auto head_too_close = [=]() -> bool {
-            auto headidx = get_last_point().get_index();
+            auto headidx = last_point().get_index();
 
             return headidx - camid < range_gap;
         };
@@ -73,20 +73,20 @@ namespace world
         auto campos = get_part<camera>()->get_position();
 
         auto cam_sqdist = [this, campos](int idx) -> float {
-            auto frpos = get_point(idx).get_position();
+            auto frpos = point(idx).get_position();
 
             return math::sqdist(campos, frpos);
         };
 
 
-        while (get_first_point().get_index() < camera_frame
+        while (first_point().get_index() < camera_frame
                 and cam_sqdist(camera_frame - 1)
                 < cam_sqdist(camera_frame))
         {
             camera_frame--;
         }
 
-        while (get_last_point().get_index() > camera_frame
+        while (last_point().get_index() > camera_frame
                 and cam_sqdist(camera_frame + 1)
                 < cam_sqdist(camera_frame))
         {

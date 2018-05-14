@@ -25,37 +25,37 @@ namespace world
         auto matrix = make_matrix(angle, axis);
         auto index = start_id;
 
-        if (not points.empty())
+        if (not pointv.empty())
         {
-            auto last = get_last_point();
+            auto last = last_point();
 
-            matrix *= last.get_matrix();
+            matrix = last.get_matrix() * matrix;
             index = last.get_index() + 1;
         }
 
-        points.emplace_back(matrix, index);
+        pointv.emplace_back(matrix, index);
     }
 
     void path_line::append(const glm::mat4 &mat)
     {
         int index;
 
-        if (points.empty())
+        if (pointv.empty())
             index = start_id;
         else
-            index = get_last_point().get_index() + 1;
+            index = last_point().get_index() + 1;
 
-        points.emplace_back(mat, index);
+        pointv.emplace_back(mat, index);
     }
 
     void path_line::remove_back()
     {
-        points.pop_back();
+        pointv.pop_back();
     }
 
     void path_line::remove_front()
     {
-        points.pop_front();
+        pointv.pop_front();
     }
 
     void path_line::reset()
@@ -65,28 +65,28 @@ namespace world
 
     void path_line::reset(const glm::mat4 &matrix)
     {
-        points.clear();
-        points.emplace_back(matrix, 0);
+        pointv.clear();
+        pointv.emplace_back(matrix, 0);
     }
 
-    const path_point &path_line::get_first_point() const
+    const path_point &path_line::first_point() const
     { 
-        return get_points().front();
+        return points().front();
     }
 
-    const path_point &path_line::get_last_point() const
+    const path_point &path_line::last_point() const
     { 
-        return get_points().back();
+        return points().back();
     }
 
-    const std::deque<path_point> &path_line::get_points() const
+    const std::deque<path_point> &path_line::points() const
     {
-        return points;
+        return pointv;
     }
 
-    const path_point &path_line::get_point(int id) const
+    const path_point &path_line::point(int id) const
     {
-        return points[id - points.front().get_index()];
+        return pointv[id - pointv.front().get_index()];
     }
 
     int path_line::updated_id(const glm::mat4 &mat, int id) const
@@ -97,17 +97,17 @@ namespace world
     int path_line::updated_id(glm::vec3 coord, int id) const
     {
         auto dist = [coord, this](int i) -> float {
-            auto mat = get_point(i).get_matrix();
+            auto mat = point(i).get_matrix();
 
             return math::sqdist(coord, mat);
         };
 
         auto cdst = dist(id);
 
-        if (id > get_first_point().get_index() and dist(id - 1) < cdst)
+        if (id > first_point().get_index() and dist(id - 1) < cdst)
             return id - 1;
 
-        if (id < get_last_point().get_index() and dist(id + 1) < cdst)
+        if (id < last_point().get_index() and dist(id + 1) < cdst)
             return id + 1;
 
         return id;
@@ -118,8 +118,8 @@ namespace world
         glm::mat4 matrix(1);
         glm::vec3 offset(0, 0, gap);
 
-        matrix = glm::translate(matrix, offset);
         matrix = glm::rotate(matrix, angle, axis);
+        matrix = glm::translate(matrix, offset);
 
         return matrix;
     }

@@ -48,32 +48,32 @@ namespace world
     {
         auto way = get_part<way_path>();
         auto camid = way->get_camera_frame();
-        auto matrix = way->get_point(camid).get_matrix();
+        auto matrix = way->point(camid).get_matrix();
 
         path_line::reset(matrix);
     }
 
     void tunnel_path::update()
     {
-        if (get_points().empty())
+        if (points().empty())
             reset();
 
         auto way = get_part<way_path>();
         auto range = get_part<camera>()->get_view_range();
         auto campos = get_part<camera>()->get_position();
-        auto lastpos = get_last_point().get_position();
+        auto lastpos = last_point().get_position();
 
         while (glm::distance(campos, lastpos) < range)
         {
             auto new_id = way_frame_id + way_frame_step;
-            auto max_id = way->get_last_point().get_index();
+            auto max_id = way->last_point().get_index();
 
             if (new_id > max_id)
                 break;
 
             way_frame_id = new_id;
 
-            append(way->get_point(new_id));
+            append(way->point(new_id));
         }
     }
 }

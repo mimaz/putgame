@@ -14,7 +14,7 @@ namespace world
                                    int frameid)
         : object(ctx) 
     {
-        auto point = get_part<way_path>()->get_point(frameid);
+        auto point = get_part<way_path>()->point(frameid);
 
         apply(point.get_matrix());
     }

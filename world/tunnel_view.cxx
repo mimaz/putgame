@@ -56,7 +56,7 @@ namespace world
     {
         begin_drawing();
 
-        for (auto &pt : path.get_points())
+        for (auto &pt : path.points())
             draw(pt);
 
         end_drawing();

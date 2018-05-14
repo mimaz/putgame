@@ -41,6 +41,8 @@ namespace game
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        get_part<world::camera>()->rotate(math::pi / 100, glm::vec3(0, 1, 0));
+
         get_part<world::object_manager>()->draw_all();
         get_part<gui::surface>()->draw();
 

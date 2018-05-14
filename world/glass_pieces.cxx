@@ -140,7 +140,7 @@ namespace world
                 continue;
 
 
-            auto framemat = way->get_point(frameidv[i]);
+            auto framemat = way->point(frameidv[i]);
             auto dist = math::sqdist(matrixv[i], framemat);
 
             if (dist > range)

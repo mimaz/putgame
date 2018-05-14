@@ -26,10 +26,10 @@ namespace world
         virtual void reset();
         virtual void reset(const glm::mat4 &matrix);
 
-        const path_point &get_first_point() const;
-        const path_point &get_last_point() const;
-        const std::deque<path_point> &get_points() const;
-        const path_point &get_point(int id) const;
+        const path_point &first_point() const;
+        const path_point &last_point() const;
+        const std::deque<path_point> &points() const;
+        const path_point &point(int id) const;
 
         float get_gap() const { return gap; }
 
@@ -39,7 +39,7 @@ namespace world
     private:
         glm::mat4 make_matrix(float angle, glm::vec3 axis) const;
 
-        std::deque<path_point> points;
+        std::deque<path_point> pointv;
         float gap;
     };
 }
