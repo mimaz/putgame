@@ -10,39 +10,28 @@
 #include "way_path.hxx"
 
 #include "camera.hxx"
+#include "constants.hxx"
 
 namespace world
 {
-    class way_path::segment
+    namespace
     {
-    public:
-        segment()
-            : segment(0, 0, glm::vec3(0, 1, 0)) {}
-
-        segment(int count, float angle, glm::vec3 axis)
-            : count(count), angle(angle / count), axis(axis) {}
-
-        int count;
-        float angle;
-        glm::vec3 axis;
-    };
-
-    way_path::way_path(common::context *ctx)
-        : path_line(ctx, 0.05)
-        , camera_frame(0)
-    {
-        for (int i = 0; i < 10000; i++)
-            generate_back();
+        way_path::segment_ref default_gen()
+        {
+            return std::make_shared<way_path::segment>
+                (10, 0, glm::vec3(0, 1, 0));
+        }
     }
 
-    void way_path::generate_back()
+    way_path::way_path(common::context *ctx)
+        : path_line(ctx, way_frame_gap)
+        , generator(default_gen)
+        , camera_frame(0)
+    {}
+
+    void way_path::set_generator(segment_gen gen)
     {
-        if (back == nullptr or back->count < 1)
-            back = generate();
-
-        back->count--;
-
-        append(back->angle, back->axis);
+        generator = gen;
     }
 
     void way_path::camera_moved()
@@ -52,27 +41,18 @@ namespace world
 
     void way_path::update()
     {
-        std::cout << "update" << std::endl;
-
         auto camid = get_camera_frame();
-        auto range = static_cast<int>
-            (get_part<camera>()->get_view_range() / get_gap());
+        auto range = get_part<camera>()->get_view_range() * 2;
+        auto range_gap = static_cast<int>(range) / get_gap();
 
-        auto too_far = [camid, range](const path_point &pt) -> bool {
-            return std::abs(pt.get_index() - camid) > range;
+        auto head_too_close = [=]() -> bool {
+            auto headidx = get_last_point().get_index();
+
+            return headidx - camid < range_gap;
         };
 
-        while (too_far(get_first_point()))
-        {
-            std::cout << "remove front!" << std::endl;
-            remove_front();
-        }
-
-        while (too_far(get_last_point()))
-        {
-            std::cout << "remove back!" << std::endl;
-            remove_back();
-        }
+        while (head_too_close())
+            generate_frame();
     }
 
     int way_path::get_camera_frame()
@@ -81,34 +61,45 @@ namespace world
         {
             dirty_camera_frame = false;
 
-
-            auto frpos = [this](int idx) -> glm::vec3 {
-                return get_point(idx).get_position();
-            };
-
-            auto campos = get_part<camera>()->get_position();
-
-            while (get_first_point().get_index() < camera_frame
-                    and glm::distance(campos, frpos(camera_frame - 1))
-                    < glm::distance(campos, frpos(camera_frame)))
-            {
-                camera_frame--;
-            }
-
-            while (get_last_point().get_index() > camera_frame
-                    and glm::distance(campos, frpos(camera_frame + 1))
-                    < glm::distance(campos, frpos(camera_frame)))
-            {
-                camera_frame++;
-            }
+            update_camera_frame();
         }
 
         return camera_frame;
     }
 
-    way_path::segment_ptr way_path::generate() const
+    void way_path::generate_frame()
     {
-        return std::make_shared<segment>
-            (10, 0, glm::vec3(0, 1, 0));
+        if (seg == nullptr or seg->count < 1)
+            seg = generator();
+
+        seg->count--;
+
+        append(seg->angle, seg->axis);
+    }
+
+    void way_path::update_camera_frame()
+    {
+        auto campos = get_part<camera>()->get_position();
+
+        auto cam_sqdist = [this, campos](int idx) -> float {
+            auto frpos = get_point(idx).get_position();
+
+            return math::sqdist(campos, frpos);
+        };
+
+
+        while (get_first_point().get_index() < camera_frame
+                and cam_sqdist(camera_frame - 1)
+                < cam_sqdist(camera_frame))
+        {
+            camera_frame--;
+        }
+
+        while (get_last_point().get_index() > camera_frame
+                and cam_sqdist(camera_frame + 1)
+                < cam_sqdist(camera_frame))
+        {
+            camera_frame++;
+        }
     }
 }

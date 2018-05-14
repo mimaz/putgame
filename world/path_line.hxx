@@ -23,7 +23,8 @@ namespace world
         void remove_back();
         void remove_front();
 
-        void reset(const glm::mat4 &matrix);
+        virtual void reset();
+        virtual void reset(const glm::mat4 &matrix);
 
         const path_point &get_first_point() const;
         const path_point &get_last_point() const;

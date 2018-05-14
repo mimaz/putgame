@@ -25,12 +25,10 @@ namespace game
 
     main_stage::~main_stage()
     {
-        std::cout << "destroy main stage" << std::endl;
     }
 
     void main_stage::on_draw()
     {
-        std::cout << "on draw main_stage" << std::endl;
     }
 
     void main_stage::register_object(object_ref ref)

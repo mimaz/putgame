@@ -1,6 +1,6 @@
 /*
  * Mieszko Mazurek <mimaz@gmx.com> 
- * Marcin Złotek
+ * Marcin Złotek <zlociu@onet.eu>
  * 2018
  */
 
@@ -9,7 +9,7 @@
 #include "default_font.hxx"
 
 text::ascii_font text::default_font = {
-    0.05f,
+    0.1f,
     7, 7,
     {
         {
@@ -397,7 +397,7 @@ text::ascii_font text::default_font = {
 			"   6   "
 			"   7   "
 			"       "
-			"   8   ", "#LS1234567#L8", '?' //will '#L8' be working? It not depend on me (yay) <Marcin Zlotek> zlociu@onet.eu
+			"   8   ", "#LS1234567#P8", '?'
 		},
 		{
 			"   1   "

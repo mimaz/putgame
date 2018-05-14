@@ -121,8 +121,8 @@ namespace world
                     pieces->update();
              });
 
-        get_part<tunnel_view>()->get_path()->update();
         get_part<way_path>()->update();
+        get_part<tunnel_view>()->get_path()->update();
     }
 
     void object_manager::join_process()

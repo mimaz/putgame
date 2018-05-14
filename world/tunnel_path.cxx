@@ -4,6 +4,7 @@
  */
 
 #include <putgame/std>
+#include <putgame/math>
 
 #include "tunnel_path.hxx"
 
@@ -36,7 +37,9 @@ namespace world
 {
     tunnel_path::tunnel_path(common::context *ctx, float gap)
         : path_line(ctx, gap)
-        , way_back_id(0)
+        , way_frame_id(0)
+        , way_frame_step(static_cast<int>
+                (gap / ctx->get_part<way_path>()->get_gap()))
     {
         reset();
     }
@@ -52,34 +55,25 @@ namespace world
 
     void tunnel_path::update()
     {
+        if (get_points().empty())
+            reset();
+
+        auto way = get_part<way_path>();
         auto range = get_part<camera>()->get_view_range();
         auto campos = get_part<camera>()->get_position();
         auto lastpos = get_last_point().get_position();
 
-        if (glm::distance(campos, lastpos) < range)
-            gen_frame_back();
-    }
+        while (glm::distance(campos, lastpos) < range)
+        {
+            auto new_id = way_frame_id + way_frame_step;
+            auto max_id = way->get_last_point().get_index();
 
-    void tunnel_path::gen_frame_back()
-    {
-        std::cout << "generate frame back" << std::endl;
-        auto way = get_part<way_path>();
+            if (new_id > max_id)
+                break;
 
-        if (get_points().empty())
-            reset();
+            way_frame_id = new_id;
 
-        auto too_close = [this, way]
-                         (int id, const path_point &pt) -> bool {
-            auto pv = way->get_point(id).get_position();
-            auto qv = pt.get_position();
-
-            return glm::distance(pv, qv) < get_gap();
-        };
-
-        while (too_close(way_back_id, get_last_point()))
-            way_back_id++;
-        std::cout << "id: " << way_back_id << std::endl;
-
-        append(way->get_point(way_back_id));
+            append(way->get_point(new_id));
+        }
     }
 }

@@ -16,7 +16,9 @@ namespace world
     path_line::path_line(common::context *ctx, float gap)
         : object(ctx)
         , gap(gap)
-    {}
+    {
+        reset();
+    }
 
     void path_line::append(float angle, glm::vec3 axis)
     {
@@ -54,6 +56,11 @@ namespace world
     void path_line::remove_front()
     {
         points.pop_front();
+    }
+
+    void path_line::reset()
+    {
+        reset(glm::mat4(1));
     }
 
     void path_line::reset(const glm::mat4 &matrix)

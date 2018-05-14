@@ -21,13 +21,12 @@ namespace world
 
         tunnel_path(common::context *ctx, float gap);
 
-        void reset();
+        void reset() override;
         void update();
 
     private:
-        void gen_frame_back();
-
-        int way_back_id;
+        int way_frame_id;
+        int way_frame_step;
     };
 }
 
