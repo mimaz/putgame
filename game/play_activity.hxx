@@ -21,13 +21,25 @@ namespace game
 
         void on_draw();
 
-        void register_object(object_ref ref);
-        void delete_unreachable_objects();
-        void delete_all_objects();
+        void register_object(const object_ref &ref);
+
+          template<typename _T, typename ..._Args>
+        std::shared_ptr<_T> &&create_object(const _Args &...args);
 
     private:
         std::set<object_ref> object_set;
     };
+
+      template<typename _T, typename ..._Args>
+    std::shared_ptr<_T> &&
+    play_activity::create_object(const _Args &...args)
+    {
+        auto obj = std::make_shared<_T>(args...);
+
+        register_object(obj);
+
+        return std::move(obj);
+    }
 }
 
 #endif

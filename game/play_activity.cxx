@@ -31,20 +31,13 @@ namespace game
 
     void play_activity::on_draw()
     {
+        auto camid = get_part<world::way_path>()->get_camera_frame();
+
+
     }
 
-    void play_activity::register_object(object_ref ref)
+    void play_activity::register_object(const object_ref &ref)
     {
         object_set.insert(ref);
-    }
-
-    void play_activity::delete_unreachable_objects()
-    {
-
-    }
-
-    void play_activity::delete_all_objects()
-    {
-        object_set.clear();
     }
 }
