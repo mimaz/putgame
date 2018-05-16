@@ -19,6 +19,11 @@ namespace math
         return glm::vec3(mat * glm::vec4(0, 0, 1, 0));
     }
 
+    glm::vec3 top3d(const glm::mat4 &mat)
+    {
+        return glm::vec3(mat * glm::vec4(0, 1, 0, 0));
+    }
+
     float sqdist(glm::vec3 p, glm::vec3 q)
     {
         auto d = p - q;

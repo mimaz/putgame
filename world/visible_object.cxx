@@ -13,6 +13,7 @@ namespace world
     visible_object::visible_object(common::context *ctx,
                                    int frameid)
         : object(ctx) 
+        , frame_id(frameid)
     {
         auto point = get_part<way_path>()->point(frameid);
 

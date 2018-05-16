@@ -11,6 +11,8 @@
 
 namespace game
 {
+    class player;
+
     class play_activity : public common::context::object
     {
     public:
@@ -21,24 +23,25 @@ namespace game
 
         void on_draw();
 
-        void register_object(const object_ref &ref);
-
           template<typename _T, typename ..._Args>
-        std::shared_ptr<_T> &&create_object(const _Args &...args);
+        std::shared_ptr<_T> create_object(const _Args &...args);
+
+        game::player *get_player() const { return player.get(); }
 
     private:
-        std::set<object_ref> object_set;
+        std::deque<object_ref> object_queue;
+        std::shared_ptr<game::player> player;
     };
 
       template<typename _T, typename ..._Args>
-    std::shared_ptr<_T> &&
+    std::shared_ptr<_T>
     play_activity::create_object(const _Args &...args)
     {
         auto obj = std::make_shared<_T>(args...);
 
-        register_object(obj);
+        object_queue.push_back(obj);
 
-        return std::move(obj);
+        return obj;
     }
 }
 

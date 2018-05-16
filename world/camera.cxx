@@ -113,7 +113,12 @@ namespace world
 
     glm::vec3 camera::get_direction() const
     {
-        return math::direction3d(inversed_view());
+        return -math::direction3d(inversed_view());
+    }
+
+    glm::vec3 camera::get_top() const
+    {
+        return math::top3d(inversed_view());
     }
 
     glm::vec3 camera::get_light_position()

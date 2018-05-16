@@ -32,6 +32,7 @@ namespace world
 
         glm::vec3 get_position() const;
         glm::vec3 get_direction() const;
+        glm::vec3 get_top() const;
 
         float get_view_angle() const { return view_angle; }
         float get_view_ratio() const { return view_ratio; }

@@ -1,0 +1,26 @@
+/*
+ * Mieszko Mazurek <mimaz@gmx.com> 
+ * 2018
+ */
+
+namespace common
+{
+    class context;
+}
+
+namespace world
+{
+    class camera;
+    class object_manager;
+    class glass_pane;
+    class glass_pieces;
+    class light_box;
+    class wall_obstacle;
+    class way_path;
+}
+
+namespace gui
+{
+    class color_button;
+    class surface;
+}

@@ -33,9 +33,11 @@ namespace world
         const glm::mat4 &get_model() const;
 
         glm::vec3 get_position() const;
+        int get_frame_id() const { return frame_id; }
 
     private:
         glm::mat4 model;
+        int frame_id;
     };
 }
 

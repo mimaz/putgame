@@ -14,6 +14,8 @@ namespace math
 
     glm::vec3 direction3d(const glm::mat4 &mat);
 
+    glm::vec3 top3d(const glm::mat4 &mat);
+
     float sqdist(glm::vec3 p, glm::vec3 q);
 
     float sqdist(const glm::mat4 &p, const glm::mat4 &q);
