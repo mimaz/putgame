@@ -15,6 +15,8 @@ namespace game
     class player : public common::context::object
     {
     public:
+        class axis_correction;
+
         player(play_activity *activity);
 
         void set_autopilot(bool ap);
@@ -26,9 +28,11 @@ namespace game
     private:
         void correct_direction(glm::vec3 target);
 
+        std::shared_ptr<axis_correction> ycorr;
+
         play_activity *activity;
         bool autopilot;
-        float correction_momentum;
+        float momentum;
     };
 }
 

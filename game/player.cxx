@@ -17,7 +17,7 @@ namespace game
         : object(activity->get_context())
         , activity(activity)
         , autopilot(false)
-        , correction_momentum(0)
+        , momentum(0)
     {
         get_part<world::camera>()->rotate(-math::pi / 8, glm::vec3(0, 1, 0));
     }
@@ -53,19 +53,18 @@ namespace game
         auto vector = target - get_part<world::camera>()->get_position();
         auto direction = get_part<world::camera>()->get_direction();
 
+        auto angle = acosf(glm::dot(direction, vector));
         auto cross = glm::cross(direction, vector);
-        auto axis = glm::normalize(cross);
-        auto angle = acosf(glm::dot(vector, direction));
 
-        correction_momentum *= 0.99f;
+        get_part<world::camera>()->rotate(angle / 60, cross);
 
-        if (angle == angle)
-            correction_momentum += std::abs(angle) / 1000;
-
-        angle *= correction_momentum;
-
-        get_part<world::camera>()->rotate(angle, axis);
-        std::cout << "target: " << target << ", direction: " 
-            << direction << std::endl;
+        std::cout 
+            << "angle: " << angle / 60
+            << ", cross: " << cross 
+            << std::endl;
+        /*
+            << ", target: " << target 
+            << ", direction: " << direction 
+            */
     }
 }
