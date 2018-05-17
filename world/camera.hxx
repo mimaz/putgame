@@ -25,14 +25,14 @@ namespace world
         void move(const glm::vec3 &vec);
         void rotate(float angle, const glm::vec3 &axis);
 
-        const glm::mat4 &get_proj() const;
-        const glm::mat4 &get_view() const;
-        const glm::mat4 &get_view_proj() const;
-        glm::mat4 make_mvp(const glm::mat4 &model) const;
+        const glm::mat4 &get_proj();
+        const glm::mat4 &get_view();
+        const glm::mat4 &get_view_proj();
+        glm::mat4 make_mvp(const glm::mat4 &model);
 
-        glm::vec3 get_position() const;
-        glm::vec3 get_direction() const;
-        glm::vec3 get_top() const;
+        glm::vec3 get_position();
+        glm::vec3 get_direction();
+        glm::vec3 get_top();
 
         float get_view_angle() const { return view_angle; }
         float get_view_ratio() const { return view_ratio; }
@@ -43,14 +43,13 @@ namespace world
         float get_light_range() override;
 
     private:
-        glm::mat4 inversed_view() const;
+        glm::mat4 inversed_view();
 
-        mutable int flags;
-
-        mutable glm::mat4 proj_mat;
-        mutable glm::mat4 view_proj_mat;
-
+        glm::mat4 proj_mat;
+        glm::mat4 view_proj_mat;
         glm::mat4 view_mat;
+
+        int flags;
 
         float view_angle;
         float view_ratio;

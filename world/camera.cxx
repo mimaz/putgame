@@ -24,9 +24,9 @@ namespace world
     camera::camera(common::context *ctx)
         : object(ctx)
         , light_source(ctx)
-        , flags(dirty_proj | dirty_view_proj)
         , proj_mat(1)
         , view_mat(1)
+        , flags(dirty_proj | dirty_view_proj)
         , view_angle(math::pi / 3)
         , view_ratio(1)
         , view_range(32)
@@ -69,7 +69,7 @@ namespace world
         view_range = range;
     }
 
-    const glm::mat4 &camera::get_proj() const
+    const glm::mat4 &camera::get_proj()
     {
         if (flags & dirty_proj)
         {
@@ -84,12 +84,12 @@ namespace world
         return proj_mat;
     }
 
-    const glm::mat4 &camera::get_view() const
+    const glm::mat4 &camera::get_view()
     {
         return view_mat;
     }
 
-    const glm::mat4 &camera::get_view_proj() const
+    const glm::mat4 &camera::get_view_proj()
     {
         if (flags & dirty_view_proj)
         {
@@ -101,22 +101,22 @@ namespace world
         return view_proj_mat;
     }
 
-    glm::mat4 camera::make_mvp(const glm::mat4 &model) const
+    glm::mat4 camera::make_mvp(const glm::mat4 &model)
     {
         return get_view_proj() * model;
     }
 
-    glm::vec3 camera::get_position() const
+    glm::vec3 camera::get_position() 
     {
         return math::coord3d(inversed_view());
     }
 
-    glm::vec3 camera::get_direction() const
+    glm::vec3 camera::get_direction() 
     {
         return -math::direction3d(inversed_view());
     }
 
-    glm::vec3 camera::get_top() const
+    glm::vec3 camera::get_top() 
     {
         return math::top3d(inversed_view());
     }
@@ -136,7 +136,7 @@ namespace world
         return 15;
     }
 
-    glm::mat4 camera::inversed_view() const
+    glm::mat4 camera::inversed_view()
     {
         return glm::inverse(get_view());
     }
