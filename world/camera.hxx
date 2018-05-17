@@ -21,9 +21,9 @@ namespace world
         void set_view_ratio(float ratio);
         void set_view_range(float range);
 
-        void move(float x, float y, float z);
         void move(const glm::vec3 &vec);
         void rotate(float angle, const glm::vec3 &axis);
+        void apply(const glm::mat4 &matrix);
 
         const glm::mat4 &get_proj();
         const glm::mat4 &get_view();

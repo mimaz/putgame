@@ -32,15 +32,10 @@ namespace world
         , view_range(32)
     {}
 
-    void camera::move(float x, float y, float z)
-    {
-        move(glm::vec3(x, y, z));
-    }
-
     void camera::move(const glm::vec3 &vec)
     {
         flags |= dirty_view_proj;
-        view_mat = glm::translate(glm::mat4(1), -vec) * view_mat;
+        apply(glm::translate(-vec));
 
         get_part<way_path>()->camera_moved();
     }
@@ -48,7 +43,13 @@ namespace world
     void camera::rotate(float angle, const glm::vec3 &axis)
     {
         flags |= dirty_view_proj;
-        view_mat = glm::rotate(glm::mat4(1), -angle, axis) * view_mat;
+        apply(glm::rotate(-angle, axis));
+    }
+
+    void camera::apply(const glm::mat4 &matrix)
+    {
+        flags |= dirty_view_proj;
+        view_mat = matrix * view_mat;
     }
 
     void camera::set_view_angle(float angle)
