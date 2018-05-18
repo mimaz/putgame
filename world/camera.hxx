@@ -24,6 +24,7 @@ namespace world
         void move(const glm::vec3 &vec);
         void rotate(float angle, const glm::vec3 &axis);
         void apply(const glm::mat4 &matrix);
+        float gradient(float angle, glm::vec3 axis, glm::vec3 target);
 
         const glm::mat4 &get_proj();
         const glm::mat4 &get_view();

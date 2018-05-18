@@ -36,7 +36,8 @@ namespace game
     {
         auto camid = get_part<world::way_path>()->get_camera_frame();
 
-        while (object_queue.front()->get_frame_id() < camid)
+        while (not object_queue.empty() 
+                and object_queue.front()->get_frame_id() < camid)
         {
             object_queue.pop_front();
 

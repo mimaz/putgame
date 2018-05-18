@@ -16,8 +16,8 @@ namespace game
     player::player(play_activity *activity)
         : object(activity->get_context())
         , activity(activity)
-        , autopilot(false)
         , momentum(0)
+        , autopilot(false)
     {
         get_part<world::camera>()->rotate(-math::pi / 8, glm::vec3(0, 1, 0));
     }
@@ -29,18 +29,10 @@ namespace game
 
     void player::on_draw()
     {
-        get_part<world::camera>()->move(glm::vec3(0, 0, -0.01));
+        get_part<world::camera>()->move(glm::vec3(0, 0, -0.02));
 
         if (autopilot)
-        {
-            auto target_frame = get_frame_id() + 10;
-            auto target_matrix = get_part<world::way_path>
-                ()->point(target_frame).get_matrix();
-
-            auto target = math::coord3d(target_matrix);
-
-            correct_direction(target);
-        }
+            correct_direction();
     }
 
     int player::get_frame_id()
@@ -48,23 +40,29 @@ namespace game
         return get_part<world::way_path>()->get_camera_frame();
     }
 
-    void player::correct_direction(glm::vec3 target)
+    void player::correct_direction()
     {
-        auto vector = target - get_part<world::camera>()->get_position();
-        auto direction = get_part<world::camera>()->get_direction();
+        auto target_frame = get_frame_id() + 50;
+        auto target_matrix = get_part<world::way_path>()
+            ->point(target_frame).get_matrix();
+        auto target = math::coord3d(target_matrix)
+            - get_part<world::camera>()->get_position();
 
-        auto angle = acosf(glm::dot(direction, vector));
-        auto cross = glm::cross(direction, vector);
+        auto gr = get_part<world::camera>()->gradient
+            (math::pi / 60, glm::vec3(0, 1, 0), target);
 
-        get_part<world::camera>()->rotate(angle / 60, cross);
+        if (gr != gr)
+            return;
 
-        std::cout 
-            << "angle: " << angle / 60
-            << ", cross: " << cross 
+        momentum *= 0.96f;
+        momentum += gr * 0.04f;
+
+        std::cout << "target: " << target 
+            << ", gradient: " << gr 
+            << ", position: " << get_part<world::camera>()->get_position()
             << std::endl;
-        /*
-            << ", target: " << target 
-            << ", direction: " << direction 
-            */
+
+        get_part<world::camera>()->rotate
+            (math::pi * momentum, glm::vec3(0, 1, 0));
     }
 }

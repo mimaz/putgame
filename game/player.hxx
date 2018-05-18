@@ -26,13 +26,13 @@ namespace game
         int get_frame_id();
 
     private:
-        void correct_direction(glm::vec3 target);
+        void correct_direction();
 
         std::shared_ptr<axis_correction> ycorr;
 
         play_activity *activity;
-        bool autopilot;
         float momentum;
+        bool autopilot;
     };
 }
 

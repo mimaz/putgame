@@ -52,6 +52,18 @@ namespace world
         view_mat = matrix * view_mat;
     }
 
+    float camera::gradient(float angle, glm::vec3 axis, glm::vec3 target)
+    {
+        auto newview = glm::rotate(-angle, axis) * get_view();
+        auto vector = math::direction3d(inversed_view());
+        auto newvector = math::direction3d(glm::inverse(newview));
+
+        auto cosine = glm::dot(target, vector);
+        auto newcosine = glm::dot(target, newvector);
+
+        return cosine - newcosine;
+    }
+
     void camera::set_view_angle(float angle)
     {
         flags |= dirty_proj | dirty_view_proj;
