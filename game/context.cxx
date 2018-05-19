@@ -19,7 +19,7 @@ namespace game
 
     context::~context()
     {
-        get_part<world::object_manager>()->join_process();
+        get<world::object_manager>()->join_process();
     }
 
     void context::start()
@@ -39,11 +39,11 @@ namespace game
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        get_part<world::object_manager>()->process_all();
-        get_part<gui::surface>()->process();
+        get<world::object_manager>()->process_all();
+        get<gui::surface>()->process();
 
-        get_part<world::object_manager>()->draw_all();
-        get_part<gui::surface>()->draw();
+        get<world::object_manager>()->draw_all();
+        get<gui::surface>()->draw();
 
         if (play != nullptr)
             play->on_draw();
@@ -58,8 +58,8 @@ namespace game
         width = wid;
         height = hei;
 
-        get_part<gui::surface>()->resize(wid, hei);
-        get_part<world::camera>()->set_view_ratio(ratio);
+        get<gui::surface>()->resize(wid, hei);
+        get<world::camera>()->set_view_ratio(ratio);
 
         glViewport(0, 0, wid, hei);
     }
@@ -76,7 +76,7 @@ namespace game
         {
             gui::touch_event event(gui::touch_event::move, x, y);
 
-            get_part<gui::surface>()->touch(event);
+            get<gui::surface>()->touch(event);
         }
     }
 
@@ -85,7 +85,7 @@ namespace game
         gui::touch_event event(gui::touch_event::press, 
                                mouse_x, mouse_y);
 
-        get_part<gui::surface>()->touch(event);
+        get<gui::surface>()->touch(event);
     }
 
     void context::release()
@@ -93,6 +93,6 @@ namespace game
         gui::touch_event event(gui::touch_event::release, 
                                mouse_x, mouse_y);
 
-        get_part<gui::surface>()->touch(event);
+        get<gui::surface>()->touch(event);
     }
 }

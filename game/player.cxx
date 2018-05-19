@@ -25,15 +25,15 @@ namespace game
 
         void correct()
         {
-            auto tframe = get_part<world::way_path>()
+            auto tframe = get<world::way_path>()
                 ->get_camera_frame() + 50;
-            auto tmatrix = get_part<world::way_path>()
+            auto tmatrix = get<world::way_path>()
                 ->point(tframe).get_matrix();
             auto target = math::coord3d(tmatrix)
-                - get_part<world::camera>()->get_position();
+                - get<world::camera>()->get_position();
 
             auto gradient_step = math::pi / 60;
-            auto gradient = get_part<world::camera>()
+            auto gradient = get<world::camera>()
                 ->gradient(gradient_step, axis, target);
 
             if (gradient != gradient) 
@@ -41,7 +41,7 @@ namespace game
 
             momentum = 0.96f * momentum + 0.04f * gradient;
 
-            get_part<world::camera>()
+            get<world::camera>()
                 ->rotate(math::pi * momentum, axis);
         }
 
@@ -54,9 +54,9 @@ namespace game
         , apilot(nullptr)
         , activity(activity)
     {
-        get_part<world::camera>()->rotate
+        get<world::camera>()->rotate
             (-math::pi / 8, glm::vec3(0, 1, 0));
-        get_part<world::camera>()->rotate
+        get<world::camera>()->rotate
             (math::pi / 6, glm::vec3(1, 0, 0));
     }
 
@@ -70,7 +70,7 @@ namespace game
 
     void player::on_draw()
     {
-        get_part<world::camera>()->move(glm::vec3(0, 0, -0.05));
+        get<world::camera>()->move(glm::vec3(0, 0, -0.05));
 
         if (apilot != nullptr)
             apilot->correct();
@@ -78,6 +78,6 @@ namespace game
 
     int player::get_frame_id()
     {
-        return get_part<world::way_path>()->get_camera_frame();
+        return get<world::way_path>()->get_camera_frame();
     }
 }

@@ -35,7 +35,7 @@ namespace world
         , vbo(GL_ARRAY_BUFFER, 
               mesh, size_of_mesh)
         , light(ctx, &prog)
-        , cam(ctx->get_part<camera>())
+        , cam(ctx->get<camera>())
     {}
 
     void light_box_view::begin_drawing()

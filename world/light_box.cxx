@@ -48,14 +48,14 @@ namespace world
         , speed(0.05)
         , blur(0)
     {
-        get_part<object_manager>()->add(this);
+        get<object_manager>()->add(this);
 
         set_color(col);
     }
 
     light_box::~light_box()
     {
-        get_part<object_manager>()->remove(this);
+        get<object_manager>()->remove(this);
     }
 
     void light_box::set_color(color c)

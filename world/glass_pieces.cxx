@@ -44,7 +44,7 @@ namespace world
         : visible_object(ctx, frameid)
         , color(color)
     {
-        auto cam = get_part<camera>();
+        auto cam = get<camera>();
         auto cam_coord = cam->get_position();
         auto cam_direction = cam->get_direction();
 
@@ -116,17 +116,17 @@ namespace world
         set_matrix(base_matrix);
 
 
-        get_part<object_manager>()->add(this);
+        get<object_manager>()->add(this);
     }
 
     glass_pieces::~glass_pieces()
     {
-        get_part<object_manager>()->remove(this);
+        get<object_manager>()->remove(this);
     }
 
     void glass_pieces::update()
     {
-        auto way = get_part<way_path>();
+        auto way = get<way_path>();
         auto range = 1;
 
         for (int i = 0; i < static_cast<int>(matrixv.size()); i++)

@@ -37,8 +37,8 @@ namespace world
 
     void way_path::update()
     {
-        auto campos = get_part<world::camera>()->get_position();
-        auto range = get_part<camera>()->get_view_range() * 2;
+        auto campos = get<world::camera>()->get_position();
+        auto range = get<camera>()->get_view_range() * 2;
 
         auto head_too_close = [=]() -> bool {
             auto head = math::coord3d(last_point().get_matrix());
@@ -77,7 +77,7 @@ namespace world
     {
         reset_if_empty();
 
-        auto campos = get_part<camera>()->get_position();
+        auto campos = get<camera>()->get_position();
 
         auto cam_sqdist = [this, campos](int idx) -> float {
             auto frpos = point(idx).get_position();

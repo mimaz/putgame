@@ -66,7 +66,7 @@ namespace world
 
     void object_manager::draw_all()
     {
-        get_part<tunnel_view>()->draw();
+        get<tunnel_view>()->draw();
         
 
 
@@ -121,8 +121,8 @@ namespace world
                     pieces->update();
              });
 
-        get_part<way_path>()->update();
-        get_part<tunnel_view>()->get_path()->update();
+        get<way_path>()->update();
+        get<tunnel_view>()->get_path()->update();
     }
 
     void object_manager::join_process()

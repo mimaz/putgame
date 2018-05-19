@@ -29,12 +29,12 @@ namespace world
     {
         scale(siz.x, siz.y, 1.0f);
 
-        get_part<object_manager>()->add(this);
+        get<object_manager>()->add(this);
     }
 
     glass_pane::~glass_pane()
     {
-        get_part<object_manager>()->remove(this);
+        get<object_manager>()->remove(this);
     }
 
     glm::mat4 glass_pane::get_piece_matrix() const

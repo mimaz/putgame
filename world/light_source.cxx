@@ -12,7 +12,7 @@
 namespace world
 {
     light_source::light_source(common::context *ctx)
-        : light_source(ctx->get_part<light_group>()) {}
+        : light_source(ctx->get<light_group>()) {}
 
     light_source::light_source(light_group *grp)
         : grp(grp)

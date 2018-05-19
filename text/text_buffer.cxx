@@ -88,7 +88,7 @@ namespace text
 
     void text_buffer::render()
     {
-        auto fb = get_part<text_framebuffer>();
+        auto fb = get<text_framebuffer>();
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texhandle);

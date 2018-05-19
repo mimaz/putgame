@@ -27,7 +27,7 @@ namespace
 namespace world
 {
     glass_pane_view::glass_pane_view(common::context *ctx)
-        : cam(ctx->get_part<camera>())
+        : cam(ctx->get<camera>())
         , vsh(GL_VERTEX_SHADER,
               version_glsl,
               "const lowp int max_count = " + 

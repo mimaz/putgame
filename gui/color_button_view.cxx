@@ -59,7 +59,7 @@ namespace gui
         btn->bind_texture();
 
 
-        u_matrix = get_part<surface>()->get_proj() * btn->get_matrix();
+        u_matrix = get<surface>()->get_proj() * btn->get_matrix();
 
         auto shadows = btn->get_shadows();
         auto count = std::min(static_cast<int>(shadows.size()), max_shadows);

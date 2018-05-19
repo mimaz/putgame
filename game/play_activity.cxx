@@ -15,7 +15,7 @@ namespace game
         : object(ctx)
         , player(std::make_shared<game::player>(this))
     {
-        auto way = get_part<world::way_path>();
+        auto way = get<world::way_path>();
 
         way->reset();
         way->update();
@@ -34,7 +34,7 @@ namespace game
 
     void play_activity::on_draw()
     {
-        auto camid = get_part<world::way_path>()->get_camera_frame();
+        auto camid = get<world::way_path>()->get_camera_frame();
 
         while (not object_queue.empty() 
                 and object_queue.front()->get_frame_id() < camid)

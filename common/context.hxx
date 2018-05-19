@@ -19,7 +19,7 @@ namespace common
         context(context &&) = delete;
 
           template<typename _Type>
-        _Type *get_part();
+        _Type *get();
 
         virtual time_t time_millis() = 0;
 
@@ -45,8 +45,8 @@ namespace common
         context *get_context() const { return ctx; }
 
           template<typename _Type>
-        _Type *get_part()
-        { return get_context()->get_part<_Type>(); }
+        _Type *get()
+        { return get_context()->get<_Type>(); }
 
         std::default_random_engine &random_engine()
         { return get_context()->random_engine(); }
@@ -56,7 +56,7 @@ namespace common
     };
 
       template<typename _Type>
-    _Type *context::get_part()
+    _Type *context::get()
     {
         static_assert(std::is_base_of<object, _Type>::value,
                       "each part of context must derive "

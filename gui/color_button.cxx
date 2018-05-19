@@ -14,7 +14,7 @@ namespace gui
 {
     color_button::color_button(common::context *ctx)
         : rect_item(ctx)
-        , text(ctx, get_part<surface>()->get_font_builder())
+        , text(ctx, get<surface>()->get_font_builder())
     {
         set_primary_color(glm::vec4(1.0f, 1.0f, 0.5f, 0.4f));
         set_secondary_color(glm::vec4(0.4f, 0.4f, 0.4f, 0.2));
@@ -39,7 +39,7 @@ namespace gui
     {
         rect_item::draw();
 
-        get_part<color_button_view>()->draw(this);
+        get<color_button_view>()->draw(this);
     }
 
     void color_button::process()

@@ -27,11 +27,11 @@ namespace world
 
         scale(xscale, yscale, zscale);
 
-        get_part<object_manager>()->add(this);
+        get<object_manager>()->add(this);
     }
 
     wall_obstacle::~wall_obstacle()
     {
-        get_part<object_manager>()->remove(this);
+        get<object_manager>()->remove(this);
     }
 }

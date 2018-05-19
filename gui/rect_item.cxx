@@ -20,12 +20,12 @@ namespace gui
         , pressed(false)
         , dirty_matrix(true)
     {
-        get_part<surface>()->add_item(this);
+        get<surface>()->add_item(this);
     }
 
     rect_item::~rect_item()
     {
-        get_part<surface>()->remove_item(this);
+        get<surface>()->remove_item(this);
     }
 
     void rect_item::set_position(int x, int y)

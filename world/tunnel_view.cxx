@@ -32,7 +32,7 @@ namespace world
         , mesh(tunnel_quality, tunnel_width)
         , path(ctx, mesh.get_gap())
         , light(ctx, &prog)
-        , cam(ctx->get_part<camera>())
+        , cam(ctx->get<camera>())
         , vsh(GL_VERTEX_SHADER, 
               version_glsl,
               vsh_header(max_count),

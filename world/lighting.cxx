@@ -22,8 +22,8 @@ namespace world
         , u_light_coord_v(prog, "u_light_coord_v")
         , u_light_color_v(prog, "u_light_color_v")
         , u_light_range_v(prog, "u_light_range_v")
-        , cam(ctx->get_part<camera>())
-        , grp(ctx->get_part<light_group>())
+        , cam(ctx->get<camera>())
+        , grp(ctx->get<light_group>())
     {}
 
     void lighting::calculate()

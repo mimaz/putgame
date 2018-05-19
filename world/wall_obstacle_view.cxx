@@ -41,7 +41,7 @@ namespace world
     const glm::vec3 wall_obstacle_view::secondary_color(bri, bri, dim);
 
     wall_obstacle_view::wall_obstacle_view(common::context *ctx)
-        : cam(ctx->get_part<camera>())
+        : cam(ctx->get<camera>())
         , vsh(GL_VERTEX_SHADER, 
               version_glsl,
               vertex_hdr,

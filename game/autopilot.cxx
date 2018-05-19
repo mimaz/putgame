@@ -23,19 +23,19 @@ namespace game
 
     void autopilot::correct()
     {
-        auto tframe = get_part<world::way_path>()
+        auto tframe = get<world::way_path>()
             ->get_camera_frame() + 50;
 
-        auto tmatrix = get_part<world::way_path>()
+        auto tmatrix = get<world::way_path>()
             ->point(tframe).get_matrix();
 
         auto target = math::coord3d(tmatrix)
-            - get_part<world::camera>()->get_position();
+            - get<world::camera>()->get_position();
 
 
         auto onaxis = [=](glm::vec3 axis, 
                           float &momentum) -> void {
-            auto gr = get_part<world::camera>()
+            auto gr = get<world::camera>()
                 ->gradient(sample_step, axis, target);
 
             if (gr != gr)
@@ -43,7 +43,7 @@ namespace game
 
             momentum = 0.96f * momentum + 0.04f * gr;
 
-            get_part<world::camera>()
+            get<world::camera>()
                 ->rotate(math::pi * momentum, axis);
         };
 
