@@ -14,41 +14,6 @@
 
 namespace game
 {
-    class player::axis_correction : common::context::object
-    {
-    public:
-        axis_correction(player *pl, glm::vec3 ax)
-            : object(pl)
-            , axis(ax)
-            , momentum(0)
-        {}
-
-        void correct()
-        {
-            auto tframe = get<world::way_path>()
-                ->get_camera_frame() + 50;
-            auto tmatrix = get<world::way_path>()
-                ->point(tframe).get_matrix();
-            auto target = math::coord3d(tmatrix)
-                - get<world::camera>()->get_position();
-
-            auto gradient_step = math::pi / 60;
-            auto gradient = get<world::camera>()
-                ->gradient(gradient_step, axis, target);
-
-            if (gradient != gradient) 
-                return;
-
-            momentum = 0.96f * momentum + 0.04f * gradient;
-
-            get<world::camera>()
-                ->rotate(math::pi * momentum, axis);
-        }
-
-        glm::vec3 axis;
-        float momentum;
-    };
-
     player::player(play_activity *activity)
         : object(activity->get_context())
         , apilot(nullptr)
@@ -70,7 +35,7 @@ namespace game
 
     void player::on_draw()
     {
-        get<world::camera>()->move(glm::vec3(0, 0, -0.05));
+        get<world::camera>()->move(glm::vec3(0, 0, -0.20));
 
         if (apilot != nullptr)
             apilot->correct();

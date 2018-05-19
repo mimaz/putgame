@@ -31,7 +31,7 @@ namespace world
         int get_camera_frame();
 
     private:
-        void generate_frame();
+        void generate_back();
         void update_camera_frame();
         segment_ref default_generator();
 

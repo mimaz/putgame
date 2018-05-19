@@ -18,6 +18,16 @@ namespace common
         _Type value;
     };
 
+    class invalid_state
+    {
+    public:
+        invalid_state(const std::string &desc)
+            : desc(desc)
+        {}
+
+        std::string desc;
+    };
+
       template<typename _Type>
     inline invalid_argument<_Type> make_invalid_argument(const _Type &value)
     {

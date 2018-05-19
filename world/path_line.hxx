@@ -29,13 +29,21 @@ namespace world
         void reset_if_empty();
         void reset_matrix(const glm::mat4 &matrix);
 
+        const std::deque<path_point> &points() const;
         const path_point &first_point() const;
         const path_point &last_point() const;
-        const std::deque<path_point> &points() const;
         const path_point &point(int id) const;
-        bool empty() { return pointv.empty(); }
 
+        bool empty() { return pointv.empty(); }
         float get_gap() const { return gap; }
+
+        glm::mat4 first_matrix() const;
+        glm::mat4 last_matrix() const;
+        glm::mat4 matrix(int id) const;
+
+        int first_index() const;
+        int last_index() const;
+        int index(int id) const;
 
         int updated_id(glm::vec3 coord, int id) const;
         int updated_id(const glm::mat4 &mat, int id) const;

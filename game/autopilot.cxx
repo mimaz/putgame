@@ -10,6 +10,7 @@
 #include "autopilot.hxx"
 
 #include "player.hxx"
+#include "constants.hxx"
 
 namespace game
 {
@@ -41,7 +42,8 @@ namespace game
             if (gr != gr)
                 return;
 
-            momentum = 0.96f * momentum + 0.04f * gr;
+            momentum = autopilot_momentum * momentum 
+                     + autopilot_rate * gr;
 
             get<world::camera>()
                 ->rotate(math::pi * momentum, axis);

@@ -39,15 +39,25 @@ namespace world
     {
         auto campos = get<world::camera>()->get_position();
         auto range = get<camera>()->get_view_range() * 2;
+        auto sqrange = range * range;
 
-        auto head_too_close = [=]() -> bool {
+        auto head_too_close = [campos, sqrange, this]() -> bool {
             auto head = math::coord3d(last_point().get_matrix());
 
-            return glm::distance(head, campos) < range;
+            return math::sqdist(head, campos) < sqrange;
+        };
+
+        auto tail_too_far = [campos, sqrange, this]() -> bool {
+            auto tail = math::coord3d(first_point().get_matrix());
+
+            return math::sqdist(tail, campos) > sqrange;
         };
 
         while (head_too_close())
-            generate_frame();
+            generate_back();
+
+        while (tail_too_far())
+            remove_front();
     }
 
     int way_path::get_camera_frame()
@@ -62,9 +72,8 @@ namespace world
         return camera_frame;
     }
 
-    void way_path::generate_frame()
+    void way_path::generate_back()
     {
-        std::cout << "generate new way frame" << std::endl;
         if (seg == nullptr or seg->count < 1)
             seg = generator();
 
@@ -103,12 +112,27 @@ namespace world
 
     way_path::segment_ref way_path::default_generator()
     {
-        std::uniform_real_distribution<float> dist(100, 120);
+        static const glm::vec3 axes[] = {
+            glm::vec3(1, 0, 0),
+            glm::vec3(0, 1, 0),
+            glm::vec3(-1, 0, 0),
+            glm::vec3(0, -1, 0),
+        };
 
-        auto length = dist(random_engine());
+        constexpr auto axis_count = sizeof(axes) / sizeof(glm::vec3);
+
+
+        auto angle = std::uniform_real_distribution<float>
+            (math::pi / 4, math::pi / 2)(random_engine());
+
+        auto axisid = std::uniform_int_distribution<int>
+            (0, axis_count - 1)(random_engine());
+
+        auto axis = axes[axisid];
+
 
         return std::make_shared<way_path::segment>
-            (length, math::pi / 2, glm::vec3(0, 1, 0));
+            (8, angle, axis);
     }
 
     way_path::segment::segment()

@@ -59,6 +59,11 @@ namespace world
         pointv.emplace_back(matrix, 0);
     }
 
+    const std::deque<path_point> &path_line::points() const
+    {
+        return pointv;
+    }
+
     const path_point &path_line::first_point() const
     { 
         if (pointv.empty())
@@ -75,11 +80,6 @@ namespace world
         return pointv.back();
     }
 
-    const std::deque<path_point> &path_line::points() const
-    {
-        return pointv;
-    }
-
     const path_point &path_line::point(int id) const
     {
         if (id < first_point().get_index() 
@@ -91,6 +91,36 @@ namespace world
         auto off = id - first_point().get_index();
 
         return pointv[off];
+    }
+
+    glm::mat4 path_line::first_matrix() const
+    {
+        return first_point().get_matrix();
+    }
+
+    glm::mat4 path_line::last_matrix() const
+    {
+        return last_point().get_matrix();
+    }
+
+    glm::mat4 path_line::matrix(int id) const
+    {
+        return point(id).get_matrix();
+    }
+
+    int path_line::first_index() const
+    {
+        return first_point().get_index();
+    }
+
+    int path_line::last_index() const
+    {
+        return last_point().get_index();
+    }
+
+    int path_line::index(int id) const
+    {
+        return point(id).get_index();
     }
 
     int path_line::updated_id(const glm::mat4 &mat, int id) const

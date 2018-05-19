@@ -25,6 +25,8 @@ namespace world
         void update();
 
     private:
+        void generate();
+
         int way_frame_id;
         int way_frame_step;
     };

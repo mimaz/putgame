@@ -11,28 +11,6 @@
 #include "way_path.hxx"
 #include "camera.hxx"
 
-namespace 
-{
-    inline glm::vec3 get_position(const glm::mat4 &matrix)
-    {
-        return glm::vec3(matrix * glm::vec4(0, 0, 0, 1));
-    }
-
-    inline glm::vec3 get_direction(const glm::mat4 &matrix)
-    {
-        return glm::vec3(matrix * glm::vec4(0, 0, 1, 0));
-    }
-
-    inline int frame_hash(const glm::mat4 &matrix, int index)
-    {
-        for (int y = 0; y < 4; y++)
-            for (int x = 0; x < 4; x++)
-                index += static_cast<int>(matrix[y][x]);
-
-        return std::hash<int>()(rand() + index);
-    }
-}
-
 namespace world
 {
     tunnel_path::tunnel_path(common::context *ctx, float gap)
@@ -55,27 +33,27 @@ namespace world
     {
         reset_if_empty();
 
-        auto way = get<way_path>();
-
+        auto campos = get<camera>()->get_position();
         auto range = get<camera>()->get_view_range();
         auto sqrange = range * range;
-        auto campos = get<camera>()->get_position();
 
-        while (math::sqdist(last_point().get_position(), campos) < sqrange)
-        {
-            std::cout << "generate!" << std::endl;
-            auto new_id = way_frame_id + way_frame_step;
-            auto max_id = way->last_point().get_index();
+        while (math::sqdist(last_matrix(), campos) < sqrange)
+            generate();
 
-            if (new_id > max_id)
-            {
-                std::cout << "too big id" << std::endl;
-                break;
-            }
+        while (math::sqdist(first_matrix(), campos) > sqrange)
+            remove_front();
+    }
 
-            way_frame_id = new_id;
+    void tunnel_path::generate()
+    {
+        auto new_id = way_frame_id + way_frame_step;
 
-            append(way->point(new_id));
-        }
+        if (new_id > get<way_path>()->last_index())
+            throw common::invalid_state("tunnel path cannot be created "
+                                        "behind way path!");
+
+        way_frame_id = new_id;
+
+        append(get<way_path>()->point(new_id));
     }
 }
