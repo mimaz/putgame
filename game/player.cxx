@@ -13,13 +13,55 @@
 
 namespace game
 {
+    class player::axis_correction : common::context::object
+    {
+    public:
+        axis_correction(player *pl, glm::vec3 ax)
+            : object(pl)
+            , axis(ax)
+            , momentum(0)
+        {}
+
+        void correct()
+        {
+            auto tframe = get_part<world::way_path>()
+                ->get_camera_frame() + 50;
+            auto tmatrix = get_part<world::way_path>()
+                ->point(tframe).get_matrix();
+            auto target = math::coord3d(tmatrix)
+                - get_part<world::camera>()->get_position();
+
+            auto gradient_step = math::pi / 60;
+            auto gradient = get_part<world::camera>()
+                ->gradient(gradient_step, axis, target);
+
+            if (gradient != gradient) 
+                return;
+
+            momentum = 0.96f * momentum + 0.04f * gradient;
+
+            get_part<world::camera>()
+                ->rotate(math::pi * momentum, axis);
+        }
+
+        glm::vec3 axis;
+        float momentum;
+    };
+
     player::player(play_activity *activity)
         : object(activity->get_context())
+        , xcorr(std::make_shared<axis_correction>
+                (this, glm::vec3(1, 0, 0)))
+        , ycorr(std::make_shared<axis_correction>
+                (this, glm::vec3(0, 1, 0)))
         , activity(activity)
         , momentum(0)
         , autopilot(false)
     {
-        get_part<world::camera>()->rotate(-math::pi / 8, glm::vec3(0, 1, 0));
+        get_part<world::camera>()->rotate
+            (-math::pi / 8, glm::vec3(0, 1, 0));
+        get_part<world::camera>()->rotate
+            (math::pi / 6, glm::vec3(1, 0, 0));
     }
 
     void player::set_autopilot(bool ap)
@@ -32,7 +74,10 @@ namespace game
         get_part<world::camera>()->move(glm::vec3(0, 0, -0.02));
 
         if (autopilot)
-            correct_direction();
+        {
+            xcorr->correct();
+            ycorr->correct();
+        }
     }
 
     int player::get_frame_id()

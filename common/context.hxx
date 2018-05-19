@@ -37,6 +37,7 @@ namespace common
     {
     protected:
         object(context *ctx) : ctx(ctx) {}
+        object(object *obj) : object(obj->get_context()) {}
 
     public:
         virtual ~object() {}

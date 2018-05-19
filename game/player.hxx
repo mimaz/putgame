@@ -28,6 +28,7 @@ namespace game
     private:
         void correct_direction();
 
+        std::shared_ptr<axis_correction> xcorr;
         std::shared_ptr<axis_correction> ycorr;
 
         play_activity *activity;
