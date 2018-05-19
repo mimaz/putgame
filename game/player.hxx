@@ -11,6 +11,7 @@
 namespace game
 {
     class play_activity;
+    class autopilot;
 
     class player : public common::context::object
     {
@@ -28,12 +29,8 @@ namespace game
     private:
         void correct_direction();
 
-        std::shared_ptr<axis_correction> xcorr;
-        std::shared_ptr<axis_correction> ycorr;
-
+        std::shared_ptr<autopilot> apilot;
         play_activity *activity;
-        float momentum;
-        bool autopilot;
     };
 }
 
