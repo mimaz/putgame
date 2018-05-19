@@ -95,8 +95,6 @@ namespace world
         auto matrix = pt.get_matrix() 
                     * glm::rotate(glm::mat4(1), angle, axis);
 
-        srand(0);
-
         models[count] = matrix;
         mvps[count] = cam->make_mvp(matrix);
         hashes[count] = std::hash<GLint>()(pt.get_index()) % 100;

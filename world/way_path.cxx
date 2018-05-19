@@ -37,14 +37,13 @@ namespace world
 
     void way_path::update()
     {
-        auto camid = get_camera_frame();
+        auto campos = get_part<world::camera>()->get_position();
         auto range = get_part<camera>()->get_view_range() * 2;
-        auto range_gap = static_cast<int>(range / get_gap());
 
         auto head_too_close = [=]() -> bool {
-            auto headidx = last_point().get_index();
+            auto head = math::coord3d(last_point().get_matrix());
 
-            return headidx - camid < range_gap;
+            return glm::distance(head, campos) < range;
         };
 
         while (head_too_close())
@@ -65,6 +64,7 @@ namespace world
 
     void way_path::generate_frame()
     {
+        std::cout << "generate new way frame" << std::endl;
         if (seg == nullptr or seg->count < 1)
             seg = generator();
 
@@ -103,12 +103,12 @@ namespace world
 
     way_path::segment_ref way_path::default_generator()
     {
-        std::uniform_real_distribution<float> dist(20, 40);
+        std::uniform_real_distribution<float> dist(100, 120);
 
-        auto angle = dist(random_engine());
+        auto length = dist(random_engine());
 
         return std::make_shared<way_path::segment>
-            (angle, math::pi / 2, glm::vec3(0, 1, 0));
+            (length, math::pi / 2, glm::vec3(0, 1, 0));
     }
 
     way_path::segment::segment()

@@ -29,7 +29,7 @@ namespace world
         , flags(dirty_proj | dirty_view_proj)
         , view_angle(math::pi / 3)
         , view_ratio(1)
-        , view_range(32)
+        , view_range(16)
     {}
 
     void camera::move(const glm::vec3 &vec)

@@ -70,7 +70,7 @@ namespace game
 
     void player::on_draw()
     {
-        get_part<world::camera>()->move(glm::vec3(0, 0, -0.02));
+        get_part<world::camera>()->move(glm::vec3(0, 0, -0.05));
 
         if (apilot != nullptr)
             apilot->correct();

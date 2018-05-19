@@ -56,17 +56,22 @@ namespace world
         reset_if_empty();
 
         auto way = get_part<way_path>();
-        auto range = get_part<camera>()->get_view_range();
-        auto campos = get_part<camera>()->get_position();
-        auto lastpos = last_point().get_position();
 
-        while (glm::distance(campos, lastpos) < range)
+        auto range = get_part<camera>()->get_view_range();
+        auto sqrange = range * range;
+        auto campos = get_part<camera>()->get_position();
+
+        while (math::sqdist(last_point().get_position(), campos) < sqrange)
         {
+            std::cout << "generate!" << std::endl;
             auto new_id = way_frame_id + way_frame_step;
             auto max_id = way->last_point().get_index();
 
             if (new_id > max_id)
+            {
+                std::cout << "too big id" << std::endl;
                 break;
+            }
 
             way_frame_id = new_id;
 

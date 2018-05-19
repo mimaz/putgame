@@ -17,6 +17,8 @@ namespace game
 
     autopilot::autopilot(player *pl)
         : object(pl)
+        , xmom(0)
+        , ymom(0)
     {}
 
     void autopilot::correct()
