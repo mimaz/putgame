@@ -13,7 +13,7 @@ namespace world
     visible_object::visible_object(common::context *ctx,
                                    int frameid)
         : object(ctx) 
-        , frame_id(frameid)
+        , frame_id(relative_id(frameid))
     {
         auto point = get<way_path>()->point(frameid);
 
@@ -68,5 +68,10 @@ namespace world
     glm::vec3 visible_object::get_position() const
     {
         return glm::vec3(get_model() * glm::vec4(0, 0, 0, 1));
+    }
+
+    int visible_object::relative_id(int id) 
+    {
+        return get<way_path>()->get_camera_frame() + id;
     }
 }

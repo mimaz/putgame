@@ -36,6 +36,8 @@ namespace world
         int get_frame_id() const { return frame_id; }
 
     private:
+        int relative_id(int id);
+
         glm::mat4 model;
         int frame_id;
     };

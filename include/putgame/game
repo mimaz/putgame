@@ -3,4 +3,6 @@
  * 2018
  */
 
-#include "../../game/context.hxx"
+#include "../../game/instance.hxx"
+#include "../../game/play_activity.hxx"
+#include "../../game/player.hxx"

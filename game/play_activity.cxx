@@ -29,8 +29,7 @@ namespace game
     }
 
     play_activity::~play_activity()
-    {
-    }
+    {}
 
     void play_activity::on_draw()
     {

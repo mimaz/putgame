@@ -8,21 +8,21 @@
 #include <putgame/math>
 #include <putgame/gui>
 
-#include "context.hxx"
+#include "instance.hxx"
 #include "play_activity.hxx"
 
 namespace game
 {
-    context::context()
+    instance::instance()
     {
     }
 
-    context::~context()
+    instance::~instance()
     {
         get<world::object_manager>()->join_process();
     }
 
-    void context::start()
+    void instance::start()
     {
         glClearColor(0, 0, 0, 1);
         glFrontFace(GL_CW);
@@ -30,12 +30,12 @@ namespace game
         play = std::make_shared<play_activity>(this);
     }
 
-    void context::stop()
+    void instance::stop()
     {
         play = nullptr;
     }
 
-    void context::draw()
+    void instance::draw()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -51,7 +51,7 @@ namespace game
         swap_buffers();
     }
 
-    void context::resize(int wid, int hei)
+    void instance::resize(int wid, int hei)
     {
         auto ratio = static_cast<float>(wid) / hei;
 
@@ -64,7 +64,7 @@ namespace game
         glViewport(0, 0, wid, hei);
     }
 
-    void context::cursor(int x, int y)
+    void instance::cursor(int x, int y)
     {
         if (x == mouse_x and y == mouse_y)
             return;
@@ -80,7 +80,7 @@ namespace game
         }
     }
 
-    void context::press()
+    void instance::press()
     {
         gui::touch_event event(gui::touch_event::press, 
                                mouse_x, mouse_y);
@@ -88,7 +88,7 @@ namespace game
         get<gui::surface>()->touch(event);
     }
 
-    void context::release()
+    void instance::release()
     {
         gui::touch_event event(gui::touch_event::release, 
                                mouse_x, mouse_y);

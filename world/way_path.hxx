@@ -37,6 +37,7 @@ namespace world
 
         std::shared_ptr<segment> seg;
         segment_gen generator;
+
         int camera_frame;
         bool dirty_camera_frame;
     };
