@@ -19,15 +19,12 @@ namespace world
 
         path_line(common::context *ctx, float gap);
 
+        virtual void generate_back() = 0;
+
         void append(float angle, glm::vec3 axis);
         void append(const glm::mat4 &mat);
-
-        void remove_back();
         void remove_front();
-
-        virtual void reset() = 0;
-        void reset_if_empty();
-        void reset_matrix(const glm::mat4 &matrix);
+        void reset(const glm::mat4 &matrix);
 
         const std::deque<path_point> &points() const;
         const path_point &first_point() const;

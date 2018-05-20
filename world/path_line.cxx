@@ -15,13 +15,14 @@ namespace world
 
     path_line::path_line(common::context *ctx, float gap)
         : object(ctx)
+        , pointv(1, path_point(glm::mat4(1), 0))
         , gap(gap)
     {}
 
     void path_line::append(float angle, glm::vec3 axis)
     {
         if (empty())
-            reset();
+            throw common::invalid_state("path_line empty!");
 
         auto last = last_point();
         auto matrix = last.get_matrix() * make_matrix(angle, axis);
@@ -37,23 +38,12 @@ namespace world
         pointv.emplace_back(mat, index);
     }
 
-    void path_line::remove_back()
-    {
-        pointv.pop_back();
-    }
-
     void path_line::remove_front()
     {
         pointv.pop_front();
     }
 
-    void path_line::reset_if_empty()
-    {
-        if (empty())
-            reset();
-    }
-
-    void path_line::reset_matrix(const glm::mat4 &matrix)
+    void path_line::reset(const glm::mat4 &matrix)
     {
         pointv.clear();
         pointv.emplace_back(matrix, 0);

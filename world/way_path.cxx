@@ -17,41 +17,13 @@ namespace world
     way_path::way_path(common::context *ctx)
         : path_line(ctx, way_frame_gap)
         , generator(std::bind(&way_path::default_generator, this))
-    {}
+    {
+        reset();
+    }
 
     void way_path::set_generator(segment_gen gen)
     {
         generator = gen;
-    }
-
-    void way_path::reset()
-    {
-        path_line::reset_matrix(glm::mat4(1));
-    }
-
-    void way_path::update()
-    {
-        auto campos = get<camera>()->get_position();
-        auto range = get<camera>()->get_view_range() * 2;
-        auto sqrange = range * range;
-
-        auto head_too_close = [campos, sqrange, this]() -> bool {
-            auto head = math::coord3d(last_point().get_matrix());
-
-            return math::sqdist(head, campos) < sqrange;
-        };
-
-        auto tail_too_far = [campos, sqrange, this]() -> bool {
-            auto tail = math::coord3d(first_point().get_matrix());
-
-            return math::sqdist(tail, campos) > sqrange;
-        };
-
-        while (head_too_close())
-            generate_back();
-
-        while (tail_too_far())
-            remove_front();
     }
 
     void way_path::generate_back()
@@ -62,6 +34,40 @@ namespace world
         seg->count--;
 
         append(seg->angle, seg->axis);
+    }
+
+    void way_path::reset()
+    {
+        path_line::reset(glm::mat4(1));
+    }
+
+    void way_path::update()
+    {
+        auto camid = get<camera>()->get_frame_id();
+        auto range = get<camera>()->get_view_range();
+        auto frame_range = static_cast<int>(range / get_gap());
+
+        auto head_too_close = [this, camid, frame_range]() -> bool {
+            try {
+                return last_index() - camid < frame_range;
+            } catch (no_point) {
+                return true;
+            }
+        };
+
+        auto tail_too_far = [this, camid, frame_range]() -> bool {
+            try {
+                return camid - first_index() > frame_range;
+            } catch (no_point) {
+                return false;
+            }
+        };
+
+        while (head_too_close())
+            generate_back();
+
+        while (tail_too_far())
+            remove_front();
     }
 
     way_path::segment_ref way_path::default_generator()

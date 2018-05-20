@@ -154,7 +154,11 @@ namespace world
     int camera::get_frame_id()
     {
         if (flags & dirty_frame)
+        {
             update_frame_id();
+
+            flags &= ~dirty_frame;
+        }
 
         return frame_id;
     }
@@ -173,7 +177,12 @@ namespace world
 
     void camera::update_frame_id()
     {
-        get<way_path>()->reset_if_empty();
+        try {
+            get<way_path>()->point(frame_id);
+        } catch (path_line::no_point) {
+            frame_id = get<way_path>()->first_index();
+        }
+
 
         auto cam_sqdist = [this](int idx) -> float {
             auto frpos = get<way_path>()->point(idx).get_position();

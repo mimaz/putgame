@@ -214,7 +214,7 @@ int main(int argc, char **argv)
 
     glfwSetErrorCallback(error_callback);
 
-    {
+    try {
         glfw_application app;
         time_t nexttim = app.time_millis();
 
@@ -233,6 +233,8 @@ int main(int argc, char **argv)
         }
 
         app.stop();
+    } catch (common::invalid_state is) {
+        std::cerr << "common::invalid_state " << is.desc << std::endl;
     }
 
     glfwTerminate();

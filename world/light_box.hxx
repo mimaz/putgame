@@ -24,8 +24,10 @@ namespace world
             green,
             blue,
             white,
+            color_count
         };
 
+        light_box(common::context *ctx, int frameid);
         light_box(common::context *ctx, int frameid, color col);
         ~light_box();
 

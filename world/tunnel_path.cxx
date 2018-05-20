@@ -18,41 +18,45 @@ namespace world
         , way_frame_id(0)
         , way_frame_step(static_cast<int>
                 (gap / ctx->get<way_path>()->get_gap()))
-    {}
+    {
+        tunnel_path::reset();
+    }
+
+    void tunnel_path::generate_back()
+    {
+        auto new_id = way_frame_id + way_frame_step;
+        auto point = get<way_path>()->point(new_id);
+
+        way_frame_id = new_id;
+
+        append(point);
+    }
 
     void tunnel_path::reset()
     {
         auto camid = get<camera>()->get_frame_id();
         auto matrix = get<way_path>()->matrix(camid);
 
-        path_line::reset_matrix(matrix);
+        path_line::reset(matrix);
     }
 
     void tunnel_path::update()
     {
-        reset_if_empty();
+        try {
+            while (true)
+                generate_back();
+        } catch (no_point) {}
 
+        auto camid = get<camera>()->get_frame_id();
         auto campos = get<camera>()->get_position();
-        auto range = get<camera>()->get_view_range();
-        auto sqrange = range * range;
 
-        while (math::sqdist(last_matrix(), campos) < sqrange)
-            generate();
+        auto sqremdist = 2 * 4;
 
-        while (math::sqdist(first_matrix(), campos) > sqrange)
+        while (first_index() < camid 
+                and math::sqdist(campos, first_matrix()) > sqremdist)
+        {
             remove_front();
-    }
-
-    void tunnel_path::generate()
-    {
-        auto new_id = way_frame_id + way_frame_step;
-
-        if (new_id > get<way_path>()->last_index())
-            throw common::invalid_state("tunnel path cannot be created "
-                                        "behind way path!");
-
-        way_frame_id = new_id;
-
-        append(get<way_path>()->point(new_id));
+            std::cout << "removed tunnel frame!" << std::endl;
+        }
     }
 }

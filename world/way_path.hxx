@@ -24,11 +24,11 @@ namespace world
 
         void set_generator(segment_gen gen);
 
-        void reset() override;
+        void generate_back() override;
+        void reset();
         void update();
 
     private:
-        void generate_back();
         segment_ref default_generator();
 
         std::shared_ptr<segment> seg;

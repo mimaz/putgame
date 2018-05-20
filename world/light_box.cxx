@@ -32,14 +32,29 @@ namespace
 
             case world::light_box::white:
                 return glm::vec3(bright, bright, bright);
-        }
 
-        throw common::make_invalid_argument(col);
+            default:
+                throw common::make_invalid_argument(col);
+        }
+    }
+
+    world::light_box::color random_color(common::context *ctx)
+    {
+        std::uniform_int_distribution<int> dist
+            (0, world::light_box::color_count - 1);
+
+        auto idx = dist(ctx->random_engine());
+
+        return static_cast<world::light_box::color>(idx);
     }
 }
 
 namespace world
 {
+    light_box::light_box(common::context *ctx, int frameid)
+        : light_box(ctx, frameid, random_color(ctx))
+    {}
+
     light_box::light_box(common::context *ctx, int frameid, color col)
         : visible_object(ctx, frameid)
         , light_source(ctx)
