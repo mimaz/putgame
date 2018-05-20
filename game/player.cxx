@@ -43,6 +43,6 @@ namespace game
 
     int player::get_frame_id()
     {
-        return get<world::way_path>()->get_camera_frame();
+        return get<world::camera>()->get_frame_id();
     }
 }

@@ -45,8 +45,11 @@ namespace world
         glm::vec3 get_light_color() override;
         float get_light_range() override;
 
+        int get_frame_id();
+
     private:
         glm::mat4 inversed_view();
+        void update_frame_id();
 
         glm::mat4 proj_mat;
         glm::mat4 view_proj_mat;
@@ -58,6 +61,8 @@ namespace world
         float view_angle;
         float view_ratio;
         float view_range;
+
+        int frame_id;
     };
 }
 

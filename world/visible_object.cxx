@@ -6,7 +6,9 @@
 #include <putgame/std>
 
 #include "visible_object.hxx"
+
 #include "way_path.hxx"
+#include "camera.hxx"
 
 namespace world
 {
@@ -72,6 +74,6 @@ namespace world
 
     int visible_object::relative_id(int id) 
     {
-        return get<way_path>()->get_camera_frame() + id;
+        return get<camera>()->get_frame_id() + id;
     }
 }

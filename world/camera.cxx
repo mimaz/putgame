@@ -16,6 +16,8 @@ enum
     dirty_proj = 0x01,
     dirty_view_proj = 0x02,
     dirty_inverse = 0x04,
+    dirty_frame = 0x08,
+    dirty_all = dirty_proj | dirty_view_proj | dirty_inverse | dirty_frame
 };
 
 constexpr auto near_plane = 0.01f;
@@ -27,7 +29,7 @@ namespace world
         , light_source(ctx)
         , proj_mat(1)
         , view_mat(1)
-        , flags(dirty_proj | dirty_view_proj | dirty_inverse)
+        , flags(dirty_all)
         , view_angle(math::pi / 3)
         , view_ratio(1)
         , view_range(16)
@@ -35,21 +37,20 @@ namespace world
 
     void camera::move(const glm::vec3 &vec)
     {
-        flags |= dirty_view_proj | dirty_inverse;
-        apply(glm::translate(-vec));
+        flags |= dirty_frame;
 
-        get<way_path>()->camera_moved();
+        apply(glm::translate(-vec));
     }
 
     void camera::rotate(float angle, const glm::vec3 &axis)
     {
-        flags |= dirty_view_proj | dirty_inverse;
         apply(glm::rotate(-angle, axis));
     }
 
     void camera::apply(const glm::mat4 &matrix)
     {
         flags |= dirty_view_proj | dirty_inverse;
+
         view_mat = matrix * view_mat;
     }
 
@@ -150,6 +151,14 @@ namespace world
         return 150;
     }
 
+    int camera::get_frame_id()
+    {
+        if (flags & dirty_frame)
+            update_frame_id();
+
+        return frame_id;
+    }
+
     glm::mat4 camera::inversed_view()
     {
         if (flags & dirty_inverse)
@@ -160,5 +169,31 @@ namespace world
         }
 
         return view_inverse_mat;
+    }
+
+    void camera::update_frame_id()
+    {
+        get<way_path>()->reset_if_empty();
+
+        auto cam_sqdist = [this](int idx) -> float {
+            auto frpos = get<way_path>()->point(idx).get_position();
+
+            return math::sqdist(get_position(), frpos);
+        };
+
+
+        while (get<way_path>()->first_index() < frame_id
+                and cam_sqdist(frame_id - 1)
+                < cam_sqdist(frame_id))
+        {
+            frame_id--;
+        }
+
+        while (get<way_path>()->last_index() > frame_id
+                and cam_sqdist(frame_id + 1)
+                < cam_sqdist(frame_id))
+        {
+            frame_id++;
+        }
     }
 }

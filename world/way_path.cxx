@@ -17,17 +17,11 @@ namespace world
     way_path::way_path(common::context *ctx)
         : path_line(ctx, way_frame_gap)
         , generator(std::bind(&way_path::default_generator, this))
-        , camera_frame(0)
     {}
 
     void way_path::set_generator(segment_gen gen)
     {
         generator = gen;
-    }
-
-    void way_path::camera_moved()
-    {
-        dirty_camera_frame = true;
     }
 
     void way_path::reset()
@@ -37,7 +31,7 @@ namespace world
 
     void way_path::update()
     {
-        auto campos = get<world::camera>()->get_position();
+        auto campos = get<camera>()->get_position();
         auto range = get<camera>()->get_view_range() * 2;
         auto sqrange = range * range;
 
@@ -60,18 +54,6 @@ namespace world
             remove_front();
     }
 
-    int way_path::get_camera_frame()
-    {
-        if (dirty_camera_frame)
-        {
-            dirty_camera_frame = false;
-
-            update_camera_frame();
-        }
-
-        return camera_frame;
-    }
-
     void way_path::generate_back()
     {
         if (seg == nullptr or seg->count < 1)
@@ -80,34 +62,6 @@ namespace world
         seg->count--;
 
         append(seg->angle, seg->axis);
-    }
-
-    void way_path::update_camera_frame()
-    {
-        reset_if_empty();
-
-        auto campos = get<camera>()->get_position();
-
-        auto cam_sqdist = [this, campos](int idx) -> float {
-            auto frpos = point(idx).get_position();
-
-            return math::sqdist(campos, frpos);
-        };
-
-
-        while (first_point().get_index() < camera_frame
-                and cam_sqdist(camera_frame - 1)
-                < cam_sqdist(camera_frame))
-        {
-            camera_frame--;
-        }
-
-        while (last_point().get_index() > camera_frame
-                and cam_sqdist(camera_frame + 1)
-                < cam_sqdist(camera_frame))
-        {
-            camera_frame++;
-        }
     }
 
     way_path::segment_ref way_path::default_generator()

@@ -22,9 +22,8 @@ namespace world
 
     void tunnel_path::reset()
     {
-        auto way = get<way_path>();
-        auto camid = way->get_camera_frame();
-        auto matrix = way->point(camid).get_matrix();
+        auto camid = get<camera>()->get_frame_id();
+        auto matrix = get<way_path>()->matrix(camid);
 
         path_line::reset_matrix(matrix);
     }
