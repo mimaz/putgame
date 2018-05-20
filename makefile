@@ -9,7 +9,6 @@ BUILD_DIR = /tmp/putgame-build
  # targets
  ##
 PRECOMPILER = ${BUILD_DIR}/putgame-precompiler
-LIBCORE = ${BUILD_DIR}/libputgame-core.so
 LIBGAME = ${BUILD_DIR}/libputgame.so
 RES_HEADER = ${BUILD_DIR}/putgame/res
 STD_HEADER = ${BUILD_DIR}/putgame/std.gch
@@ -26,12 +25,9 @@ COMMON_LDFLAGS = -Og
 PRECOMPILER_CFLAGS = ${COMMON_FLAGS} -O1
 PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
 
-LIBCORE_CFLAGS = ${COMMON_CFLAGS}
-LIBCORE_CXXFLAGS = ${COMMON_CXXFLAGS}
-LIBCORE_LDFLAGS = ${COMMON_LDFLAGS} -pthread -lGL
-
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
-LIBGAME_LDFLAGS = ${COMMON_LDFLAGS}
+LIBGAME_CFLAGS = ${COMMON_CFLAGS}
+LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} -lpthread -lGL
 
 GLFW_APP_CXXFLAGS = ${COMMON_CFLAGS}
 GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw
@@ -40,47 +36,32 @@ CC = gcc
 CXX = g++
 
 ##
- # sources
+ # sources & objects
  ##
-LIBCORE_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/
+LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/
 
 PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
-
-LIBCORE_GLSL = ${shell find glsl/ -type f}
-LIBCORE_GLSL_SRC = ${LIBCORE_GLSL:%=${BUILD_DIR}/%.c}
-LIBCORE_SRC = ${shell find ${LIBCORE_SRC_DIRS} -maxdepth 1 -name "*.cxx"}
-
-LIBGAME_SRC = ${shell find game/ -name "*.cxx"}
-
-GLFW_APP_SRC = ${shell find glfw/ -name "*.cxx"}
-
-##
- # objects
- ##
 PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${BUILD_DIR}/%.o}
 
-LIBCORE_GLSL_OBJ = ${LIBCORE_GLSL_SRC:%=%.o}
-LIBCORE_OBJ = ${LIBCORE_SRC:%=${BUILD_DIR}/%.o} ${LIBCORE_GLSL_OBJ}
+GLSL_SRC = ${shell find glsl/ -type f}
+GLSL_C_SRC = ${GLSL_SRC:%=${BUILD_DIR}/%.c}
+GLSL_C_OBJ = ${GLSL_C_SRC:%=%.o}
 
+LIBGAME_SRC = ${shell find ${LIBGAME_SRC_DIRS} -name "*.cxx"}
 LIBGAME_OBJ = ${LIBGAME_SRC:%=${BUILD_DIR}/%.o}
 
+GLFW_APP_SRC = ${shell find glfw/ -name "*.cxx"}
 GLFW_APP_OBJ = ${GLFW_APP_SRC:%=${BUILD_DIR}/%.o}
-
-##
- # dependencies
- ##
-ALL_OBJ = ${PRECOMPILER_OBJ} ${LIBCORE_OBJ} ${LIBGAME_OBJ} ${GLFW_APP_OBJ}
-ALL_DEP = ${ALL_OBJ:%.o=%.d}
 
 ##
  # basic rules
  ##
 
-all: executable
+all: glfw_app
+
+glfw_app: ${GLFW_APP}
 
 precompiler: ${PRECOMPILER}
-
-libcore: ${LIBCORE}
 
 libgame: ${LIBGAME}
 
@@ -98,26 +79,23 @@ run: ${GLFW_APP}
 ##
  # executable rules
  ##
-${GLFW_APP}: ${LIBCORE} ${LIBGAME} ${GLFW_APP_OBJ} 
+${GLFW_APP}: ${LIBGAME} ${GLFW_APP_OBJ} 
 	${CXX} ${GLFW_APP_LDFLAGS} -o $@ $^
 
 ##
  # libcore & libgame rules
  ##
-${LIBGAME}: ${LIBGAME_OBJ}
+${LIBGAME}: ${LIBGAME_OBJ} ${GLSL_C_OBJ}
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBGAME_LDFLAGS} -o $@ -shared $^
-
-${LIBCORE}: ${LIBCORE_OBJ}
-	${CXX} ${LIBCORE_LDFLAGS} -o $@ -shared $^
+	${CXX} ${LIBGAME_LDFLAGS} -shared -o $@ $^
 
 ${BUILD_DIR}/%.cxx.o: %.cxx ${STD_HEADER} ${RES_HEADER}
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -c $<
+	${CXX} ${LIBGAME_CXXFLAGS} -o $@ -c $<
 
 ${BUILD_DIR}/glsl/%.c.o: ${BUILD_DIR}/glsl/%.c
 	@mkdir -p ${dir $@}
-	${CC} ${LIBCORE_CFLAGS} -o $@ -c $<
+	${CC} ${LIBGAME_CFLAGS} -o $@ -c $<
 
 ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 	@mkdir -p ${dir $@}
@@ -125,9 +103,9 @@ ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 
 ${STD_HEADER}: putgame/std
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBCORE_CXXFLAGS} -o $@ -xc++-header -c $<
+	${CXX} ${LIBGAME_CXXFLAGS} -o $@ -xc++-header -c $<
 
-${RES_HEADER}: ${LIBCORE_GLSL_SRC}
+${RES_HEADER}: ${GLSL_C_SRC}
 	@mkdir -p ${dir $@}
 	${PRECOMPILER} header $@ $^
 
