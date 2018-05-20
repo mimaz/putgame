@@ -8,14 +8,14 @@
 #include "play_activity.hxx"
 
 #include "player.hxx"
-#include "object_generator.hxx"
+#include "demo_generator.hxx"
 
 namespace game
 {
     play_activity::play_activity(common::context *ctx)
         : object(ctx)
         , player_ref(std::make_shared<player>(this))
-        , object_generator_ref(std::make_shared<object_generator>(this))
+        , object_generator_ref(std::make_shared<demo_generator>(this))
     {
         auto way = get<world::way_path>();
 

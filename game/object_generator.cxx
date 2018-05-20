@@ -16,8 +16,8 @@ namespace game
         , activity(activity)
     {}
 
+    object_generator::~object_generator() {}
+
     void object_generator::on_draw()
-    {
-        std::cout << "generate!" << std::endl;
-    }
+    {}
 }

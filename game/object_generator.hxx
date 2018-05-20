@@ -16,11 +16,11 @@ namespace game
     {
     public:
         object_generator(play_activity *activity);
+        ~object_generator() = 0;
 
-        void on_draw();
+        virtual void on_draw();
 
-    private:
-        play_activity *activity;
+        play_activity *const activity;
     };
 }
 
