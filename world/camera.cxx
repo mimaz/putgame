@@ -15,6 +15,7 @@ enum
 {
     dirty_proj = 0x01,
     dirty_view_proj = 0x02,
+    dirty_inverse = 0x04,
 };
 
 constexpr auto near_plane = 0.01f;
@@ -26,7 +27,7 @@ namespace world
         , light_source(ctx)
         , proj_mat(1)
         , view_mat(1)
-        , flags(dirty_proj | dirty_view_proj)
+        , flags(dirty_proj | dirty_view_proj | dirty_inverse)
         , view_angle(math::pi / 3)
         , view_ratio(1)
         , view_range(16)
@@ -34,7 +35,7 @@ namespace world
 
     void camera::move(const glm::vec3 &vec)
     {
-        flags |= dirty_view_proj;
+        flags |= dirty_view_proj | dirty_inverse;
         apply(glm::translate(-vec));
 
         get<way_path>()->camera_moved();
@@ -42,26 +43,26 @@ namespace world
 
     void camera::rotate(float angle, const glm::vec3 &axis)
     {
-        flags |= dirty_view_proj;
+        flags |= dirty_view_proj | dirty_inverse;
         apply(glm::rotate(-angle, axis));
     }
 
     void camera::apply(const glm::mat4 &matrix)
     {
-        flags |= dirty_view_proj;
+        flags |= dirty_view_proj | dirty_inverse;
         view_mat = matrix * view_mat;
     }
 
-    float camera::gradient(float angle, glm::vec3 axis, glm::vec3 target)
+    float camera::gradient(float angle, glm::vec3 axis, glm::vec3 targetvec)
     {
-        auto newview = glm::rotate(-angle, axis) * get_view();
+        auto newview = inversed_view() * glm::rotate(angle, axis);
         auto vector = math::direction3d(inversed_view());
-        auto newvector = math::direction3d(glm::inverse(newview));
+        auto newvector = math::direction3d(newview);
 
-        auto cosine = glm::dot(target, vector);
-        auto newcosine = glm::dot(target, newvector);
+        auto cosine = glm::dot(targetvec, vector);
+        auto newcosine = glm::dot(targetvec, newvector);
 
-        return cosine - newcosine;
+        return (cosine - newcosine) / angle;
     }
 
     void camera::set_view_angle(float angle)
@@ -146,11 +147,18 @@ namespace world
 
     float camera::get_light_range()
     {
-        return 15;
+        return 150;
     }
 
     glm::mat4 camera::inversed_view()
     {
-        return glm::inverse(get_view());
+        if (flags & dirty_inverse)
+        {
+            view_inverse_mat = glm::inverse(get_view());
+
+            flags &= ~dirty_inverse;
+        }
+
+        return view_inverse_mat;
     }
 }

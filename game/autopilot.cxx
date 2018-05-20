@@ -10,11 +10,13 @@
 #include "autopilot.hxx"
 
 #include "player.hxx"
-#include "constants.hxx"
 
 namespace game
 {
-    constexpr auto sample_step = math::pi / 250;
+    constexpr auto gradient_angle = math::pi / 250;
+    constexpr auto gradient_factor = 0.05f;
+    constexpr auto turning_rate = 0.15f;
+    constexpr auto distance_offset = 2;
 
     autopilot::autopilot(player *pl)
         : object(pl)
@@ -24,29 +26,28 @@ namespace game
 
     void autopilot::correct()
     {
-        auto tframe = get<world::way_path>()
-            ->get_camera_frame() + 50;
+        auto fgap = get<world::way_path>()->get_gap();
+        auto foffset = static_cast<int>(distance_offset / fgap);
 
-        auto tmatrix = get<world::way_path>()
-            ->point(tframe).get_matrix();
+        auto tframe = get<world::way_path>()->get_camera_frame() + foffset;
+        auto tmatrix = get<world::way_path>()->point(tframe).get_matrix();
 
-        auto target = math::coord3d(tmatrix)
+        auto targetvec = math::coord3d(tmatrix)
             - get<world::camera>()->get_position();
 
 
-        auto onaxis = [=](glm::vec3 axis, 
-                          float &momentum) -> void {
+        auto onaxis = [targetvec, this](glm::vec3 axis, 
+                                        float &momentum) -> void {
             auto gr = get<world::camera>()
-                ->gradient(sample_step, axis, target);
+                ->gradient(gradient_angle, axis, targetvec);
 
             if (gr != gr)
                 return;
 
-            momentum = autopilot_momentum * momentum 
-                     + autopilot_rate * gr;
+            momentum = turning_rate * gradient_factor * gr 
+                     + (1 - turning_rate) * momentum;
 
-            get<world::camera>()
-                ->rotate(math::pi * momentum, axis);
+            get<world::camera>()->rotate(math::pi * momentum, axis);
         };
 
 
