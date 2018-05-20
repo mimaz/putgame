@@ -12,6 +12,7 @@
 namespace game
 {
     class player;
+    class object_generator;
 
     class play_activity : public common::context::object
     {
@@ -26,11 +27,17 @@ namespace game
           template<typename _T, typename ..._Args>
         std::shared_ptr<_T> create_object(const _Args &...args);
 
-        game::player *get_player() const { return player.get(); }
+        player *get_player() const 
+        { return player_ref.get(); }
+
+        object_generator *get_object_generator() const 
+        { return object_generator_ref.get(); }
 
     private:
         std::deque<object_ref> object_queue;
-        std::shared_ptr<game::player> player;
+
+        std::shared_ptr<player> player_ref;
+        std::shared_ptr<object_generator> object_generator_ref;
     };
 
       template<typename _T, typename ..._Args>

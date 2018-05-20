@@ -8,24 +8,21 @@
 #include "play_activity.hxx"
 
 #include "player.hxx"
+#include "object_generator.hxx"
 
 namespace game
 {
     play_activity::play_activity(common::context *ctx)
         : object(ctx)
-        , player(std::make_shared<game::player>(this))
+        , player_ref(std::make_shared<player>(this))
+        , object_generator_ref(std::make_shared<object_generator>(this))
     {
         auto way = get<world::way_path>();
 
         way->reset();
         way->update();
 
-        auto box = create_object<world::light_box>
-            (ctx, 130, world::light_box::white);
-
-        box->translate(glm::vec3(0.8, 0, 0));
-
-        player->set_autopilot(true);
+        get_player()->set_autopilot(true);
     }
 
     play_activity::~play_activity()
@@ -44,5 +41,6 @@ namespace game
         }
 
         get_player()->on_draw();
+        get_object_generator()->on_draw();
     }
 }
