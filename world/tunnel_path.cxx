@@ -56,7 +56,6 @@ namespace world
                 and math::sqdist(campos, first_matrix()) > sqremdist)
         {
             remove_front();
-            std::cout << "removed tunnel frame!" << std::endl;
         }
     }
 }

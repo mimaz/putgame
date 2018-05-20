@@ -38,6 +38,8 @@ namespace game
 
         std::shared_ptr<player> player_ref;
         std::shared_ptr<object_generator> object_generator_ref;
+
+        int last_way_id;
     };
 
       template<typename _T, typename ..._Args>

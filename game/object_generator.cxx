@@ -18,6 +18,6 @@ namespace game
 
     object_generator::~object_generator() {}
 
-    void object_generator::on_draw()
+    void object_generator::generate()
     {}
 }

@@ -15,7 +15,7 @@ namespace game
     public:
         demo_generator(play_activity *act);
 
-        void on_draw() override;
+        void generate() override;
     };
 }
 

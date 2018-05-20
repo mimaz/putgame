@@ -17,14 +17,14 @@ namespace game
         : object_generator(act)
     {}
 
-    void demo_generator::on_draw()
+    void demo_generator::generate()
     {
         auto dist = std::normal_distribution<float>
             (0.0f, 1.0f)(random_engine());
 
         auto absdist = std::abs(dist);
 
-        if (absdist > 2.75f)
+        if (absdist > 2.5f)
         {
             std::cout << "create lightbox" << std::endl;
 
@@ -41,14 +41,8 @@ namespace game
             auto yoff = sinf(angle);
 
             ptr->translate(glm::vec3(xoff, yoff, 0) / 2.0f);
-
-
-            std::cout << ptr->get_frame_id()
-                      << " cam " 
-                      << get<world::camera>()->get_frame_id() 
-                      << std::endl;
         }
 
-        object_generator::on_draw();
+        object_generator::generate();
     }
 }

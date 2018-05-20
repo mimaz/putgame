@@ -18,7 +18,7 @@ namespace game
         object_generator(play_activity *activity);
         ~object_generator() = 0;
 
-        virtual void on_draw();
+        virtual void generate();
 
         play_activity *const activity;
     };
