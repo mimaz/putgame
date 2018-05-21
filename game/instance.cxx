@@ -9,13 +9,14 @@
 #include <putgame/gui>
 
 #include "instance.hxx"
+
 #include "play_activity.hxx"
+#include "main_menu.hxx"
 
 namespace game
 {
     instance::instance()
-    {
-    }
+    {}
 
     instance::~instance()
     {
@@ -28,11 +29,13 @@ namespace game
         glFrontFace(GL_CW);
 
         play = std::make_shared<play_activity>(this);
+        menu = std::make_shared<main_menu>(this);
     }
 
     void instance::stop()
     {
         play = nullptr;
+        menu = nullptr;
     }
 
     void instance::draw()
@@ -94,5 +97,15 @@ namespace game
                                mouse_x, mouse_y);
 
         get<gui::surface>()->touch(event);
+    }
+
+    int instance::get_width() 
+    {
+        return width;
+    }
+
+    int instance::get_height()
+    {
+        return height;
     }
 }

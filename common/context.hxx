@@ -22,6 +22,8 @@ namespace common
         _Type *get();
 
         virtual time_t time_millis() = 0;
+        virtual int get_width() = 0;
+        virtual int get_height() = 0;
 
         std::default_random_engine &random_engine()
         { return randeng; }

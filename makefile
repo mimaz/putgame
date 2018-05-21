@@ -119,4 +119,14 @@ ${BUILD_DIR}/precompiler/%.c.o: precompiler/%.c
 	@mkdir -p ${dir $@}
 	${CC} ${PRECOMPILER_CFLAGS} -o $@ -c $< 
 
+##
+ # dependencies
+ ##
+
+ALL_OBJ = ${PRECOMPILER_OBJ}
+ALL_OBJ += ${GLSL_C_OBJ}
+ALL_OBJ += ${LIBGAME_OBJ}
+ALL_OBJ += ${GLFW_APP_OBJ}
+ALL_DEP = ${ALL_OBJ:%.o=%.d}
+
 -include ${ALL_DEP}

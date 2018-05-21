@@ -70,7 +70,7 @@ namespace
             glfwDestroyWindow(win);
         }
 
-        void draw() final
+        void draw() override
         {
             glfwPollEvents();
 

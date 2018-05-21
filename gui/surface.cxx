@@ -14,22 +14,28 @@ namespace gui
     surface::surface(common::context *ctx)
         : object(ctx)
         , dirty_proj(true)
-        , width(2)
-        , height(2)
+        , width(-1)
+        , height(-1)
         , font_builder(text::default_font)
-    {}
+    {
+        resize(ctx->get_width(), ctx->get_height());
+    }
 
     surface::~surface()
     {}
 
     void surface::resize(int w, int h)
     {
-        width = w;
-        height = h;
-        dirty_proj = true;
+        if (w != width or h != height)
+        {
+            width = w;
+            height = h;
 
-        for (auto item : items)
-            item->on_surface_resize(w, h);
+            dirty_proj = true;
+
+            for (auto item : items)
+                item->on_surface_resize(w, h);
+        }
     }
 
     void surface::process()

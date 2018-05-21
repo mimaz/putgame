@@ -18,10 +18,18 @@ namespace game
         start_btn.set_text("start!");
         start_btn.set_primary_color(primary);
         start_btn.set_secondary_color(glm::vec4(1, 1, 0, 0.5f));
+
+        layout(ctx->get_width(), ctx->get_height());
     }
 
     void main_menu::on_surface_resize(int w, int h)
     {
+        layout(w, h);
+    }
+
+    void main_menu::layout(int w, int h)
+    {
+        std::cout << "resize: " << w << ":" << h << std::endl;
         gui::rect_item::on_surface_resize(w, h);
 
         start_btn.resize(w / 2,  h / 8);

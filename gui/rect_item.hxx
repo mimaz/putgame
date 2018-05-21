@@ -18,8 +18,8 @@ namespace gui
         rect_item(common::context *ctx);
         ~rect_item();
 
-        virtual void set_position(int x, int y);
-        virtual void resize(int w, int h);
+        void set_position(int x, int y);
+        void resize(int w, int h);
 
         virtual void draw();
         virtual void process();

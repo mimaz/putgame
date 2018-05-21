@@ -18,6 +18,8 @@ namespace game
         void on_surface_resize(int w, int h) override;
 
     private:
+        void layout(int w, int h);
+
         gui::color_button start_btn;
     };
 }

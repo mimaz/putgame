@@ -36,9 +36,7 @@ namespace world
         matrix = glm::translate(matrix, offset);
         matrix = back().matrix() * matrix;
 
-        auto index = back().index() + 1;
-
-        pointv.emplace_back(matrix, index);
+        append(matrix);
     }
 
     void path_line::append(const glm::mat4 &mat)

@@ -11,6 +11,7 @@
 namespace game
 {
     class play_activity;
+    class main_menu;
 
     class instance : public common::context
     {
@@ -29,8 +30,8 @@ namespace game
 
         virtual void swap_buffers() = 0;
 
-        int get_width() const { return width; }
-        int get_height() const { return height; }
+        int get_width() override;
+        int get_height() override;
 
     private:
         int width;
@@ -40,6 +41,7 @@ namespace game
         int mouse_pressed;
 
         std::shared_ptr<play_activity> play;
+        std::shared_ptr<main_menu> menu;
     };
 }
 
