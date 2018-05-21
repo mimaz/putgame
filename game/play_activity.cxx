@@ -43,9 +43,9 @@ namespace game
 
 
 
-        if (get<world::way_path>()->last_index() != last_way_id)
+        if (get<world::way_path>()->back().index() != last_way_id)
         {
-            last_way_id = get<world::way_path>()->last_index();
+            last_way_id = get<world::way_path>()->back().index();
 
             get_object_generator()->generate();
         }

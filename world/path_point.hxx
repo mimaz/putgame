@@ -11,19 +11,17 @@ namespace world
     class path_point
     {
     public:
-        path_point(const glm::mat4 &matrix, int index)
-            : matrix(matrix)
-            , index(index) {}
+        path_point(const glm::mat4 &matrix, int index);
 
-        const glm::mat4 &get_matrix() const { return matrix; }
-        glm::vec3 get_position() const;
-        int get_index() const { return index; }
+        const glm::mat4 &matrix() const;
+        glm::vec3 position() const;
+        int index() const;
 
         operator glm::mat4() const;
 
     private:
-        glm::mat4 matrix;
-        int index;
+        glm::mat4 mat;
+        int idx;
     };
 }
 

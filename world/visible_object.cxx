@@ -17,9 +17,9 @@ namespace world
         : object(ctx) 
         , frame_id(frameid)
     {
-        auto point = get<way_path>()->point(frameid);
+        auto point = get<way_path>()->at(frameid);
 
-        apply(point.get_matrix());
+        apply(point.matrix());
     }
 
     void visible_object::set_matrix(const glm::mat4 &mat)

@@ -11,18 +11,33 @@
 
 namespace world
 {
-    glm::vec3 path_point::get_position() const
+    path_point::path_point(const glm::mat4 &matrix, int index)
+        : mat(matrix)
+        , idx(index)
+    {}
+
+    const glm::mat4 &path_point::matrix() const 
+    { 
+        return mat; 
+    }
+
+    glm::vec3 path_point::position() const
     {
-        return math::coord3d(get_matrix());
+        return math::coord3d(matrix());
+    }
+
+    int path_point::index() const
+    { 
+        return idx; 
     }
 
     path_point::operator glm::mat4() const
     {
-        return get_matrix();
+        return matrix();
     }
 }
 
 std::ostream &operator<<(std::ostream &os, const world::path_point &pt)
 {
-    return os << "point" << math::coord3d(pt.get_matrix());
+    return os << "point" << math::coord3d(pt.matrix());
 }

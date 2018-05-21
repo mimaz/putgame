@@ -25,7 +25,7 @@ namespace world
     void tunnel_path::generate_back()
     {
         auto new_id = way_frame_id + way_frame_step;
-        auto point = get<way_path>()->point(new_id);
+        auto point = get<way_path>()->at(new_id);
 
         way_frame_id = new_id;
 
@@ -35,7 +35,7 @@ namespace world
     void tunnel_path::reset()
     {
         auto camid = get<camera>()->get_frame_id();
-        auto matrix = get<way_path>()->matrix(camid);
+        auto matrix = get<way_path>()->at(camid).matrix();
 
         path_line::reset(matrix);
     }
@@ -52,8 +52,8 @@ namespace world
 
         auto sqremdist = 2 * 4;
 
-        while (first_index() < camid 
-                and math::sqdist(campos, first_matrix()) > sqremdist)
+        while (front().index() < camid 
+                and math::sqdist(campos, front().matrix()) > sqremdist)
         {
             remove_front();
         }

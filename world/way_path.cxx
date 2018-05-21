@@ -49,7 +49,7 @@ namespace world
 
         auto head_too_close = [this, camid, frame_range]() -> bool {
             try {
-                return last_index() - camid < frame_range;
+                return back().index() - camid < frame_range;
             } catch (no_point) {
                 return true;
             }
@@ -57,7 +57,7 @@ namespace world
 
         auto tail_too_far = [this, camid, frame_range]() -> bool {
             try {
-                return camid - first_index() > frame_range;
+                return camid - front().index() > frame_range;
             } catch (no_point) {
                 return false;
             }

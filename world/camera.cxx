@@ -178,27 +178,27 @@ namespace world
     void camera::update_frame_id()
     {
         try {
-            get<way_path>()->point(frame_id);
+            get<way_path>()->at(frame_id);
         } catch (path_line::no_point) {
-            frame_id = get<way_path>()->first_index();
+            frame_id = get<way_path>()->front().index();
         }
 
 
         auto cam_sqdist = [this](int idx) -> float {
-            auto frpos = get<way_path>()->point(idx).get_position();
+            auto frpos = get<way_path>()->at(idx).position();
 
             return math::sqdist(get_position(), frpos);
         };
 
 
-        while (get<way_path>()->first_index() < frame_id
+        while (get<way_path>()->front().index() < frame_id
                 and cam_sqdist(frame_id - 1)
                 < cam_sqdist(frame_id))
         {
             frame_id--;
         }
 
-        while (get<way_path>()->last_index() > frame_id
+        while (get<way_path>()->back().index() > frame_id
                 and cam_sqdist(frame_id + 1)
                 < cam_sqdist(frame_id))
         {

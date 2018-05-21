@@ -89,15 +89,14 @@ namespace world
 
     void tunnel_view::draw(const path_point &pt)
     {
-        auto angle = -math::pi / mesh.get_quality() * pt.get_index();
+        auto angle = -math::pi / mesh.get_quality() * pt.index();
         auto axis = glm::vec3(0, 0, 1);
 
-        auto matrix = pt.get_matrix() 
-                    * glm::rotate(glm::mat4(1), angle, axis);
+        auto matrix = pt.matrix() * glm::rotate(angle, axis);
 
         models[count] = matrix;
         mvps[count] = cam->make_mvp(matrix);
-        hashes[count] = std::hash<GLint>()(pt.get_index()) % 100;
+        hashes[count] = std::hash<GLint>()(pt.index()) % 100;
 
         count++;
 

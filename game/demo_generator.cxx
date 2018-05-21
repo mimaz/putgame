@@ -31,7 +31,7 @@ namespace game
             std::uniform_real_distribution<float> angledist(0, math::pi * 2);
 
 
-            auto id = get<world::way_path>()->last_index();
+            auto id = get<world::way_path>()->back().index();
             auto ptr = activity->create_object<world::light_box>
                 (get_context(), id);
 

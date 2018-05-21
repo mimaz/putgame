@@ -30,7 +30,7 @@ namespace game
         auto foffset = static_cast<int>(distance_offset / fgap);
 
         auto tframe = get<world::camera>()->get_frame_id() + foffset;
-        auto tmatrix = get<world::way_path>()->point(tframe).get_matrix();
+        auto tmatrix = get<world::way_path>()->at(tframe).matrix();
 
         auto targetvec = math::coord3d(tmatrix)
             - get<world::camera>()->get_position();
