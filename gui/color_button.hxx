@@ -15,7 +15,10 @@ namespace gui
     class color_button : public rect_item
     {
     public:
-        color_button(common::context *ctx);
+        using handler_type = std::function<void(color_button *)>;
+
+        color_button(common::context *ctx, 
+                     handler_type handler);
 
         void set_text(const std::string &text);
         void set_primary_color(glm::vec4 color);

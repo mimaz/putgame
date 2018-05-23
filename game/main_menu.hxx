@@ -10,6 +10,8 @@
 
 namespace game
 {
+    class color_button;
+
     class main_menu : public gui::rect_item
     {
     public:
@@ -19,6 +21,7 @@ namespace game
 
     private:
         void layout(int w, int h);
+        void clicked(color_button *btn);
 
         gui::color_button start_btn;
     };

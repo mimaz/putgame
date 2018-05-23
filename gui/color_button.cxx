@@ -12,7 +12,8 @@
 
 namespace gui
 {
-    color_button::color_button(common::context *ctx)
+    color_button::color_button(common::context *ctx,
+                               handler_type handler)
         : rect_item(ctx)
         , text(ctx, get<surface>()->get_font_builder())
     {
