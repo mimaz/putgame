@@ -20,14 +20,14 @@ namespace game
 
         player(play_activity *activity);
 
-        void set_autopilot(bool ap);
+        void process();
 
-        void on_draw();
+        void set_autopilot(bool ap);
 
         int get_frame_id();
 
     private:
-        void correct_direction();
+        void test_collision();
 
         std::shared_ptr<autopilot> apilot;
         play_activity *activity;

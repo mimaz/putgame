@@ -52,7 +52,8 @@ namespace world
 
         auto sqremdist = 2 * 4;
 
-        while (front().index() < camid 
+        while (not empty()
+                and front().index() < camid 
                 and math::sqdist(campos, front().matrix()) > sqremdist)
         {
             remove_front();

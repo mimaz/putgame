@@ -92,7 +92,7 @@ namespace world
 
 
         return std::make_shared<way_path::segment>
-            (8, angle, axis);
+            (100, angle, axis);
     }
 
     way_path::segment::segment()

@@ -18,11 +18,27 @@ namespace game
         : object(activity->get_context())
         , apilot(nullptr)
         , activity(activity)
+    {}
+
+    void player::process()
     {
-        get<world::camera>()->rotate
-            (-math::pi / 8, glm::vec3(0, 1, 0));
-        get<world::camera>()->rotate
-            (math::pi / 6, glm::vec3(1, 0, 0));
+        get<world::camera>()->move(glm::vec3(0, 0, -0.20));
+
+        if (apilot != nullptr)
+        {
+            apilot->correct();
+        }
+        else
+        {
+            try {
+                test_collision();
+            } catch (glm::vec3 point) {
+                auto offs = point - get<world::camera>()->get_position();
+
+                get<world::camera>()->move(offs);
+                std::cout << "ouch!" << std::endl;
+            }
+        }
     }
 
     void player::set_autopilot(bool ap)
@@ -33,16 +49,21 @@ namespace game
             apilot = nullptr;
     }
 
-    void player::on_draw()
-    {
-        get<world::camera>()->move(glm::vec3(0, 0, -0.20));
-
-        if (apilot != nullptr)
-            apilot->correct();
-    }
-
     int player::get_frame_id()
     {
         return get<world::camera>()->get_frame_id();
+    }
+
+    void player::test_collision()
+    {
+        auto eye = get<world::camera>()->get_position();
+        auto fid = get<world::camera>()->get_frame_id();
+        auto fra = get<world::way_path>()->at(fid);
+        auto center = math::coord3d(fra);
+
+        auto sqd = math::sqdist(center, eye);
+
+        if (sqd > 1)
+            throw center + glm::normalize(eye - center) * 0.8f;
     }
 }

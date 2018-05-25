@@ -23,7 +23,7 @@ namespace game
         way->reset();
         way->update();
 
-        get_player()->set_autopilot(true);
+        //get_player()->set_autopilot(true);
     }
 
     play_activity::~play_activity()
@@ -51,6 +51,6 @@ namespace game
         }
 
 
-        get_player()->on_draw();
+        get_player()->process();
     }
 }
