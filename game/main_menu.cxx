@@ -9,9 +9,11 @@
 
 namespace game
 {
+    constexpr auto pholder = std::placeholders::_1;
+
     main_menu::main_menu(common::context *ctx)
         : rect_item(ctx)
-        , start_btn(ctx)
+        , start_btn(ctx, std::bind(&main_menu::clicked, this, nullptr))
     {
         auto primary = glm::vec4(0.15f, 0.15f, 0.15f, 0.75f);
 
@@ -34,5 +36,10 @@ namespace game
 
         start_btn.resize(w / 2,  h / 8);
         start_btn.set_position(0, 0);
+    }
+
+    void main_menu::clicked(color_button *btn)
+    {
+        std::cout << "clicked!" << std::endl;
     }
 }

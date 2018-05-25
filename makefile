@@ -3,6 +3,10 @@
  # 2018
  ##
 
+ARCH ?= x86-64
+HOST ?= x86_64-pc-linux-gnu-
+TARGET ?= x86_64-pc-linux-gnu-
+
 BUILD_DIR = /tmp/putgame-build
 
 ##
@@ -17,23 +21,25 @@ GLFW_APP = ${BUILD_DIR}/putgame.elf
 ##
  # compile flags
  ##
-COMMON_FLAGS = -Og -g -Wall -MMD -fPIC -Iinclude/ -I${BUILD_DIR}
+COMMON_FLAGS = -O2 -Wall -MMD -fPIC -fno-lto -Iinclude/ -I${BUILD_DIR} -static-libstdc++ -DPUTGAME_ANDROID
 COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
-COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++17
-COMMON_LDFLAGS = -Og
+COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++14
+COMMON_LDFLAGS = -O1
 
 PRECOMPILER_CFLAGS = ${COMMON_FLAGS} -O1
 PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
 
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBGAME_CFLAGS = ${COMMON_CFLAGS}
-LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} -lpthread -lGL
+LIBGAME_LDFLAGS = ${COMMON_LDFLAGS}
 
 GLFW_APP_CXXFLAGS = ${COMMON_CFLAGS}
-GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw
+GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw -lpthread
 
-CC = gcc
-CXX = g++
+HOST_CC = ${HOST}gcc
+HOST_CXX = ${HOST}g++
+TARGET_CC = ${TARGET}gcc
+TARGET_CXX = ${TARGET}g++
 
 ##
  # sources & objects
@@ -63,7 +69,10 @@ glfw_app: ${GLFW_APP}
 
 precompiler: ${PRECOMPILER}
 
-libgame: ${LIBGAME}
+libputgame: ${LIBGAME}
+
+libputgame_copy: ${LIBGAME}
+	cp $< ${OUTPUT}
 
 executable: ${GLFW_APP}
 
@@ -80,22 +89,22 @@ run: ${GLFW_APP}
  # executable rules
  ##
 ${GLFW_APP}: ${LIBGAME} ${GLFW_APP_OBJ} 
-	${CXX} ${GLFW_APP_LDFLAGS} -o $@ $^
+	${TARGET_CXX} ${GLFW_APP_LDFLAGS} -o $@ $^
 
 ##
  # libcore & libgame rules
  ##
 ${LIBGAME}: ${LIBGAME_OBJ} ${GLSL_C_OBJ}
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBGAME_LDFLAGS} -shared -o $@ $^
+	${TARGET_CXX} ${LIBGAME_LDFLAGS} -shared -o $@ $^
 
 ${BUILD_DIR}/%.cxx.o: %.cxx ${STD_HEADER} ${RES_HEADER}
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBGAME_CXXFLAGS} -o $@ -c $<
+	${TARGET_CXX} ${LIBGAME_CXXFLAGS} -o $@ -c $<
 
 ${BUILD_DIR}/glsl/%.c.o: ${BUILD_DIR}/glsl/%.c
 	@mkdir -p ${dir $@}
-	${CC} ${LIBGAME_CFLAGS} -o $@ -c $<
+	${TARGET_CC} ${LIBGAME_CFLAGS} -o $@ -c $<
 
 ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 	@mkdir -p ${dir $@}
@@ -103,7 +112,7 @@ ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 
 ${STD_HEADER}: putgame/std
 	@mkdir -p ${dir $@}
-	${CXX} ${LIBGAME_CXXFLAGS} -o $@ -xc++-header -c $<
+	${TARGET_CXX} ${LIBGAME_CXXFLAGS} -o $@ -xc++-header -c $<
 
 ${RES_HEADER}: ${GLSL_C_SRC}
 	@mkdir -p ${dir $@}
@@ -113,11 +122,11 @@ ${RES_HEADER}: ${GLSL_C_SRC}
  # precompiler rules
  ##
 ${PRECOMPILER}: ${PRECOMPILER_OBJ}
-	${CC} ${PRECOMPILER_LDFLAGS} -o $@ $^
+	${HOST_CC} ${PRECOMPILER_LDFLAGS} -o $@ $^
 
 ${BUILD_DIR}/precompiler/%.c.o: precompiler/%.c
 	@mkdir -p ${dir $@}
-	${CC} ${PRECOMPILER_CFLAGS} -o $@ -c $< 
+	${HOST_CC} ${PRECOMPILER_CFLAGS} -o $@ -c $< 
 
 ##
  # dependencies

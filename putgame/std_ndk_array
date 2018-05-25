@@ -1,0 +1,40 @@
+/*
+ * Mieszko Mazurek <mimaz@gmx.com> 
+ * 2018
+ */
+
+namespace std
+{
+    namespace __ndk1
+    {
+          template<typename _T, size_t _Size>
+        class array
+        {
+        public:
+            using iterator_type = _T *;
+
+              template<typename _Index>
+            inline _T &operator[](_Index idx) 
+            { return _array[idx]; }
+
+              template<typename _Index>
+            inline const _T &operator[](_Index idx) const
+            { return _array[idx]; }
+
+            inline const _T &front() const
+            { return operator[](0); }
+
+            inline const _T &back() const
+            { return operator[](_Size - 1); }
+
+            inline iterator_type begin()
+            { return _array; }
+
+            inline iterator_type end()
+            { return _array + _Size; }
+
+        private:
+            _T _array[_Size];
+        };
+    }
+}
