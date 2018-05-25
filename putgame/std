@@ -29,5 +29,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
 
-#define GLFW_INCLUDE_ES3
-#include <GLFW/glfw3.h>
+#ifdef PUTGAME_ANDROID
+# include <GLES3/gl3.h>
+# include "std_ndk_array"
+#elif defined PUTGAME_GLFW
+# define GLFW_INCLUDE_ES3
+# include <GLFW/glfw3.h>
+#else
+# error putgame must be compiled either for glfw or android target
+#endif

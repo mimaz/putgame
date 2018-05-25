@@ -21,7 +21,7 @@ GLFW_APP = ${BUILD_DIR}/putgame.elf
 ##
  # compile flags
  ##
-COMMON_FLAGS = -O2 -Wall -MMD -fPIC -march=${ARCH} -fno-lto -Iinclude/ -I${BUILD_DIR} -static-libstdc++
+COMMON_FLAGS = -O2 -Wall -MMD -fPIC -fno-lto -Iinclude/ -I${BUILD_DIR} -static-libstdc++ -DPUTGAME_ANDROID
 COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
 COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++14
 COMMON_LDFLAGS = -O1
@@ -31,10 +31,10 @@ PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
 
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBGAME_CFLAGS = ${COMMON_CFLAGS}
-LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} -lpthread -lGL
+LIBGAME_LDFLAGS = ${COMMON_LDFLAGS}
 
 GLFW_APP_CXXFLAGS = ${COMMON_CFLAGS}
-GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw
+GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw -lpthread
 
 HOST_CC = ${HOST}gcc
 HOST_CXX = ${HOST}g++
@@ -69,7 +69,10 @@ glfw_app: ${GLFW_APP}
 
 precompiler: ${PRECOMPILER}
 
-libgame: ${LIBGAME}
+libputgame: ${LIBGAME}
+
+libputgame_copy: ${LIBGAME}
+	cp $< ${OUTPUT}
 
 executable: ${GLFW_APP}
 
