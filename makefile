@@ -21,9 +21,9 @@ GLFW_APP = ${BUILD_DIR}/putgame.elf
 ##
  # compile flags
  ##
-COMMON_FLAGS = -O2 -Wall -MMD -fPIC -march=${ARCH} -fno-lto -Iinclude/ -I${BUILD_DIR}
+COMMON_FLAGS = -O2 -Wall -MMD -fPIC -march=${ARCH} -fno-lto -Iinclude/ -I${BUILD_DIR} -static-libstdc++
 COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
-COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++17
+COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++14
 COMMON_LDFLAGS = -O1
 
 PRECOMPILER_CFLAGS = ${COMMON_FLAGS} -O1
