@@ -24,15 +24,16 @@
 #include <cmath>
 
 #define GLM_FORCE_RADIANS
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
 
-#ifdef PUTGAME_ANDROID
+#ifdef PLATFORM_ANDROID
 # include <GLES3/gl3.h>
 # include "std_ndk_array"
-#elif defined PUTGAME_GLFW
+#elif defined PLATFORM_LINUX
 # define GLFW_INCLUDE_ES3
 # include <GLFW/glfw3.h>
 #else
