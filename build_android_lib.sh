@@ -22,9 +22,31 @@ case $1 in
         LIBNAME=libputgame-android-$1.so
         ;;
 
+    arm)
+        TARGET=arm-linux-androideabi-
+        LIBNAME=libputgame-android-arm.so
+        ;;
+
+    arm64 | aarch64)
+        TARGET=aarch64-linux-android-
+        LIBNAME=libputgame-android-$1.so
+        ;;
+
     *)
         echo "invalid architecture: $1"
         exit 1
 esac
 
-make TARGET=$TARGET OUTPUT=$LIBNAME PLATFORM=ANDROID libputgame_copy
+BUILD_DIR=/tmp/putgame-build-$1
+
+mkdir -p $BUILD_DIR
+
+make TARGET=$TARGET \
+    OUTPUT=$LIBNAME \
+    PLATFORM=ANDROID \
+    RELEASE=1 \
+    BUILD_DIR=$BUILD_DIR \
+    clean \
+    libputgame
+
+cp $BUILD_DIR/libputgame.so $LIBNAME

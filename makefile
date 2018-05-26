@@ -7,8 +7,7 @@ HOST ?= x86_64-pc-linux-gnu-
 TARGET ?= x86_64-pc-linux-gnu-
 PLATFORM ?= LINUX
 RELEASE ?= 0
-
-BUILD_DIR = /tmp/putgame-build
+BUILD_DIR ?= /tmp/putgame-build
 
 ##
  # targets
@@ -32,7 +31,7 @@ else
 endif
 
 ifeq (${PLATFORM},ANDROID)
-	COMMON_FLAGS += -static-libstdc++
+	COMMON_FLAGS += -static-libstdc++ -I/home/mimakkz/android/toolchains/common/include
 endif
 
 COMMON_FLAGS += -MMD -fPIC
@@ -86,16 +85,13 @@ precompiler: ${PRECOMPILER}
 
 libputgame: ${LIBGAME}
 
-libputgame_copy: ${LIBGAME}
-	cp $< ${OUTPUT}
-
 executable: ${GLFW_APP}
 
 debug: ${GLFW_APP}
 	gdb $<
 
 clean:
-	rm -rf ${BUILD_DIR}
+	rm -rf ${BUILD_DIR} libputgame-*.so
 
 run: ${GLFW_APP}
 	${GLFW_APP}
