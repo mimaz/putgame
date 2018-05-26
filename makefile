@@ -3,9 +3,10 @@
  # 2018
  ##
 
-ARCH ?= x86-64
 HOST ?= x86_64-pc-linux-gnu-
 TARGET ?= x86_64-pc-linux-gnu-
+PLATFORM ?= LINUX
+RELEASE ?= 0
 
 BUILD_DIR = /tmp/putgame-build
 
@@ -21,10 +22,24 @@ GLFW_APP = ${BUILD_DIR}/putgame.elf
 ##
  # compile flags
  ##
-COMMON_FLAGS = -O2 -Wall -MMD -fPIC -fno-lto -Iinclude/ -I${BUILD_DIR} -static-libstdc++ -DPUTGAME_ANDROID
+
+ifeq (${RELEASE},0)
+	COMMON_FLAGS = -Og -g -Wall
+	COMMON_LDFLAGS = -O0
+else
+	COMMON_FLAGS = -O2 -flto
+	COMMON_LDFLAGS = -O2 -flto
+endif
+
+ifeq (${PLATFORM},ANDROID)
+	COMMON_FLAGS += -static-libstdc++
+endif
+
+COMMON_FLAGS += -MMD -fPIC
+COMMON_FLAGS += -Iinclude/ -I${BUILD_DIR}
+COMMON_FLAGS += -DPLATFORM_${PLATFORM}
 COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
 COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++14
-COMMON_LDFLAGS = -O1
 
 PRECOMPILER_CFLAGS = ${COMMON_FLAGS} -O1
 PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
