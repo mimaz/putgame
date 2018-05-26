@@ -31,7 +31,7 @@ else
 endif
 
 ifeq (${PLATFORM},ANDROID)
-	COMMON_FLAGS += -static-libstdc++ -I/home/mimakkz/android/toolchains/common/include
+	COMMON_FLAGS += -static-libstdc++
 endif
 
 COMMON_FLAGS += -MMD -fPIC
