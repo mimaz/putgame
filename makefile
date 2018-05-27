@@ -4,7 +4,7 @@
  ##
 
 HOST ?= x86_64-pc-linux-gnu-
-ARCH ?=
+ARCH ?= x86_64-linux
 TARGET ?= x86_64-pc-linux-gnu-
 PLATFORM ?= LINUX
 RELEASE ?= 0
@@ -33,9 +33,6 @@ else
 	COMMON_LDFLAGS = -O2 -flto
 endif
 
-ifeq (${PLATFORM},ANDROID)
-endif
-
 COMMON_FLAGS += -MMD -fPIC
 COMMON_FLAGS += -Iinclude/ -I${BUILD_DIR}
 COMMON_FLAGS += -DPLATFORM_${PLATFORM}
@@ -47,7 +44,12 @@ PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
 
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBGAME_CFLAGS = ${COMMON_CFLAGS}
-LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} -lc -lm -lGLESv3 -lz -llog -lstdc++
+LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} 
+
+ifeq (${PLATFORM},ANDROID)
+	LIBGAME_SRC_DIRS += jni/
+	LIBGAME_LDFLAGS += -lc -lm -lGLESv3 -lz -llog -lstdc++
+endif
 
 GLFW_APP_CXXFLAGS = ${COMMON_CFLAGS}
 GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw -lpthread
@@ -60,7 +62,11 @@ TARGET_CXX = ${TARGET}g++
 ##
  # sources & objects
  ##
-LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/ jni/
+LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/
+
+ifeq (${PLATFORM},ANDROID)
+	LIBGAME_SRC_DIRS += jni/
+endif
 
 PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${BUILD_DIR}/%.o}

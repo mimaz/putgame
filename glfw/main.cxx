@@ -79,6 +79,7 @@ namespace
 
         void swap_buffers() final
         {
+            std::cout << "swap" << std::endl;
             glfwSwapBuffers(win);
             glfwPollEvents();
         }
@@ -93,58 +94,11 @@ namespace
             if (action != GLFW_RELEASE)
                 return;
 
-            /*
-            auto angle = math::pi / 20;
-            auto step = 0.25f;
-            */
-
             switch (key)
             {
                 case GLFW_KEY_ESCAPE:
                     glfwSetWindowShouldClose(win, GLFW_TRUE);
                     break;
-
-                /*
-                case GLFW_KEY_H:
-                    move({ -step, 0, 0 });
-                    break;
-
-                case GLFW_KEY_J:
-                    move({ 0, -step, 0 });
-                    break;
-
-                case GLFW_KEY_K:
-                    move({ 0, step, 0 });
-                    break;
-
-                case GLFW_KEY_L:
-                    move({ step, 0, 0 });
-                    break;
-
-                case GLFW_KEY_F:
-                    move({ 0, 0, -step });
-                    break;
-
-                case GLFW_KEY_B:
-                    move({ 0, 0, step });
-                    break;
-
-                case GLFW_KEY_A:
-                    rotate(angle, { 0, 1, 0 });
-                    break;
-
-                case GLFW_KEY_D:
-                    rotate(-angle, { 0, 1, 0 });
-                    break;
-
-                case GLFW_KEY_W:
-                    rotate(angle, { 1, 0, 0 });
-                    break;
-
-                case GLFW_KEY_X:
-                    rotate(-angle, { 1, 0, 0 });
-                    break;
-                */
 
                 default:
                     break;
