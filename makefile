@@ -4,10 +4,13 @@
  ##
 
 HOST ?= x86_64-pc-linux-gnu-
+ARCH ?=
 TARGET ?= x86_64-pc-linux-gnu-
 PLATFORM ?= LINUX
 RELEASE ?= 0
-BUILD_DIR ?= /tmp/putgame-build
+
+BUILD_DIR_BASE = /tmp/putgame-build
+BUILD_DIR = ${BUILD_DIR_BASE}-${ARCH}
 
 ##
  # targets
@@ -31,7 +34,6 @@ else
 endif
 
 ifeq (${PLATFORM},ANDROID)
-	COMMON_FLAGS += -static-libstdc++
 endif
 
 COMMON_FLAGS += -MMD -fPIC
@@ -45,7 +47,7 @@ PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
 
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBGAME_CFLAGS = ${COMMON_CFLAGS}
-LIBGAME_LDFLAGS = ${COMMON_LDFLAGS}
+LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} -lc -lm -lGLESv3 -lz -llog -lstdc++
 
 GLFW_APP_CXXFLAGS = ${COMMON_CFLAGS}
 GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw -lpthread
@@ -58,7 +60,7 @@ TARGET_CXX = ${TARGET}g++
 ##
  # sources & objects
  ##
-LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/
+LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/ jni/
 
 PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${BUILD_DIR}/%.o}
@@ -79,6 +81,9 @@ GLFW_APP_OBJ = ${GLFW_APP_SRC:%=${BUILD_DIR}/%.o}
 
 all: glfw_app
 
+build_dir:
+	@echo ${BUILD_DIR}
+
 glfw_app: ${GLFW_APP}
 
 precompiler: ${PRECOMPILER}
@@ -91,7 +96,10 @@ debug: ${GLFW_APP}
 	gdb $<
 
 clean:
-	rm -rf ${BUILD_DIR} libputgame-*.so
+	rm -rf ${BUILD_DIR}
+
+cleanall:
+	rm -rf ${BUILD_DIR_BASE}
 
 run: ${GLFW_APP}
 	${GLFW_APP}

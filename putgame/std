@@ -32,7 +32,17 @@
 
 #ifdef PLATFORM_ANDROID
 # include <GLES3/gl3.h>
-# include "std_ndk_array"
+
+namespace std
+{
+      template<typename _T>
+    inline std::string to_string(const _T &value)
+    {
+        return static_cast<std::ostringstream &>
+               (std::ostringstream() << value).str();
+    }
+}
+
 #elif defined PLATFORM_LINUX
 # define GLFW_INCLUDE_ES3
 # include <GLFW/glfw3.h>

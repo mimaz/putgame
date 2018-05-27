@@ -9,8 +9,6 @@
 
 namespace game
 {
-    constexpr auto pholder = std::placeholders::_1;
-
     main_menu::main_menu(common::context *ctx)
         : rect_item(ctx)
         , start_btn(ctx, std::bind(&main_menu::clicked, this, nullptr))

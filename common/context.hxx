@@ -18,6 +18,8 @@ namespace common
         context(const context &) = delete;
         context(context &&) = delete;
 
+        virtual ~context() {}
+
           template<typename _Type>
         _Type *get();
 

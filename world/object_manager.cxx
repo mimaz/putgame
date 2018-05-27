@@ -111,6 +111,7 @@ namespace world
 
     void object_manager::process_all()
     {
+        return;
         join_process();
 
         process_thread = std::make_unique<std::thread>
