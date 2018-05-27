@@ -7,6 +7,10 @@
 
 #include "log.hxx"
 
+#ifdef PLATFORM_ANDROID
+#include <android/log.h>
+#endif
+
 namespace common
 {
     namespace 
@@ -35,6 +39,29 @@ namespace common
 
             case level::info:
                 std::cout << "I :: " << str << std::endl;
+                break;
+            }
+        }
+#endif
+
+#ifdef PLATFORM_ANDROID
+        void log(level lv, const std::ostringstream &os)
+        {
+            auto tag = "putgame";
+            auto str = os.str().c_str();
+
+            switch (lv)
+            {
+            case level::debug:
+                __android_log_print(ANDROID_LOG_DEBUG, tag, str);
+                break;
+
+            case level::error:
+                __android_log_print(ANDROID_LOG_ERROR, tag, str);
+                break;
+
+            case level::info:
+                __android_log_print(ANDROID_LOG_INFO, tag, str);
                 break;
             }
         }

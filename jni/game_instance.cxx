@@ -13,9 +13,8 @@ namespace
     constexpr auto handle_name = "handle";
     constexpr auto handle_signature = "J";
 
-    class jni_instance : public game::instance
+    struct jni_instance : public game::instance
     {
-    public:
         static jni_instance *get(JNIEnv *env, jobject obj)
         {
             jclass cls = env->GetObjectClass(obj);
@@ -60,7 +59,6 @@ namespace
             return env->CallLongMethod(obj, time_millis_id);
         }
 
-    private:
         JNIEnv *env;
         jobject obj;
         jmethodID swap_buffers_id;

@@ -5,7 +5,7 @@
 
 package pl.poznan.put.student.mazurek.mieszko;
 
-class GameInstance
+abstract class GameInstance
 {
     static 
     {
@@ -18,9 +18,9 @@ class GameInstance
     }
 
     @Override
-    void finalize()
+    void finalize() throws Throwable
     {
-        destroy(handle);
+        destroy();
 
         super.finalize();
     }

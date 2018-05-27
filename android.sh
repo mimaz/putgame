@@ -22,7 +22,7 @@ ARCH=$2
 
 TOOLCHAINS=~/android/toolchains
 
-JNI_LIBS_DIR=android/jniLibs
+JNI_LIBS_DIR=jniLibs
 LIB_OUT_DIR=$JNI_LIBS_DIR/$ARCH
 BUILD_DIR=$(make build_dir ARCH=$ARCH TARGET=$TARGET)
 
