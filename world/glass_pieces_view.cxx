@@ -40,12 +40,14 @@ namespace world
     glass_pieces_view::glass_pieces_view(common::context *ctx)
         : object(ctx)
         , cam(ctx->get<camera>())
-        , vsh(GL_VERTEX_SHADER,
+        , vsh("glass_pieces_vsh",
+              GL_VERTEX_SHADER,
               version_glsl,
               "const lowp int max_count = " + 
               std::to_string(max_count) + ";",
               glass_pieces_vsh)
-        , fsh(GL_FRAGMENT_SHADER,
+        , fsh("glass_pieces_fsh",
+              GL_FRAGMENT_SHADER,
               version_glsl,
               lighting::fragment_source,
               glass_common_fsh,

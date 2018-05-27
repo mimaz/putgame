@@ -33,11 +33,13 @@ namespace world
         , path(ctx, mesh.get_gap())
         , light(ctx, &prog)
         , cam(ctx->get<camera>())
-        , vsh(GL_VERTEX_SHADER, 
+        , vsh("tunnel_vsh",
+              GL_VERTEX_SHADER, 
               version_glsl,
               vsh_header(max_count),
               tunnel_vsh)
-        , fsh(GL_FRAGMENT_SHADER, 
+        , fsh("tunnel_fsh",
+              GL_FRAGMENT_SHADER, 
               version_glsl,
               world::lighting::fragment_source,
               tunnel_fsh)

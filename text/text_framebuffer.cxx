@@ -24,10 +24,12 @@ namespace text
 {
     text_framebuffer::text_framebuffer(common::context *ctx)
         : object(ctx)
-        , vsh(GL_VERTEX_SHADER,
+        , vsh("textured_rect_vsh",
+              GL_VERTEX_SHADER,
               version_glsl,
               textured_rect_vsh)
-        , fsh(GL_FRAGMENT_SHADER,
+        , fsh("text_buffer_fsh",
+              GL_FRAGMENT_SHADER,
               version_glsl,
               text_buffer_fsh)
         , pro(&vsh, &fsh)

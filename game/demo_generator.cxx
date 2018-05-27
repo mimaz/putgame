@@ -24,7 +24,7 @@ namespace game
 
         auto absdist = std::abs(dist);
 
-        if (absdist > 2.5f)
+        if (absdist > 2.75f)
         {
             common::logd("create lightbox");
 

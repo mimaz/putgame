@@ -42,11 +42,13 @@ namespace world
 
     wall_obstacle_view::wall_obstacle_view(common::context *ctx)
         : cam(ctx->get<camera>())
-        , vsh(GL_VERTEX_SHADER, 
+        , vsh("wall_obstacle_vsh",
+              GL_VERTEX_SHADER, 
               version_glsl,
               vertex_hdr,
               wall_obstacle_vsh)
-        , fsh(GL_FRAGMENT_SHADER, 
+        , fsh("wall_obstacle_fsh",
+              GL_FRAGMENT_SHADER, 
               version_glsl,
               fragment_hdr,
               lighting::fragment_source,

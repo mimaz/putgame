@@ -27,10 +27,12 @@ namespace gui
 {
     color_button_view::color_button_view(common::context *ctx)
         : object(ctx)
-        , vsh(GL_VERTEX_SHADER,
+        , vsh("textured_rect_vsh",
+              GL_VERTEX_SHADER,
               version_glsl,
               textured_rect_vsh)
-        , fsh(GL_FRAGMENT_SHADER,
+        , fsh("color_button_fsh",
+              GL_FRAGMENT_SHADER,
               version_glsl,
               "const lowp int max_shadows = " + 
               std::to_string(max_shadows) + ";\n",

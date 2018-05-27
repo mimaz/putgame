@@ -10,7 +10,7 @@ PLATFORM ?= LINUX
 RELEASE ?= 0
 
 BUILD_DIR_BASE = /tmp/putgame-build
-BUILD_DIR = ${BUILD_DIR_BASE}-${ARCH}
+BUILD_DIR = ${BUILD_DIR_BASE}/${ARCH}
 
 ##
  # targets
@@ -29,8 +29,8 @@ ifeq (${RELEASE},0)
 	COMMON_FLAGS = -Og -g -Wall
 	COMMON_LDFLAGS = -O0
 else
-	COMMON_FLAGS = -O2 -flto
-	COMMON_LDFLAGS = -O2 -flto
+	COMMON_FLAGS = -O2
+	COMMON_LDFLAGS = -O1
 endif
 
 COMMON_FLAGS += -MMD -fPIC

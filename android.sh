@@ -60,8 +60,11 @@ function set_make_args() {
     esac
 
 
-    MAKE_ARCH_ARGS="TARGET=$TARGET OUTPUT=$LIBOUT \
-                    PLATFORM=ANDROID BUILD_DIR=$BUILD_DIR"
+    MAKE_ARCH_ARGS="TARGET=$TARGET \
+                    OUTPUT=$LIBOUT \
+                    PLATFORM=ANDROID \
+                    RELEASE=1 \
+                    BUILD_DIR=$BUILD_DIR"
 }
 
 

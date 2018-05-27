@@ -15,10 +15,14 @@ namespace glutils
         using srclist = std::initializer_list<srcitem>;
         using srcvec = std::vector<srcitem>;
 
-        shader(GLenum type, const srclist &list);
+        shader(const std::string &tag, 
+               GLenum type, 
+               const srclist &list);
 
           template<typename ..._Sources>
-        shader(GLenum type, const _Sources &...sources);
+        shader(const std::string &tag,
+               GLenum type, 
+               const _Sources &...sources);
 
         shader(const shader &) = delete;
         shader(shader &&) = default;
@@ -33,6 +37,7 @@ namespace glutils
         operator GLuint() { return get_handle(); }
 
     private:
+        std::string tag;
         GLenum type;
         srcvec srcv;
 
@@ -40,8 +45,10 @@ namespace glutils
     };
 
       template<typename ..._Sources>
-    shader::shader(GLenum type, const _Sources &...sources)
-        : shader(type, { sources... }) {}
+    shader::shader(const std::string &tag,
+                   GLenum type, 
+                   const _Sources &...sources)
+        : shader(tag, type, { sources... }) {}
 }
 
 #endif

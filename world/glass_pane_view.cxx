@@ -28,12 +28,14 @@ namespace world
 {
     glass_pane_view::glass_pane_view(common::context *ctx)
         : cam(ctx->get<camera>())
-        , vsh(GL_VERTEX_SHADER,
+        , vsh("glass_pane_vsh",
+              GL_VERTEX_SHADER,
               version_glsl,
               "const lowp int max_count = " + 
               std::to_string(instances_per_call) + ";",
               glass_pane_vsh)
-        , fsh(GL_FRAGMENT_SHADER,
+        , fsh("glass_pane_fsh",
+              GL_FRAGMENT_SHADER,
               version_glsl,
               lighting::fragment_source,
               glass_common_fsh,

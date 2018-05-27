@@ -33,10 +33,12 @@ namespace
     {
     public:
         renderer()
-            : vsh(GL_VERTEX_SHADER,
+            : vsh("text_font_vsh",
+                  GL_VERTEX_SHADER,
                   version_glsl,
                   text_font_vsh)
-            , fsh(GL_FRAGMENT_SHADER,
+            , fsh("text_font_fsh",
+                  GL_FRAGMENT_SHADER,
                   version_glsl,
                   "const lowp int max_count = " + 
                   std::to_string(max_count) + ";",

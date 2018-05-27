@@ -36,8 +36,13 @@ namespace glutils
         }
     }
 
-    shader::shader(GLenum type, const srclist &list)
-        : type(type), srcv(list.begin(), list.end()), handle(0) 
+    shader::shader(const std::string &tag,
+                   GLenum type, 
+                   const srclist &list)
+        : tag(tag)
+        , type(type)
+        , srcv(list.begin(), list.end())
+        , handle(0) 
     {}
 
     shader::~shader() 
@@ -95,7 +100,7 @@ namespace glutils
 
             auto log = std::string(msg);
 
-            common::loge("shader: ", code);
+            common::loge("tag: ", tag);
             common::loge("compilling shader failed: ", log);
 
             throw shader_error { type, log, std::move(code) };
