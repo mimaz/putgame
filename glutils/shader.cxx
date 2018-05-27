@@ -4,6 +4,7 @@
  */
 
 #include <putgame/std>
+#include <putgame/common>
 
 #include "shader.hxx"
 
@@ -53,9 +54,9 @@ namespace glutils
         
         if (handle < 1)
         {
-            std::cerr << "creating shader of type " 
-                      << strtype(type)
-                      << "failed!" << std::endl;
+            common::loge("creating shader of type ", 
+                         strtype(type),
+                         " failed!");
 
             exit(1);
         }
@@ -94,6 +95,8 @@ namespace glutils
 
             auto log = std::string(msg);
 
+            common::loge("shader: ", code);
+            common::loge("compilling shader failed: ", log);
 
             throw shader_error { type, log, std::move(code) };
         }

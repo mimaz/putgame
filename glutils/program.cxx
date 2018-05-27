@@ -4,6 +4,7 @@
  */
 
 #include <putgame/std>
+#include <putgame/common>
 
 #include "program.hxx"
 
@@ -42,8 +43,7 @@ namespace glutils
 
             glGetProgramInfoLog(handle, sizeof(msg), nullptr, msg);
 
-            std::cerr << "linking program failed: " 
-                      << msg << std::endl;
+            common::loge("linking program failed: ", msg);
 
             exit(1);
         }

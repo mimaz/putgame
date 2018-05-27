@@ -21,28 +21,26 @@ namespace
             jfieldID id = env->GetFieldID(cls, "handle", "J");
             jlong handle = env->GetLongField(obj, id);
 
-            return reinterpret_cast<jni_instance *>(handle);
+            auto ins = reinterpret_cast<jni_instance *>(handle);
+
+            ins->env = env;
+            ins->obj = obj;
+
+            common::logd("get instance: ", ins);
+
+            return ins;
         }
 
         jni_instance(JNIEnv *env, jobject obj)
             : env(env)
-            , obj(obj) 
+            , obj(obj)
         {
             jclass cls = env->GetObjectClass(obj);
-
-
-            swap_buffers_id = env->GetMethodID(cls, 
-                                               "swapBuffers", 
-                                               "()V");
-
-            time_millis_id = env->GetMethodID(cls,
-                                              "timeMillis",
-                                              "()J");
-
             jfieldID id = env->GetFieldID(cls, 
                                            handle_name, 
                                            handle_signature);
 
+            common::logd("create instance: ", this);
 
             auto handle = reinterpret_cast<jlong>(this);
 
@@ -51,18 +49,21 @@ namespace
 
         void swap_buffers() final
         {
-            env->CallVoidMethod(obj, swap_buffers_id);
+            // nothing to do, GLSurfaceView swaps just after draw
         }
 
         time_t time_millis() final
         {
-            return env->CallLongMethod(obj, time_millis_id);
+            auto cls = env->GetObjectClass(obj);
+            auto id = env->GetMethodID(cls,
+                                       "timeMillis",
+                                       "()J");
+
+            return env->CallLongMethod(obj, id);
         }
 
         JNIEnv *env;
         jobject obj;
-        jmethodID swap_buffers_id;
-        jmethodID time_millis_id;
     };
 }
 

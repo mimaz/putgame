@@ -67,6 +67,7 @@ namespace world
     void object_manager::draw_all()
     {
         get<tunnel_view>()->draw();
+        return;
         
 
 

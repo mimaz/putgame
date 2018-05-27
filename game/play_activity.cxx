@@ -22,6 +22,7 @@ namespace game
 
         way->reset();
         way->update();
+        return;
 
         get_player()->set_autopilot(true);
     }

@@ -29,7 +29,7 @@ namespace game
         glFrontFace(GL_CW);
 
         play = std::make_shared<play_activity>(this);
-        menu = std::make_shared<main_menu>(this);
+        //menu = std::make_shared<main_menu>(this);
     }
 
     void instance::stop()
@@ -43,13 +43,15 @@ namespace game
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         get<world::object_manager>()->process_all();
-        get<gui::surface>()->process();
+        //get<gui::surface>()->process();
 
         get<world::object_manager>()->draw_all();
-        get<gui::surface>()->draw();
+        //get<gui::surface>()->draw();
 
         if (play != nullptr)
             play->on_draw();
+
+        common::logd("draw !!!");
 
         swap_buffers();
     }
@@ -61,7 +63,7 @@ namespace game
         width = wid;
         height = hei;
 
-        get<gui::surface>()->resize(wid, hei);
+        //get<gui::surface>()->resize(wid, hei);
         get<world::camera>()->set_view_ratio(ratio);
 
         glViewport(0, 0, wid, hei);

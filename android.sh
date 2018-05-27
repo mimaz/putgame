@@ -68,7 +68,7 @@ function set_make_args() {
 case $COMMAND in
     build)
         set_make_args
-        PATH=$TOOLCHAIN_PATH:$PATH make $MAKE_ARCH_ARGS libputgame
+        PATH=$TOOLCHAIN_PATH:$PATH make $MAKE_ARCH_ARGS libputgame -j4
         mkdir -p $LIB_OUT_DIR
         cp $BUILD_DIR/libputgame.so $LIB_OUT_DIR/
         ;;

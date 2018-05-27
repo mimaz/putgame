@@ -5,7 +5,7 @@
 
 package pl.poznan.put.student.mazurek.mieszko;
 
-abstract class GameInstance
+class GameInstance
 {
     static 
     {
@@ -18,14 +18,12 @@ abstract class GameInstance
     }
 
     @Override
-    void finalize() throws Throwable
+    protected void finalize() throws Throwable
     {
         destroy();
 
         super.finalize();
     }
-
-    abstract void swapBuffers();
 
     long timeMillis()
     {
