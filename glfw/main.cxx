@@ -160,6 +160,8 @@ namespace
 
 int main(int argc, char **argv)
 {
+    common::logd("dupa");
+
     if (not glfwInit())
     {
         std::cerr << "intializing GLFW failed" << std::endl;
