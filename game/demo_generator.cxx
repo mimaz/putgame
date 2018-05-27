@@ -26,7 +26,7 @@ namespace game
 
         if (absdist > 2.5f)
         {
-            std::cout << "create lightbox" << std::endl;
+            common::logd("create lightbox");
 
             std::uniform_real_distribution<float> angledist(0, math::pi * 2);
 

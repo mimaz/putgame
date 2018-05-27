@@ -36,7 +36,7 @@ namespace game
                 auto offs = point - get<world::camera>()->get_position();
 
                 get<world::camera>()->move(offs);
-                std::cout << "ouch!" << std::endl;
+                common::logd("ouch");
             }
         }
     }

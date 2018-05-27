@@ -29,7 +29,7 @@ namespace game
 
     void main_menu::layout(int w, int h)
     {
-        std::cout << "resize: " << w << ":" << h << std::endl;
+        common::logd("resize: ", w, ":", h);
         gui::rect_item::on_surface_resize(w, h);
 
         start_btn.resize(w / 2,  h / 8);
@@ -38,6 +38,6 @@ namespace game
 
     void main_menu::clicked(color_button *btn)
     {
-        std::cout << "clicked!" << std::endl;
+        common::logd("clicked");
     }
 }

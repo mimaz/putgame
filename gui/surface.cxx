@@ -26,7 +26,6 @@ namespace gui
 
     void surface::resize(int w, int h)
     {
-        return;
         if (w != width or h != height)
         {
             width = w;

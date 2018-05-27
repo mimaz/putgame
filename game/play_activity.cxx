@@ -36,7 +36,7 @@ namespace game
         while (not object_queue.empty() 
                 and object_queue.front()->get_frame_id() < camid)
         {
-            std::cout << "delete last object" << std::endl;
+            common::logd("delete last object");
 
             object_queue.pop_front();
         }

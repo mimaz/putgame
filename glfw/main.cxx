@@ -79,7 +79,6 @@ namespace
 
         void swap_buffers() final
         {
-            std::cout << "swap" << std::endl;
             glfwSwapBuffers(win);
             glfwPollEvents();
         }

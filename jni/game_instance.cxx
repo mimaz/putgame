@@ -75,7 +75,7 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        std::cout << "start" << std::endl;
+        common::logd("jni start");
         jni_instance::get(env, obj)->start();
     }
 
@@ -84,7 +84,7 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        std::cout << "stop" << std::endl;
+        common::logd("jni stop");
         jni_instance::get(env, obj)->stop();
     }
 
@@ -93,7 +93,7 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        std::cout << "draw" << std::endl;
+        common::logd("jni draw");
         jni_instance::get(env, obj)->draw();
     }
 
@@ -104,7 +104,7 @@ extern "C"
             jint width,
             jint height)
     {
-        std::cout << "resize " << width << ":" << height << std::endl;
+        common::logd("jni resize ", width, ":", height);
         jni_instance::get(env, obj)->resize(width, height);
     }
 
@@ -115,7 +115,7 @@ extern "C"
             jint x,
             jint y)
     {
-        std::cout << "cursor " << x << ":" << y << std::endl;
+        common::logd("jni cursor ", x, ":", y);
         jni_instance::get(env, obj)->cursor(x, y);
     }
 
@@ -124,7 +124,7 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        std::cout << "press" << std::endl;
+        common::logd("jni press");
         jni_instance::get(env, obj)->press();
     }
 
@@ -133,7 +133,7 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        std::cout << "release" << std::endl;
+        common::logd("jni release");
         jni_instance::get(env, obj)->release();
     }
 
@@ -142,7 +142,7 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        std::cout << "create" << std::endl;
+        common::logd("jni create");
         new jni_instance(env, obj);
     }
 
@@ -151,7 +151,7 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        std::cout << "destroy" << std::endl;
+        common::logd("jni destroy");
         delete jni_instance::get(env, obj);
     }
 }
