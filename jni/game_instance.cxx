@@ -26,8 +26,6 @@ namespace
             ins->env = env;
             ins->obj = obj;
 
-            common::logd("get instance: ", ins);
-
             return ins;
         }
 
@@ -39,8 +37,6 @@ namespace
             jfieldID id = env->GetFieldID(cls, 
                                            handle_name, 
                                            handle_signature);
-
-            common::logd("create instance: ", this);
 
             auto handle = reinterpret_cast<jlong>(this);
 
@@ -74,7 +70,6 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        common::logd("jni start");
         jni_instance::get(env, obj)->start();
     }
 
@@ -83,7 +78,6 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        common::logd("jni stop");
         jni_instance::get(env, obj)->stop();
     }
 
@@ -92,7 +86,6 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        common::logd("jni draw");
         jni_instance::get(env, obj)->draw();
     }
 
@@ -103,7 +96,6 @@ extern "C"
             jint width,
             jint height)
     {
-        common::logd("jni resize ", width, ":", height);
         jni_instance::get(env, obj)->resize(width, height);
     }
 
@@ -114,7 +106,6 @@ extern "C"
             jint x,
             jint y)
     {
-        common::logd("jni cursor ", x, ":", y);
         jni_instance::get(env, obj)->cursor(x, y);
     }
 
@@ -123,7 +114,6 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        common::logd("jni press");
         jni_instance::get(env, obj)->press();
     }
 
@@ -132,7 +122,6 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        common::logd("jni release");
         jni_instance::get(env, obj)->release();
     }
 
@@ -141,7 +130,6 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        common::logd("jni create");
         new jni_instance(env, obj);
     }
 
@@ -150,7 +138,6 @@ extern "C"
             JNIEnv *env,
             jobject obj)
     {
-        common::logd("jni destroy");
         delete jni_instance::get(env, obj);
     }
 }

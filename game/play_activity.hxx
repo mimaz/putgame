@@ -22,6 +22,7 @@ namespace game
         play_activity(common::context *ctx);
         ~play_activity();
 
+        void on_shift(float x, float y);
         void on_draw();
 
           template<typename _T, typename ..._Args>

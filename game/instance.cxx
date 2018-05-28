@@ -16,6 +16,10 @@
 namespace game
 {
     instance::instance()
+        : mouse_x(-1)
+        , mouse_y(-1)
+        , mouse_pressed(false)
+        , shifting(false)
     {}
 
     instance::~instance()
@@ -72,19 +76,40 @@ namespace game
         if (x == mouse_x and y == mouse_y)
             return;
 
-        mouse_x = x;
-        mouse_y = y;
-
         if (mouse_pressed)
         {
+            common::logd("shifting: ", shifting);
+
+            if (shifting)
+            {
+                auto diffx = static_cast<float>(x - mouse_x) / get_width();
+                auto diffy = static_cast<float>(y - mouse_y) / get_height();
+
+                if (play != nullptr)
+                    play->on_shift(diffx, diffy);
+            }
+            else
+            {
+                shifting = true;
+            }
+
             gui::touch_event event(gui::touch_event::move, x, y);
 
             get<gui::surface>()->touch(event);
         }
+        else
+        {
+            shifting = false;
+        }
+
+        mouse_x = x;
+        mouse_y = y;
     }
 
     void instance::press()
     {
+        mouse_pressed = true;
+
         gui::touch_event event(gui::touch_event::press, 
                                mouse_x, mouse_y);
 
@@ -93,6 +118,8 @@ namespace game
 
     void instance::release()
     {
+        mouse_pressed = false;
+
         gui::touch_event event(gui::touch_event::release, 
                                mouse_x, mouse_y);
 

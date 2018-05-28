@@ -23,11 +23,16 @@ namespace game
         way->reset();
         way->update();
 
-        get_player()->set_autopilot(true);
+        //get_player()->set_autopilot(true);
     }
 
     play_activity::~play_activity()
     {}
+
+    void play_activity::on_shift(float x, float y)
+    {
+        get_player()->shift(x, y);
+    }
 
     void play_activity::on_draw()
     {

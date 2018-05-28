@@ -126,15 +126,10 @@ namespace
                                     double cursorx, 
                                     double cursory)
         {
-            auto app = from_window(win);
+            auto x = static_cast<int>(cursorx);
+            auto y = static_cast<int>(cursory);
 
-            auto xpos = static_cast<int>(cursorx)
-                - app->get_width() / 2;
-
-            auto ypos = -static_cast<int>(cursory)
-                + app->get_height() / 2;
-
-            from_window(win)->cursor(xpos, ypos);
+            from_window(win)->cursor(x, y);
         }
 
         static void touch_callback(GLFWwindow *win,

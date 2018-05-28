@@ -20,6 +20,17 @@ namespace game
         , activity(activity)
     {}
 
+    void player::shift(float x, float y)
+    {
+        glm::vec3 axisx(0, 1, 0);
+        glm::vec3 axisy(1, 0, 0);
+
+        auto factor = math::pi / 3;
+
+        get<world::camera>()->rotate(x * factor, axisx);
+        get<world::camera>()->rotate(y * factor, axisy);
+    }
+
     void player::process()
     {
         get<world::camera>()->move(glm::vec3(0, 0, -0.20));

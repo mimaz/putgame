@@ -2,26 +2,31 @@ package pl.poznan.put.student.mazurek.mieszko;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.MotionEvent;
+import android.view.View;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class GameView extends GLSurfaceView {
-    private Renderer renderer;
     private boolean started;
     private boolean stopped;
+
+    private final Renderer renderer;
 
     public GameView(Context context) {
         super(context);
 
-        setEGLConfigChooser(8, 8, 8, 0, 16, 0);
+        setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         setEGLContextClientVersion(3);
 
-        renderer = new Renderer();
         started = false;
         stopped = false;
 
+        renderer = new Renderer();
+
         setRenderer(renderer);
+        setOnTouchListener(new TouchListener());
     }
 
     public void start() {
@@ -65,6 +70,36 @@ public class GameView extends GLSurfaceView {
             nextTime += 1000 / 30;
 
             draw();
+        }
+    }
+
+    private class TouchListener implements OnTouchListener {
+        private int last_x;
+        private int last_y;
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+
+            if (x != last_x || y != last_y) {
+                last_x = x;
+                last_y = y;
+
+                renderer.cursor(x, y);
+            }
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    renderer.press();
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                    renderer.release();
+                    break;
+            }
+
+            return true;
         }
     }
 }

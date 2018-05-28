@@ -38,7 +38,8 @@ namespace game
         int height;
         int mouse_x;
         int mouse_y;
-        int mouse_pressed;
+        bool mouse_pressed;
+        bool shifting;
 
         std::shared_ptr<play_activity> play;
         std::shared_ptr<main_menu> menu;
