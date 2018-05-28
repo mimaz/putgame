@@ -24,14 +24,22 @@ namespace game
 
         auto absdist = std::abs(dist);
 
-        if (absdist > 2.75f)
+        auto id = get<world::way_path>()->back().index();
+
+        if (absdist > 2.95f)
+        {
+            common::logd("create glass");
+
+            auto ptr = activity->create_object<world::glass_pane>
+                (get_context(), id, glm::vec3(0, 0, 1));
+        }
+        else if (absdist > 2.75f)
         {
             common::logd("create lightbox");
 
-            std::uniform_real_distribution<float> angledist(0, math::pi * 2);
+            std::uniform_real_distribution<float> angledist
+                (0, math::pi * 2);
 
-
-            auto id = get<world::way_path>()->back().index();
             auto ptr = activity->create_object<world::light_box>
                 (get_context(), id);
 

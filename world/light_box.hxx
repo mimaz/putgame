@@ -23,7 +23,6 @@ namespace world
             red,
             green,
             blue,
-            white,
             color_count
         };
 

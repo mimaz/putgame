@@ -24,6 +24,8 @@ namespace
     };
 }
 
+constexpr auto instances_per_call = world::glass_pane_view::instances_per_call;
+
 namespace world
 {
     glass_pane_view::glass_pane_view(common::context *ctx)
@@ -32,7 +34,7 @@ namespace world
               GL_VERTEX_SHADER,
               version_glsl,
               "const lowp int max_count = " + 
-              std::to_string(instances_per_call) + ";",
+              std::to_string(::instances_per_call) + ";",
               glass_pane_vsh)
         , fsh("glass_pane_fsh",
               GL_FRAGMENT_SHADER,
@@ -55,7 +57,6 @@ namespace world
         glDisable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
-        glDepthFunc(GL_LEQUAL);
 
         pro.use();
         a_coord.enable();
@@ -105,11 +106,13 @@ namespace world
 
         u_specular_mode = 0;
 
+        glDepthFunc(GL_LESS);
         glBlendFunc(GL_ZERO, GL_SRC_COLOR);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, instance_count);
 
         u_specular_mode = 1;
 
+        glDepthFunc(GL_LEQUAL);
         glBlendFunc(GL_ONE, GL_ONE);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, instance_count);
 

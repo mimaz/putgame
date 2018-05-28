@@ -6,7 +6,7 @@
 precision lowp float;
 precision lowp int;
 
-in vec2 v_tex_coord;
+in float vec2 v_tex_coord;
 
 uniform sampler2D u_texture;
 

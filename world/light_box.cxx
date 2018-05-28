@@ -30,9 +30,6 @@ namespace
             case world::light_box::blue:
                 return glm::vec3(dim, dim, bright);
 
-            case world::light_box::white:
-                return glm::vec3(bright, bright, bright);
-
             default:
                 throw common::make_invalid_argument(col);
         }

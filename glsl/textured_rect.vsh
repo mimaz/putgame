@@ -10,7 +10,7 @@ in vec2 a_coord;
 
 uniform highp mat4 u_matrix;
 
-out vec2 v_tex_coord;
+out lowp vec2 v_tex_coord;
 
 void main()
 {

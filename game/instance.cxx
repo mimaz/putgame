@@ -25,11 +25,11 @@ namespace game
 
     void instance::start()
     {
-        glClearColor(0, 0, 0, 1);
+        glClearColor(0, 0.4, 0, 1);
         glFrontFace(GL_CW);
 
         play = std::make_shared<play_activity>(this);
-        //menu = std::make_shared<main_menu>(this);
+        menu = std::make_shared<main_menu>(this);
     }
 
     void instance::stop()
@@ -50,8 +50,6 @@ namespace game
 
         if (play != nullptr)
             play->on_draw();
-
-        common::logd("draw !!!");
 
         swap_buffers();
     }

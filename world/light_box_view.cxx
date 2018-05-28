@@ -13,6 +13,8 @@
 #include "light_box.hxx"
 #include "camera.hxx"
 
+constexpr auto boxes_per_draw = world::light_box_view::boxes_per_draw;
+
 namespace world
 {
     light_box_view::light_box_view(common::context *ctx)
@@ -20,7 +22,7 @@ namespace world
               GL_VERTEX_SHADER, 
               version_glsl,
               "const lowp int max_count = " +
-              std::to_string(boxes_per_draw) + ";",
+              std::to_string(::boxes_per_draw) + ";",
               light_box_vsh)
         , fsh("light_box_fsh",
               GL_FRAGMENT_SHADER,

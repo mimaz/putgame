@@ -35,7 +35,7 @@ namespace gui
               GL_FRAGMENT_SHADER,
               version_glsl,
               "const lowp int max_shadows = " + 
-              std::to_string(max_shadows) + ";\n",
+              std::to_string(max_shadows) + ";",
               color_button_fsh)
         , pro(&vsh, &fsh)
         , a_coord(&pro, "a_coord")

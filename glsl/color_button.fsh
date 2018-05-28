@@ -11,7 +11,7 @@
 precision lowp float;
 precision lowp int;
 
-in vec2 v_tex_coord;
+in lowp vec2 v_tex_coord;
 
 uniform sampler2D u_texture;
 uniform vec4 u_primary_color;
@@ -45,7 +45,7 @@ bool highlighted()
 
 bool textured()
 {
-    return texture2D(u_texture, v_tex_coord).r > 0.5;
+    return texture(u_texture, v_tex_coord).r > 0.5;
 }
 
 void main()

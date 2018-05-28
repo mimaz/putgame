@@ -25,7 +25,9 @@ lowp float blot(lowp int hash)
     lowp vec2 arg0 = vec2(a_coord.x * hashf, a_coord.y);
     lowp vec2 arg1 = vec2(sqrt(2.0), sqrt(3.0) * hashf);
 
-    return fract(dot(arg0, arg1) * 3.14159);
+    lowp float rand = fract(dot(arg0, arg1) * 3.14159);
+
+    return 1.0 - (rand * rand * rand) * 0.75;
 }
 
 void main()
