@@ -6,7 +6,7 @@
 HOST ?= x86_64-pc-linux-gnu-
 ARCH ?= x86_64-linux
 TARGET ?= x86_64-pc-linux-gnu-
-PLATFORM ?= LINUX
+PLATFORM ?= GNU_GLFW
 RELEASE ?= 0
 
 BUILD_DIR_BASE = /tmp/putgame-build

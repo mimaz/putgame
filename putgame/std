@@ -18,7 +18,6 @@
 #include <thread>
 #include <functional>
 #include <chrono>
-
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
@@ -30,8 +29,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
 
-#ifdef PLATFORM_ANDROID
-# include <GLES3/gl3.h>
+#if defined PLATFORM_ANDROID
+#include <GLES3/gl3.h>
 
 namespace std
 {
@@ -43,9 +42,9 @@ namespace std
     }
 }
 
-#elif defined PLATFORM_LINUX
-# define GLFW_INCLUDE_ES3
-# include <GLFW/glfw3.h>
+#elif defined PLATFORM_GNU_GLFW
+#define GLFW_INCLUDE_ES3
+#include <GLFW/glfw3.h>
 #else
-# error putgame must be compiled either for glfw or android target
+#error putgame must be compiled either for gnu glfw or android target
 #endif

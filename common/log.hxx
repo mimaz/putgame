@@ -8,42 +8,39 @@
 
 namespace common
 {
-    struct __logger
+    class logger
     {
-        using writer = void (*)(const std::ostringstream &);
+    public:
+        using writer = std::function<void(const std::string &)>;
 
-        inline __logger(writer wr) : wr(wr) {}
+        logger(writer);
 
           template<typename ..._Args>
         inline void operator()(const _Args &...args)
         {
             std::ostringstream os;
-            __build_log_message(os, args...);
-            wr(os);
+            build_message(os, args...);
+            wr(os.str());
         }
 
+    private:
           template<typename _Arg, typename ..._Rest>
-        static inline void __build_log_message(std::ostringstream &os,
-                                               const _Arg &arg, 
-                                               const _Rest &...rest)
+        static inline void build_message(std::ostringstream &os,
+                                         const _Arg &arg, 
+                                         const _Rest &...rest)
         {
             os << arg;
-            __build_log_message(os, rest...);
+            build_message(os, rest...);
         }
 
-        static inline void __build_log_message(std::ostringstream &os)
-        {}
-
-        static void __logd(const std::ostringstream &os);
-        static void __loge(const std::ostringstream &os);
-        static void __logi(const std::ostringstream &os);
+        static void build_message(std::ostringstream &os);
 
         writer wr;
     };
 
-    extern __logger logd;
-    extern __logger loge;
-    extern __logger logi;
+    extern logger logd;
+    extern logger loge;
+    extern logger logi;
 }
 
 #endif

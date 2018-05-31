@@ -22,11 +22,11 @@ namespace common
             info
         };
 
-#ifdef PLATFORM_LINUX
-        void log(level lv, const std::ostringstream &os)
-        {
-            auto str = os.str();
+        void log(level, const std::string &);
 
+#if defined PLATFORM_GNU_GLFW
+        void log(level lv, const std::string &str)
+        {
             switch (lv)
             {
             case level::debug:
@@ -42,48 +42,38 @@ namespace common
                 break;
             }
         }
-#endif
-
-#ifdef PLATFORM_ANDROID
-        void log(level lv, const std::ostringstream &os)
+#elif defined PLATFORM_ANDROID
+        void log(level lv, const std::string &str)
         {
             auto tag = "putgame";
-            auto str = os.str().c_str();
+            auto cstr = str.c_str();
 
             switch (lv)
             {
             case level::debug:
-                __android_log_print(ANDROID_LOG_DEBUG, tag, str);
+                __android_log_print(ANDROID_LOG_DEBUG, tag, cstr);
                 break;
 
             case level::error:
-                __android_log_print(ANDROID_LOG_ERROR, tag, str);
+                __android_log_print(ANDROID_LOG_ERROR, tag, cstr);
                 break;
 
             case level::info:
-                __android_log_print(ANDROID_LOG_INFO, tag, str);
+                __android_log_print(ANDROID_LOG_INFO, tag, cstr);
                 break;
             }
         }
+#else
+        void log(level, const std::string &) {}
+#error unknown platform
 #endif
     }
 
-    void __logger::__logd(const std::ostringstream &os)
-    {
-        log(level::debug, os);
-    }
+    logger::logger(writer wr) : wr(wr) {}
 
-    void __logger::__loge(const std::ostringstream &os)
-    {
-        log(level::error, os);
-    }
+    void logger::build_message(std::ostringstream &) {}
 
-    void __logger::__logi(const std::ostringstream &os)
-    {
-        log(level::info, os);
-    }
-
-    __logger logd(__logger::__logd);
-    __logger loge(__logger::__loge);
-    __logger logi(__logger::__logi);
+    logger logd(std::bind(log, level::debug, std::placeholders::_1));
+    logger loge(std::bind(log, level::error, std::placeholders::_1));
+    logger logi(std::bind(log, level::info, std::placeholders::_1));
 }
