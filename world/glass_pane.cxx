@@ -16,7 +16,7 @@ namespace world
     glass_pane::glass_pane(common::context *ctx,
                            int frameid,
                            glm::vec3 col)
-        : glass_pane(ctx, frameid, color, tunnel_square_area)
+        : glass_pane(ctx, frameid, col, tunnel_square_area)
     {}
 
     glass_pane::glass_pane(common::context *ctx,
