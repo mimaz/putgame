@@ -83,14 +83,12 @@ namespace world
 
 
 
-        /*
         wall_obstacle_drawer->begin_drawing();
 
         for (auto wall : wall_obstacles)
             wall_obstacle_drawer->draw_element(wall);
         
         wall_obstacle_drawer->end_drawing();
-        */
 
 
 

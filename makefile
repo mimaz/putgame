@@ -8,6 +8,7 @@ ARCH ?= x86_64-linux
 TARGET ?= x86_64-pc-linux-gnu-
 PLATFORM ?= GNU_GLFW
 RELEASE ?= 0
+USE_LTO ?= 0
 
 BUILD_DIR_BASE = /tmp/putgame-build
 BUILD_DIR = ${BUILD_DIR_BASE}/${ARCH}
@@ -39,14 +40,19 @@ LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBGAME_CFLAGS = ${COMMON_CFLAGS}
 LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} 
 
-ifeq (${RELEASE},0)
+ifneq (${RELEASE},0)
+	LIBGAME_CFLAGS += -O2
+	LIBGAME_CXXFLAGS += -O2
+	LIBGAME_LDFLAGS = -O2
+ifneq (${USE_LTO},0)
+	LIBGAME_CFLAGS += -flto -fno-fat-lto-objects
+	LIBGAME_CXXFLAGS += -flto -no-fat-lto-objects
+	LIBGAME_LDFLAGS += -flto
+endif
+else
 	LIBGAME_CFLAGS += -Og -g -Wall
 	LIBGAME_CXXFLAGS += -Og -g -Wall
 	LIBGAME_LDFLAGS += -O0
-else
-	LIBGAME_CFLAGS += -O2 -flto -fno-fat-lto-objects
-	LIBGAME_CXXFLAGS += -O2 -flto -fno-fat-lto-objects
-	LIBGAME_LDFLAGS = -O2 -flto
 endif
 
 ifeq (${PLATFORM},ANDROID)
