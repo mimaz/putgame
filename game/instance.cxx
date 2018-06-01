@@ -47,10 +47,10 @@ namespace game
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         get<world::object_manager>()->process_all();
-        //get<gui::surface>()->process();
+        get<gui::surface>()->process();
 
         get<world::object_manager>()->draw_all();
-        //get<gui::surface>()->draw();
+        get<gui::surface>()->draw();
 
         if (play != nullptr)
             play->on_draw();
@@ -65,7 +65,7 @@ namespace game
         width = wid;
         height = hei;
 
-        //get<gui::surface>()->resize(wid, hei);
+        get<gui::surface>()->resize(wid, hei);
         get<world::camera>()->set_view_ratio(ratio);
 
         glViewport(0, 0, wid, hei);
@@ -75,6 +75,9 @@ namespace game
     {
         if (x == mouse_x and y == mouse_y)
             return;
+
+        x -= get_width() / 2;
+        y -= get_height() / 2;
 
         if (mouse_pressed)
         {

@@ -18,12 +18,17 @@ namespace gui
             release,
         };
 
-        touch_event(event_type type, int x, int y)
-            : type(type), xpos(x), ypos(y) {}
+        touch_event(event_type type, int x, int y);
 
         event_type type;
         int xpos, ypos;
     };
 }
+
+std::ostream &operator<<(std::ostream &os, 
+                         gui::touch_event::event_type ev);
+
+std::ostream &operator<<(std::ostream &os, 
+                         const gui::touch_event &ev);
 
 #endif

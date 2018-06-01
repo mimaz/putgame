@@ -34,8 +34,6 @@ namespace
 
         glfw_application() 
             : win(nullptr)
-            , width(960)
-            , height(540) 
         {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
             glfwWindowHint(GLFW_CONTEXT_CREATION_API, 
@@ -43,7 +41,7 @@ namespace
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-            win = glfwCreateWindow(width, height, 
+            win = glfwCreateWindow(1, 1, 
                                    "putgame", 
                                    nullptr,
                                    //glfwGetPrimaryMonitor(),
@@ -63,7 +61,7 @@ namespace
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glFrontFace(GL_CW);
 
-            resize(width, height);
+            resize(960, 540);
         }
 
         ~glfw_application()
@@ -130,7 +128,9 @@ namespace
             auto x = static_cast<int>(cursorx);
             auto y = static_cast<int>(cursory);
 
-            from_window(win)->cursor(x, y);
+            auto ctx = from_window(win);
+
+            ctx->cursor(x, ctx->get_height() - y);
         }
 
         static void touch_callback(GLFWwindow *win,
@@ -140,16 +140,21 @@ namespace
 
             if (button == GLFW_MOUSE_BUTTON_LEFT)
             {
-                if (action == GLFW_PRESS)
+                switch (action)
+                {
+                case GLFW_PRESS:
                     app->press();
-                else
+                    break;
+
+                case GLFW_RELEASE:
                     app->release();
+                    break;
+                }
             }
         }
 
 
         GLFWwindow *win;
-        int cursor_xpos, cursor_ypos, width, height;
     };
 }
 
