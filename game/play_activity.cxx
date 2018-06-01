@@ -38,7 +38,7 @@ namespace game
         };
 
         auto boxid0 = get<world::camera>()->get_frame_id() + 40;
-        auto boxid1 = boxid0 + 10;
+        auto boxid1 = boxid0 + 30;
 
         genbox(boxid0);
         genbox(boxid1);

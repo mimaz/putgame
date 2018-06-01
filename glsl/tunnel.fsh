@@ -40,7 +40,7 @@ void main()
                     v_coord, 
                     32.0,
                     true, 
-                    true,
+                    false,
                     false);
 
     out_color = vec4(color, 1.0);

@@ -2,6 +2,7 @@ package pl.poznan.put.student.mazurek.mieszko;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 public class MainActivity extends Activity {
     private GameView view;
@@ -11,6 +12,9 @@ public class MainActivity extends Activity {
         super.onCreate(state);
 
         view = new GameView(this);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(view);
     }

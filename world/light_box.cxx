@@ -104,7 +104,7 @@ namespace world
 
     float light_box::get_light_range()
     {
-        return 4;
+        return 8;
     }
 
     float light_box::rand_speed()

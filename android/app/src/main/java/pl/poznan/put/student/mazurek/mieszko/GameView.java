@@ -2,6 +2,7 @@ package pl.poznan.put.student.mazurek.mieszko;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -45,6 +46,7 @@ public class GameView extends GLSurfaceView {
 
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
+            Log.d("TAG", "resize: " + width + " " + height);
             resize(width, height);
         }
 
@@ -67,7 +69,7 @@ public class GameView extends GLSurfaceView {
                 }
             }
 
-            nextTime += 1000 / 30;
+            nextTime += 1000 / 40;
 
             draw();
         }

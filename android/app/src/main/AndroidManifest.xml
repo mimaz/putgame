@@ -8,7 +8,7 @@
         android:allowBackup="false"
         android:label="putgame">
         <activity android:name=".MainActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:theme="@style/putgame_style"
             android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden"
             android:icon="@drawable/putgamelogo">
