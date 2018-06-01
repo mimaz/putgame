@@ -22,6 +22,7 @@ namespace game
         void clicked(gui::color_button *btn);
 
         gui::color_button start_btn;
+        gui::color_button exit_btn;
     };
 }
 

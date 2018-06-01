@@ -29,7 +29,7 @@ namespace game
 
     void instance::start()
     {
-        glClearColor(0, 0.4, 0, 1);
+        glClearColor(0, 0.0, 0, 1);
         glFrontFace(GL_CW);
 
         play = std::make_shared<play_activity>(this);

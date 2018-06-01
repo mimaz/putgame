@@ -18,6 +18,7 @@ namespace world
 
     lighting::lighting(common::context *ctx, glutils::program *prog)
         : u_camera_coord(prog, "u_camera_coord")
+        , u_view_range(prog, "u_view_range")
         , u_light_count(prog, "u_light_count")
         , u_light_coord_v(prog, "u_light_coord_v")
         , u_light_color_v(prog, "u_light_color_v")
@@ -47,6 +48,8 @@ namespace world
         }
 
         try {
+            u_camera_coord = cam->get_position();
+            u_view_range = cam->get_view_range();
             u_light_count = count;
 
             glUniform3fv(u_light_coord_v, count, 
@@ -56,8 +59,6 @@ namespace world
                          glm::value_ptr(colors[0]));
 
             glUniform1fv(u_light_range_v, count, ranges);
-
-            u_camera_coord = cam->get_position();
         } catch(glutils::location_error e) {
             std::cerr << "location_error: " << e.name << std::endl;
         }

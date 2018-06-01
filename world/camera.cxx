@@ -32,7 +32,7 @@ namespace world
         , flags(dirty_all)
         , view_angle(math::pi / 3)
         , view_ratio(1)
-        , view_range(16)
+        , view_range(10)
     {}
 
     void camera::move(const glm::vec3 &vec)

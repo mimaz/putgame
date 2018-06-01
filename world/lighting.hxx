@@ -25,7 +25,7 @@ namespace world
 
     private:
         glutils::uniform u_camera_coord;
-
+        glutils::uniform u_view_range;
         glutils::uniform u_light_count;
         glutils::uniform u_light_coord_v;
         glutils::uniform u_light_color_v;

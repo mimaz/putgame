@@ -3,7 +3,7 @@
  * 2018
  */
 
-const float specular = 32.0;
+const mediump float specular = 32.0;
 
 /*
  * v_type 
