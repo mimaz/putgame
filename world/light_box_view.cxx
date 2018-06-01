@@ -29,7 +29,7 @@ namespace world
               version_glsl,
               lighting::fragment_source,
               light_box_fsh)
-        , prog(&vsh, &fsh)
+        , prog("light_box", &vsh, &fsh)
         , a_coord(&prog, "a_coord")
         , a_normal(&prog, "a_normal")
         , a_type(&prog, "a_type")

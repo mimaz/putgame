@@ -52,7 +52,7 @@ namespace world
               lighting::fragment_source,
               glass_common_fsh,
               glass_pieces_fsh)
-        , pro(&vsh, &fsh)
+        , pro("glass_pieces", &vsh, &fsh)
         , u_extra_v(&pro, "u_extra_v")
         , u_model_v(&pro, "u_model_v")
         , u_view_proj(&pro, "u_view_proj")

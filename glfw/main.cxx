@@ -6,6 +6,7 @@
 #include <putgame/std>
 #include <putgame/game>
 #include <putgame/math>
+#include <putgame/glutils>
 
 namespace
 {
@@ -185,7 +186,8 @@ int main(int argc, char **argv)
         app.stop();
     } catch (common::invalid_state is) {
         std::cerr << "common::invalid_state " << is.desc << std::endl;
-    }
+    } catch (glutils::location_error err) {
+        std::cerr << "location error: " << err << std::endl; }
 
     glfwTerminate();
 

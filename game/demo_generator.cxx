@@ -26,11 +26,18 @@ namespace game
 
         auto id = get<world::way_path>()->back().index();
 
-        if (absdist > 2.65f)
+        if (absdist > 2.4f)
+        {
+            common::logd("create wall obstacle");
+
+            activity->create_object<world::wall_obstacle>
+                (get_context(), id, 6, 4);
+        }
+        else if (absdist > 2.65f)
         {
             common::logd("create glass");
 
-            auto ptr = activity->create_object<world::glass_pane>
+            activity->create_object<world::glass_pane>
                 (get_context(), id, glm::vec3(0.5f, 0.5f, 1.0f));
         }
         else if (absdist > 2.45f)

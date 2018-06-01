@@ -42,7 +42,7 @@ namespace world
               lighting::fragment_source,
               glass_common_fsh,
               glass_pane_fsh)
-        , pro(&vsh, &fsh)
+        , pro("glass_pane", &vsh, &fsh)
         , a_coord(&pro, "a_coord")
         , u_model_v(&pro, "u_model_v")
         , u_mvp_v(&pro, "u_mvp_v")

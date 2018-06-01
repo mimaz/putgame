@@ -19,8 +19,15 @@ namespace glutils
     class location_error
     {
     public:
+        explicit location_error(const std::string &tag,
+                                const std::string &name);
+
+        std::string tag;
         std::string name;
     };
 }
+
+std::ostream &operator<<(std::ostream &os, 
+                         const glutils::location_error &err);
 
 #endif

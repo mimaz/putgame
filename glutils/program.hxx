@@ -16,10 +16,12 @@ namespace glutils
         using shdlist = std::initializer_list<shader *>;
         using shdvec = std::vector<shader *>;
 
-        program(const shdlist &list);
+        program(const std::string &tag,
+                const shdlist &list);
 
           template<typename ..._Shaders>
-        program(const _Shaders &...shaders);
+        program(const std::string &tag,
+                const _Shaders &...shaders);
 
         program(const program &) = delete;
         program(program &&) = delete;
@@ -30,19 +32,21 @@ namespace glutils
         void destroy();
         void use();
 
+        std::string get_tag();
         GLuint get_handle();
 
         operator GLuint() { return get_handle(); }
 
     private:
+        std::string tag;
         shdvec shdv;
-
         GLuint handle;
     };
 
       template<typename ..._Shaders>
-    program::program(const _Shaders &...shaders)
-        : program({ shaders... }) {}
+    program::program(const std::string &tag,
+                     const _Shaders &...shaders)
+        : program(tag, { shaders... }) {}
 }
 
 #endif

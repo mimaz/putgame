@@ -24,7 +24,7 @@ namespace glutils
             handle = glGetAttribLocation(*prog, name);
 
             if (handle < 0)
-                throw location_error { name };
+                throw location_error(prog->get_tag(), name);
         }
 
         return static_cast<GLuint>(handle);

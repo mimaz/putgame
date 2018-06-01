@@ -23,7 +23,7 @@ void main()
 
     if (v_use_tex != 0)
     {
-        color = vec3(texture2D(u_texture, v_tex_coord));
+        color = vec3(texture(u_texture, v_tex_coord));
     }
     else
     {

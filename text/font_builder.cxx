@@ -43,7 +43,7 @@ namespace
                   "const lowp int max_count = " + 
                   std::to_string(max_count) + ";",
                   text_font_fsh)
-            , pro(&vsh, &fsh)
+            , pro("text_font", &vsh, &fsh)
             , a_coord(&pro, "a_coord")
             , u_thickness(&pro, "u_thickness")
             , u_segment_count(&pro, "u_segment_count")

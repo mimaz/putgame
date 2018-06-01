@@ -12,8 +12,10 @@
 
 namespace glutils
 {
-    program::program(const shdlist &list)
-        : shdv(list.begin(), list.end()), handle(0) {}
+    program::program(const std::string &tag,
+                     const shdlist &list)
+        : tag(tag)
+        , shdv(list.begin(), list.end()), handle(0) {}
 
     program::~program()
     {
@@ -60,6 +62,11 @@ namespace glutils
     void program::use()
     {
         glUseProgram(get_handle());
+    }
+
+    std::string program::get_tag()
+    {
+        return tag;
     }
 
     GLuint program::get_handle()

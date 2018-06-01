@@ -43,7 +43,7 @@ namespace world
               version_glsl,
               world::lighting::fragment_source,
               tunnel_fsh)
-        , prog(&vsh, &fsh)
+        , prog("tunnel", &vsh, &fsh)
         , a_coord(&prog, "a_coord")
         , u_model_v(&prog, "u_model_v")
         , u_mvp_v(&prog, "u_mvp_v")

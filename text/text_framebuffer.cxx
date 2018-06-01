@@ -32,7 +32,7 @@ namespace text
               GL_FRAGMENT_SHADER,
               version_glsl,
               text_buffer_fsh)
-        , pro(&vsh, &fsh)
+        , pro("text_framebuffer", &vsh, &fsh)
         , a_coord(&pro, "a_coord")
         , u_matrix(&pro, "u_matrix")
     {

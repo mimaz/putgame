@@ -37,7 +37,7 @@ namespace gui
               "const lowp int max_shadows = " + 
               std::to_string(max_shadows) + ";",
               color_button_fsh)
-        , pro(&vsh, &fsh)
+        , pro("color_button", &vsh, &fsh)
         , a_coord(&pro, "a_coord")
         , u_matrix(&pro, "u_matrix")
         , u_primary_color(&pro, "u_primary_color")

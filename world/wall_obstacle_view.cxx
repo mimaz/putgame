@@ -53,7 +53,7 @@ namespace world
               fragment_hdr,
               lighting::fragment_source,
               wall_obstacle_fsh)
-        , pro(&vsh, &fsh)
+        , pro("wall_obstacle", &vsh, &fsh)
         , a_coord(&pro, "a_coord")
         , a_normal(&pro, "a_normal")
         , a_tex_coord(&pro, "a_tex_coord")
@@ -110,12 +110,16 @@ namespace world
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
-        pro.use();
+        try {
+            pro.use();
 
-        a_coord.enable();
-        a_normal.enable();
-        a_tex_coord.enable();
-        a_mode.enable();
+            a_coord.enable();
+            a_normal.enable();
+            a_tex_coord.enable();
+            a_mode.enable();
+        } catch (glutils::location_error er) {
+            common::loge("location_error catched: ", er);
+        }
 
 
         light.calculate();
@@ -185,8 +189,12 @@ namespace world
                            GL_FALSE, 
                            glm::value_ptr(mvps.front()));
 
+        try {
         glUniform2fv(u_tex_factor_v, instance_count,
                      glm::value_ptr(tex_factors.front()));
+        } catch (glutils::location_error er) {
+            common::loge("no u_tex_factor_v", er);
+        }
 
 
         auto vertices = wall_obstacle_view::size_of_mesh / sizeof(float) / 9;
