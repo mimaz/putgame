@@ -81,12 +81,12 @@ namespace game
 
         if (mouse_pressed)
         {
-            common::logd("shifting: ", shifting);
-
             if (shifting)
             {
-                auto diffx = static_cast<float>(x - mouse_x) / get_width();
-                auto diffy = static_cast<float>(y - mouse_y) / get_height();
+                auto diffx = static_cast<float>(x - mouse_x) 
+                           / get_width();
+                auto diffy = static_cast<float>(y - mouse_y) 
+                           / get_height();
 
                 if (play != nullptr)
                     play->on_shift(diffx, diffy);

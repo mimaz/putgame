@@ -11,7 +11,8 @@ namespace game
 {
     main_menu::main_menu(common::context *ctx)
         : rect_item(ctx)
-        , start_btn(ctx, std::bind(&main_menu::clicked, this, nullptr))
+        , start_btn(ctx, std::bind(&main_menu::clicked, 
+                    this, std::placeholders::_1))
     {
         auto primary = glm::vec4(0.15f, 0.15f, 0.15f, 0.75f);
 
@@ -29,14 +30,16 @@ namespace game
 
     void main_menu::layout(int w, int h)
     {
-        common::logd("resize: ", w, ":", h);
         gui::rect_item::on_surface_resize(w, h);
 
-        start_btn.resize(w / 2,  h / 8);
+        auto btnwidth = w / 2;
+        auto btnheight = h / 6;
+
+        start_btn.resize(btnwidth, btnheight);
         start_btn.set_position(0, 0);
     }
 
-    void main_menu::clicked(color_button *btn)
+    void main_menu::clicked(gui::color_button *btn)
     {
         common::logd("clicked");
     }

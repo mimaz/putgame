@@ -41,6 +41,9 @@ namespace gui
         const std::vector<glm::vec4> &get_shadows() const 
         { return shadows; }
 
+        handler_type get_handler() const
+        { return handler; }
+
     protected:
         void on_size_changed() override;
 
@@ -51,6 +54,8 @@ namespace gui
         text::text_buffer text;
 
         std::vector<glm::vec4> shadows;
+
+        handler_type handler;
     };
 }
 

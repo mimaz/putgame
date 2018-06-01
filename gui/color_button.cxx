@@ -16,6 +16,7 @@ namespace gui
                                handler_type handler)
         : rect_item(ctx)
         , text(ctx, get<surface>()->get_font_builder())
+        , handler(handler)
     {
         set_primary_color(glm::vec4(1.0f, 1.0f, 0.5f, 0.4f));
         set_secondary_color(glm::vec4(0.4f, 0.4f, 0.4f, 0.2));
@@ -103,6 +104,11 @@ namespace gui
                     shadows.front()[2] = orgx;
                     shadows.front()[3] = orgy;
                 }
+                break;
+
+            case touch_event::release:
+                if (contains(event.xpos, event.ypos))
+                    handler(this);
                 break;
 
             default:
