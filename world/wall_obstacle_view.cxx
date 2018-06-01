@@ -58,12 +58,10 @@ namespace world
         , a_normal(&pro, "a_normal")
         , a_tex_coord(&pro, "a_tex_coord")
         , a_mode(&pro, "a_mode")
-        , u_model(&pro, "u_model")
-        , u_mvp(&pro, "u_mvp")
-        , u_tex_factor(&pro, "u_tex_factor")
         , u_model_v(&pro, "u_model_v")
         , u_mvp_v(&pro, "u_mvp_v")
         , u_tex_factor_v(&pro, "u_tex_factor_v")
+        , u_texture(&pro, "u_texture")
         , light(ctx, &pro)
     {
         glGenTextures(1, &texhandle);
@@ -147,8 +145,10 @@ namespace world
                               mesh + 8);
 
                               
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texhandle);
 
+        u_texture = 0;
 
         instance_count = 0;
     }

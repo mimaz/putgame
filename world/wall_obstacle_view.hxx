@@ -49,12 +49,10 @@ namespace world
         glutils::attribute a_normal;
         glutils::attribute a_tex_coord;
         glutils::attribute a_mode;
-        glutils::uniform u_model;
-        glutils::uniform u_mvp;
-        glutils::uniform u_tex_factor;
         glutils::uniform u_model_v;
         glutils::uniform u_mvp_v;
         glutils::uniform u_tex_factor_v;
+        glutils::uniform u_texture;
 
         lighting light;
 
