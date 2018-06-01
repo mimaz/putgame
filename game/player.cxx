@@ -23,7 +23,7 @@ namespace game
     void player::shift(float x, float y)
     {
         glm::vec3 axisx(0, 1, 0);
-        glm::vec3 axisy(1, 0, 0);
+        glm::vec3 axisy(-1, 0, 0);
 
         auto factor = math::pi / 3;
 
@@ -33,8 +33,6 @@ namespace game
 
     void player::process()
     {
-        get<world::camera>()->move(glm::vec3(0, 0, -0.20));
-
         if (apilot != nullptr)
         {
             apilot->correct();

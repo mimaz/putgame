@@ -22,8 +22,6 @@ namespace game
 
         way->reset();
         way->update();
-
-        get_player()->set_autopilot(true);
     }
 
     play_activity::~play_activity()

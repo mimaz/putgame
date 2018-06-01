@@ -131,6 +131,6 @@ namespace gui
         rect_item::on_size_changed();
 
         text.set_size(get_width(), get_height());
-        text.set_font_size(get_height() / 3);
+        text.set_font_size(get_height() / 4);
     }
 }

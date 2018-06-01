@@ -80,7 +80,7 @@ public class GameView extends GLSurfaceView {
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             int x = (int) event.getX();
-            int y = (int) event.getY();
+            int y = getHeight() - (int) event.getY();
 
             if (x != last_x || y != last_y) {
                 last_x = x;

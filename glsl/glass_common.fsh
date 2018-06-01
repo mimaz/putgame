@@ -3,8 +3,8 @@
  * 2018
  */
 
-vec4 glass_color(lowp int specular, lowp vec3 color,
-                 lowp vec3 normal, highp vec3 coord)
+lowp vec4 glass_color(lowp int specular, lowp vec3 color,
+                      lowp vec3 normal, highp vec3 coord)
 {
     if (specular != 0)
     {
