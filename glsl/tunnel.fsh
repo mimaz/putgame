@@ -38,9 +38,9 @@ void main()
                     white,
                     normal, 
                     v_coord, 
-                    0.0,
+                    32.0,
                     true, 
-                    false,
+                    true,
                     false);
 
     out_color = vec4(color, 1.0);

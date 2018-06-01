@@ -5,7 +5,7 @@
 
 #include <putgame/std>
 #include <putgame/res>
-
+#include <putgame/math>
 #include <putgame/common>
 
 #include "light_box.hxx"
@@ -57,7 +57,9 @@ namespace world
         , light_source(ctx)
         , light_col(common::black3())
         , surface_col(common::black3())
-        , speed(0.05)
+        , speedx(rand_speed())
+        , speedy(rand_speed())
+        , speedz(rand_speed())
         , blur(0)
     {
         get<object_manager>()->add(this);
@@ -78,21 +80,11 @@ namespace world
         surface_col = to_rgb(c, 1.0f, 0.6f);
     }
 
-    void light_box::set_speed(float spd)
-    {
-        speed = spd;
-    }
-
     void light_box::rotate()
     {
-        rotate(get_speed());
-    }
-
-    void light_box::rotate(float angle)
-    {
-        auto speedy = angle;
-
-        visible_object::rotate(speedy, { 0, 1, 0 });
+        visible_object::rotate(speedx, { 0, 1, 0 });
+        visible_object::rotate(speedy, { 1, 0, 0 });
+        visible_object::rotate(speedz, { 0, 0, 1 });
     }
 
     glm::vec3 light_box::get_surface_color() const
@@ -112,6 +104,18 @@ namespace world
 
     float light_box::get_light_range()
     {
-        return 20;
+        return 4;
+    }
+
+    float light_box::rand_speed()
+    {
+        std::normal_distribution<float> dist(0.0f, 1.0f);
+
+        auto rand = dist(random_engine()) * 0.02f;
+
+        if (rand < 0)
+            return rand - 0.05f;
+
+        return rand + 0.04f;
     }
 }

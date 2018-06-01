@@ -31,13 +31,10 @@ namespace world
         ~light_box();
 
         void rotate();
-        void rotate(float angle);
 
         void set_color(color col);
-        void set_speed(float speed);
 
         color get_color() const { return col; }
-        float get_speed() const { return speed; }
 
         glm::vec3 get_surface_color() const;
 
@@ -46,11 +43,15 @@ namespace world
         float get_light_range() override;
 
     private:
+        float rand_speed();
+
         color col;
         glm::vec3 light_col;
         glm::vec3 surface_col;
 
-        float speed;
+        float speedx;
+        float speedy;
+        float speedz;
         float blur;
     };
 }

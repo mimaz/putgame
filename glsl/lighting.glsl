@@ -39,7 +39,10 @@ lowp float calc_fog(lowp int idx,
     lowp float lightfac = viewlen / range;
     lowp float viewfac = viewlen / u_view_range;
 
-    return (1.0 - lightfac * lightfac) * (1.0 - viewfac * viewfac);
+    lowp float lightfog = (1.0 - lightfac * lightfac);
+    lowp float viewfog = (1.0 - viewfac * viewfac);
+
+    return clamp(lightfog * viewfog, 0.0, 1.0);
 }
 
 lowp vec3 enlight(lowp vec3 material_diffuse,

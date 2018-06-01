@@ -9,6 +9,7 @@
 namespace math
 {
     constexpr float pi = static_cast<float>(M_PI);
+    constexpr float e = static_cast<float>(M_E);
 
     glm::vec3 coord3d(const glm::mat4 &mat);
 
