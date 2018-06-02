@@ -3,15 +3,12 @@
  # 2018
  ##
 
-HOST ?= x86_64-pc-linux-gnu-
-ARCH ?= x86_64-linux
-TARGET ?= x86_64-pc-linux-gnu-
 PLATFORM ?= GNU_GLFW
 RELEASE ?= 0
 USE_LTO ?= 0
 
 BUILD_DIR_BASE = /tmp/putgame-build
-BUILD_DIR = ${BUILD_DIR_BASE}/${ARCH}
+BUILD_DIR = ${BUILD_DIR_BASE}
 
 ##
  # targets
