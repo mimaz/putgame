@@ -32,8 +32,8 @@ COMMON_LDFLAGS =
 PRECOMPILER_CFLAGS = -O1
 PRECOMPILER_LDFLAGS = -O1
 
-LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
-LIBGAME_CFLAGS = ${COMMON_CFLAGS}
+LIBGAME_CFLAGS = ${COMMON_CFLAGS} -fvisibility=hidden
+LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS} -fvisibility=hidden
 LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} 
 
 ifneq (${RELEASE},0)
@@ -52,11 +52,11 @@ else
 endif
 
 ifeq (${PLATFORM},ANDROID)
-	LIBGAME_SRC_DIRS += jni/
+	LIBGAME_SRC_DIRS += java/
 	LIBGAME_LDFLAGS += -lc -lm -lGLESv3 -llog -lc++_static -static-libstdc++
 endif
 
-GLFW_APP_CXXFLAGS = ${COMMON_CFLAGS}
+GLFW_APP_CFLAGS = ${COMMON_CFLAGS}
 GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw -lpthread
 
 HOST_CC = gcc
@@ -67,7 +67,7 @@ TARGET_CXX = ${TARGET}clang++
 ##
  # sources & objects
  ##
-LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/
+LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/ putgame/
 
 ifeq (${PLATFORM},ANDROID)
 	LIBGAME_SRC_DIRS += jni/
@@ -83,7 +83,7 @@ GLSL_C_OBJ = ${GLSL_C_SRC:%=%.o}
 LIBGAME_SRC = ${shell find ${LIBGAME_SRC_DIRS} -name "*.cxx"}
 LIBGAME_OBJ = ${LIBGAME_SRC:%=${BUILD_DIR}/%.o}
 
-GLFW_APP_SRC = ${shell find glfw/ -name "*.cxx"}
+GLFW_APP_SRC = ${shell find glfw/ -name "*.c"}
 GLFW_APP_OBJ = ${GLFW_APP_SRC:%=${BUILD_DIR}/%.o}
 
 ##
@@ -121,7 +121,11 @@ run: ${GLFW_APP}
  # executable rules
  ##
 ${GLFW_APP}: ${LIBGAME} ${GLFW_APP_OBJ} 
-	${TARGET_CXX} ${GLFW_APP_LDFLAGS} -o $@ $^
+	${TARGET_CC} ${GLFW_APP_LDFLAGS} -o $@ $^
+
+${BUILD_DIR}/%.c.o: %.c ${RES_HEADER}
+	@mkdir -p ${dir $@}
+	${TARGET_CC} ${GLFW_APP_CFLAGS} -o $@ -c $<
 
 ##
  # libcore & libgame rules

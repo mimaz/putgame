@@ -3,7 +3,6 @@
  * 2018
  */
 
-#include <putgame/std>
 #include <putgame/common>
 
 #include "shader.hxx"

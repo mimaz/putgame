@@ -3,7 +3,6 @@
  * 2018
  */
 
-#include <putgame/std>
 
 #include "light_box_view.hxx"
 

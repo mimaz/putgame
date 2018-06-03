@@ -3,7 +3,6 @@
  * 2018
  */
 
-#include <putgame/std>
 
 /* 
  * touch_event.hxx have to be declared here due 

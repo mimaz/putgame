@@ -3,7 +3,6 @@
  * 2018
  */
 
-#include <putgame/std>
 #include <putgame/res>
 #include <putgame/glutils>
 #include <putgame/common>

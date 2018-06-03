@@ -4,7 +4,6 @@
  * 2018
  */
 
-#include <putgame/std>
 
 #include "default_font.hxx"
 
