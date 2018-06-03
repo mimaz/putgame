@@ -1,2 +1,3 @@
 gen/
 *.so
+android/app/build/
