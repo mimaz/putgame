@@ -13,12 +13,12 @@ namespace common
     public:
         class object;
 
-        context() = default;
+        context();
 
         context(const context &) = delete;
         context(context &&) = delete;
 
-        virtual ~context() {}
+        virtual ~context();
 
           template<typename _Type>
         _Type *get();

@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../putgame/putgame.h"
+#include <putgame/putgame.h>
 
 static struct putgame *instance;
 static GLFWwindow *window;

@@ -44,9 +44,9 @@ class GameInstance
 
     native void release();
 
-    private native void create();
+    native private void create();
 
-    private native void destroy();
+    native private void destroy();
 
     private long handle;
 }

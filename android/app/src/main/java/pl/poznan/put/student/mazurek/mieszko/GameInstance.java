@@ -1,1 +1,1 @@
-../../../../../../../../../../../jni/GameInstance.java
+../../../../../../../../../../../java/GameInstance.java

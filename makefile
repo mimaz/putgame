@@ -36,25 +36,30 @@ LIBGAME_CFLAGS = ${COMMON_CFLAGS} -fvisibility=hidden
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS} -fvisibility=hidden
 LIBGAME_LDFLAGS = ${COMMON_LDFLAGS} 
 
+LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/ putgame/
+
+
 ifneq (${RELEASE},0)
 	LIBGAME_CFLAGS += -O2
 	LIBGAME_CXXFLAGS += -O2
 	LIBGAME_LDFLAGS = -O2
-ifneq (${USE_LTO},0)
-	LIBGAME_CFLAGS += -flto -fno-fat-lto-objects
-	LIBGAME_CXXFLAGS += -flto -no-fat-lto-objects
-	LIBGAME_LDFLAGS += -flto
-endif
 else
 	LIBGAME_CFLAGS += -Og -g -Wall
 	LIBGAME_CXXFLAGS += -Og -g -Wall
 	LIBGAME_LDFLAGS += -O0
 endif
 
-ifeq (${PLATFORM},ANDROID)
-	LIBGAME_SRC_DIRS += java/
-	LIBGAME_LDFLAGS += -lc -lm -lGLESv3 -llog -lc++_static -static-libstdc++
+ifneq (${USE_LTO},0)
+	LIBGAME_CFLAGS += -flto -fno-fat-lto-objects
+	LIBGAME_CXXFLAGS += -flto -no-fat-lto-objects
+	LIBGAME_LDFLAGS += -flto
 endif
+
+ifeq (${PLATFORM},ANDROID)
+	LIBGAME_LDFLAGS += -lc -lm -lGLESv3 -llog -lc++_static -static-libstdc++
+	LIBGAME_SRC_DIRS += java/
+endif
+
 
 GLFW_APP_CFLAGS = ${COMMON_CFLAGS}
 GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw -lpthread
@@ -67,12 +72,6 @@ TARGET_CXX = ${TARGET}clang++
 ##
  # sources & objects
  ##
-LIBGAME_SRC_DIRS = world/ common/ glutils/ text/ gui/ math/ game/ putgame/
-
-ifeq (${PLATFORM},ANDROID)
-	LIBGAME_SRC_DIRS += jni/
-endif
-
 PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${BUILD_DIR}/%.o}
 
@@ -80,7 +79,7 @@ GLSL_SRC = ${shell find glsl/ -type f}
 GLSL_C_SRC = ${GLSL_SRC:%=${BUILD_DIR}/%.c}
 GLSL_C_OBJ = ${GLSL_C_SRC:%=%.o}
 
-LIBGAME_SRC = ${shell find ${LIBGAME_SRC_DIRS} -name "*.cxx"}
+LIBGAME_SRC = ${shell find ${LIBGAME_SRC_DIRS} -name "*.cxx" -or -name "*.c"}
 LIBGAME_OBJ = ${LIBGAME_SRC:%=${BUILD_DIR}/%.o}
 
 GLFW_APP_SRC = ${shell find glfw/ -name "*.c"}
@@ -123,7 +122,7 @@ run: ${GLFW_APP}
 ${GLFW_APP}: ${LIBGAME} ${GLFW_APP_OBJ} 
 	${TARGET_CC} ${GLFW_APP_LDFLAGS} -o $@ $^
 
-${BUILD_DIR}/%.c.o: %.c ${RES_HEADER}
+${BUILD_DIR}/glfw/%.c.o: glfw/%.c ${RES_HEADER}
 	@mkdir -p ${dir $@}
 	${TARGET_CC} ${GLFW_APP_CFLAGS} -o $@ -c $<
 
@@ -137,6 +136,10 @@ ${LIBGAME}: ${LIBGAME_OBJ} ${GLSL_C_OBJ}
 ${BUILD_DIR}/%.cxx.o: %.cxx ${STD_HEADER} ${RES_HEADER}
 	@mkdir -p ${dir $@}
 	${TARGET_CXX} ${LIBGAME_CXXFLAGS} -include-pch ${STD_HEADER} -o $@ -c $<
+
+${BUILD_DIR}/java/%.c.o: java/%.c ${RES_HEADER}
+	@mkdir -p ${dir $@}
+	${TARGET_CC} ${LIBGAME_CFLAGS} -o $@ -c $<
 
 ${BUILD_DIR}/glsl/%.c.o: ${BUILD_DIR}/glsl/%.c
 	@mkdir -p ${dir $@}
