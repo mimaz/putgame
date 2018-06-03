@@ -21,12 +21,11 @@ namespace game
 
         void on_surface_resize(int w, int h) override;
 
-        void set_bottom_offset(int offs);
-
         bool is_enabled() const
         { return enabled; }
 
     private:
+        void bottomoff_prop_set(const std::string &value);
         void layout();
         void layout(int w, int h);
         void clicked(gui::color_button *btn);

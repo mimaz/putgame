@@ -34,6 +34,9 @@ struct putgame
                       int ypos);
     void (*on_press)(struct putgame *self);
     void (*on_release)(struct putgame *self);
+    void (*on_set)(struct putgame *self,
+                   const char *key,
+                   const char *value);
 
     time_t (*_time_ms)(struct putgame *self);
     void *_game_instance;
@@ -73,6 +76,11 @@ putgame_release(struct putgame *self);
 
 PUTGAME_EXPORT time_t
 putgame_time(struct putgame *self);
+
+PUTGAME_EXPORT void
+putgame_set(struct putgame *self,
+            const char *key,
+            const char *value);
 
 #ifdef __cplusplus
 }

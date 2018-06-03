@@ -13,12 +13,23 @@ namespace common
     public:
         class object;
 
+        using handler_type = std::function<void(std::string)>;
+
+
         context();
 
         context(const context &) = delete;
         context(context &&) = delete;
 
         virtual ~context();
+
+        virtual void set_property(const std::string &key, 
+                                  const std::string &value);
+
+        std::string get_property(const std::string &key) const;
+
+        std::string get_property(const std::string &key,
+                                 const std::string &def) const;
 
           template<typename _Type>
         _Type *get();
@@ -31,22 +42,50 @@ namespace common
         { return randeng; }
 
     private:
+        friend class object;
+
         using part_ref = std::unique_ptr<context::object>;
 
+        struct handler_data
+        {
+            handler_type fun;
+            int ident;
+        };
+
+
+        int register_handler(const std::string &key,
+                             const handler_type &handler);
+        void unregister_handler(const std::string &key,
+                                int id);
+
+
         std::map<std::type_index, part_ref> part_map;
+        std::map<std::string, std::string> prop_map;
+        std::multimap<std::string, handler_data> handler_map;
+
+
         std::default_random_engine randeng;
+
+
+        int hidcnt;
     };
 
     class context::object
     {
     protected:
-        object(context *ctx) : ctx(ctx) {}
-        object(object *obj) : object(obj->get_context()) {}
+        object(context *ctx);
+        object(object *obj);
 
     public:
-        virtual ~object() {}
+        virtual ~object();
 
-        context *get_context() const { return ctx; }
+        std::string get_property(const std::string &key) const;
+
+        std::string get_property(const std::string &key,
+                                 const std::string &def) const;
+
+        context *get_context() const 
+        { return ctx; }
 
           template<typename _Type>
         _Type *get()
@@ -55,8 +94,16 @@ namespace common
         std::default_random_engine &random_engine()
         { return get_context()->random_engine(); }
 
+    protected:
+        void register_handler(const std::string &key,
+                              const handler_type &handler);
+
     private:
+        using handler_data = std::pair<std::string, int>;
+
         context *ctx;
+
+        std::vector<handler_data> hdatavec;
     };
 
       template<typename _Type>

@@ -35,6 +35,11 @@ namespace game
         exit_btn.set_primary_color(primary);
         exit_btn.set_secondary_color(glm::vec4(0, 0, 1, 0.5f));
 
+        auto handler = std::bind(&main_menu::bottomoff_prop_set, this, 
+                                 std::placeholders::_1);
+
+        register_handler("bottom_offset", handler);
+
         layout();
         enable();
     }
@@ -72,6 +77,11 @@ namespace game
         gui::rect_item::on_surface_resize(w, h);
 
         layout(w, h);
+    }
+
+    void main_menu::bottomoff_prop_set(const std::string &value)
+    {
+        std::istringstream(value) >> bottomoff;
     }
 
     void main_menu::layout()

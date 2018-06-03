@@ -41,40 +41,43 @@ void putgame_create(putgame *self,
     self->on_cursor = nullptr;
     self->on_press = nullptr;
     self->on_release = nullptr;
+    self->on_set = nullptr;
 
     self->_time_ms = time_ms;
     self->_game_instance = new subinstance(self);
 }
 
-void putgame_destroy(struct putgame *self)
+void putgame_destroy(putgame *self)
 {
     callback(self->on_destroy, self);
 
     delete static_cast<subinstance *>(self->_game_instance);
+
+    self->_game_instance = nullptr;
 }
 
-void putgame_start(struct putgame *self)
+void putgame_start(putgame *self)
 {
     callback(self->on_start, self);
 
     static_cast<subinstance *>(self->_game_instance)->start();
 }
 
-void putgame_stop(struct putgame *self)
+void putgame_stop(putgame *self)
 {
     callback(self->on_stop, self);
 
     static_cast<subinstance *>(self->_game_instance)->stop();
 }
 
-void putgame_draw(struct putgame *self)
+void putgame_draw(putgame *self)
 {
     callback(self->on_draw, self);
 
     static_cast<subinstance *>(self->_game_instance)->draw();
 }
 
-void putgame_resize(struct putgame *self,
+void putgame_resize(putgame *self,
                     int width,
                     int height)
 {
@@ -83,7 +86,7 @@ void putgame_resize(struct putgame *self,
     static_cast<subinstance *>(self->_game_instance)->resize(width, height);
 }
 
-void putgame_cursor(struct putgame *self,
+void putgame_cursor(putgame *self,
                     int xpos,
                     int ypos)
 {
@@ -92,21 +95,21 @@ void putgame_cursor(struct putgame *self,
     static_cast<subinstance *>(self->_game_instance)->cursor(xpos, ypos);
 }
 
-void putgame_press(struct putgame *self)
+void putgame_press(putgame *self)
 {
     callback(self->on_press, self);
 
     static_cast<subinstance *>(self->_game_instance)->press();
 }
 
-void putgame_release(struct putgame *self)
+void putgame_release(putgame *self)
 {
     callback(self->on_release, self);
 
     static_cast<subinstance *>(self->_game_instance)->release();
 }
 
-time_t putgame_time(struct putgame *self)
+time_t putgame_time(putgame *self)
 {
     if (self->_time_ms != nullptr)
         return self->_time_ms(self);
@@ -114,4 +117,13 @@ time_t putgame_time(struct putgame *self)
     common::loge("_time_ms function was not set!");
 
     return 0;
+}
+
+void putgame_set(putgame *self,
+                 const char *key,
+                 const char *value)
+{
+    callback(self->on_set, self, key, value);
+
+    static_cast<subinstance *>(self->_game_instance)->set_property(key, value);
 }
