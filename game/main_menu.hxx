@@ -21,6 +21,8 @@ namespace game
 
         void on_surface_resize(int w, int h) override;
 
+        void set_bottom_offset(int offs);
+
         bool is_enabled() const
         { return enabled; }
 
@@ -30,6 +32,7 @@ namespace game
         void clicked(gui::color_button *btn);
         void animate();
 
+        gui::color_button space_btn;
         gui::color_button start_btn;
         gui::color_button exit_btn;
 
@@ -37,6 +40,7 @@ namespace game
         float yspd;
         bool animating;
         bool enabled;
+        int bottomoff;
     };
 }
 

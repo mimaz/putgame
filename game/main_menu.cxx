@@ -10,6 +10,7 @@ namespace game
 {
     main_menu::main_menu(common::context *ctx)
         : rect_item(ctx)
+        , space_btn(ctx, std::bind([](){}))
         , start_btn(ctx, std::bind(&main_menu::clicked, 
                     this, std::placeholders::_1))
         , exit_btn(ctx, std::bind(&main_menu::clicked,
@@ -18,8 +19,13 @@ namespace game
         , yspd(0)
         , animating(false)
         , enabled(false)
+        , bottomoff(100)
     {
         auto primary = glm::vec4(0.15f, 0.15f, 0.15f, 0.75f);
+
+        space_btn.set_text("");
+        space_btn.set_primary_color(primary);
+        space_btn.set_secondary_color(glm::vec4(0, 1, 0, 0.5f));
 
         start_btn.set_text("start!");
         start_btn.set_primary_color(primary);
@@ -81,15 +87,20 @@ namespace game
         auto btnheight = get_height();
 
         auto btnoff = static_cast<int>(yoff * h);
+        auto btny = -h / 2 + btnoff;
+
+
+        space_btn.resize(w, bottomoff);
+        space_btn.set_position(0, btny + bottomoff / 2);
+
+        btny += bottomoff;
 
 
         start_btn.resize(btnwidth, btnheight);
-        start_btn.set_position((btnwidth - w) / 2,
-                               (btnheight - h) / 2 + btnoff);
+        start_btn.set_position((btnwidth - w) / 2, btny + btnheight / 2);
 
         exit_btn.resize(btnwidth, btnheight);
-        exit_btn.set_position((w - btnwidth) / 2,
-                              (btnheight - h) / 2 + btnoff);
+        exit_btn.set_position((w - btnwidth) / 2, btny + btnheight / 2);
     }
 
     void main_menu::clicked(gui::color_button *btn)
