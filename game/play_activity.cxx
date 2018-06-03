@@ -47,12 +47,12 @@ namespace game
     play_activity::~play_activity()
     {}
 
-    void play_activity::on_shift(float x, float y)
+    void play_activity::shift(float x, float y)
     {
         get_player()->shift(x, y);
     }
 
-    void play_activity::on_draw()
+    void play_activity::process()
     {
         auto camid = get<world::camera>()->get_frame_id();
 

@@ -30,16 +30,24 @@ namespace gui
 
     void rect_item::set_position(int x, int y)
     {
-        xpos = x;
-        ypos = y;
-        dirty_matrix = true;
+        if (x != get_xpos() or y != get_ypos())
+        {
+            xpos = x;
+            ypos = y;
+            dirty_matrix = true;
+        }
     }
 
     void rect_item::resize(int w, int h)
     {
-        width = w;
-        height = h;
-        dirty_matrix = true;
+        if (w != get_width() or h != get_height())
+        {
+            width = w;
+            height = h;
+            dirty_matrix = true;
+
+            on_size_changed();
+        }
     }
 
     void rect_item::draw()
@@ -90,8 +98,6 @@ namespace gui
             matrix = glm::mat4(1);
             matrix = glm::translate(matrix, trvec);
             matrix = glm::scale(matrix, scvec);
-
-            on_size_changed();
         }
 
         return matrix;

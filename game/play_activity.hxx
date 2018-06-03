@@ -22,8 +22,8 @@ namespace game
         play_activity(common::context *ctx);
         ~play_activity();
 
-        void on_shift(float x, float y);
-        void on_draw();
+        void shift(float x, float y);
+        void process();
 
           template<typename _T, typename ..._Args>
         std::shared_ptr<_T> create_object(const _Args &...args);

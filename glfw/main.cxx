@@ -180,7 +180,7 @@ int main(int argc, char **argv)
         {
             app.draw();
 
-            nexttim += 1000 / 30;
+            nexttim += 1000 / 40;
 
             while (not app.should_close() and 
                    app.time_millis() < nexttim)

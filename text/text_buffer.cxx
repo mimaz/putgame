@@ -56,26 +56,38 @@ namespace text
 
     void text_buffer::set_text(const std::string &txt)
     {
-        text = txt;
-        dirty = true;
+        if (txt != get_text())
+        {
+            text = txt;
+            dirty = true;
 
-        text_height = std::count(get_text().begin(), 
-                                 get_text().end(), 
-                                 '\n') + 1;
+            text_height = std::count(get_text().begin(), 
+                                     get_text().end(), 
+                                     '\n') + 1;
+        }
     }
 
     void text_buffer::set_size(int w, int h)
     {
-        width = w;
-        height = h;
-        dirty = true;
-        resized = true;
+        w = std::max(w, 1);
+        h = std::max(h, 1);
+
+        if (w != get_width() or h != get_height())
+        {
+            width = w;
+            height = h;
+            dirty = true;
+            resized = true;
+        }
     }
 
     void text_buffer::set_font_size(float size)
     {
-        font_size = size;
-        dirty = true;
+        if (size != get_font_size())
+        {
+            font_size = size;
+            dirty = true;
+        }
     }
 
     GLuint text_buffer::get_texture_handle()
@@ -88,6 +100,7 @@ namespace text
 
     void text_buffer::render()
     {
+        common::logd("render text with size ", get_width(), ":", get_height());
         auto fb = get<text_framebuffer>();
 
         glActiveTexture(GL_TEXTURE0);

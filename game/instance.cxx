@@ -44,16 +44,24 @@ namespace game
 
     void instance::draw()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        if (menu != nullptr)
+            menu->process();
+
+        if (play != nullptr)
+            play->process();
 
         get<world::object_manager>()->process_all();
         get<gui::surface>()->process();
 
+
+
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         get<world::object_manager>()->draw_all();
         get<gui::surface>()->draw();
 
-        if (play != nullptr)
-            play->on_draw();
+
 
         swap_buffers();
     }
@@ -89,7 +97,7 @@ namespace game
                            / get_height();
 
                 if (play != nullptr)
-                    play->on_shift(diffx, diffy);
+                    play->shift(diffx, diffy);
             }
             else
             {

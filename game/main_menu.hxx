@@ -15,14 +15,28 @@ namespace game
     public:
         main_menu(common::context *ctx);
 
+        void process();
+        void enable();
+        void disable();
+
         void on_surface_resize(int w, int h) override;
 
+        bool is_enabled() const
+        { return enabled; }
+
     private:
+        void layout();
         void layout(int w, int h);
         void clicked(gui::color_button *btn);
+        void animate();
 
         gui::color_button start_btn;
         gui::color_button exit_btn;
+
+        float yoff;
+        float yspd;
+        bool animating;
+        bool enabled;
     };
 }
 
