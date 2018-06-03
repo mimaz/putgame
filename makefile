@@ -29,8 +29,8 @@ COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
 COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++14
 COMMON_LDFLAGS = 
 
-PRECOMPILER_CFLAGS = ${COMMON_FLAGS} -O1
-PRECOMPILER_LDFLAGS = ${COMMON_LDFLAGS} -O0
+PRECOMPILER_CFLAGS = -O1
+PRECOMPILER_LDFLAGS = -O1
 
 LIBGAME_CXXFLAGS = ${COMMON_CXXFLAGS}
 LIBGAME_CFLAGS = ${COMMON_CFLAGS}
@@ -52,18 +52,15 @@ else
 endif
 
 ifeq (${PLATFORM},ANDROID)
-	LIBCXX_FLAGS = -lc++_static -lc++abi -landroid_support -lunwind -latomic -static-libstdc++
 	LIBGAME_SRC_DIRS += jni/
-	LIBGAME_CFLAGS += ${LIBCXX_FLAGS}
-	LIBGAME_CXXFLAGS += ${LIBCXX_FLAGS}
-	LIBGAME_LDFLAGS += -lc -lm -lGLESv3 -lz -llog -lstdc++ ${LIBCXX_FLAGS}
+	LIBGAME_LDFLAGS += -lc -lm -lGLESv3 -llog -lc++_static -static-libstdc++
 endif
 
 GLFW_APP_CXXFLAGS = ${COMMON_CFLAGS}
 GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw -lpthread
 
-HOST_CC = ${HOST}clang
-HOST_CXX = ${HOST}clang++
+HOST_CC = gcc
+HOST_CXX = g++
 TARGET_CC = ${TARGET}clang
 TARGET_CXX = ${TARGET}clang++
 
@@ -147,8 +144,7 @@ ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 
 ${STD_HEADER}: putgame/std
 	@mkdir -p ${dir $@}
-	@touch ${BUILD_DIR}/putgame/std
-	${TARGET_CXX} -xc++-header $< -emit-pch -o $@ ${LIBGAME_CXXFLAGS}
+	${TARGET_CXX} -xc++-header -c $< -o $@ ${LIBGAME_CXXFLAGS}
 
 ${RES_HEADER}: ${GLSL_C_SRC}
 	@mkdir -p ${dir $@}
