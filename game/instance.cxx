@@ -60,10 +60,6 @@ namespace game
 
         get<world::object_manager>()->draw_all();
         get<gui::surface>()->draw();
-
-
-
-        swap_buffers();
     }
 
     void instance::resize(int wid, int hei)

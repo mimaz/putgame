@@ -43,11 +43,6 @@ namespace
             env->SetLongField(obj, id, handle);
         }
 
-        void swap_buffers() final
-        {
-            // nothing to do, GLSurfaceView swaps just after draw
-        }
-
         time_t time_millis() final
         {
             auto cls = env->GetObjectClass(obj);

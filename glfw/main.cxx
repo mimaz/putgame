@@ -74,12 +74,8 @@ namespace
             glfwPollEvents();
 
             instance::draw();
-        }
 
-        void swap_buffers() final
-        {
             glfwSwapBuffers(win);
-            glfwPollEvents();
         }
 
         time_t time_millis() final
@@ -178,14 +174,16 @@ int main(int argc, char **argv)
 
         while (not app.should_close())
         {
-            app.draw();
-
             nexttim += 1000 / 40;
 
             while (not app.should_close() and 
                    app.time_millis() < nexttim)
+            {
                 std::this_thread::sleep_for
-                    (std::chrono::milliseconds(1));
+                    (std::chrono::milliseconds(4));
+            }
+
+            app.draw();
         }
 
         app.stop();

@@ -17,8 +17,8 @@ if (( $ARGC < 1 )); then
     exit 1
 fi
 
-COMMAND=$1
-ARCH=$2
+ARCH=$1
+COMMAND=$2
 
 TOOLCHAINS=~/android/toolchains
 
@@ -80,11 +80,6 @@ case $COMMAND in
         set_make_args
         make $MAKE_ARCH_ARGS clean
         rm -rf $LIB_OUT_DIR
-        ;;
-
-    cleanall)
-        make cleanall
-        rm -rf $LIB_OUT_DIR_BASE
         ;;
 
     *)

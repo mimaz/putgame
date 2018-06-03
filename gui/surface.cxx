@@ -5,6 +5,11 @@
 
 #include <putgame/std>
 
+/* 
+ * touch_event.hxx have to be declared here due 
+ * to clang's parsing method
+ */
+#include "touch_event.hxx"
 #include "surface.hxx"
 
 #include "rect_item.hxx"
@@ -57,6 +62,7 @@ namespace gui
     void surface::touch(touch_event event)
     {
         common::logd("event: ", event);
+
         for (auto item : items)
             if (item->contains(event.xpos, event.ypos) 
                     or item->is_pressed())

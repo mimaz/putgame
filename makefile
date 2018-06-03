@@ -7,8 +7,7 @@ PLATFORM ?= GNU_GLFW
 RELEASE ?= 0
 USE_LTO ?= 0
 
-BUILD_DIR_BASE = /tmp/putgame-build
-BUILD_DIR = ${BUILD_DIR_BASE}
+BUILD_DIR = /tmp/putgame-build
 
 ##
  # targets
@@ -16,7 +15,7 @@ BUILD_DIR = ${BUILD_DIR_BASE}
 PRECOMPILER = ${BUILD_DIR}/putgame-precompiler
 LIBGAME = ${BUILD_DIR}/libputgame.so
 RES_HEADER = ${BUILD_DIR}/putgame/res
-STD_HEADER = ${BUILD_DIR}/putgame/std.gch
+STD_HEADER = ${BUILD_DIR}/putgame/std.pch
 GLFW_APP = ${BUILD_DIR}/putgame.elf
 
 ##
@@ -53,17 +52,20 @@ else
 endif
 
 ifeq (${PLATFORM},ANDROID)
+	LIBCXX_FLAGS = -lc++_static -lc++abi -landroid_support -lunwind -latomic -static-libstdc++
 	LIBGAME_SRC_DIRS += jni/
-	LIBGAME_LDFLAGS += -lc -lm -lGLESv3 -lz -llog -lstdc++
+	LIBGAME_CFLAGS += ${LIBCXX_FLAGS}
+	LIBGAME_CXXFLAGS += ${LIBCXX_FLAGS}
+	LIBGAME_LDFLAGS += -lc -lm -lGLESv3 -lz -llog -lstdc++ ${LIBCXX_FLAGS}
 endif
 
 GLFW_APP_CXXFLAGS = ${COMMON_CFLAGS}
 GLFW_APP_LDFLAGS = ${COMMON_LDFLAGS} -lGL -lglfw -lpthread
 
-HOST_CC = ${HOST}gcc
-HOST_CXX = ${HOST}g++
-TARGET_CC = ${TARGET}gcc
-TARGET_CXX = ${TARGET}g++
+HOST_CC = ${HOST}clang
+HOST_CXX = ${HOST}clang++
+TARGET_CC = ${TARGET}clang
+TARGET_CXX = ${TARGET}clang++
 
 ##
  # sources & objects
@@ -104,6 +106,8 @@ libputgame: ${LIBGAME}
 
 executable: ${GLFW_APP}
 
+pch: ${STD_HEADER}
+
 debug: ${GLFW_APP}
 	gdb $<
 
@@ -131,7 +135,7 @@ ${LIBGAME}: ${LIBGAME_OBJ} ${GLSL_C_OBJ}
 
 ${BUILD_DIR}/%.cxx.o: %.cxx ${STD_HEADER} ${RES_HEADER}
 	@mkdir -p ${dir $@}
-	${TARGET_CXX} ${LIBGAME_CXXFLAGS} -o $@ -c $<
+	${TARGET_CXX} ${LIBGAME_CXXFLAGS} -include-pch ${STD_HEADER} -o $@ -c $<
 
 ${BUILD_DIR}/glsl/%.c.o: ${BUILD_DIR}/glsl/%.c
 	@mkdir -p ${dir $@}
@@ -143,7 +147,8 @@ ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 
 ${STD_HEADER}: putgame/std
 	@mkdir -p ${dir $@}
-	${TARGET_CXX} ${LIBGAME_CXXFLAGS} -o $@ -xc++-header -c $<
+	@touch ${BUILD_DIR}/putgame/std
+	${TARGET_CXX} -xc++-header $< -emit-pch -o $@ ${LIBGAME_CXXFLAGS}
 
 ${RES_HEADER}: ${GLSL_C_SRC}
 	@mkdir -p ${dir $@}

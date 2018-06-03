@@ -28,8 +28,6 @@ namespace game
         virtual void press();
         virtual void release();
 
-        virtual void swap_buffers() = 0;
-
         int get_width() override;
         int get_height() override;
 

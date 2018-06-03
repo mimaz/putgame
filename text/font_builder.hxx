@@ -16,8 +16,8 @@ namespace text
     class font_builder
     {
     public:
-        font_builder(),
-        font_builder(const ascii_font &font),
+        font_builder();
+        font_builder(const ascii_font &font);
         ~font_builder();
 
         void bind_texture(int code);
