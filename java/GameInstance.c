@@ -107,6 +107,22 @@ Java_pl_poznan_put_student_mazurek_mieszko_GameInstance_release(
 }
 
 JNIEXPORT void JNICALL
+Java_pl_poznan_put_student_mazurek_mieszko_GameInstance_set(
+        JNIEnv *env,
+        jobject obj,
+        jstring key,
+        jstring value)
+{
+    const char *ckey = (*env)->GetStringUTFChars(env, key, NULL);
+    const char *cvalue = (*env)->GetStringUTFChars(env, value, NULL);
+
+    putgame_set(get_self(env, obj), ckey, cvalue);
+
+    (*env)->ReleaseStringUTFChars(env, key, ckey);
+    (*env)->ReleaseStringUTFChars(env, value, cvalue);
+}
+
+JNIEXPORT void JNICALL
 Java_pl_poznan_put_student_mazurek_mieszko_GameInstance_create(
         JNIEnv *env,
         jobject obj)

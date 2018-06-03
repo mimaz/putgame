@@ -25,6 +25,7 @@ public class GameView extends GLSurfaceView {
         stopped = false;
 
         renderer = new Renderer();
+        renderer.set("bottom_offset", "10");
 
         setRenderer(renderer);
         setOnTouchListener(new TouchListener());
@@ -32,6 +33,10 @@ public class GameView extends GLSurfaceView {
 
     public void start() {
         started = true;
+
+        int bottomoff = ((MainActivity) getContext()).getNavBarHeight();
+
+        renderer.set("bottom_offset", String.valueOf(bottomoff));
     }
 
     public void stop() {

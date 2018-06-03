@@ -44,6 +44,8 @@ class GameInstance
 
     native void release();
 
+    native void set(String key, String value);
+
     native private void create();
 
     native private void destroy();
