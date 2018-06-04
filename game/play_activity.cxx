@@ -36,11 +36,15 @@ namespace game
             box->translate(glm::vec3(xoff, yoff, 0) * 0.75f);
         };
 
-        auto boxid0 = get<world::camera>()->get_frame_id() + 40;
-        auto boxid1 = boxid0 + 30;
+        auto boxid0 = get<world::camera>()->get_frame_id() + 20;
+        auto boxid1 = boxid0 + 10;
+        auto paneid = boxid0 + 20;
 
         genbox(boxid0);
         genbox(boxid1);
+
+
+        create_object<world::glass_pane>(ctx, paneid, glm::vec3(1, 0, 0));
     }
 
     play_activity::~play_activity()

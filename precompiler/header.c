@@ -102,6 +102,12 @@ static void update(const char *outname)
         fwrite(headerbuf, 1, bufsiz, output);
 
         fclose(output);
+
+        printf("header updated\n");
+    }
+    else
+    {
+        printf("header remained\n");
     }
 }
 

@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 
 #include <putgame/putgame.h>
@@ -173,7 +174,7 @@ int main(int argc, char **argv)
         nexttim += 1.0 / 40;
 
         while (glfwGetTime() < nexttim)
-            ;
+            usleep(1000);
     }
 
     putgame_stop(instance);

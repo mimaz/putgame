@@ -3,8 +3,6 @@
  * 2018
  */
 
-const mediump float specular = 32.0;
-
 /*
  * v_type 
  * 0 - color face
@@ -29,7 +27,7 @@ void main()
                         white,
                         v_normal, 
                         v_coord, 
-                        specular,
+                        4,
                         false, 
                         true,
                         false);
@@ -51,7 +49,7 @@ void main()
                         white,
                         v_normal, 
                         v_coord, 
-                        specular,
+                        4,
                         true, 
                         true,
                         false);

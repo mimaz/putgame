@@ -91,7 +91,7 @@ namespace game
 
     void main_menu::layout(int w, int h)
     {
-        resize(w, w / 6);
+        resize(w, std::min(w / 6, h / 8));
 
         auto btnwidth = get_width() / 2;
         auto btnheight = get_height();

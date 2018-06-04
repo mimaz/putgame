@@ -34,7 +34,7 @@ void main()
                     white,
                     v_normal, 
                     v_coord,
-                    160.0,
+                    7,
                     true, 
                     true,
                     false);
