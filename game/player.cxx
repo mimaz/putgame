@@ -3,8 +3,8 @@
  * 2018
  */
 
-#include <putgame/world>
 #include <putgame/math>
+#include <putgame/world>
 
 #include "player.hxx"
 
@@ -19,7 +19,7 @@ namespace game
         , activity(activity)
     {}
 
-    void player::shift(float x, float y)
+    void player::steer(float x, float y)
     {
         glm::vec3 axisx(0, 1, 0);
         glm::vec3 axisy(-1, 0, 0);
@@ -32,6 +32,8 @@ namespace game
 
     void player::process()
     {
+        get<world::camera>()->move(glm::vec3(0, 0, -0.1f));
+
         if (apilot != nullptr)
         {
             apilot->correct();
@@ -41,10 +43,21 @@ namespace game
             try {
                 test_collision();
             } catch (glm::vec3 point) {
-                auto offs = point - get<world::camera>()->get_position();
+                // TODO make an offset
 
-                get<world::camera>()->move(offs);
-                common::logd("ouch");
+                auto cam = get<world::camera>();
+                auto camid = cam->get_frame_id();
+                auto camframe = get<world::way_path>()->at(camid);
+
+                auto norm = camframe.position() - cam->get_position();
+                
+                auto vect = -get<world::camera>()->get_direction();
+                auto axis = glm::normalize(glm::cross(norm, vect));
+
+                auto cosine = glm::dot(vect, norm);
+                auto angle = math::pi - 2 * acosf(cosine);
+
+                get<world::camera>()->rotate(angle, axis);
             }
         }
     }

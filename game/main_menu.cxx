@@ -120,8 +120,8 @@ namespace game
 
     void main_menu::animate()
     {
-        constexpr auto acceleration = 0.0075f;
-        constexpr auto resistance = 0.95f;
+        constexpr auto acceleration = 0.0025f;
+        constexpr auto resistance = 0.99f;
         constexpr auto speed_eps = 0.025f;
 
         if (enabled)

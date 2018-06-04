@@ -50,9 +50,9 @@ namespace game
     play_activity::~play_activity()
     {}
 
-    void play_activity::shift(float x, float y)
+    void play_activity::steer(float x, float y)
     {
-        get_player()->shift(x, y);
+        get_player()->steer(x, y);
     }
 
     void play_activity::process()

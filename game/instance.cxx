@@ -92,7 +92,7 @@ namespace game
                            / get_height();
 
                 if (play != nullptr)
-                    play->shift(diffx, diffy);
+                    play->steer(diffx, diffy);
             }
             else
             {

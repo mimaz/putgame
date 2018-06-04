@@ -20,7 +20,7 @@ namespace game
 
         player(play_activity *activity);
 
-        void shift(float x, float y);
+        void steer(float x, float y);
         void process();
 
         void set_autopilot(bool ap);

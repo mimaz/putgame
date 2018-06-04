@@ -22,7 +22,7 @@ namespace game
         play_activity(common::context *ctx);
         ~play_activity();
 
-        void shift(float x, float y);
+        void steer(float x, float y);
         void process();
 
           template<typename _T, typename ..._Args>

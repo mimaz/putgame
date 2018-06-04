@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <pthread.h>
 
 #include <putgame/putgame.h>
 
@@ -96,7 +97,11 @@ static void cursor_callback(GLFWwindow *win,
                             double cursorx, 
                             double cursory)
 {
-    (void) win;
+    int height;
+
+    glfwGetWindowSize(win, NULL, &height);
+
+    cursory = height - cursory;
 
     putgame_cursor(instance, (int) cursorx, (int) cursory);
 }
@@ -117,6 +122,15 @@ static void touch_callback(GLFWwindow *win,
             break;
         }
     }
+}
+
+static void *process_thread(void *arg)
+{
+    (void) arg;
+
+    putgame_process(instance);
+
+    return NULL;
 }
 
 int main(int argc, char **argv)
@@ -166,8 +180,19 @@ int main(int argc, char **argv)
     {
         glfwPollEvents();
 
+
+
+        pthread_t thread;
+
+        if (pthread_create(&thread, NULL, process_thread, NULL) != 0)
+            exit_with_error("creating process thread failed!\n");
+
         putgame_draw(instance);
-        putgame_process(instance);
+
+        pthread_join(thread, NULL);
+
+
+
 
         glfwSwapBuffers(window);
         

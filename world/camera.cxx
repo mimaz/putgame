@@ -29,7 +29,7 @@ namespace world
         , proj_mat(1)
         , view_mat(1)
         , flags(dirty_all)
-        , view_angle(math::pi / 3)
+        , view_angle(math::pi / 5)
         , view_ratio(1)
         , view_range(10)
     {}
