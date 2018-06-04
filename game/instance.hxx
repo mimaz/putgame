@@ -22,6 +22,7 @@ namespace game
         virtual void start();
         virtual void stop();
         virtual void draw();
+        virtual void process();
 
         virtual void resize(int width, int height);
         virtual void cursor(int x, int y);

@@ -76,6 +76,7 @@ public class GameView extends GLSurfaceView {
 
             nextTime += 1000 / 40;
 
+            process();
             draw();
         }
     }

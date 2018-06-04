@@ -36,6 +36,8 @@ class GameInstance
 
     native void draw();
 
+    native void process();
+
     native void resize(int width, int height);
 
     native void cursor(int x, int y);

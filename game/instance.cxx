@@ -43,6 +43,14 @@ namespace game
 
     void instance::draw()
     {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        get<world::object_manager>()->draw_all();
+        get<gui::surface>()->draw();
+    }
+
+    void instance::process()
+    {
         if (menu != nullptr)
             menu->process();
 
@@ -51,14 +59,6 @@ namespace game
 
         get<world::object_manager>()->process_all();
         get<gui::surface>()->process();
-
-
-
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        get<world::object_manager>()->draw_all();
-        get<gui::surface>()->draw();
     }
 
     void instance::resize(int wid, int hei)

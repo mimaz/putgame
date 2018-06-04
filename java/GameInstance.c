@@ -71,6 +71,14 @@ Java_pl_poznan_put_student_mazurek_mieszko_GameInstance_draw(
 }
 
 JNIEXPORT void JNICALL
+Java_pl_poznan_put_student_mazurek_mieszko_GameInstance_process(
+        JNIEnv *env,
+        jobject obj)
+{
+    putgame_process(get_self(env, obj));
+}
+
+JNIEXPORT void JNICALL
 Java_pl_poznan_put_student_mazurek_mieszko_GameInstance_resize(
         JNIEnv *env,
         jobject obj,

@@ -167,6 +167,7 @@ int main(int argc, char **argv)
         glfwPollEvents();
 
         putgame_draw(instance);
+        putgame_process(instance);
 
         glfwSwapBuffers(window);
         

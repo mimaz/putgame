@@ -8,13 +8,7 @@
 
 #include <time.h>
 
-#if defined PLATFORM_GNU_GLFW
 #define PUTGAME_EXPORT __attribute__((visibility("default")))
-#elif defined PLATFORM_ANDROID
-#define PUTGAME_EXPORT
-#else
-#error invalid platform
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,6 +20,7 @@ struct putgame
     void (*on_start)(struct putgame *self);
     void (*on_stop)(struct putgame *self);
     void (*on_draw)(struct putgame *self);
+    void (*on_process)(struct putgame *self);
     void (*on_resize)(struct putgame *self,
                       int width,
                       int height);
@@ -57,6 +52,9 @@ putgame_stop(struct putgame *self);
 
 PUTGAME_EXPORT void
 putgame_draw(struct putgame *self);
+
+PUTGAME_EXPORT void
+putgame_process(struct putgame *self);
 
 PUTGAME_EXPORT void 
 putgame_resize(struct putgame *self,
