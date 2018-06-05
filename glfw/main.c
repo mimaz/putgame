@@ -12,6 +12,8 @@
 
 #include <putgame/putgame.h>
 
+extern void usleep(time_t);
+
 static struct putgame *instance;
 static GLFWwindow *window;
 

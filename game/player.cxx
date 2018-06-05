@@ -38,27 +38,30 @@ namespace game
         {
             apilot->correct();
         }
-        else
+        else if (test_collision())
         {
-            try {
-                test_collision();
-            } catch (glm::vec3 point) {
-                // TODO make an offset
+            auto cam = get<world::camera>();
+            auto way = get<world::way_path>();
 
-                auto cam = get<world::camera>();
-                auto camid = cam->get_frame_id();
-                auto camframe = get<world::way_path>()->at(camid);
+            auto camid = cam->get_frame_id();
+            auto camframe = way->at(camid);
 
-                auto norm = camframe.position() - cam->get_position();
-                
-                auto vect = -get<world::camera>()->get_direction();
-                auto axis = glm::normalize(glm::cross(norm, vect));
+            auto radius = camframe.position() - cam->get_position();
+            auto camoff = radius * 0.05f;
 
-                auto cosine = glm::dot(vect, norm);
-                auto angle = math::pi - 2 * acosf(cosine);
+            cam->move(camoff);
 
-                get<world::camera>()->rotate(angle, axis);
-            }
+
+
+            auto norm = camframe.position() - cam->get_position();
+            
+            auto vect = -cam->get_direction();
+            auto axis = glm::normalize(glm::cross(norm, vect));
+
+            auto cosine = glm::dot(vect, norm);
+            auto angle = math::pi - 2 * acosf(cosine);
+
+            cam->rotate(angle, axis);
         }
     }
 
@@ -75,7 +78,7 @@ namespace game
         return get<world::camera>()->get_frame_id();
     }
 
-    void player::test_collision()
+    bool player::test_collision()
     {
         auto eye = get<world::camera>()->get_position();
         auto fid = get<world::camera>()->get_frame_id();
@@ -84,7 +87,6 @@ namespace game
 
         auto sqd = math::sqdist(center, eye);
 
-        if (sqd > 1)
-            throw center + glm::normalize(eye - center) * 0.8f;
+        return sqd >= 1;
     }
 }

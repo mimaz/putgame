@@ -28,7 +28,7 @@ namespace game
         int get_frame_id();
 
     private:
-        void test_collision();
+        bool test_collision();
 
         std::shared_ptr<autopilot> apilot;
         play_activity *activity;
