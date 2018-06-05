@@ -25,12 +25,23 @@ namespace game
 
         auto id = get<world::way_path>()->back().index();
 
-        if (absdist > 2.4f)
+        std::uniform_real_distribution<float> angledist
+            (0, math::pi * 2);
+
+        auto angle = angledist(random_engine());
+        auto xoff = cosf(angle);
+        auto yoff = sinf(angle);
+        auto offvec = glm::vec3(xoff, yoff, 0.0f) * 0.75f;
+
+
+        if (absdist > 2.8f)
         {
             common::logd("create wall obstacle");
 
-            activity->create_object<world::wall_obstacle>
+            auto ptr = activity->create_object<world::wall_obstacle>
                 (get_context(), id, 6, 4);
+
+            ptr->translate(offvec);
         }
         else if (absdist > 2.65f)
         {
@@ -43,18 +54,11 @@ namespace game
         {
             common::logd("create lightbox");
 
-            std::uniform_real_distribution<float> angledist
-                (0, math::pi * 2);
-
             auto ptr = activity->create_object<world::light_box>
                 (get_context(), id);
 
 
-            auto angle = angledist(random_engine());
-            auto xoff = cosf(angle);
-            auto yoff = sinf(angle);
-
-            ptr->translate(glm::vec3(xoff, yoff, 0) / 2.0f);
+            ptr->translate(offvec);
         }
 
         object_generator::generate();

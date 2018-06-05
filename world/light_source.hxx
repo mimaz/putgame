@@ -21,7 +21,7 @@ namespace world
         light_source(const light_source &) = delete;
         light_source(light_source &&) = delete;
 
-        virtual ~light_source();
+        virtual ~light_source() = 0;
 
         virtual glm::vec3 get_light_position() = 0;
         virtual glm::vec3 get_light_color() = 0;

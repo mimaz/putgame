@@ -79,7 +79,7 @@ namespace world
         surface_col = to_rgb(c, 1.0f, 0.6f);
     }
 
-    void light_box::rotate()
+    void light_box::process()
     {
         visible_object::rotate(speedx, { 0, 1, 0 });
         visible_object::rotate(speedy, { 1, 0, 0 });

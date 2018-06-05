@@ -30,7 +30,7 @@ namespace world
         light_box(common::context *ctx, int frameid, color col);
         ~light_box();
 
-        void rotate();
+        void process();
 
         void set_color(color col);
 

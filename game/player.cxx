@@ -47,7 +47,7 @@ namespace game
             auto camframe = way->at(camid);
 
             auto radius = camframe.position() - cam->get_position();
-            auto camoff = radius * 0.05f;
+            auto camoff = radius * 0.1f;
 
             cam->move(camoff);
 

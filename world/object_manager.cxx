@@ -72,11 +72,7 @@ namespace world
         light_box_drawer->begin_drawing();
 
         for (auto box : light_boxes)
-        {
-            box->rotate();
-
             light_box_drawer->draw_element(box);
-        }
 
         light_box_drawer->end_drawing();
 
@@ -112,13 +108,11 @@ namespace world
     {
         join_process();
 
-        process_thread = std::make_unique<std::thread>
-            ([this]() -> void {
-                std::lock_guard<std::mutex> guard(process_lock);
+        for (auto box : light_boxes)
+            box->process();
 
-                for (auto pieces : glass_pieces_set)
-                    pieces->update();
-             });
+        for (auto pieces : glass_pieces_set)
+            pieces->update();
 
         get<way_path>()->update();
         get<tunnel_view>()->get_path()->update();

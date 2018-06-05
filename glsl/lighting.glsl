@@ -15,26 +15,11 @@ uniform highp vec3 u_light_coord_v[max_light_count];
 uniform lowp vec3 u_light_color_v[max_light_count];
 uniform highp float u_light_range_v[max_light_count];
 
-highp vec3 light_coord(lowp int idx)
-{
-    return u_light_coord_v[idx];
-}
-
-lowp vec3 light_color(lowp int idx)
-{
-    return u_light_color_v[idx];
-}
-
-highp float light_range(lowp int idx)
-{
-    return u_light_range_v[idx];
-}
-
 lowp float calc_fog(lowp int idx,
                     highp float raylen, 
                     highp float viewlen)
 {
-    mediump float range = light_range(idx);
+    mediump float range = u_light_range_v[idx];
 
     lowp float lightfac = raylen / range;
     lowp float viewfac = viewlen / u_view_range;
@@ -61,7 +46,7 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
     lowp vec3 view_norm = view / viewlen;
 
     lowp float specular_ofside = pow(
-        0.025, 
+        0.02, 
         1.0 / pow(
             2.0, 
             float(specular_pow_factor)
@@ -70,7 +55,7 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
 
     for (int i = 0; i < u_light_count; i++)
     {
-        mediump vec3 ray = light_coord(i) - fragment_coord;
+        mediump vec3 ray = u_light_coord_v[i] - fragment_coord;
         mediump float raylen = length(ray);
         lowp vec3 ray_norm = ray / raylen;
 
@@ -83,7 +68,7 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
 
             if (with_backface || diffuse_cosine > 0.0)
             {
-                color += light_color(i)
+                color += u_light_color_v[i]
                        * material_diffuse 
                        * diffuse_cosine
                        ;
@@ -111,7 +96,7 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
                 for (lowp int i = 0; i < specular_pow_factor; i++)
                     specular_coefficient *= specular_coefficient;
 
-                color += light_color(i) 
+                color += u_light_color_v[i] 
                        * material_specular 
                        * specular_coefficient
                        ;

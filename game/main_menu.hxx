@@ -15,7 +15,7 @@ namespace game
     public:
         main_menu(common::context *ctx);
 
-        void process();
+        void process() override;
         void enable();
         void disable();
 

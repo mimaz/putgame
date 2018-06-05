@@ -39,6 +39,7 @@ namespace world
 
         for (auto s : all)
         {
+            common::loge("type: ", typeid(*s).name());
             coords[idx] = s->get_light_position();
             colors[idx] = s->get_light_color();
             ranges[idx] = s->get_light_range();

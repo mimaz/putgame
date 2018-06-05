@@ -189,9 +189,9 @@ int main(int argc, char **argv)
         if (pthread_create(&thread, NULL, process_thread, NULL) != 0)
             exit_with_error("creating process thread failed!\n");
 
-        putgame_draw(instance);
 
         pthread_join(thread, NULL);
+        putgame_draw(instance);
 
 
 
