@@ -37,7 +37,6 @@ void putgame_create(putgame *self,
     self->on_start = nullptr;
     self->on_stop = nullptr;
     self->on_draw = nullptr;
-    self->on_process = nullptr;
     self->on_resize = nullptr;
     self->on_cursor = nullptr;
     self->on_press = nullptr;
@@ -75,14 +74,8 @@ void putgame_draw(putgame *self)
 {
     callback(self->on_draw, self);
 
-    static_cast<subinstance *>(self->_game_instance)->draw();
-}
-
-void putgame_process(putgame *self)
-{
-    callback(self->on_process, self);
-
     static_cast<subinstance *>(self->_game_instance)->process();
+    static_cast<subinstance *>(self->_game_instance)->draw();
 }
 
 void putgame_resize(putgame *self,

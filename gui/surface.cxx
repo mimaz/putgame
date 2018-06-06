@@ -60,8 +60,6 @@ namespace gui
 
     void surface::touch(touch_event event)
     {
-        common::logd("event: ", event);
-
         for (auto item : items)
             if (item->contains(event.xpos, event.ypos) 
                     or item->is_pressed())

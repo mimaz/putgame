@@ -20,7 +20,6 @@ struct putgame
     void (*on_start)(struct putgame *self);
     void (*on_stop)(struct putgame *self);
     void (*on_draw)(struct putgame *self);
-    void (*on_process)(struct putgame *self);
     void (*on_resize)(struct putgame *self,
                       int width,
                       int height);
@@ -52,9 +51,6 @@ putgame_stop(struct putgame *self);
 
 PUTGAME_EXPORT void
 putgame_draw(struct putgame *self);
-
-PUTGAME_EXPORT void
-putgame_process(struct putgame *self);
 
 PUTGAME_EXPORT void 
 putgame_resize(struct putgame *self,

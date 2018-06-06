@@ -10,8 +10,6 @@
 
 namespace world
 {
-    constexpr auto start_id = 0;
-
     path_line::path_line(common::context *ctx, float gap)
         : object(ctx)
         , pointv(1, path_point(glm::mat4(1), 0))

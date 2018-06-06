@@ -126,15 +126,6 @@ static void touch_callback(GLFWwindow *win,
     }
 }
 
-static void *process_thread(void *arg)
-{
-    (void) arg;
-
-    putgame_process(instance);
-
-    return NULL;
-}
-
 int main(int argc, char **argv)
 {
     (void) argc;
@@ -183,16 +174,7 @@ int main(int argc, char **argv)
         glfwPollEvents();
 
 
-
-        pthread_t thread;
-
-        if (pthread_create(&thread, NULL, process_thread, NULL) != 0)
-            exit_with_error("creating process thread failed!\n");
-
-
-        pthread_join(thread, NULL);
         putgame_draw(instance);
-
 
 
 

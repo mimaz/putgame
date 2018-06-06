@@ -59,7 +59,6 @@ namespace world
         , speedx(rand_speed())
         , speedy(rand_speed())
         , speedz(rand_speed())
-        , blur(0)
     {
         get<object_manager>()->add(this);
 

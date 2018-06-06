@@ -52,7 +52,6 @@ namespace world
         float speedx;
         float speedy;
         float speedz;
-        float blur;
     };
 }
 
