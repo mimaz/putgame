@@ -24,14 +24,20 @@ namespace game
         void process();
 
         void set_autopilot(bool ap);
+        void set_target_speed(float speed);
 
-        int get_frame_id();
+        int get_frame_id() const;
+        float get_target_speed() const;
+        float get_real_speed() const;
 
     private:
         bool test_collision();
 
-        std::shared_ptr<autopilot> apilot;
         play_activity *activity;
+        std::shared_ptr<autopilot> apilot;
+
+        float target_speed;
+        float real_speed;
     };
 }
 

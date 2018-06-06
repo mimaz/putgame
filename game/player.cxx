@@ -15,8 +15,10 @@ namespace game
 {
     player::player(play_activity *activity)
         : object(activity->get_context())
-        , apilot(nullptr)
         , activity(activity)
+        , apilot(nullptr)
+        , target_speed(10)
+        , real_speed(0)
     {}
 
     void player::steer(float x, float y)
@@ -32,7 +34,20 @@ namespace game
 
     void player::process()
     {
-        get<world::camera>()->move(glm::vec3(0, 0, -0.1f));
+        constexpr auto fps = 40;
+        constexpr auto factor = 1.0f / fps;
+
+        auto cam = get<world::camera>();
+
+
+        real_speed += (get_target_speed() - get_real_speed()) * factor;
+
+
+        glm::vec3 movec(0, 0, -get_real_speed() / fps);
+
+        cam->move(movec);
+
+
 
         if (apilot != nullptr)
         {
@@ -40,7 +55,6 @@ namespace game
         }
         else if (test_collision())
         {
-            auto cam = get<world::camera>();
             auto way = get<world::way_path>();
 
             auto camid = cam->get_frame_id();
@@ -73,9 +87,19 @@ namespace game
             apilot = nullptr;
     }
 
-    int player::get_frame_id()
+    int player::get_frame_id() const
     {
         return get<world::camera>()->get_frame_id();
+    }
+
+    float player::get_target_speed() const
+    {
+        return target_speed;
+    }
+
+    float player::get_real_speed() const
+    {
+        return real_speed;
     }
 
     bool player::test_collision()

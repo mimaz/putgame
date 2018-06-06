@@ -88,7 +88,7 @@ namespace common
         { return ctx; }
 
           template<typename _Type>
-        _Type *get()
+        _Type *get() const
         { return get_context()->get<_Type>(); }
 
         std::default_random_engine &random_engine()
