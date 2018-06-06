@@ -45,7 +45,8 @@ namespace gui
     void surface::process()
     {
         for (auto item : items)
-            item->process();
+            if (item->is_active())
+                item->process();
     }
 
     void surface::draw()
@@ -55,7 +56,8 @@ namespace gui
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         for (auto item : items)
-            item->draw();
+            if (item->is_active())
+                item->draw();
     }
 
     void surface::touch(touch_event event)

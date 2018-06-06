@@ -17,11 +17,12 @@ namespace gui
     public:
         static const float strip_mesh[];
 
-        rect_item(common::context *ctx);
+        rect_item(common::context *ctx, int depth = 0);
         ~rect_item();
 
         void set_position(int x, int y);
         void resize(int w, int h);
+        void set_active(bool act);
 
         virtual void draw();
         virtual void process();
@@ -35,7 +36,9 @@ namespace gui
         int get_ypos() const { return ypos; }
         int get_width() const { return width; }
         int get_height() const { return height; }
+        int get_depth() const { return depth; }
         bool is_pressed() const { return pressed; }
+        bool is_active() const { return active; }
 
         glm::mat4 get_matrix();
         glm::mat4 get_mvp();
@@ -48,7 +51,9 @@ namespace gui
         int ypos;
         int width;
         int height;
+        int depth;
         bool pressed;
+        bool active;
 
         glm::mat4 matrix;
         bool dirty_matrix;

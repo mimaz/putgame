@@ -58,8 +58,10 @@ namespace
 
 namespace gui
 {
-    color_rectangle::color_rectangle(common::context *ctx)
+    color_rectangle::color_rectangle(common::context *ctx, 
+                                     int depth)
         : rect_item(ctx)
+        , color(glm::vec4(0, 0, 0, 1))
     {}
 
     void color_rectangle::set_color(glm::vec4 col)

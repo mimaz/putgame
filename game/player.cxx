@@ -10,6 +10,7 @@
 
 #include "autopilot.hxx"
 #include "play_activity.hxx"
+#include "hit_mask.hxx"
 
 namespace game
 {
@@ -76,6 +77,11 @@ namespace game
             auto angle = math::pi - 2 * acosf(cosine);
 
             cam->rotate(angle, axis);
+
+            common::logd("cos: ", cosine);
+
+
+            activity->get_hit_mask()->hit(cosine);
         }
     }
 

@@ -38,7 +38,14 @@ namespace gui
         { return &font_builder; }
 
     private:
-        std::set<rect_item *> items;
+        class comparator
+        {
+        public:
+            bool operator()(const rect_item *p, const rect_item *q) const
+            { return p < q; }
+        };
+
+        std::set<rect_item *, comparator> items;
 
         mutable glm::mat4 proj;
         mutable bool dirty_proj;

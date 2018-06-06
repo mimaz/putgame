@@ -17,13 +17,15 @@ namespace gui
         0.5f, -0.5f,
     };
 
-    rect_item::rect_item(common::context *ctx)
+    rect_item::rect_item(common::context *ctx, int depth)
         : object(ctx)
         , xpos(0)
         , ypos(0)
         , width(1)
         , height(1)
+        , depth(depth)
         , pressed(false)
+        , active(true)
         , dirty_matrix(true)
     {
         get<surface>()->add_item(this);
@@ -54,6 +56,11 @@ namespace gui
 
             on_size_changed();
         }
+    }
+
+    void rect_item::set_active(bool act)
+    {
+        active = act;
     }
 
     void rect_item::draw()

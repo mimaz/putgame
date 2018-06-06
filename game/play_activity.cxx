@@ -9,6 +9,7 @@
 
 #include "player.hxx"
 #include "demo_generator.hxx"
+#include "hit_mask.hxx"
 
 namespace game
 {
@@ -16,35 +17,11 @@ namespace game
         : object(ctx)
         , player_ref(std::make_shared<player>(this))
         , object_generator_ref(std::make_shared<demo_generator>(this))
+        , hit_mask_ref(std::make_shared<hit_mask>(this))
         , last_way_id(-1)
     {
         get<world::way_path>()->reset();
         get<world::way_path>()->update();
-
-        get<world::camera>()->move(glm::vec3(0, 0, -5));
-
-        auto genbox = [this, ctx](int boxid) -> void {
-            auto box = create_object<world::light_box>(ctx, boxid);
-
-            std::uniform_real_distribution<float> angledist
-                (0, math::pi * 2);
-
-            auto angle = angledist(random_engine());
-            auto xoff = cosf(angle);
-            auto yoff = sinf(angle);
-
-            box->translate(glm::vec3(xoff, yoff, 0) * 0.75f);
-        };
-
-        auto boxid0 = get<world::camera>()->get_frame_id() + 20;
-        auto boxid1 = boxid0 + 10;
-        auto paneid = boxid0 + 20;
-
-        genbox(boxid0);
-        genbox(boxid1);
-
-
-        create_object<world::glass_pane>(ctx, paneid, glm::vec3(1, 0, 0));
     }
 
     play_activity::~play_activity()
@@ -78,5 +55,6 @@ namespace game
 
 
         get_player()->process();
+        get_hit_mask()->process();
     }
 }
