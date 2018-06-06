@@ -6,3 +6,4 @@
 #include "../../gui/color_button.hxx"
 #include "../../gui/surface.hxx"
 #include "../../gui/touch_event.hxx"
+#include "../../gui/color_rectangle.hxx"

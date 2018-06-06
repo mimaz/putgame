@@ -31,7 +31,7 @@ namespace game
         void clicked(gui::color_button *btn);
         void animate();
 
-        gui::color_button space_btn;
+        gui::color_rectangle bottom_spacer;
         gui::color_button start_btn;
         gui::color_button exit_btn;
 

@@ -10,7 +10,7 @@ namespace game
 {
     main_menu::main_menu(common::context *ctx)
         : rect_item(ctx)
-        , space_btn(ctx, std::bind([](){}))
+        , bottom_spacer(ctx)
         , start_btn(ctx, std::bind(&main_menu::clicked, 
                     this, std::placeholders::_1))
         , exit_btn(ctx, std::bind(&main_menu::clicked,
@@ -23,9 +23,7 @@ namespace game
     {
         auto primary = glm::vec4(0.15f, 0.15f, 0.15f, 0.75f);
 
-        space_btn.set_text("");
-        space_btn.set_primary_color(primary);
-        space_btn.set_secondary_color(glm::vec4(0, 1, 0, 0.5f));
+        bottom_spacer.set_color(primary);
 
         start_btn.set_text("start!");
         start_btn.set_primary_color(primary);
@@ -100,8 +98,8 @@ namespace game
         auto btny = -h / 2 + btnoff;
 
 
-        space_btn.resize(w, bottomoff);
-        space_btn.set_position(0, btny + bottomoff / 2);
+        bottom_spacer.resize(w, bottomoff);
+        bottom_spacer.set_position(0, btny + bottomoff / 2);
 
         btny += bottomoff;
 

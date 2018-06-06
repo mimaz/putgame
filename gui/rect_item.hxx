@@ -15,6 +15,8 @@ namespace gui
     class rect_item : public common::context::object
     {
     public:
+        static const float strip_mesh[];
+
         rect_item(common::context *ctx);
         ~rect_item();
 
@@ -36,6 +38,7 @@ namespace gui
         bool is_pressed() const { return pressed; }
 
         glm::mat4 get_matrix();
+        glm::mat4 get_mvp();
 
     protected:
         virtual void on_size_changed();

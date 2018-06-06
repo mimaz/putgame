@@ -10,6 +10,13 @@
 
 namespace gui
 {
+    const float rect_item::strip_mesh[] = {
+        -0.5f, 0.5f,
+        0.5f, 0.5f,
+        -0.5f, -0.5f,
+        0.5f, -0.5f,
+    };
+
     rect_item::rect_item(common::context *ctx)
         : object(ctx)
         , xpos(0)
@@ -100,6 +107,11 @@ namespace gui
         }
 
         return matrix;
+    }
+
+    glm::mat4 rect_item::get_mvp()
+    {
+        return get<surface>()->get_proj() * get_matrix();
     }
 
     void rect_item::on_size_changed()

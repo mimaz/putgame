@@ -10,20 +10,10 @@
 #include "color_button.hxx"
 #include "surface.hxx"
 
-namespace
+namespace gui
 {
     constexpr auto max_shadows = 4;
 
-    const float mesh[] = {
-        -0.5f, 0.5f,
-        0.5f, 0.5f,
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-    };
-}
-
-namespace gui
-{
     color_button_view::color_button_view(common::context *ctx)
         : object(ctx)
         , vsh("textured_rect_vsh",
@@ -54,13 +44,13 @@ namespace gui
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glVertexAttribPointer(a_coord, 2, GL_FLOAT,
                               GL_FALSE, sizeof(float) * 2,
-                              mesh);
+                              rect_item::strip_mesh);
 
         glActiveTexture(GL_TEXTURE0);
         btn->bind_texture();
 
 
-        u_matrix = get<surface>()->get_proj() * btn->get_matrix();
+        u_matrix = btn->get_mvp();
 
         auto shadows = btn->get_shadows();
         auto count = std::min(static_cast<int>(shadows.size()), max_shadows);
