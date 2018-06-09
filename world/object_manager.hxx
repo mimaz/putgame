@@ -25,8 +25,9 @@ namespace world
     class object_manager : public common::context::object
     {
     public:
+        PUTGAME_OBJECT
+
         object_manager(common::context *ctx);
-        ~object_manager();
 
         void add(light_box *box);
         void remove(light_box *box);
@@ -42,7 +43,6 @@ namespace world
 
         void draw_all();
         void process_all();
-        void join_process();
 
     private:
         std::set<light_box *> light_boxes;
@@ -54,9 +54,6 @@ namespace world
         std::shared_ptr<wall_obstacle_view> wall_obstacle_drawer;
         std::shared_ptr<glass_pane_view> glass_pane_drawer;
         std::shared_ptr<glass_pieces_view> glass_pieces_drawer;
-
-        std::unique_ptr<std::thread> process_thread;
-        std::mutex process_lock;
     };
 }
 

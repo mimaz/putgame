@@ -15,6 +15,8 @@ namespace world
     class camera : public common::context::object, public light_source
     {
     public:
+        PUTGAME_OBJECT
+
         camera(common::context *ctx);
 
         void set_view_angle(float angle);

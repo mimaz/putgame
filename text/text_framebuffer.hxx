@@ -16,6 +16,8 @@ namespace text
     class text_framebuffer : public common::context::object
     {
     public:
+        PUTGAME_OBJECT
+
         text_framebuffer(common::context *ctx);
         ~text_framebuffer();
 

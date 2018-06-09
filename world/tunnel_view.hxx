@@ -19,6 +19,8 @@ namespace world
     class tunnel_view : public common::context::object
     {
     public:
+        PUTGAME_OBJECT
+
         static constexpr auto max_count = 4;
 
         tunnel_view(common::context *ctx);

@@ -15,6 +15,8 @@ namespace text
     class text_buffer : public common::context::object
     {
     public:
+        PUTGAME_OBJECT
+
         text_buffer(common::context *ctx,
                     font_builder *builder);
         text_buffer(common::context *ctx, 

@@ -15,6 +15,8 @@ namespace world
     class way_path : public path_line
     {
     public:
+        PUTGAME_OBJECT
+
         class segment;
 
         using segment_ref = std::shared_ptr<segment>;

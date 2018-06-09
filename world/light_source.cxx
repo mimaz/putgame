@@ -21,6 +21,12 @@ namespace world
 
     light_source::~light_source()
     {
-        grp->unregister_source(this);
+        if (grp != nullptr)
+            grp->unregister_source(this);
+    }
+
+    void light_source::detach()
+    {
+        grp = nullptr;
     }
 }

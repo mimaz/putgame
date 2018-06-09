@@ -58,7 +58,7 @@ static void handle(const char *filename)
     for (int i = 0; i < depth; i++)
         outptr += sprintf(outptr, "%s::", classname[i]);
 
-    outptr += sprintf(outptr, "id = %d;\n\n", idcount);
+    outptr += sprintf(outptr, "id = %d;\n\n", idcount++);
 }
 
 static void processtok(const char *filename)
@@ -201,7 +201,7 @@ void meta_object(int argc, char **argv)
     readlast();
 
     outptr += sprintf(outptr, "%s\n", author_message);
-    outptr += sprintf(outptr, "%s\n", BEGIN_TAG);
+    outptr += sprintf(outptr, "%s\n\n", BEGIN_TAG);
 
     for (i = 4; i < argc; i++)
         parsefile(argv[i]);

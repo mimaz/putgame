@@ -15,12 +15,15 @@ namespace world
     class light_group : public common::context::object
     {
     public:
+        PUTGAME_OBJECT
+
         light_group(common::context *ctx);
+        ~light_group();
 
         void register_source(light_source *src);
         void unregister_source(light_source *src);
 
-        const std::set<light_source *> get_all() const { return sources; }
+        const std::set<light_source *> get_all() const;
 
     private:
         std::set<light_source *> sources;

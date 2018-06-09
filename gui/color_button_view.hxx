@@ -16,6 +16,8 @@ namespace gui
     class color_button_view : public common::context::object
     {
     public:
+        PUTGAME_OBJECT
+
         color_button_view(common::context *ctx);
 
         void draw(color_button *btn);

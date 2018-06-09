@@ -22,9 +22,7 @@ namespace game
     {}
 
     instance::~instance()
-    {
-        get<world::object_manager>()->join_process();
-    }
+    {}
 
     void instance::start()
     {

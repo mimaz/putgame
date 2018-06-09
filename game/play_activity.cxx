@@ -36,10 +36,12 @@ namespace game
                 and object_queue.front()->get_frame_id() < camid)
         {
             auto item = object_queue.front().get();
+            /*
             auto pane = dynamic_cast<world::glass_pane *>(item);
 
             if (pane != nullptr)
                 break_pane(pane);
+                */
 
             common::logd("delete last object");
 

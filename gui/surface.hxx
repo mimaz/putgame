@@ -18,6 +18,8 @@ namespace gui
     class surface : public common::context::object
     {
     public:
+        PUTGAME_OBJECT
+
         surface(common::context *ctx);
         ~surface();
 

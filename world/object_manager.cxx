@@ -25,12 +25,6 @@ namespace world
         , glass_pieces_drawer(std::make_shared<glass_pieces_view>(ctx))
     {}
 
-    object_manager::~object_manager()
-    {
-        if (process_thread != nullptr)
-            process_thread->join();
-    }
-
     void object_manager::add(light_box *box)
     { light_boxes.insert(box); }
 
@@ -51,15 +45,11 @@ namespace world
 
     void object_manager::add(glass_pieces *pieces)
     { 
-        std::lock_guard<std::mutex> guard(process_lock);
-
         glass_pieces_set.insert(pieces); 
     }
 
     void object_manager::remove(glass_pieces *pieces)
     { 
-        std::lock_guard<std::mutex> guard(process_lock);
-
         glass_pieces_set.erase(pieces); 
     }
 
@@ -106,8 +96,6 @@ namespace world
 
     void object_manager::process_all()
     {
-        join_process();
-
         for (auto box : light_boxes)
             box->process();
 
@@ -116,14 +104,5 @@ namespace world
 
         get<way_path>()->update();
         get<tunnel_view>()->get_path()->update();
-    }
-
-    void object_manager::join_process()
-    {
-        if (process_thread != nullptr)
-        {
-            process_thread->join();
-            process_thread = nullptr;
-        }
     }
 }

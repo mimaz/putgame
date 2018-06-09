@@ -61,7 +61,7 @@ namespace common
                                 int id);
 
 
-        std::map<std::type_index, part_ref> part_map;
+        std::map<int, part_ref> part_map;
         std::map<std::string, std::string> prop_map;
         std::multimap<std::string, handler_data> handler_map;
 
@@ -115,8 +115,9 @@ namespace common
                       "each part of context must derive "
                       "from context::object");
 
-        auto index = std::type_index(typeid(_Type));
-        auto it = part_map.find(index);
+        //auto id = std::type_index(typeid(_Type));
+        auto id = _Type::id;
+        auto it = part_map.find(id);
 
         if (it != part_map.end())
             return static_cast<_Type *>(it->second.get());
@@ -124,7 +125,7 @@ namespace common
         auto uniq = std::make_unique<_Type>(this);
         auto raw = uniq.get();
 
-        part_map[index] = std::move(uniq);
+        part_map[id] = std::move(uniq);
 
         return raw;
     }
