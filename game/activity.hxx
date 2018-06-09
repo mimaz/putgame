@@ -29,26 +29,24 @@ namespace game
         std::shared_ptr<_T> create_object(const _Args &...args);
 
         int get_distance();
+        int get_difficulty();
 
-        player *get_player()  
-        { return &player_obj; }
-
-        object_generator *get_object_generator()  
-        { return &object_generator_obj; }
-
-        hit_mask *get_hit_mask() 
-        { return &hit_mask_obj; }
+        player *get_player();
+        object_generator *get_object_generator();
+        hit_mask *get_hit_mask();
 
     private:
         void break_pane(world::glass_pane *pane);
 
         std::deque<object_ref> object_queue;
 
-        player player_obj;
-        object_generator object_generator_obj;
-        hit_mask hit_mask_obj;
+        player play;
+        object_generator ogen;
+        hit_mask hmsk;
 
         int last_way_id;
+        int last_distance;
+        int last_difficulty;
     };
 
       template<typename _T, typename ..._Args>

@@ -13,8 +13,10 @@
 
 namespace world
 {
+    const float way_path::gap = way_frame_gap;
+
     way_path::way_path(common::context *ctx)
-        : path_line(ctx, way_frame_gap)
+        : path_line(ctx, gap)
         , generator(std::bind(&way_path::default_generator, this))
     {
         reset();
