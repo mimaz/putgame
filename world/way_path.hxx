@@ -20,6 +20,9 @@ namespace world
         using segment_ref = std::shared_ptr<segment>;
         using segment_gen = std::function<segment_ref()>;
 
+        static const float gap;
+
+
         way_path(common::context *ctx);
 
         void set_generator(segment_gen gen);

@@ -9,19 +9,18 @@
 #include <putgame/common>
 #include <putgame/world>
 
+#include "player.hxx"
+#include "object_generator.hxx"
+#include "hit_mask.hxx"
+
 namespace game
 {
-    class player;
-    class object_generator;
-    class hit_mask;
-
     class play_activity : public common::context::object
     {
     public:
         using object_ref = std::shared_ptr<world::visible_object>;
 
         play_activity(common::context *ctx);
-        ~play_activity();
 
         void steer(float x, float y);
         void process();
@@ -29,21 +28,25 @@ namespace game
           template<typename _T, typename ..._Args>
         std::shared_ptr<_T> create_object(const _Args &...args);
 
-        player *get_player() const 
-        { return player_ref.get(); }
+        int get_distance();
 
-        object_generator *get_object_generator() const 
-        { return object_generator_ref.get(); }
+        player *get_player()  
+        { return &player_obj; }
 
-        hit_mask *get_hit_mask() const
-        { return hit_mask_ref.get(); }
+        object_generator *get_object_generator()  
+        { return &object_generator_obj; }
+
+        hit_mask *get_hit_mask() 
+        { return &hit_mask_obj; }
 
     private:
+        void break_pane(world::glass_pane *pane);
+
         std::deque<object_ref> object_queue;
 
-        std::shared_ptr<player> player_ref;
-        std::shared_ptr<object_generator> object_generator_ref;
-        std::shared_ptr<hit_mask> hit_mask_ref;
+        player player_obj;
+        object_generator object_generator_obj;
+        hit_mask hit_mask_obj;
 
         int last_way_id;
     };

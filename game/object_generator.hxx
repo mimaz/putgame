@@ -15,11 +15,11 @@ namespace game
     class object_generator : public common::context::object
     {
     public:
-        object_generator(play_activity *activity);
-        ~object_generator() = 0;
+        object_generator(play_activity *act);
 
-        virtual void generate();
+        void generate();
 
+    private:
         play_activity *const activity;
     };
 }

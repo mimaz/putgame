@@ -8,24 +8,20 @@
 #include "play_activity.hxx"
 
 #include "player.hxx"
-#include "demo_generator.hxx"
 #include "hit_mask.hxx"
 
 namespace game
 {
     play_activity::play_activity(common::context *ctx)
         : object(ctx)
-        , player_ref(std::make_shared<player>(this))
-        , object_generator_ref(std::make_shared<demo_generator>(this))
-        , hit_mask_ref(std::make_shared<hit_mask>(this))
+        , player_obj(this)
+        , object_generator_obj(this)
+        , hit_mask_obj(this)
         , last_way_id(-1)
     {
         get<world::way_path>()->reset();
         get<world::way_path>()->update();
     }
-
-    play_activity::~play_activity()
-    {}
 
     void play_activity::steer(float x, float y)
     {
@@ -39,6 +35,12 @@ namespace game
         while (not object_queue.empty() 
                 and object_queue.front()->get_frame_id() < camid)
         {
+            auto item = object_queue.front().get();
+            auto pane = dynamic_cast<world::glass_pane *>(item);
+
+            if (pane != nullptr)
+                break_pane(pane);
+
             common::logd("delete last object");
 
             object_queue.pop_front();
@@ -56,5 +58,17 @@ namespace game
 
         get_player()->process();
         get_hit_mask()->process();
+
+        common::logd("distance: ", get_distance());
+    }
+
+    int play_activity::get_distance()
+    {
+        return get_player()->get_frame_id();
+    }
+
+    void play_activity::break_pane(world::glass_pane *pane)
+    {
+        common::logd("break_pane");
     }
 }

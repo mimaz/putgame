@@ -72,7 +72,7 @@ namespace world
     way_path::segment_ref way_path::default_generator()
     {
         return std::make_shared<way_path::segment>
-            (20, 0, glm::vec3(0, 1, 0));
+            (20, 0.0f, glm::vec3(0, 1, 0));
         /*
         static const glm::vec3 axes[] = {
             glm::vec3(1, 0, 0),
