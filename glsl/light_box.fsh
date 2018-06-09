@@ -4,13 +4,14 @@
  */
 
 /*
- * v_type 
+ * u_type 
  * 0 - color face
  * 1 - corner
  * 2 - edge
  */
 
-flat in lowp int v_type;
+uniform lowp int u_type;
+
 flat in lowp vec3 v_normal;
 flat in lowp vec3 v_color;
 in mediump vec3 v_coord;
@@ -21,9 +22,9 @@ void main()
 {
     lowp vec3 color;
 
-    if (v_type == 0)
+    if (u_type == 0)
     {
-        color = enlight(color, 
+        color = enlight(vec3(0.0, 0.0, 0.0), 
                         white,
                         v_normal, 
                         v_coord, 
@@ -36,7 +37,7 @@ void main()
     }
     else
     {
-        if (v_type == 1)
+        if (u_type == 1)
         {
             color = v_color;
         }

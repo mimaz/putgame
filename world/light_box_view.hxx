@@ -41,7 +41,7 @@ namespace world
         glutils::program prog;
         glutils::attribute a_coord;
         glutils::attribute a_normal;
-        glutils::attribute a_type;
+        glutils::uniform u_type;
         glutils::uniform u_model_v;
         glutils::uniform u_mvp_v;
         glutils::uniform u_color_v;

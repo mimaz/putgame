@@ -10,13 +10,11 @@
 
 in lowp vec3 a_coord;
 in lowp vec3 a_normal;
-in lowp float a_type;
 
 uniform highp mat4 u_mvp_v[max_count];
 uniform highp mat4 u_model_v[max_count];
 uniform lowp vec3 u_color_v[max_count];
 
-flat out lowp int v_type;
 flat out lowp vec3 v_normal;
 flat out lowp vec3 v_color;
 out mediump vec3 v_coord;
@@ -32,7 +30,6 @@ void main()
     lowp vec4 coord4 = vec4(a_coord, 1.0);
     lowp vec4 normal4 = vec4(a_normal, 0.0);
 
-    v_type = int(a_type);
     v_normal = normalize(vec3(model * normal4));
     v_color = color;
 

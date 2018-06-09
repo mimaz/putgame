@@ -31,7 +31,7 @@ namespace world
         , prog("light_box", &vsh, &fsh)
         , a_coord(&prog, "a_coord")
         , a_normal(&prog, "a_normal")
-        , a_type(&prog, "a_type")
+        , u_type(&prog, "u_type")
         , u_model_v(&prog, "u_model_v")
         , u_mvp_v(&prog, "u_mvp_v")
         , u_color_v(&prog, "u_color_v")
@@ -59,21 +59,17 @@ namespace world
             return reinterpret_cast<void *>(n * sizeof(GLfloat));
         };
 
-        auto stride = sizeof(GLfloat) * 7;
+        auto stride = sizeof(GLfloat) * 6;
 
         a_coord.enable();
-        a_type.enable();
         a_normal.enable();
 
         glVertexAttribPointer(a_coord, 3, GL_FLOAT,
                               GL_FALSE, stride,
                               offset(0));
-        glVertexAttribPointer(a_type, 1, GL_FLOAT,
-                              GL_FALSE, stride,
-                              offset(3));
         glVertexAttribPointer(a_normal, 3, GL_FLOAT,
                               GL_FALSE, stride,
-                              offset(4));
+                              offset(3));
 
         count = 0;
     }
@@ -96,7 +92,6 @@ namespace world
             draw_instances();
 
         a_coord.disable();
-        a_type.disable();
         a_normal.disable();
     }
 
@@ -110,9 +105,14 @@ namespace world
                      glm::value_ptr(colors.front()));
 
 
-        auto vertices = size_of_mesh / sizeof(float) / 3;
+        u_type = 0;
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 36, count);
 
-        glDrawArraysInstanced(GL_TRIANGLES, 0, vertices, count);
+        u_type = 1;
+        glDrawArraysInstanced(GL_TRIANGLES, 36, 24, count);
+
+        u_type = 2;
+        glDrawArraysInstanced(GL_TRIANGLES, 60, 72, count);
 
         count = 0;
     }
