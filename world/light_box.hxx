@@ -18,6 +18,8 @@ namespace world
     class light_box : public visible_object, public light_source
     {
     public:
+        PUTGAME_OBJECT
+
         enum color
         {
             red,

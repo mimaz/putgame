@@ -14,6 +14,7 @@
 
 extern void glsl_source(int argc, char **argv);
 extern void glsl_header(int argc, char **argv);
+extern void meta_object(int argc, char **argv);
 
 struct option
 {
@@ -23,7 +24,8 @@ struct option
 
 static struct option optionlst[] = {
     { glsl_source, "glsl-source" },
-    { glsl_header, "glsl-header" }
+    { glsl_header, "glsl-header" },
+    { meta_object, "meta-object" }
 };
 
 #define funcnt (sizeof(optionlst) / sizeof(struct option))

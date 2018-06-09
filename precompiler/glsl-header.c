@@ -9,8 +9,7 @@
 #include <string.h>
 #include <errno.h>
 
-#define BEGIN_STR "/* begin */"
-#define END_STR "/* end */"
+#include "comparator.h"
 
 extern const char *author_message;
 
@@ -63,33 +62,6 @@ static void handlefile(void)
     symbol[strlen(symbol) - 2] = 0;
 
     buffptr += sprintf(buffptr, "extern const %s %s[];\n\n", datatype, symbol);
-}
-
-static int compare(int len1, const char *str1,
-                   int len2, const char *str2)
-{
-    if (len1 < 0 || len2 < 0)
-        return 1;
-
-    str1 = strstr(str1, BEGIN_STR);
-    str2 = strstr(str2, BEGIN_STR);
-
-    if (str1 == NULL || str2 == NULL)
-        return 1;
-
-    const char *str1end = strstr(str1, END_STR);
-    const char *str2end = strstr(str2, END_STR);
-
-    if (str1end == NULL || str2end == NULL)
-        return 1;
-
-    len1 = str1end - str1;
-    len2 = str2end - str2;
-
-    if (len1 != len2)
-        return 1;
-
-    return memcmp(str1, str2, len1);
 }
 
 static void update(const char *outname)
@@ -172,7 +144,7 @@ void glsl_header(int argc, char **argv)
     buffptr += sprintf(buffptr, "%s\n", author_message);
     buffptr += sprintf(buffptr, "#ifndef __%s\n", unitname);
     buffptr += sprintf(buffptr, "#define __%s\n\n", unitname);
-    buffptr += sprintf(buffptr, "%s\n\n", BEGIN_STR);
+    buffptr += sprintf(buffptr, "%s\n\n", BEGIN_TAG);
 
     
     for (i = 3; i < argc; i++)
@@ -193,7 +165,7 @@ void glsl_header(int argc, char **argv)
         }
     }
 
-    buffptr += sprintf(buffptr, "%s\n\n", END_STR);
+    buffptr += sprintf(buffptr, "%s\n\n", END_TAG);
     buffptr += sprintf(buffptr, "#endif\n");
 
 

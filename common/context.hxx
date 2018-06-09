@@ -6,6 +6,8 @@
 #ifndef __common_context_hxx
 #define __common_context_hxx
 
+#define PUTGAME_OBJECT static const int id;
+
 namespace common
 {
     class context
