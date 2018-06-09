@@ -9,7 +9,7 @@
 
 #include "instance.hxx"
 
-#include "play_activity.hxx"
+#include "activity.hxx"
 #include "main_menu.hxx"
 
 namespace game
@@ -29,7 +29,7 @@ namespace game
         glClearColor(0, 0.0, 0, 1);
         glFrontFace(GL_CW);
 
-        play = std::make_shared<play_activity>(this);
+        play = std::make_shared<activity>(this);
         menu = std::make_shared<main_menu>(this);
     }
 

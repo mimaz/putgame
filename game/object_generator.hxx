@@ -10,17 +10,17 @@
 
 namespace game
 {
-    class play_activity;
+    class activity;
 
     class object_generator : public common::context::object
     {
     public:
-        object_generator(play_activity *act);
+        object_generator(activity *act);
 
         void generate();
 
     private:
-        play_activity *const activity;
+        activity *const act;
     };
 }
 

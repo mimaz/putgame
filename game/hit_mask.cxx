@@ -7,11 +7,11 @@
 
 #include "hit_mask.hxx"
 
-#include "play_activity.hxx"
+#include "activity.hxx"
 
 namespace game
 {
-    hit_mask::hit_mask(play_activity *act)
+    hit_mask::hit_mask(activity *act)
         : color_rectangle(act->get_context())
         , exposure(0)
     {

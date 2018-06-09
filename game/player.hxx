@@ -10,7 +10,7 @@
 
 namespace game
 {
-    class play_activity;
+    class activity;
     class autopilot;
 
     class player : public common::context::object
@@ -18,7 +18,7 @@ namespace game
     public:
         class axis_correction;
 
-        player(play_activity *activity);
+        player(activity *act);
 
         void steer(float x, float y);
         void process();
@@ -33,7 +33,7 @@ namespace game
     private:
         bool test_collision();
 
-        play_activity *activity;
+        activity *act;
         std::shared_ptr<autopilot> apilot;
 
         float target_speed;

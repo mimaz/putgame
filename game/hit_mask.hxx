@@ -10,12 +10,12 @@
 
 namespace game
 {
-    class play_activity;
+    class activity;
 
     class hit_mask : public gui::color_rectangle
     {
     public:
-        hit_mask(play_activity *act);
+        hit_mask(activity *act);
 
         void hit(float cosine);
 

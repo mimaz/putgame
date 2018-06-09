@@ -3,8 +3,8 @@
  * 2018
  */
 
-#ifndef __game_play_activity_hxx
-#define __game_play_activity_hxx
+#ifndef __game_activity_hxx
+#define __game_activity_hxx
 
 #include <putgame/common>
 #include <putgame/world>
@@ -15,12 +15,12 @@
 
 namespace game
 {
-    class play_activity : public common::context::object
+    class activity : public common::context::object
     {
     public:
         using object_ref = std::shared_ptr<world::visible_object>;
 
-        play_activity(common::context *ctx);
+        activity(common::context *ctx);
 
         void steer(float x, float y);
         void process();
@@ -53,7 +53,7 @@ namespace game
 
       template<typename _T, typename ..._Args>
     std::shared_ptr<_T>
-    play_activity::create_object(const _Args &...args)
+    activity::create_object(const _Args &...args)
     {
         auto obj = std::make_shared<_T>(args...);
 

@@ -10,7 +10,7 @@
 
 namespace game
 {
-    class play_activity;
+    class activity;
     class main_menu;
 
     class instance : public common::context
@@ -40,7 +40,7 @@ namespace game
         bool mouse_pressed;
         bool shifting;
 
-        std::shared_ptr<play_activity> play;
+        std::shared_ptr<activity> play;
         std::shared_ptr<main_menu> menu;
     };
 }

@@ -5,14 +5,14 @@
 
 #include <putgame/math>
 
-#include "play_activity.hxx"
+#include "activity.hxx"
 
 #include "player.hxx"
 #include "hit_mask.hxx"
 
 namespace game
 {
-    play_activity::play_activity(common::context *ctx)
+    activity::activity(common::context *ctx)
         : object(ctx)
         , player_obj(this)
         , object_generator_obj(this)
@@ -23,12 +23,12 @@ namespace game
         get<world::way_path>()->update();
     }
 
-    void play_activity::steer(float x, float y)
+    void activity::steer(float x, float y)
     {
         get_player()->steer(x, y);
     }
 
-    void play_activity::process()
+    void activity::process()
     {
         auto camid = get<world::camera>()->get_frame_id();
 
@@ -64,12 +64,12 @@ namespace game
         common::logd("distance: ", get_distance());
     }
 
-    int play_activity::get_distance()
+    int activity::get_distance()
     {
         return get_player()->get_frame_id();
     }
 
-    void play_activity::break_pane(world::glass_pane *pane)
+    void activity::break_pane(world::glass_pane *pane)
     {
         common::logd("break_pane");
     }

@@ -9,14 +9,14 @@
 #include "player.hxx"
 
 #include "autopilot.hxx"
-#include "play_activity.hxx"
+#include "activity.hxx"
 #include "hit_mask.hxx"
 
 namespace game
 {
-    player::player(play_activity *activity)
-        : object(activity->get_context())
-        , activity(activity)
+    player::player(activity *act)
+        : object(act->get_context())
+        , act(act)
         , apilot(nullptr)
         , target_speed(10)
         , real_speed(0)
@@ -81,7 +81,7 @@ namespace game
             common::logd("cos: ", cosine);
 
 
-            activity->get_hit_mask()->hit(cosine);
+            act->get_hit_mask()->hit(cosine);
         }
     }
 

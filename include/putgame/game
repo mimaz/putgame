@@ -4,5 +4,5 @@
  */
 
 #include "../../game/instance.hxx"
-#include "../../game/play_activity.hxx"
+#include "../../game/activity.hxx"
 #include "../../game/player.hxx"
