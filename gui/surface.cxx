@@ -85,6 +85,16 @@ namespace gui
         items.erase(item);
     }
 
+    int surface::get_width() const
+    {
+        return width;
+    }
+
+    int surface::get_height() const
+    {
+        return height;
+    }
+
     glm::mat4 surface::get_proj() const
     {
         if (dirty_proj)
@@ -98,5 +108,17 @@ namespace gui
         }
 
         return proj;
+    }
+
+    text::font_builder *surface::get_font_builder()
+    { return &font_builder; }
+
+    bool surface::comparator::operator()(const rect_item *p, 
+                                         const rect_item *q) const
+    {
+        if (p->get_depth() != q->get_depth())
+            return p->get_depth() < q->get_depth();
+
+        return p < q;
     }
 }

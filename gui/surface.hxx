@@ -32,19 +32,17 @@ namespace gui
         void add_item(rect_item *item);
         void remove_item(rect_item *item);
 
-        int get_width() const { return width; }
-        int get_height() const { return height; }
+        int get_width() const;
+        int get_height() const;
         glm::mat4 get_proj() const;
 
-        text::font_builder *get_font_builder() 
-        { return &font_builder; }
+        text::font_builder *get_font_builder();
 
     private:
-        class comparator
+        struct comparator
         {
-        public:
-            bool operator()(const rect_item *p, const rect_item *q) const
-            { return p < q; }
+            bool operator()(const rect_item *p, 
+                            const rect_item *q) const;
         };
 
         std::set<rect_item *, comparator> items;
