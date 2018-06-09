@@ -29,14 +29,14 @@ namespace game
         glClearColor(0, 0.0, 0, 1);
         glFrontFace(GL_CW);
 
-        play = std::make_shared<activity>(this);
-        menu = std::make_shared<main_menu>(this);
+        act = std::make_shared<activity>(this);
+        men = std::make_shared<main_menu>(this);
     }
 
     void instance::stop()
     {
-        play = nullptr;
-        menu = nullptr;
+        act = nullptr;
+        men = nullptr;
     }
 
     void instance::draw()
@@ -49,11 +49,11 @@ namespace game
 
     void instance::process()
     {
-        if (menu != nullptr)
-            menu->process();
+        if (men != nullptr)
+            men->process();
 
-        if (play != nullptr)
-            play->process();
+        if (act != nullptr)
+            act->process();
 
         get<world::object_manager>()->process_all();
         get<gui::surface>()->process();
@@ -89,8 +89,8 @@ namespace game
                 auto diffy = static_cast<float>(y - mouse_y) 
                            / get_height();
 
-                if (play != nullptr)
-                    play->steer(diffx, diffy);
+                if (act != nullptr)
+                    act->steer(diffx, diffy);
             }
             else
             {
@@ -138,5 +138,15 @@ namespace game
     int instance::get_height()
     {
         return height;
+    }
+
+    main_menu *instance::get_main_menu() const
+    {
+        return men.get();
+    }
+
+    activity *instance::get_activity() const
+    {
+        return act.get();
     }
 }
