@@ -12,8 +12,8 @@
 
 #include <sys/stat.h>
 
-extern void glsl(int argc, char **argv);
-extern void header(int argc, char **argv);
+extern void glsl_source(int argc, char **argv);
+extern void glsl_header(int argc, char **argv);
 
 struct option
 {
@@ -22,8 +22,8 @@ struct option
 };
 
 static struct option optionlst[] = {
-    { glsl, "glsl" },
-    { header, "header" }
+    { glsl_source, "glsl-source" },
+    { glsl_header, "glsl-header" }
 };
 
 #define funcnt (sizeof(optionlst) / sizeof(struct option))

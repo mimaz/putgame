@@ -40,7 +40,7 @@ const char *symname(const char *filename)
     return comn;
 }
 
-void glsl(int argc, char **argv)
+void glsl_source(int argc, char **argv)
 {
     char buff[64];
     const char *infile, *outfile, *symbol;

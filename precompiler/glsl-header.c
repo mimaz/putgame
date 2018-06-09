@@ -9,6 +9,9 @@
 #include <string.h>
 #include <errno.h>
 
+#define BEGIN_STR "/* begin */"
+#define END_STR "/* end */"
+
 extern const char *author_message;
 
 static FILE *input;
@@ -62,15 +65,42 @@ static void handlefile(void)
     buffptr += sprintf(buffptr, "extern const %s %s[];\n\n", datatype, symbol);
 }
 
+static int compare(int len1, const char *str1,
+                   int len2, const char *str2)
+{
+    if (len1 < 0 || len2 < 0)
+        return 1;
+
+    str1 = strstr(str1, BEGIN_STR);
+    str2 = strstr(str2, BEGIN_STR);
+
+    if (str1 == NULL || str2 == NULL)
+        return 1;
+
+    const char *str1end = strstr(str1, END_STR);
+    const char *str2end = strstr(str2, END_STR);
+
+    if (str1end == NULL || str2end == NULL)
+        return 1;
+
+    len1 = str1end - str1;
+    len2 = str2end - str2;
+
+    if (len1 != len2)
+        return 1;
+
+    return memcmp(str1, str2, len1);
+}
+
 static void update(const char *outname)
 {
     static char lastbuf[16386];
 
     FILE *last, *output;
-    int lastsiz, bufsiz;
+    int lastsiz, headersiz;
 
 
-    bufsiz = buffptr - headerbuf;
+    headersiz = buffptr - headerbuf;
 
 
     last = fopen(outname, "r");
@@ -87,8 +117,7 @@ static void update(const char *outname)
     }
 
 
-
-    if (lastsiz != bufsiz || memcmp(lastbuf, headerbuf, bufsiz) != 0)
+    if (compare(lastsiz, lastbuf, headersiz, headerbuf) != 0)
     {
         output = fopen(outname, "w");
 
@@ -99,15 +128,9 @@ static void update(const char *outname)
             exit(1);
         }
 
-        fwrite(headerbuf, 1, bufsiz, output);
+        fwrite(headerbuf, 1, headersiz, output);
 
         fclose(output);
-
-        printf("header updated\n");
-    }
-    else
-    {
-        printf("header remained\n");
     }
 }
 
@@ -117,7 +140,7 @@ static void closefiles(void)
         fclose(input);
 }
 
-void header(int argc, char **argv)
+void glsl_header(int argc, char **argv)
 {
     char unitname[64];
     int i;
@@ -149,6 +172,7 @@ void header(int argc, char **argv)
     buffptr += sprintf(buffptr, "%s\n", author_message);
     buffptr += sprintf(buffptr, "#ifndef __%s\n", unitname);
     buffptr += sprintf(buffptr, "#define __%s\n\n", unitname);
+    buffptr += sprintf(buffptr, "%s\n\n", BEGIN_STR);
 
     
     for (i = 3; i < argc; i++)
@@ -169,6 +193,7 @@ void header(int argc, char **argv)
         }
     }
 
+    buffptr += sprintf(buffptr, "%s\n\n", END_STR);
     buffptr += sprintf(buffptr, "#endif\n");
 
 

@@ -147,7 +147,7 @@ ${BUILD_DIR}/glsl/%.c.o: ${BUILD_DIR}/glsl/%.c
 
 ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 	@mkdir -p ${dir $@}
-	${PRECOMPILER} glsl $< $@
+	${PRECOMPILER} glsl-source $< $@
 
 ${STD_HEADER}: putgame/std
 	@mkdir -p ${dir $@}
@@ -155,7 +155,7 @@ ${STD_HEADER}: putgame/std
 
 ${RES_HEADER}: ${GLSL_C_SRC}
 	@mkdir -p ${dir $@}
-	${PRECOMPILER} header $@ $^
+	${PRECOMPILER} glsl-header $@ $^
 
 ##
  # precompiler rules
