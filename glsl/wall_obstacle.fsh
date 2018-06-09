@@ -31,7 +31,7 @@ void main()
     }
 
     color = enlight(color, 
-                    white,
+                    white * 0.5,
                     v_normal, 
                     v_coord,
                     8,

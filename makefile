@@ -51,8 +51,8 @@ else
 endif
 
 ifneq (${USE_LTO},0)
-	LIBGAME_CFLAGS += -flto -fno-fat-lto-objects
-	LIBGAME_CXXFLAGS += -flto -no-fat-lto-objects
+	LIBGAME_CFLAGS += -flto
+	LIBGAME_CXXFLAGS += -flto
 	LIBGAME_LDFLAGS += -flto
 endif
 

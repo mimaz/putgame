@@ -23,9 +23,6 @@ namespace world
         static const float mesh[];
         static const size_t size_of_mesh;
 
-        static const glm::vec3 primary_color;
-        static const glm::vec3 secondary_color;
-
         static constexpr auto draw_instances = 4;
 
 

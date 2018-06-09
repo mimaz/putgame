@@ -13,8 +13,8 @@
 
 namespace 
 {
-    const auto max_count = world::wall_obstacle_view::draw_instances;
-    const auto side_color = world::wall_obstacle_view::primary_color;
+    constexpr auto max_count = world::wall_obstacle_view::draw_instances;
+    constexpr auto side_color = glm::vec3(0.4f, 0.4f, 0.6f);;
 
     const auto vertex_hdr =
         "const lowp int max_count = " + 
@@ -33,12 +33,6 @@ namespace
 
 namespace world
 {
-    constexpr auto bri = 0.8f;
-    constexpr auto dim = 0.4f;
-
-    const glm::vec3 wall_obstacle_view::primary_color(dim, dim, dim);
-    const glm::vec3 wall_obstacle_view::secondary_color(bri, bri, dim);
-
     wall_obstacle_view::wall_obstacle_view(common::context *ctx)
         : cam(ctx->get<camera>())
         , vsh("wall_obstacle_vsh",
@@ -81,17 +75,20 @@ namespace world
                         GL_TEXTURE_MAG_FILTER,
                         GL_NEAREST);
 
-        glm::vec3 texdata[4] = {
-            primary_color, secondary_color,
-            secondary_color, primary_color
+        const GLubyte H = 160, L = 80, A = 255;
+
+        static GLubyte texdata[4][4] = {
+            { H, H, L, A }, { L, L, H, A },
+            { L, L, H, A }, { H, H, L, A },
         };
 
-        glTexImage2D(GL_TEXTURE_2D, 0,
-                     GL_RGB,
+        glTexImage2D(GL_TEXTURE_2D, 
+                     0,
+                     GL_RGBA,
                      2, 2,
                      0,
-                     GL_RGB,
-                     GL_FLOAT,
+                     GL_RGBA,
+                     GL_UNSIGNED_BYTE,
                      texdata);
     }
 

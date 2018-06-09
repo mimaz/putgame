@@ -64,6 +64,7 @@ function set_make_args() {
                     OUTPUT=$LIBOUT \
                     PLATFORM=ANDROID \
                     RELEASE=1 \
+                    USE_LTO=1 \
                     BUILD_DIR=$BUILD_DIR"
 }
 
