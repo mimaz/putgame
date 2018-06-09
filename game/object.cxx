@@ -6,6 +6,7 @@
 #include "object.hxx"
 
 #include "instance.hxx"
+#include "activity.hxx"
 
 namespace game
 {
@@ -15,6 +16,10 @@ namespace game
 
     object::object(common::context *ctx)
         : common::context::object(ctx)
+    {}
+
+    object::object(activity *act)
+        : common::context::object(act)
     {}
 
     activity *object::get_activity() const

@@ -75,29 +75,6 @@ namespace world
     {
         return std::make_shared<way_path::segment>
             (20, 0.0f, glm::vec3(0, 1, 0));
-        /*
-        static const glm::vec3 axes[] = {
-            glm::vec3(1, 0, 0),
-            glm::vec3(0, 1, 0),
-            glm::vec3(-1, 0, 0),
-            glm::vec3(0, -1, 0),
-        };
-
-        constexpr auto axis_count = sizeof(axes) / sizeof(glm::vec3);
-
-
-        auto angle = std::uniform_real_distribution<float>
-            (math::pi / 4, math::pi / 2)(random_engine());
-
-        auto axisid = std::uniform_int_distribution<int>
-            (0, axis_count - 1)(random_engine());
-
-        auto axis = axes[axisid];
-
-
-        return std::make_shared<way_path::segment>
-            (20, angle, axis);
-        */
     }
 
     way_path::segment::segment()

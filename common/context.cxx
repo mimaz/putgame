@@ -47,6 +47,11 @@ namespace common
         return def;
     }
 
+    std::default_random_engine &context::get_random_engine()
+    {
+        return randeng;
+    }
+
     int context::register_handler(const std::string &key,
                                   const handler_type &handler)
     {

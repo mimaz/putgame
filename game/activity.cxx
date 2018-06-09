@@ -16,13 +16,16 @@ namespace game
         : object(ctx)
         , play(this)
         , ogen(this)
+        , tgen(this)
         , hmsk(this)
         , last_way_id(-1)
         , last_distance(-1)
         , last_difficulty(-1)
     {
+        auto waygen = std::bind(&tunnel_generator::generate, get_tunnel_generator());
+
+        get<world::way_path>()->set_generator(waygen);
         get<world::way_path>()->reset();
-        get<world::way_path>()->update();
     }
 
     void activity::steer(float x, float y)
@@ -37,14 +40,6 @@ namespace game
         while (not object_queue.empty() 
                 and object_queue.front()->get_frame_id() < camid)
         {
-            /*
-            auto item = object_queue.front().get();
-            auto pane = dynamic_cast<world::glass_pane *>(item);
-
-            if (pane != nullptr)
-                break_pane(pane);
-                */
-
             common::logd("delete last object");
 
             object_queue.pop_front();
@@ -81,8 +76,8 @@ namespace game
         {
             last_distance = dist;
 
-            auto arg = std::max(dist, 0) + math::e;
-            auto dif = log(arg) * 10;
+            auto arg = std::max(dist, 0) + math::e * 10;
+            auto dif = log(arg) * 100;
 
             last_difficulty = static_cast<int>(dif);
         }
@@ -98,6 +93,11 @@ namespace game
     object_generator *activity::get_object_generator()
     {
         return &ogen;
+    }
+
+    tunnel_generator *activity::get_tunnel_generator()
+    {
+        return &tgen;
     }
 
     hit_mask *activity::get_hit_mask()

@@ -19,7 +19,7 @@ namespace game
     void object_generator::generate()
     {
         auto dist = std::normal_distribution<float>
-            (0.0f, 1.0f)(random_engine());
+            (0.0f, 1.0f)(get_random_engine());
 
         auto absdist = std::abs(dist);
 
@@ -28,7 +28,7 @@ namespace game
         std::uniform_real_distribution<float> angledist
             (0, math::pi * 2);
 
-        auto angle = angledist(random_engine());
+        auto angle = angledist(get_random_engine());
         auto xoff = cosf(angle);
         auto yoff = sinf(angle);
         auto offvec = glm::vec3(xoff, yoff, 0.0f) * 0.75f;

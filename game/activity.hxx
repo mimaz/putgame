@@ -12,6 +12,7 @@
 #include "player.hxx"
 #include "object_generator.hxx"
 #include "hit_mask.hxx"
+#include "tunnel_generator.hxx"
 
 namespace game
 {
@@ -33,6 +34,7 @@ namespace game
 
         player *get_player();
         object_generator *get_object_generator();
+        tunnel_generator *get_tunnel_generator();
         hit_mask *get_hit_mask();
 
     private:
@@ -42,6 +44,7 @@ namespace game
 
         player play;
         object_generator ogen;
+        tunnel_generator tgen;
         hit_mask hmsk;
 
         int last_way_id;

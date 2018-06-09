@@ -17,6 +17,7 @@ namespace game
     public:
         object(common::context::object *obj);
         object(common::context *ctx);
+        object(activity *act);
 
         activity *get_activity() const;
     };

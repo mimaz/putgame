@@ -39,7 +39,7 @@ namespace
         std::uniform_int_distribution<int> dist
             (0, world::light_box::color_count - 1);
 
-        auto idx = dist(ctx->random_engine());
+        auto idx = dist(ctx->get_random_engine());
 
         return static_cast<world::light_box::color>(idx);
     }
@@ -109,7 +109,7 @@ namespace world
     {
         std::normal_distribution<float> dist(0.0f, 1.0f);
 
-        auto rand = dist(random_engine()) * 0.02f;
+        auto rand = dist(get_random_engine()) * 0.02f;
 
         if (rand < 0)
             return rand - 0.05f;

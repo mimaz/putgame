@@ -12,7 +12,7 @@ lowp vec4 glass_color(lowp int specular, lowp vec3 color,
                         white,
                         normal,
                         coord,
-                        6,
+                        8,
                         false,
                         true,
                         false);

@@ -40,8 +40,7 @@ namespace common
         virtual int get_width() = 0;
         virtual int get_height() = 0;
 
-        std::default_random_engine &random_engine()
-        { return randeng; }
+        std::default_random_engine &get_random_engine();
 
     private:
         friend class object;
@@ -93,8 +92,8 @@ namespace common
         _Type *get() const
         { return get_context()->get<_Type>(); }
 
-        std::default_random_engine &random_engine()
-        { return get_context()->random_engine(); }
+        std::default_random_engine &get_random_engine()
+        { return get_context()->get_random_engine(); }
 
     protected:
         void register_handler(const std::string &key,
