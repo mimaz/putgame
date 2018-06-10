@@ -13,6 +13,8 @@ namespace game
     class main_menu : public gui::rect_item
     {
     public:
+        PUTGAME_OBJECT
+
         main_menu(common::context *ctx);
 
         void process() override;
@@ -21,8 +23,7 @@ namespace game
 
         void on_surface_resize(int w, int h) override;
 
-        bool is_enabled() const
-        { return enabled; }
+        bool is_enabled() const;
 
     private:
         void bottomoff_prop_set(const std::string &value);

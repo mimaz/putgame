@@ -32,9 +32,6 @@ namespace game
         int get_width() override;
         int get_height() override;
 
-        main_menu *get_main_menu() const;
-        activity *get_activity() const;
-
     private:
         int width;
         int height;
@@ -42,9 +39,6 @@ namespace game
         int mouse_y;
         bool mouse_pressed;
         bool shifting;
-
-        std::shared_ptr<activity> act;
-        std::shared_ptr<main_menu> men;
     };
 }
 

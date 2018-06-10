@@ -9,15 +9,15 @@
 
 namespace game
 {
-    tunnel_generator::tunnel_generator(activity *act)
-        : object(act)
+    tunnel_generator::tunnel_generator(common::context *ctx)
+        : object(ctx)
     {}
 
     world::way_path::segment_ref tunnel_generator::generate()
     {
         using segment = world::way_path::segment;
 
-        auto dif = get_activity()->get_difficulty();
+        auto dif = get<activity>()->get_difficulty();
         auto eng = get_random_engine();
 
         auto length = 20;

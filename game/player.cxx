@@ -14,9 +14,8 @@
 
 namespace game
 {
-    player::player(activity *act)
-        : object(act->get_context())
-        , act(act)
+    player::player(common::context *ctx)
+        : object(ctx)
         , apilot(nullptr)
         , target_speed(10)
         , real_speed(0)
@@ -78,10 +77,8 @@ namespace game
 
             cam->rotate(angle, axis);
 
-            common::logd("cos: ", cosine);
 
-
-            act->get_hit_mask()->hit(cosine);
+            get<activity>()->get_hit_mask()->hit(cosine);
         }
     }
 

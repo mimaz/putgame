@@ -14,15 +14,12 @@ namespace game
 {
     activity::activity(common::context *ctx)
         : object(ctx)
-        , play(this)
-        , ogen(this)
-        , tgen(this)
-        , hmsk(this)
         , last_way_id(-1)
         , last_distance(-1)
         , last_difficulty(-1)
     {
-        auto waygen = std::bind(&tunnel_generator::generate, get_tunnel_generator());
+        auto tgen = get<tunnel_generator>();
+        auto waygen = std::bind(&tunnel_generator::generate, tgen);
 
         get<world::way_path>()->set_generator(waygen);
         get<world::way_path>()->reset();
@@ -51,7 +48,7 @@ namespace game
         {
             last_way_id = get<world::way_path>()->back().index();
 
-            get_object_generator()->generate();
+            get<object_generator>()->generate();
         }
 
 
@@ -87,22 +84,12 @@ namespace game
 
     player *activity::get_player()
     {
-        return &play;
-    }
-
-    object_generator *activity::get_object_generator()
-    {
-        return &ogen;
-    }
-
-    tunnel_generator *activity::get_tunnel_generator()
-    {
-        return &tgen;
+        return get<player>();
     }
 
     hit_mask *activity::get_hit_mask()
     {
-        return &hmsk;
+        return get<hit_mask>();
     }
 
     void activity::break_pane(world::glass_pane *pane)

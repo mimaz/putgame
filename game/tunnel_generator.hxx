@@ -8,14 +8,14 @@
 
 #include <putgame/world>
 
-#include "object.hxx"
-
 namespace game
 {
-    class tunnel_generator : public object
+    class tunnel_generator : public common::context::object
     {
     public:
-        tunnel_generator(activity *act);
+        PUTGAME_OBJECT
+
+        tunnel_generator(common::context *ctx);
 
         world::way_path::segment_ref generate();
     };

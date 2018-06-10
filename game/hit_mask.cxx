@@ -11,8 +11,8 @@
 
 namespace game
 {
-    hit_mask::hit_mask(activity *act)
-        : color_rectangle(act->get_context())
+    hit_mask::hit_mask(common::context *ctx)
+        : color_rectangle(ctx)
         , exposure(0)
     {
         set_active(false);
@@ -46,5 +46,10 @@ namespace game
 
             set_color(real);
         }
+    }
+
+    float hit_mask::get_exposure() const
+    {
+        return exposure;
     }
 }

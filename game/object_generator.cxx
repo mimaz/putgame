@@ -11,9 +11,8 @@
 
 namespace game
 {
-    object_generator::object_generator(activity *act)
-        : object(act)
-        , act(act)
+    object_generator::object_generator(common::context *ctx)
+        : object(ctx)
     {}
 
     void object_generator::generate()
@@ -38,8 +37,8 @@ namespace game
         {
             common::logd("create wall obstacle");
 
-            auto ptr = act->create_object<world::wall_obstacle>
-                (get_context(), id, 6, 4);
+            auto ptr = get<activity>()
+                ->create_object<world::wall_obstacle>(get_context(), id, 6, 4);
 
             ptr->translate(offvec);
         }
@@ -47,15 +46,15 @@ namespace game
         {
             common::logd("create glass");
 
-            act->create_object<world::glass_pane>
+            get<activity>()->create_object<world::glass_pane>
                 (get_context(), id, glm::vec3(0.5f, 0.5f, 1.0f));
         }
         else if (absdist > 2.45f)
         {
             common::logd("create lightbox");
 
-            auto ptr = act->create_object<world::light_box>
-                (get_context(), id);
+            auto ptr = get<activity>()
+                ->create_object<world::light_box>(get_context(), id);
 
 
             ptr->translate(offvec);

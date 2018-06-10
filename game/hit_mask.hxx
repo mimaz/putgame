@@ -15,15 +15,16 @@ namespace game
     class hit_mask : public gui::color_rectangle
     {
     public:
-        hit_mask(activity *act);
+        PUTGAME_OBJECT
+
+        hit_mask(common::context *ctx);
 
         void hit(float cosine);
 
         void on_surface_resize(int w, int h) override;
         void process() override;
 
-        float get_exposure() const
-        { return exposure; }
+        float get_exposure() const;
 
     private:
         float exposure;

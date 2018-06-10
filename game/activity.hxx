@@ -19,6 +19,8 @@ namespace game
     class activity : public common::context::object
     {
     public:
+        PUTGAME_OBJECT
+
         using object_ref = std::shared_ptr<world::visible_object>;
 
         activity(common::context *ctx);
@@ -33,19 +35,12 @@ namespace game
         int get_difficulty();
 
         player *get_player();
-        object_generator *get_object_generator();
-        tunnel_generator *get_tunnel_generator();
         hit_mask *get_hit_mask();
 
     private:
         void break_pane(world::glass_pane *pane);
 
         std::deque<object_ref> object_queue;
-
-        player play;
-        object_generator ogen;
-        tunnel_generator tgen;
-        hit_mask hmsk;
 
         int last_way_id;
         int last_distance;

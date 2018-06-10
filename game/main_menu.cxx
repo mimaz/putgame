@@ -77,6 +77,11 @@ namespace game
         layout(w, h);
     }
 
+    bool main_menu::is_enabled() const
+    {
+        return enabled;
+    }
+
     void main_menu::bottomoff_prop_set(const std::string &value)
     {
         std::istringstream(value) >> bottomoff;
