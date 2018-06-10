@@ -180,7 +180,7 @@ int main(int argc, char **argv)
         glfwSwapBuffers(window);
         
 
-        nexttim += 1.0 / 40;
+        nexttim += 1.0 / FPS;
 
         while (glfwGetTime() < nexttim)
             usleep(1000);

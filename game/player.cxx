@@ -34,7 +34,7 @@ namespace game
 
     void player::process()
     {
-        constexpr auto fps = 40;
+        constexpr auto fps = FPS;
         constexpr auto factor = 1.0f / fps;
 
         auto cam = get<world::camera>();
@@ -61,7 +61,7 @@ namespace game
             auto camframe = way->at(camid);
 
             auto radius = camframe.position() - cam->get_position();
-            auto camoff = radius * 0.1f;
+            auto camoff = radius * 0.25f;
 
             cam->move(camoff);
 

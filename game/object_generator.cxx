@@ -46,8 +46,8 @@ namespace game
         {
             common::logd("create glass");
 
-            get<activity>()->create_object<world::glass_pane>
-                (get_context(), id, glm::vec3(0.5f, 0.5f, 1.0f));
+            //get<activity>()->create_object<world::glass_pane>
+                //(get_context(), id, glm::vec3(0.5f, 0.5f, 1.0f));
         }
         else if (absdist > 2.45f)
         {

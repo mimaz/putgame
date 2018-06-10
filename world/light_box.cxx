@@ -107,7 +107,7 @@ namespace world
 
     float light_box::rand_speed()
     {
-        std::normal_distribution<float> dist(0.0f, 1.0f);
+        std::normal_distribution<float> dist(0.0f, 50.0f / FPS);
 
         auto rand = dist(get_random_engine()) * 0.02f;
 
