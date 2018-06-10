@@ -47,7 +47,7 @@ namespace common
         return def;
     }
 
-    std::default_random_engine &context::get_random_engine()
+    context::random_engine_type &context::get_random_engine()
     {
         return randeng;
     }
@@ -104,6 +104,12 @@ namespace common
     {
         return get_context()->get_property(key, def);
     }
+
+    context *context::object::get_context() const
+    { return ctx; }
+
+    context::random_engine_type &context::object::get_random_engine() const
+    { return get_context()->get_random_engine(); }
 
     void context::object::register_handler(const std::string &key,
                                            const handler_type &handler)

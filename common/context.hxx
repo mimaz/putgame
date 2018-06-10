@@ -16,6 +16,7 @@ namespace common
         class object;
 
         using handler_type = std::function<void(std::string)>;
+        using random_engine_type = std::default_random_engine;
 
 
         context();
@@ -36,11 +37,14 @@ namespace common
           template<typename _Type>
         _Type *get();
 
+          template<typename _Type>
+        void destroy();
+
         virtual time_t time_millis() = 0;
         virtual int get_width() = 0;
         virtual int get_height() = 0;
 
-        std::default_random_engine &get_random_engine();
+        random_engine_type &get_random_engine();
 
     private:
         friend class object;
@@ -65,7 +69,7 @@ namespace common
         std::multimap<std::string, handler_data> handler_map;
 
 
-        std::default_random_engine randeng;
+        random_engine_type randeng;
 
 
         int hidcnt;
@@ -85,15 +89,12 @@ namespace common
         std::string get_property(const std::string &key,
                                  const std::string &def) const;
 
-        context *get_context() const 
-        { return ctx; }
+        context *get_context() const;
 
           template<typename _Type>
-        _Type *get() const
-        { return get_context()->get<_Type>(); }
+        _Type *get() const;
 
-        std::default_random_engine &get_random_engine()
-        { return get_context()->get_random_engine(); }
+        random_engine_type &get_random_engine() const;
 
     protected:
         void register_handler(const std::string &key,
@@ -110,11 +111,6 @@ namespace common
       template<typename _Type>
     _Type *context::get()
     {
-        static_assert(std::is_base_of<object, _Type>::value,
-                      "each part of context must derive "
-                      "from context::object");
-
-        //auto id = std::type_index(typeid(_Type));
         auto id = _Type::id;
         auto it = part_map.find(id);
 
@@ -127,6 +123,18 @@ namespace common
         part_map[id] = std::move(uniq);
 
         return raw;
+    }
+
+      template<typename _Type>
+    void context::destroy()
+    {
+        part_map.erase(_Type::id);
+    }
+
+      template<typename _Type>
+    _Type *context::object::get() const
+    {
+        return get_context()->get<_Type>();
     }
 }
 
