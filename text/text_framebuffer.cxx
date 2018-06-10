@@ -36,13 +36,6 @@ namespace text
         , u_matrix(&pro, "u_matrix")
     {
         glGenFramebuffers(1, &fbhandle);
-        glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
-
-        GLenum attachement = GL_COLOR_ATTACHMENT0;
-        glDrawBuffers(1, &attachement);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 
         pro.use();
 

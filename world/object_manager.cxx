@@ -14,6 +14,7 @@
 #include "glass_pieces.hxx"
 #include "tunnel_view.hxx"
 #include "way_path.hxx"
+#include "frame_buffer.hxx"
 
 namespace world
 {
@@ -55,8 +56,10 @@ namespace world
 
     void object_manager::draw_all()
     {
+        get<frame_buffer>()->bind();
+
+
         get<tunnel_view>()->draw();
-        
 
 
         light_box_drawer->begin_drawing();
@@ -92,6 +95,9 @@ namespace world
             glass_pieces_drawer->draw(pieces);
 
         glass_pieces_drawer->end();
+
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     void object_manager::process_all()

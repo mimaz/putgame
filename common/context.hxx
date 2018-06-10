@@ -38,6 +38,9 @@ namespace common
         _Type *get();
 
           template<typename _Type>
+        bool is_instantied() const;
+
+          template<typename _Type>
         void destroy();
 
         virtual time_t time_millis() = 0;
@@ -94,6 +97,9 @@ namespace common
           template<typename _Type>
         _Type *get() const;
 
+          template<typename _Type>
+        bool is_instantied() const;
+
         random_engine_type &get_random_engine() const;
 
     protected:
@@ -126,6 +132,14 @@ namespace common
     }
 
       template<typename _Type>
+    bool context::is_instantied() const
+    {
+        auto it = part_map.find(_Type::id);
+
+        return it != part_map.end() and it->second != nullptr;
+    }
+
+      template<typename _Type>
     void context::destroy()
     {
         part_map.erase(_Type::id);
@@ -135,6 +149,12 @@ namespace common
     _Type *context::object::get() const
     {
         return get_context()->get<_Type>();
+    }
+
+      template<typename _Type>
+    bool context::object::is_instantied() const
+    {
+        return get_context()->is_instantied<_Type>();
     }
 }
 

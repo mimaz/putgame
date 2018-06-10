@@ -26,7 +26,8 @@ namespace gui
     }
 
     surface::~surface()
-    {}
+    {
+    }
 
     void surface::resize(int w, int h)
     {
@@ -51,6 +52,8 @@ namespace gui
 
     void surface::draw()
     {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
         glEnable(GL_BLEND);
         glDisable(GL_DEPTH_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

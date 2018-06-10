@@ -33,7 +33,8 @@ namespace gui
 
     rect_item::~rect_item()
     {
-        get<surface>()->remove_item(this);
+        if (is_instantied<surface>())
+            get<surface>()->remove_item(this);
     }
 
     void rect_item::set_position(int x, int y)
