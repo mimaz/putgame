@@ -8,14 +8,12 @@ lowp vec4 glass_color(lowp int specular, lowp vec3 color,
 {
     if (specular != 0)
     {
-        color = enlight(white,
-                        white,
+        color = enlight(black,
                         normal,
                         coord,
                         8,
                         false,
-                        true,
-                        false);
+                        true);
     }
 
     return vec4(color, 1.0);

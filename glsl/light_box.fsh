@@ -24,14 +24,12 @@ void main()
 
     if (u_type == 0)
     {
-        color = enlight(vec3(0.0, 0.0, 0.0), 
-                        white,
+        color = enlight(black, 
                         v_normal, 
                         v_coord, 
-                        4,
+                        5,
                         false, 
-                        true,
-                        false);
+                        true);
 
         color += v_color;
     }
@@ -47,13 +45,11 @@ void main()
         }
 
         color = enlight(color, 
-                        white,
                         v_normal, 
                         v_coord, 
                         4,
                         true, 
-                        true,
-                        false);
+                        true);
     }
 
     out_color = vec4(color, 1.0);

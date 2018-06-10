@@ -15,35 +15,19 @@ uniform highp vec3 u_light_coord_v[max_light_count];
 uniform lowp vec3 u_light_color_v[max_light_count];
 uniform highp float u_light_range_v[max_light_count];
 
-lowp float calc_fog(lowp int idx,
-                    highp float raylen, 
-                    highp float viewlen)
-{
-    mediump float range = u_light_range_v[idx];
-
-    lowp float lightfac = raylen / range;
-    lowp float viewfac = viewlen / u_view_range;
-
-    lowp float lightfog = (1.0 - lightfac * lightfac);
-    lowp float viewfog = (1.0 - viewfac * viewfac);
-
-    return clamp(lightfog * viewfog, 0.0, 1.0);
-}
-
 lowp vec3 enlight(lowp vec3 material_diffuse,
-                  lowp vec3 material_specular,
                   lowp vec3 normal_vector,
                   highp vec3 fragment_coord,
                   lowp int specular_pow_factor,
                   bool with_diffuse,
-                  bool with_specular,
-                  bool with_backface)
+                  bool with_specular)
 {
     lowp vec3 outcolor = vec3(0.0, 0.0, 0.0);
 
     mediump vec3 view = u_camera_coord - fragment_coord;
     mediump float viewlen = length(view);
     lowp vec3 view_norm = view / viewlen;
+
 
     mediump float specular_pow = pow(2.0, float(specular_pow_factor));
 
@@ -54,37 +38,37 @@ lowp vec3 enlight(lowp vec3 material_diffuse,
 
     for (int i = 0; i < u_light_count; i++)
     {
-        mediump vec3 ray = u_light_coord_v[i] - fragment_coord;
+        mediump vec3 ray = fragment_coord - u_light_coord_v[i];
         mediump float raylen = length(ray);
         lowp vec3 ray_norm = ray / raylen;
 
 
-        lowp vec3 color = vec3(0.0, 0.0, 0.0);
+        lowp float fog_factor = min(raylen / u_light_range_v[i], 1.0);
+        lowp float fog = 1.0 - fog_factor * fog_factor;
 
-        mediump vec3 reflection = reflect(-ray_norm, normal_vector);
 
-        lowp float diffuse_cosine = dot(normal_vector, ray_norm);
+        mediump vec3 reflection = reflect(ray_norm, normal_vector);
+
+        lowp float diffuse_cosine = dot(reflection, normal_vector);
         lowp float specular_cosine = dot(reflection, view_norm);
 
-        if (with_diffuse && (with_backface || diffuse_cosine > 0.0))
-        {
-            color += u_light_color_v[i]
-                   * material_diffuse 
-                   * diffuse_cosine
-                   ;
-        }
 
-        if (with_specular && (with_backface || specular_cosine > specular_ofside))
+        lowp float diffuse_factor = max(0.0, diffuse_cosine) * fog;
+
+        outcolor += u_light_color_v[i] * material_diffuse * diffuse_factor;
+
+
+        if (specular_cosine > specular_ofside)
         {
             lowp float specular_coefficient = pow(specular_cosine, specular_pow);
+            lowp float specular_factor = specular_coefficient * fog;
 
-            color += u_light_color_v[i] 
-                   * specular_coefficient
-                   ;
+            outcolor += u_light_color_v[i] * specular_factor;
         }
-
-        outcolor += color * calc_fog(i, raylen, viewlen);
     }
 
-    return outcolor;
+    lowp float view_fog_factor = min(viewlen / u_view_range, 1.0);
+    lowp float view_fog = 1.0 - view_fog_factor * view_fog_factor;
+
+    return outcolor * view_fog;
 }
