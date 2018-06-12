@@ -21,6 +21,8 @@ namespace game
         auto tgen = get<tunnel_generator>();
         auto waygen = std::bind(&tunnel_generator::generate, tgen);
 
+        get<player>()->set_autopilot(true);
+
         get<world::way_path>()->set_generator(waygen);
         get<world::way_path>()->reset();
     }
