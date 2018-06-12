@@ -97,7 +97,7 @@ namespace world
         glass_pieces_drawer->end();
 
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        get<frame_buffer>()->unbind();
     }
 
     void object_manager::process_all()

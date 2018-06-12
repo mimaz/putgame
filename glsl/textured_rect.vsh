@@ -3,10 +3,7 @@
  * 2018
  */
 
-precision lowp float;
-precision lowp int;
-
-in vec2 a_coord;
+in lowp vec2 a_coord;
 
 out lowp vec2 v_tex_coord;
 
