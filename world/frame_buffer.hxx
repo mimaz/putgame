@@ -29,13 +29,16 @@ namespace world
         glutils::shader fsh;
         glutils::program pro;
         glutils::attribute a_coord;
-        glutils::uniform u_matrix;
+        glutils::attribute a_tex_coord;
+        glutils::buffer vbo;
 
         GLuint fbhandle;
         GLuint rdhandle;
         GLuint txhandle;
 
         int vpdata[4];
+        int width;
+        int height;
     };
 }
 

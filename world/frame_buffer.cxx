@@ -24,26 +24,43 @@ namespace
 #undef CASE
         }
     }
+
+    const float mesh[] = {
+        -1, 1, 0, 1,
+        1, 1, 1, 1,
+        -1, -1, 0, 0,
+        1, -1, 1, 0,
+    };
+
+    int scaled_resolution(int res)
+    {
+        return static_cast<int>(res / sqrtf(2));
+    }
 }
 
 namespace world
 {
     frame_buffer::frame_buffer(common::context *ctx)
-        : rect_item(ctx)
+        : rect_item(ctx, -50)
         , vsh("frame_buffer",
               GL_VERTEX_SHADER,
               version_glsl,
-              textured_rect_vsh)
+              world_fb_vsh)
         , fsh("frame_buffer",
               GL_FRAGMENT_SHADER,
               version_glsl,
-              world_frame_fsh)
+              world_fb_fsh)
         , pro("frame_buffer",
               &vsh,
               &fsh)
         , a_coord(&pro, "a_coord")
-        , u_matrix(&pro, "u_matrix")
+        , a_tex_coord(&pro, "a_tex_coord")
+        , vbo(GL_ARRAY_BUFFER, mesh, sizeof(mesh))
+        , width(scaled_resolution(get_context()->get_width()))
+        , height(scaled_resolution(get_context()->get_height()))
     {
+        common::logd("create framebuffer with resolution: ", width, "x", height);
+
         glGenFramebuffers(1, &fbhandle);
         glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
 
@@ -51,17 +68,20 @@ namespace world
         glBindTexture(GL_TEXTURE_2D, txhandle);
         glTexImage2D(GL_TEXTURE_2D, 
                      0, GL_RGB, 
-                     956, 1044,
+                     width, height,
                      0, GL_RGB, 
                      GL_UNSIGNED_BYTE, 
                      nullptr);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+        auto filter = GL_LINEAR;
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 
 
         glGenRenderbuffers(1, &rdhandle);
         glBindRenderbuffer(GL_RENDERBUFFER, rdhandle);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, 956, 1044);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rdhandle);
 
 
@@ -91,10 +111,12 @@ namespace world
         glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
         glBindRenderbuffer(GL_RENDERBUFFER, rdhandle);
 
-        glViewport(0, 0, 956, 1044);
+        glViewport(0, 0, width, height);
 
         glClearColor(0.0, 0.25, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        vbo.bind();
     }
 
     void frame_buffer::unbind()
@@ -115,24 +137,30 @@ namespace world
         rect_item::draw();
 
         pro.use();
+
         a_coord.enable();
+        a_tex_coord.enable();
 
         glDisable(GL_BLEND);
         glDisable(GL_DEPTH_TEST);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        glVertexAttribPointer(a_coord, 2, GL_FLOAT,
-                              GL_FALSE, sizeof(float) * 2,
-                              rect_item::strip_mesh);
-
-        u_matrix = glm::translate(glm::vec3(0, 0, 0));
-
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, txhandle);
+
+        vbo.bind();
+
+        glVertexAttribPointer(a_coord, 2, GL_FLOAT,
+                              GL_FALSE, sizeof(float) * 4,
+                              nullptr);
+        glVertexAttribPointer(a_tex_coord, 2, GL_FLOAT,
+                              GL_FALSE, sizeof(float) * 4,
+                              reinterpret_cast<void *>(sizeof(float) * 2));
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         a_coord.disable();
+        a_tex_coord.disable();
     }
 }
