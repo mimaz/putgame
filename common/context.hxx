@@ -46,6 +46,7 @@ namespace common
         virtual time_t time_millis() = 0;
         virtual int get_width() = 0;
         virtual int get_height() = 0;
+        virtual void exit() = 0;
 
         random_engine_type &get_random_engine();
 

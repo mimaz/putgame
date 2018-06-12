@@ -31,6 +31,6 @@ int compare(int len1, const char *str1,
     if (len1 != len2)
         return 1;
 
-    return memcmp(str1, str2, len1);
+    return memcmp(str1, str2, len1) == 0 ? 0 : 1;
 }
 

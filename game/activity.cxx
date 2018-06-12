@@ -57,7 +57,7 @@ namespace game
         get_player()->process();
         get_hit_mask()->process();
 
-        common::logd("difficulty: ", get_difficulty());
+        //common::logd("difficulty: ", get_difficulty());
     }
 
     int activity::get_distance()

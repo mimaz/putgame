@@ -19,6 +19,11 @@ namespace
             return putgame_time(pg);
         }
 
+        void exit() final
+        {
+            putgame_exit(pg);
+        }
+
         putgame *const pg;
     };
 
@@ -30,10 +35,9 @@ namespace
     }
 }
 
-void putgame_create(putgame *self,
-                    time_t (*time_ms)(putgame *))
+void putgame_construct(putgame *self)
 {
-    self->on_destroy = nullptr;
+    self->on_destruct = nullptr;
     self->on_start = nullptr;
     self->on_stop = nullptr;
     self->on_draw = nullptr;
@@ -43,13 +47,15 @@ void putgame_create(putgame *self,
     self->on_release = nullptr;
     self->on_set = nullptr;
 
-    self->_time_ms = time_ms;
+    self->time = nullptr;
+    self->exit = nullptr;
+
     self->_game_instance = new subinstance(self);
 }
 
-void putgame_destroy(putgame *self)
+void putgame_destruct(putgame *self)
 {
-    callback(self->on_destroy, self);
+    callback(self->on_destruct, self);
 
     delete static_cast<subinstance *>(self->_game_instance);
 
@@ -112,12 +118,20 @@ void putgame_release(putgame *self)
 
 time_t putgame_time(putgame *self)
 {
-    if (self->_time_ms != nullptr)
-        return self->_time_ms(self);
+    if (self->time != nullptr)
+        return self->time(self);
 
-    common::loge("_time_ms function was not set!");
+    common::loge("time function was not set!");
 
     return 0;
+}
+
+void putgame_exit(putgame *self)
+{
+    if (self->exit != nullptr)
+        self->exit(self);
+    else
+        common::loge("exit function was not set!");
 }
 
 void putgame_set(putgame *self,

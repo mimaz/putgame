@@ -26,7 +26,7 @@ namespace game
 
     void instance::start()
     {
-        glClearColor(0, 0.0, 0, 1);
+        glClearColor(0, 0, 0, 1);
         glFrontFace(GL_CW);
     }
 
@@ -38,7 +38,6 @@ namespace game
 
     void instance::draw()
     {
-        glClearColor(0.25, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         get<world::object_manager>()->draw_all();

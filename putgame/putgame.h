@@ -16,7 +16,7 @@ extern "C" {
 
 struct putgame
 {
-    void (*on_destroy)(struct putgame *self);
+    void (*on_destruct)(struct putgame *self);
     void (*on_start)(struct putgame *self);
     void (*on_stop)(struct putgame *self);
     void (*on_draw)(struct putgame *self);
@@ -32,16 +32,17 @@ struct putgame
                    const char *key,
                    const char *value);
 
-    time_t (*_time_ms)(struct putgame *self);
+    time_t (*time)(struct putgame *self);
+    void (*exit)(struct putgame *self);
+
     void *_game_instance;
 };
 
 PUTGAME_EXPORT void
-putgame_create(struct putgame *self,
-               time_t (*time_ms)(struct putgame *self));
+putgame_construct(struct putgame *self);
 
 PUTGAME_EXPORT void
-putgame_destroy(struct putgame *self);
+putgame_destruct(struct putgame *self);
 
 PUTGAME_EXPORT void 
 putgame_start(struct putgame *self);
@@ -70,6 +71,9 @@ putgame_release(struct putgame *self);
 
 PUTGAME_EXPORT time_t
 putgame_time(struct putgame *self);
+
+PUTGAME_EXPORT void
+putgame_exit(struct putgame *self);
 
 PUTGAME_EXPORT void
 putgame_set(struct putgame *self,

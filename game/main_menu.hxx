@@ -29,7 +29,8 @@ namespace game
         void bottomoff_prop_set(const std::string &value);
         void layout();
         void layout(int w, int h);
-        void clicked(gui::color_button *btn);
+        void exit_clicked();
+        void start_clicked();
         void animate();
 
         gui::color_rectangle bottom_spacer;

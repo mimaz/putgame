@@ -86,6 +86,10 @@ namespace gui
         auto orgx = normalize(event.xpos, get_width());
         auto orgy = normalize(event.ypos, get_height());
 
+        auto inside = event.xpos >= -get_width() / 2 and
+            event.xpos <= get_width() / 2 and
+            event.ypos >= -get_height() / 2 and
+            event.ypos <= get_height();
 
         switch (event.type)
         {
@@ -106,7 +110,7 @@ namespace gui
                 break;
 
             case touch_event::release:
-                if (contains(event.xpos, event.ypos))
+                if (inside)
                     handler(this);
                 break;
 

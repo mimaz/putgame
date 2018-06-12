@@ -24,11 +24,18 @@ static time_t get_time_ms(struct putgame *self)
     return (time_t)(glfwGetTime() * 1000);
 }
 
+static void exit_window(struct putgame *self)
+{
+    (void) self;
+
+    glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
 static void destroy_instance(void)
 {
     if (instance != NULL)
     {
-        putgame_destroy(instance);
+        putgame_destruct(instance);
 
         free(instance);
 
@@ -42,7 +49,10 @@ static void create_instance(void)
 
     instance = malloc(sizeof(struct putgame));
 
-    putgame_create(instance, get_time_ms);
+    putgame_construct(instance);
+
+    instance->time = get_time_ms;
+    instance->exit = exit_window;
 }
 
 static void destroy_window(void)
