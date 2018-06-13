@@ -21,6 +21,16 @@ namespace game
     public:
         PUTGAME_OBJECT
 
+        enum state
+        {
+            splash,
+            menu,
+            starting,
+            play,
+            defeated,
+            score
+        };
+
         using object_ref = std::shared_ptr<world::visible_object>;
 
         activity(common::context *ctx);
@@ -28,8 +38,13 @@ namespace game
         void steer(float x, float y);
         void process();
 
+        void switch_state(state st);
+
           template<typename _T, typename ..._Args>
         std::shared_ptr<_T> create_object(const _Args &...args);
+
+        state get_state() const;
+        bool is_transiting() const;
 
         int get_distance();
         int get_difficulty();
@@ -45,6 +60,9 @@ namespace game
         int last_way_id;
         int last_distance;
         int last_difficulty;
+
+        state stat;
+        bool transiting;
     };
 
       template<typename _T, typename ..._Args>

@@ -34,14 +34,14 @@ namespace
 
     int scaled_resolution(int res)
     {
-        return static_cast<int>(res / sqrtf(2));
+        return static_cast<int>(res / 2);
     }
 }
 
 namespace world
 {
     frame_buffer::frame_buffer(common::context *ctx)
-        : rect_item(ctx, -50)
+        : rect_item(ctx)
         , vsh("frame_buffer",
               GL_VERTEX_SHADER,
               version_glsl,
@@ -59,6 +59,8 @@ namespace world
         , width(scaled_resolution(get_context()->get_width()))
         , height(scaled_resolution(get_context()->get_height()))
     {
+        set_depth(-50);
+
         common::logd("create framebuffer with resolution: ", width, "x", height);
 
         glGenFramebuffers(1, &fbhandle);

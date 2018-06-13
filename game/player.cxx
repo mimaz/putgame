@@ -61,10 +61,7 @@ namespace game
             auto camframe = way->at(camid);
 
             auto radius = camframe.position() - cam->get_position();
-            auto camoff = radius * 0.25f;
-
-            cam->move(camoff);
-
+            auto camoff = radius * 0.1f;
 
 
             auto norm = camframe.position() - cam->get_position();
@@ -73,10 +70,12 @@ namespace game
             auto axis = glm::normalize(glm::cross(norm, vect));
 
             auto cosine = glm::dot(vect, norm);
-            auto angle = math::pi - 2 * acosf(cosine);
+            auto angle = math::pi - 2.0f * acosf(cosine);
+
+            angle = std::max(angle, math::pi / 12);
 
             cam->rotate(angle, axis);
-
+            cam->absolute_move(camoff);
 
             get<activity>()->get_hit_mask()->hit(cosine);
         }

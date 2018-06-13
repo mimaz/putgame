@@ -9,8 +9,7 @@
 
 namespace gui
 {
-    color_rectangle::color_rectangle(common::context *ctx, 
-                                     int depth)
+    color_rectangle::color_rectangle(common::context *ctx)
         : rect_item(ctx)
         , color(glm::vec4(0, 0, 0, 1))
     {}

@@ -3,8 +3,9 @@
  * 2018
  */
 
-
 #include "main_menu.hxx"
+
+#include "activity.hxx"
 
 namespace game
 {
@@ -37,7 +38,6 @@ namespace game
         register_handler("bottom_offset", handler);
 
         layout();
-        enable();
     }
 
     void main_menu::process()
@@ -80,6 +80,11 @@ namespace game
         return enabled;
     }
 
+    bool main_menu::is_animating() const
+    {
+        return animating;
+    }
+
     void main_menu::bottomoff_prop_set(const std::string &value)
     {
         std::istringstream(value) >> bottomoff;
@@ -116,7 +121,7 @@ namespace game
 
     void main_menu::start_clicked()
     {
-        common::logd("start");
+        get<activity>()->switch_state(activity::play);
     }
 
     void main_menu::exit_clicked()

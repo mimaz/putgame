@@ -17,10 +17,11 @@ namespace gui
     public:
         static const float strip_mesh[];
 
-        rect_item(common::context *ctx, int depth = 0);
+        rect_item(common::context *ctx);
         ~rect_item();
 
         void set_position(int x, int y);
+        void set_depth(int depth);
         void resize(int w, int h);
         void set_active(bool act);
 

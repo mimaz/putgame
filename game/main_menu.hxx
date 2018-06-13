@@ -24,6 +24,7 @@ namespace game
         void on_surface_resize(int w, int h) override;
 
         bool is_enabled() const;
+        bool is_animating() const;
 
     private:
         void bottomoff_prop_set(const std::string &value);

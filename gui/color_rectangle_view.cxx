@@ -32,6 +32,8 @@ namespace gui
         pro.use();
         a_coord.enable();
 
+        glEnable(GL_BLEND);
+
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glVertexAttribPointer(a_coord, 2, GL_FLOAT,
                               GL_FALSE, sizeof(float) * 2,

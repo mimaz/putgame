@@ -24,6 +24,7 @@ namespace world
         void set_view_range(float range);
 
         void move(const glm::vec3 &vec);
+        void absolute_move(const glm::vec3 &vec);
         void rotate(float angle, const glm::vec3 &axis);
         void apply(const glm::mat4 &matrix);
         float gradient(float angle, 

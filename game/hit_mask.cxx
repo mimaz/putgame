@@ -16,11 +16,15 @@ namespace game
         , exposure(0)
     {
         set_active(false);
+        set_depth(150);
+        resize(ctx->get_width(), ctx->get_height());
     }
 
     void hit_mask::hit(float cosine)
     {
         exposure = sqrtf(cosine);
+
+        common::logd("hit!!!");
 
         set_active(true);
     }
@@ -34,7 +38,7 @@ namespace game
 
     void hit_mask::process()
     {
-        exposure -= 0.5f / 40;
+        common::logd("exp: ", get_exposure());
 
         if (exposure < 0.0f)
         {
@@ -42,6 +46,11 @@ namespace game
         }
         else
         {
+            if (exposure < 2)
+                exposure -= 0.5f / FPS;
+            else
+                exposure = 3;
+
             auto real = glm::vec4(1, 0, 0, get_exposure());
 
             set_color(real);

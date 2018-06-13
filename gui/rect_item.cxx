@@ -17,13 +17,13 @@ namespace gui
         0.5f, -0.5f,
     };
 
-    rect_item::rect_item(common::context *ctx, int depth)
+    rect_item::rect_item(common::context *ctx)
         : object(ctx)
         , xpos(0)
         , ypos(0)
         , width(1)
         , height(1)
-        , depth(depth)
+        , depth(0)
         , pressed(false)
         , active(true)
         , dirty_matrix(true)
@@ -44,6 +44,18 @@ namespace gui
             xpos = x;
             ypos = y;
             dirty_matrix = true;
+        }
+    }
+
+    void rect_item::set_depth(int dep)
+    {
+        if (dep != get_depth())
+        {
+            get<surface>()->remove_item(this);
+
+            depth = dep;
+
+            get<surface>()->add_item(this);
         }
     }
 

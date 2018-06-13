@@ -41,6 +41,13 @@ namespace world
         apply(glm::translate(-vec));
     }
 
+    void camera::absolute_move(const glm::vec3 &vec)
+    {
+        flags |= dirty_view_proj | dirty_inverse;
+
+        view_mat *= glm::translate(-vec);
+    }
+
     void camera::rotate(float angle, const glm::vec3 &axis)
     {
         apply(glm::rotate(-angle, axis));

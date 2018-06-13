@@ -9,6 +9,7 @@
 
 #include "player.hxx"
 #include "hit_mask.hxx"
+#include "main_menu.hxx"
 
 namespace game
 {
@@ -17,6 +18,8 @@ namespace game
         , last_way_id(-1)
         , last_distance(-1)
         , last_difficulty(-1)
+        , stat(splash)
+        , transiting(false)
     {
         auto tgen = get<tunnel_generator>();
         auto waygen = std::bind(&tunnel_generator::generate, tgen);
@@ -25,6 +28,8 @@ namespace game
 
         get<world::way_path>()->set_generator(waygen);
         get<world::way_path>()->reset();
+
+        switch_state(menu);
     }
 
     void activity::steer(float x, float y)
@@ -55,9 +60,65 @@ namespace game
 
 
         get_player()->process();
-        get_hit_mask()->process();
 
         //common::logd("difficulty: ", get_difficulty());
+
+        if (is_transiting())
+        {
+            switch (get_state())
+            {
+            case menu:
+                transiting = get<main_menu>()->is_animating();
+                break;
+
+            default:
+                break;
+            }
+        }
+        else
+        {
+        }
+    }
+
+    void activity::switch_state(state st)
+    {
+        if (transiting)
+        {
+            common::loge("cannot set state while transiting!");
+            get_context()->exit();
+        }
+
+        if (st != stat)
+        {
+            transiting = true;
+
+            switch (st)
+            {
+            case menu:
+                get<main_menu>()->enable();
+                break;
+
+            case play:
+                get<main_menu>()->disable();
+                get<player>()->set_autopilot(false);
+                break;
+
+            default:
+                break;
+            }
+
+            stat = st;
+        }
+    }
+
+    activity::state activity::get_state() const
+    {
+        return stat;
+    }
+
+    bool activity::is_transiting() const
+    {
+        return transiting;
     }
 
     int activity::get_distance()

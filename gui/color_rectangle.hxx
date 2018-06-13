@@ -13,8 +13,7 @@ namespace gui
     class color_rectangle : public rect_item
     {
     public:
-        color_rectangle(common::context *ctx, 
-                        int depth = 0);
+        color_rectangle(common::context *ctx);
 
         void set_color(glm::vec4 col);
 
