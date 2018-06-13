@@ -129,7 +129,9 @@ Java_pl_poznan_put_student_mazurek_mieszko_GameInstance_create(
 {
     struct internal *self = malloc(sizeof(struct internal));
 
-    putgame_create((struct putgame *) self, get_time_ms);
+    putgame_construct((struct putgame *) self);
+
+    self->p.time = get_time_ms;
 
 
     jclass cls = (*env)->GetObjectClass(env, obj);
@@ -147,7 +149,7 @@ Java_pl_poznan_put_student_mazurek_mieszko_GameInstance_destroy(
 {
     struct putgame *self = get_self(env, obj);
 
-    putgame_destroy(self);
+    putgame_destruct(self);
 
     free(self);
 }
