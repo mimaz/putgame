@@ -6,7 +6,7 @@
 #ifndef __common_context_hxx
 #define __common_context_hxx
 
-#define PUTGAME_OBJECT static const int id;
+#define PUTGAME_OBJECT
 
 namespace common
 {
@@ -68,7 +68,7 @@ namespace common
                                 int id);
 
 
-        std::map<int, part_ref> part_map;
+        std::map<std::type_index, part_ref> part_map;
         std::map<std::string, std::string> prop_map;
         std::multimap<std::string, handler_data> handler_map;
 
@@ -118,7 +118,7 @@ namespace common
       template<typename _Type>
     _Type *context::get()
     {
-        auto id = _Type::id;
+        auto id = std::type_index(typeid(_Type));
         auto it = part_map.find(id);
 
         if (it != part_map.end())
@@ -135,7 +135,7 @@ namespace common
       template<typename _Type>
     bool context::is_instantied() const
     {
-        auto it = part_map.find(_Type::id);
+        auto it = part_map.find(typeid(_Type));
 
         return it != part_map.end() and it->second != nullptr;
     }
@@ -143,7 +143,7 @@ namespace common
       template<typename _Type>
     void context::destroy()
     {
-        part_map.erase(_Type::id);
+        part_map.erase(typeid(_Type));
     }
 
       template<typename _Type>

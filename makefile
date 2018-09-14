@@ -16,7 +16,6 @@ PRECOMPILER = ${BUILD_DIR}/putgame-precompiler
 LIBGAME = ${BUILD_DIR}/libputgame.so
 RES_HEADER = ${BUILD_DIR}/putgame/res
 STD_HEADER = ${BUILD_DIR}/putgame/std.pch
-HDR_META = ${BUILD_DIR}/meta-object.cxx
 GLFW_APP = ${BUILD_DIR}/putgame.elf
 
 ##
@@ -27,7 +26,7 @@ COMMON_FLAGS = -MMD -fPIC
 COMMON_FLAGS += -Iinclude/ -I${BUILD_DIR}
 COMMON_FLAGS += -DPLATFORM_${PLATFORM} -DFPS=30
 COMMON_CFLAGS = ${COMMON_FLAGS} -std=c11
-COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++14 -fno-rtti
+COMMON_CXXFLAGS = ${COMMON_FLAGS} -std=c++14
 COMMON_LDFLAGS = 
 
 PRECOMPILER_CFLAGS = -O1
@@ -82,7 +81,7 @@ GLSL_C_OBJ = ${GLSL_C_SRC:%=%.o}
 
 LIBGAME_HDR = ${shell find ${LIBGAME_SRC_DIRS} -name "*.hxx"}
 LIBGAME_SRC = ${shell find ${LIBGAME_SRC_DIRS} -name "*.cxx" -or -name "*.c"}
-LIBGAME_OBJ = ${LIBGAME_SRC:%=${BUILD_DIR}/%.o} ${HDR_META:%=%.o}
+LIBGAME_OBJ = ${LIBGAME_SRC:%=${BUILD_DIR}/%.o}
 
 GLFW_APP_SRC = ${shell find glfw/ -name "*.c"}
 GLFW_APP_OBJ = ${GLFW_APP_SRC:%=${BUILD_DIR}/%.o}
@@ -151,9 +150,6 @@ ${BUILD_DIR}/glsl/%.c: glsl/% ${PRECOMPILER}
 	@mkdir -p ${dir $@}
 	${PRECOMPILER} glsl-source $< $@
 
-${HDR_META}.o: ${HDR_META} ${STD_HEADER}
-	${TARGET_CXX} -c $< -o $@ -include-pch ${STD_HEADER} ${LIBGAME_CXXFLAGS}
-
 ${STD_HEADER}: putgame/std
 	@mkdir -p ${dir $@}
 	${TARGET_CXX} -xc++-header -c $< -o $@ ${LIBGAME_CXXFLAGS}
@@ -161,10 +157,6 @@ ${STD_HEADER}: putgame/std
 ${RES_HEADER}: ${GLSL_C_SRC}
 	@mkdir -p ${dir $@}
 	${PRECOMPILER} glsl-header $@ $^
-
-${HDR_META}: ${PRECOMPILER} ${LIBGAME_HDR}
-	@mkdir -p ${dir $@}
-	${PRECOMPILER} meta-object ${shell pwd}/ $@ ${LIBGAME_HDR}
 
 ##
  # precompiler rules

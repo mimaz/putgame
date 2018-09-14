@@ -11,6 +11,18 @@
 
 #include "comparator.h"
 
+/*
+ * Previously this code was used to generate at compile time
+ * static class identifiers for context part. 
+ * Enabling rtti for such feature wasn't perfectly effective
+ * and increased executable file size by over 20kB despite
+ * we didn't really use runtime type information - just static typeid
+ * However I decided to use back rtti because the loss is not so
+ * significant. Also we have dynamic casting out of the box.
+ * Then I'll decide to stay with rtti or replace it with
+ * this custom implementation.
+ */
+
 #define META_TAG "PUTGAME_OBJECT"
 
 extern const char *author_message;
