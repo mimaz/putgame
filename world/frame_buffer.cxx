@@ -9,6 +9,9 @@
 
 namespace 
 {
+    constexpr float scale_up_factor = 1.05f;
+    constexpr float scale_down_factor = 1 / scale_up_factor;
+
     const char *framebuffer_strerror(GLenum en)
     {
         switch (en)
@@ -34,7 +37,7 @@ namespace
 
     int scaled_resolution(int res)
     {
-        return static_cast<int>(res / 2);
+        return static_cast<int>(res);
     }
 }
 
@@ -56,54 +59,22 @@ namespace world
         , a_coord(&pro, "a_coord")
         , a_tex_coord(&pro, "a_tex_coord")
         , vbo(GL_ARRAY_BUFFER, mesh, sizeof(mesh))
-        , width(scaled_resolution(get_context()->get_width()))
-        , height(scaled_resolution(get_context()->get_height()))
+        , scaling(0.5f)
+        , dirty(true)
     {
         set_depth(-50);
-
-        common::logd("create framebuffer with resolution: ", width, "x", height);
+        resize(ctx->get_width(), ctx->get_height());
 
         glGenFramebuffers(1, &fbhandle);
-        glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
-
-        glGenTextures(1, &txhandle);
-        glBindTexture(GL_TEXTURE_2D, txhandle);
-        glTexImage2D(GL_TEXTURE_2D, 
-                     0, GL_RGB, 
-                     width, height,
-                     0, GL_RGB, 
-                     GL_UNSIGNED_BYTE, 
-                     nullptr);
-
-        auto filter = GL_LINEAR;
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-
-
         glGenRenderbuffers(1, &rdhandle);
-        glBindRenderbuffer(GL_RENDERBUFFER, rdhandle);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rdhandle);
+        glGenTextures(1, &txhandle);
 
-
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
-                               GL_TEXTURE_2D, txhandle, 0);
-
-        GLenum attachments[] = { GL_COLOR_ATTACHMENT0 };
-        glDrawBuffers(sizeof(attachments) / sizeof(attachments[0]), attachments);
-
-        auto stat = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
-        if (stat != GL_FRAMEBUFFER_COMPLETE)
-            common::loge("incomplete framebuffer: ", framebuffer_strerror(stat));
+        create_texture();
     }
 
     frame_buffer::~frame_buffer()
     {
-        glDeleteFramebuffers(1, &fbhandle);
-        glDeleteRenderbuffers(1, &rdhandle);
-        glDeleteTextures(1, &txhandle);
+        destroy_texture();
     }
 
     void frame_buffer::bind()
@@ -113,7 +84,7 @@ namespace world
         glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
         glBindRenderbuffer(GL_RENDERBUFFER, rdhandle);
 
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, fbwidth, fbheight);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -126,16 +97,41 @@ namespace world
         glViewport(vpdata[0], vpdata[1], vpdata[2], vpdata[3]);
     }
 
+    void frame_buffer::set_scaling(float sc)
+    {
+        scaling = sc;
+        dirty = true;
+    }
+
+    void frame_buffer::scale_up()
+    {
+        set_scaling(scaling * scale_up_factor);
+    }
+
+    void frame_buffer::scale_down()
+    {
+        set_scaling(scaling * scale_down_factor);
+    }
+
     void frame_buffer::on_surface_resize(int w, int h)
     {
         rect_item::on_surface_resize(w, h);
 
         resize(w, h);
+
+        dirty = true;
     }
 
     void frame_buffer::draw()
     {
         rect_item::draw();
+
+        if (dirty)
+        {
+            dirty = false;
+
+            create_texture();
+        }
 
         pro.use();
 
@@ -163,5 +159,59 @@ namespace world
 
         a_coord.disable();
         a_tex_coord.disable();
+    }
+
+    void frame_buffer::resize(int w, int h)
+    {
+        rect_item::resize(w, h);
+
+        create_texture();
+    }
+
+    void frame_buffer::create_texture()
+    {
+        auto filter = GL_NEAREST;
+
+        fbwidth = get_width() * scaling;
+        fbheight = get_height() * scaling;
+
+        common::logd("create texture:", fbwidth, ":", fbheight, ":", scaling);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, fbhandle);
+        glBindTexture(GL_TEXTURE_2D, txhandle);
+        glBindRenderbuffer(GL_RENDERBUFFER, rdhandle);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rdhandle);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
+                               GL_TEXTURE_2D, txhandle, 0);
+
+        GLenum attachment = GL_COLOR_ATTACHMENT0;
+        glDrawBuffers(1, &attachment);
+
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fbwidth, fbheight);
+        glTexImage2D(GL_TEXTURE_2D, 
+                     0, GL_RGB, 
+                     fbwidth, fbheight,
+                     0, GL_RGB, 
+                     GL_UNSIGNED_BYTE, 
+                     nullptr);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+        auto stat = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+        if (stat != GL_FRAMEBUFFER_COMPLETE)
+            common::loge("incomplete framebuffer: ", framebuffer_strerror(stat));
+    }
+
+    void frame_buffer::destroy_texture()
+    {
+        glDeleteFramebuffers(1, &fbhandle);
+        glDeleteRenderbuffers(1, &rdhandle);
+        glDeleteTextures(1, &txhandle);
     }
 }

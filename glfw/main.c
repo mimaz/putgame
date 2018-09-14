@@ -170,8 +170,11 @@ int main(int argc, char **argv)
 
     create_instance();
 
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
 
     putgame_start(instance);
+    putgame_resize(instance, width, height);
 
     double nexttim = glfwGetTime();
 

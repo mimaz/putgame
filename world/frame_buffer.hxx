@@ -21,10 +21,18 @@ namespace world
 
         void bind();
         void unbind();
+        void set_scaling(float sc);
+        void scale_up();
+        void scale_down();
+
         void on_surface_resize(int w, int h) override;
         void draw() override;
+        void resize(int w, int h) override;
 
     private:
+        void create_texture();
+        void destroy_texture();
+
         glutils::shader vsh;
         glutils::shader fsh;
         glutils::program pro;
@@ -36,9 +44,11 @@ namespace world
         GLuint rdhandle;
         GLuint txhandle;
 
+        float scaling;
+        bool dirty;
+        int fbwidth;
+        int fbheight;
         int vpdata[4];
-        int width;
-        int height;
     };
 }
 

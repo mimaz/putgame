@@ -20,10 +20,10 @@ namespace gui
         rect_item(common::context *ctx);
         ~rect_item();
 
-        void set_position(int x, int y);
-        void set_depth(int depth);
-        void resize(int w, int h);
-        void set_active(bool act);
+        virtual void set_position(int x, int y);
+        virtual void set_depth(int depth);
+        virtual void resize(int w, int h);
+        virtual void set_active(bool act);
 
         virtual void draw();
         virtual void process();
@@ -31,7 +31,7 @@ namespace gui
 
         virtual void on_surface_resize(int x, int y);
 
-        bool contains(int x, int y) const;
+        virtual bool contains(int x, int y) const;
 
         int get_xpos() const { return xpos; }
         int get_ypos() const { return ypos; }

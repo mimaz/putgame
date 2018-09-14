@@ -15,7 +15,9 @@
 namespace game
 {
     instance::instance()
-        : mouse_x(-1)
+        : width(1)
+        , height(1)
+        , mouse_x(-1)
         , mouse_y(-1)
         , mouse_pressed(false)
         , shifting(false)
