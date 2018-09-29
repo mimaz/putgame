@@ -1,0 +1,16 @@
+29.09.2018 mimaz
+
+I implemented game rendering frame buffer as yet another
+level of drawing indirection. Now we should be able to dynamically 
+ajust rendering resolution to avoid decreasing real frame per second
+value, save reduntancy computations and provide best quality when 
+it's possible.
+
+TODO
+
+check if dynamic setting framebuffer size doesn't cause
+other issues
+
+measure average frame rendering time
+
+scale resolution up or down according to rise or fall of fps

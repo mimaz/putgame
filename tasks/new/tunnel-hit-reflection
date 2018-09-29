@@ -1,0 +1,15 @@
+29.09.2018 mimaz
+
+When player hits the tunnel its flight trajectory should be reflected
+due to tunnel surface normal vector. As for now it works only at start 
+when the tunnel is straight. But after getting more curved the calculations
+are not correct.
+
+TODO
+
+generate straight tunnel and confirm whether the problem has something
+in common with tunnel absolute position
+
+start with tunnel bent by a small angle and check what happens then
+
+fix calculations in game/player.cxx / player::process()

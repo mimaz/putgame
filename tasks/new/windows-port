@@ -1,0 +1,12 @@
+29.09.2018 mimaz
+
+It should be possible to build and run the app on
+Windows platform. We should check it out using 
+Cygwin. I don't know whether GLFW will work well
+so it may be needed to implement SDL game front end.
+
+TODO
+
+compile project on Windows
+
+solve issues and go back to first point

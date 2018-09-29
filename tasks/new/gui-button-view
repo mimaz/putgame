@@ -1,0 +1,10 @@
+29.09.2018 mimaz
+
+GUI buttons should not be a filled rectangle so make it has
+some margins and better look.
+
+TODO
+
+redesign gui button
+
+reimplement gui button

@@ -1,0 +1,13 @@
+29.09.2018 mimaz
+
+As for now the frame per second value (FPS) are fixed by
+compilation definition 'FPS'.
+We should be able to dynammically adjust the vlaue at
+runtime by context property
+
+TODO
+
+implement fps property
+
+solve possible problems and make all time-dependent components
+respect the property
