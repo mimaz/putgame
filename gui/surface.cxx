@@ -3,7 +3,6 @@
  * 2018
  */
 
-
 /* 
  * touch_event.hxx have to be declared here due 
  * to clang's parsing method
@@ -12,6 +11,7 @@
 #include "surface.hxx"
 
 #include "rect_item.hxx"
+#include "color_button_view.hxx"
 
 namespace gui
 {
@@ -48,6 +48,8 @@ namespace gui
         for (auto item : items)
             if (item->is_active())
                 item->process();
+
+        get<color_button_view>()->mesh_collect();
     }
 
     void surface::draw()

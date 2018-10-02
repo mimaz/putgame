@@ -12,15 +12,15 @@
 namespace gui
 {
     class color_button;
+    class color_button_mesh;
 
     class color_button_view : public common::context::object
     {
     public:
-        PUTGAME_OBJECT
-
         color_button_view(common::context *ctx);
 
         void draw(color_button *btn);
+        void mesh_collect();
 
     private:
         glutils::shader vsh;
@@ -33,6 +33,8 @@ namespace gui
         glutils::uniform u_ratio;
         glutils::uniform u_shadows;
         glutils::uniform u_shadow_v;
+
+        std::map<int, std::shared_ptr<color_button_mesh>> mesh_map;
     };
 }
 

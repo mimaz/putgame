@@ -8,3 +8,8 @@ TODO
 redesign gui button
 
 reimplement gui button
+
+02.10.2018
+
+already created new shape of buttons with caching mesh data
+the issue is drawing its texture
