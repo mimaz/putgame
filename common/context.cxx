@@ -19,8 +19,8 @@ namespace common
         common::logi("destroyed common::context");
     }
 
-    void context::set_property(const std::string &key,
-                               const std::string &value)
+    void context::set_property(const property_key &key,
+                               const property_value &value)
     {
         prop_map[key] = value;
 
@@ -31,13 +31,13 @@ namespace common
             it->second.fun(value);
     }
 
-    std::string context::get_property(const std::string &key) const
+    context::property_value context::get_property(const property_key &key) const
     {
-        return get_property(key, "");
+        return get_property(key, property_value());
     }
 
-    std::string context::get_property(const std::string &key,
-                                      const std::string &def) const
+    context::property_value context::get_property(const property_key &key,
+                                                  const property_value &def) const
     {
         auto it = prop_map.find(key);
 
@@ -52,8 +52,8 @@ namespace common
         return randeng;
     }
 
-    int context::register_handler(const std::string &key,
-                                  const handler_type &handler)
+    int context::register_handler(const property_key &key,
+                                  const property_handler &handler)
     {
         handler_data data = {
             .fun = handler,
@@ -67,7 +67,7 @@ namespace common
         return hidcnt++;
     }
 
-    void context::unregister_handler(const std::string &key,
+    void context::unregister_handler(const property_key &key,
                                      int id)
     {
         auto ran = handler_map.equal_range(key);
@@ -94,13 +94,13 @@ namespace common
             get_context()->unregister_handler(d.first, d.second);
     }
 
-    std::string context::object::get_property(const std::string &key) const
+    context::property_value context::object::get_property(const property_key &key) const
     {
-        return get_property(key, "");
+        return get_context()->get_property(key);
     }
 
-    std::string context::object::get_property(const std::string &key,
-                                              const std::string &def) const
+    context::property_value context::object::get_property(const property_key &key,
+                                                          const property_value &def) const
     {
         return get_context()->get_property(key, def);
     }
@@ -111,8 +111,8 @@ namespace common
     context::random_engine_type &context::object::get_random_engine() const
     { return get_context()->get_random_engine(); }
 
-    void context::object::register_handler(const std::string &key,
-                                           const handler_type &handler)
+    void context::object::register_handler(const property_key &key,
+                                           const property_handler &handler)
     {
         auto id = get_context()->register_handler(key, handler);
         auto data = std::make_pair(key, id);

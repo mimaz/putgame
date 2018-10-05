@@ -85,9 +85,10 @@ namespace game
         return animating;
     }
 
-    void main_menu::bottomoff_prop_set(const std::string &value)
+    void main_menu::bottomoff_prop_set(const property_value &value)
     {
-        std::istringstream(value) >> bottomoff;
+        bottomoff = std::get<int>(value);
+        layout();
     }
 
     void main_menu::layout()

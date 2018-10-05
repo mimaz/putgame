@@ -13,8 +13,6 @@ namespace game
     class main_menu : public gui::rect_item
     {
     public:
-        PUTGAME_OBJECT
-
         main_menu(common::context *ctx);
 
         void process() override;
@@ -27,7 +25,7 @@ namespace game
         bool is_animating() const;
 
     private:
-        void bottomoff_prop_set(const std::string &value);
+        void bottomoff_prop_set(const property_value &value);
         void layout();
         void layout(int w, int h);
         void exit_clicked();

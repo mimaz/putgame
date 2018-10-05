@@ -15,10 +15,10 @@ namespace gui
     class color_button : public rect_item
     {
     public:
-        using handler_type = std::function<void(color_button *)>;
+        using property_handler = std::function<void(color_button *)>;
 
         color_button(common::context *ctx, 
-                     handler_type handler);
+                     property_handler handler);
 
         void set_text(const std::string &text);
         void set_primary_color(glm::vec4 color);
@@ -41,7 +41,7 @@ namespace gui
         const std::vector<glm::vec4> &get_shadows() const 
         { return shadows; }
 
-        handler_type get_handler() const
+        property_handler get_handler() const
         { return handler; }
 
     protected:
@@ -55,7 +55,7 @@ namespace gui
 
         std::vector<glm::vec4> shadows;
 
-        handler_type handler;
+        property_handler handler;
     };
 }
 

@@ -28,9 +28,9 @@ struct putgame
                       int ypos);
     void (*on_press)(struct putgame *self);
     void (*on_release)(struct putgame *self);
-    void (*on_set)(struct putgame *self,
-                   const char *key,
-                   const char *value);
+    void (*on_set_int)(struct putgame *self,
+                       const char *key,
+                       int value);
 
     time_t (*time)(struct putgame *self);
     void (*exit)(struct putgame *self);
@@ -76,9 +76,9 @@ PUTGAME_EXPORT void
 putgame_exit(struct putgame *self);
 
 PUTGAME_EXPORT void
-putgame_set(struct putgame *self,
-            const char *key,
-            const char *value);
+putgame_set_int(struct putgame *self,
+                const char *key,
+                int value);
 
 #ifdef __cplusplus
 }

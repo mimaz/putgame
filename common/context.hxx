@@ -15,7 +15,9 @@ namespace common
     public:
         class object;
 
-        using handler_type = std::function<void(std::string)>;
+        using property_key = std::string;
+        using property_value = std::variant<int>;
+        using property_handler = std::function<void(const property_value &)>;
         using random_engine_type = std::default_random_engine;
 
 
@@ -26,13 +28,13 @@ namespace common
 
         virtual ~context();
 
-        virtual void set_property(const std::string &key, 
-                                  const std::string &value);
+        virtual void set_property(const property_key &key, 
+                                  const property_value &value);
 
-        std::string get_property(const std::string &key) const;
+        property_value get_property(const property_key &key) const;
 
-        std::string get_property(const std::string &key,
-                                 const std::string &def) const;
+        property_value get_property(const property_key &key,
+                                    const property_value &def) const;
 
           template<typename _Type>
         _Type *get();
@@ -57,20 +59,20 @@ namespace common
 
         struct handler_data
         {
-            handler_type fun;
+            property_handler fun;
             int ident;
         };
 
 
-        int register_handler(const std::string &key,
-                             const handler_type &handler);
-        void unregister_handler(const std::string &key,
+        int register_handler(const property_key &key,
+                             const property_handler &handler);
+        void unregister_handler(const property_key &key,
                                 int id);
 
 
         std::map<std::type_index, part_ref> part_map;
-        std::map<std::string, std::string> prop_map;
-        std::multimap<std::string, handler_data> handler_map;
+        std::map<property_key, property_value> prop_map;
+        std::multimap<property_key, handler_data> handler_map;
 
 
         random_engine_type randeng;
@@ -86,12 +88,15 @@ namespace common
         object(object *obj);
 
     public:
+        using property_key = property_key;
+        using property_value = property_value;
+
         virtual ~object();
 
-        std::string get_property(const std::string &key) const;
+        property_value get_property(const property_key &key) const;
 
-        std::string get_property(const std::string &key,
-                                 const std::string &def) const;
+        property_value get_property(const property_key &key,
+                                    const property_value &def) const;
 
         context *get_context() const;
 
@@ -104,11 +109,11 @@ namespace common
         random_engine_type &get_random_engine() const;
 
     protected:
-        void register_handler(const std::string &key,
-                              const handler_type &handler);
+        void register_handler(const property_key &key,
+                              const property_handler &handler);
 
     private:
-        using handler_data = std::pair<std::string, int>;
+        using handler_data = std::pair<property_key, int>;
 
         context *ctx;
 

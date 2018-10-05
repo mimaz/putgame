@@ -179,7 +179,7 @@ int main(int argc, char **argv)
     double nexttim = glfwGetTime();
 
 
-    putgame_set(instance, "bottom_offset", "0");
+    putgame_set_int(instance, "bottom_offset", 0);
 
 
     while (! glfwWindowShouldClose(window))

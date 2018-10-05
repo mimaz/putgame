@@ -45,7 +45,7 @@ void putgame_construct(putgame *self)
     self->on_cursor = nullptr;
     self->on_press = nullptr;
     self->on_release = nullptr;
-    self->on_set = nullptr;
+    self->on_set_int = nullptr;
 
     self->time = nullptr;
     self->exit = nullptr;
@@ -134,11 +134,13 @@ void putgame_exit(putgame *self)
         common::loge("exit function was not set!");
 }
 
-void putgame_set(putgame *self,
-                 const char *key,
-                 const char *value)
+void putgame_set_int(putgame *self,
+                     const char *key,
+                     int value)
 {
-    callback(self->on_set, self, key, value);
+    callback(self->on_set_int, self, key, value);
 
-    static_cast<subinstance *>(self->_game_instance)->set_property(key, value);
+    common::context::property_value prop(value);
+
+    static_cast<subinstance *>(self->_game_instance)->set_property(key, prop);
 }
