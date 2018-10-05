@@ -21,7 +21,9 @@ namespace game
         , mouse_y(-1)
         , mouse_pressed(false)
         , shifting(false)
-    {}
+    {
+        set_property("fps", property_value(30));
+    }
 
     instance::~instance()
     {}

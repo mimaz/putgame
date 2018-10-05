@@ -38,7 +38,7 @@ namespace game
 
     void hit_mask::process()
     {
-        common::logd("exp: ", get_exposure());
+        auto fps = std::get<int>(get_property("fps"));
 
         if (exposure < 0.0f)
         {
@@ -47,7 +47,7 @@ namespace game
         else
         {
             if (exposure < 2)
-                exposure -= 0.5f / FPS;
+                exposure -= 0.5f / fps;
             else
                 exposure = 3;
 

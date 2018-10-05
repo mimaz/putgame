@@ -41,8 +41,12 @@ namespace common
     {
         auto it = prop_map.find(key);
 
-        if (it != prop_map.end())
+        if (it != prop_map.end()) {
+            common::logd("return ", key, " -> ", std::get<int>(it->second));
             return it->second;
+        }
+
+        common::logd("return ", key, " def -> ", std::get<int>(def));
 
         return def;
     }

@@ -34,8 +34,8 @@ namespace game
 
     void player::process()
     {
-        constexpr auto fps = FPS;
-        constexpr auto factor = 1.0f / fps;
+        auto fps = std::get<int>(get_property("fps"));
+        auto factor = 1.0f / fps;
 
         auto cam = get<world::camera>();
 

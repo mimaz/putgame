@@ -155,8 +155,8 @@ int main(int argc, char **argv)
     window = glfwCreateWindow(960, 540, 
                               "putgame", 
                               NULL,
-                              //glfwGetPrimaryMonitor(),
-                              NULL);
+                              glfwGetPrimaryMonitor());
+                              //NULL);
 
     if (window == NULL)
         exit_with_error("creating GLFW window failed");
@@ -180,6 +180,7 @@ int main(int argc, char **argv)
 
 
     putgame_set_int(instance, "bottom_offset", 0);
+    putgame_set_int(instance, "fps", 60);
 
 
     while (! glfwWindowShouldClose(window))
@@ -193,7 +194,7 @@ int main(int argc, char **argv)
         glfwSwapBuffers(window);
         
 
-        nexttim += 1.0 / FPS;
+        nexttim += 1.0 / putgame_get_int(instance, "fps", 30);
 
         while (glfwGetTime() < nexttim)
             usleep(1000);
