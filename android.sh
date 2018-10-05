@@ -5,43 +5,59 @@
 
 #!/bin/bash
 
-ARGC=$#
-SCRIPT_NAME=$0
+COMMANDS="${@:2}"
 
-function print_usage() {
-    echo "Usage $SCRIPT_NAME command [arch]"
-}
+case $1 in
+    arm|armv7a)
+        ARCH=arm
+        ;;
 
-if (( $ARGC < 1 )); then
-    print_usage
-    exit 1
-fi
+    x86|i686)
+        ARCH=x86
+        ;;
 
-ARCH=$1
-COMMAND=$2
+    x86_64|x86-64)
+        ARCH=x86_64
+        ;;
+    
+    *)
+        unset ARCH
+        COMMANDS="$1 $COMMANDS"
+esac
 
-TOOLCHAINS=~/android/toolchains
+NDK_DIR=/home/mimakkz/android/ndk-r18
+TOOLCHAIN_DIR=toolchains/
+JNI_LIBS_DIR=jniLibs/
+TARGET_API=21
+RELEASE=1
+USE_LTO=1
+MAKE_JOBS=12
 
-JNI_LIBS_DIR=jniLibs
 LIB_OUT_DIR=$JNI_LIBS_DIR/$ARCH
 BUILD_DIR=$(make build_dir ARCH=$ARCH TARGET=$TARGET)
+MAKE_TOOLCHAIN_SCRIPT=$NDK_DIR/build/tools/make_standalone_toolchain.py
 
-function set_make_args() {
-    if (( $ARGC < 2 )); then
-        print_usage
-        echo "arch argument required for command $COMMAND"
-        exit 1
+function print_usage {
+    echo "Usage: $0 [arch] [command]"
+}
+
+function set_toolchain_path {
+    if [ -z "$(ls $TOOLCHAIN_DIR 2> /dev/null | grep $ARCH)" ]; then
+        echo "generating toolchain for $ARCH..."
+        $MAKE_TOOLCHAIN_SCRIPT --install-dir $TOOLCHAIN_DIR/$ARCH --arch $ARCH --api $TARGET_API
+
+        if (( $? != 0 )); then
+            echo "cannot generate toolchain for $ARCH :("
+            exit 1
+        fi
     fi
 
-    TOOLCHAIN_PATH=""
+    TOOLCHAIN_PATH=$TOOLCHAIN_DIR/$ARCH/bin
+}
 
-    for dir in $(find $TOOLCHAINS -maxdepth 2 -type d -name "bin"); do
-        TOOLCHAIN_PATH=$dir:$TOOLCHAIN_PATH
-    done
-
-
+function set_make_args {
     case $ARCH in
-        armeabi-v7a)
+        arm)
             TARGET=arm-linux-androideabi-
             ;;
 
@@ -54,36 +70,69 @@ function set_make_args() {
             ;;
 
         *)
-            echo "invalid architecture $ARCH"
-            echo "available architectures - armeabi-v7a, x86, x86_64"
-            exit 1
+            if [[ -z $ARCH ]]; then
+                unset TARGET
+            else
+                echo "invalid architecture $ARCH"
+                echo "available architectures - arm, x86, x86_64"
+                exit 1
+            fi
     esac
 
 
-    MAKE_ARCH_ARGS="TARGET=$TARGET \
-                    OUTPUT=$LIBOUT \
-                    PLATFORM=ANDROID \
-                    RELEASE=1 \
-                    USE_LTO=1 \
-                    BUILD_DIR=$BUILD_DIR"
+    MAKE_ARGS="TARGET=$TARGET \
+               OUTPUT=$LIBOUT \
+               PLATFORM=ANDROID \
+               RELEASE=$RELEASE \
+               USE_LTO=$USE_LTO \
+               BUILD_DIR=$BUILD_DIR"
 }
 
+function build {
+    if [ -z $ARCH ]; then
+        echo cannot build project with no architecture set!
+        print_usage
+        exit 1
+    fi
 
-case $COMMAND in
-    build)
-        set_make_args
-        PATH=$TOOLCHAIN_PATH:$PATH make $MAKE_ARCH_ARGS libputgame -j4
-        mkdir -p $LIB_OUT_DIR
-        cp $BUILD_DIR/libputgame.so $LIB_OUT_DIR/
-        ;;
+    set_toolchain_path
+    set_make_args
 
-    clean)
-        set_make_args
-        make $MAKE_ARCH_ARGS clean
-        rm -rf $LIB_OUT_DIR
-        ;;
+    PATH=$TOOLCHAIN_PATH:$PATH make $MAKE_ARGS libputgame -j$MAKE_JOBS
+    mkdir -p $LIB_OUT_DIR
 
-    *)
-        echo "invalid command $COMMAND"
-        echo "available commands - build, clean, cleanall"
-esac
+    cp $BUILD_DIR/libputgame.so $LIB_OUT_DIR/
+}
+
+function clean {
+    set_make_args
+    make $MAKE_ARGS clean
+
+    rm -rf $LIB_OUT_DIR
+}
+
+function cleanall {
+    clean
+
+    rm -rf $TOOLCHAIN_DIR
+}
+
+for cmd in $COMMANDS; do
+    case $cmd in
+        build)
+            build
+            ;;
+
+        clean)
+            clean
+            ;;
+
+        cleanall)
+            cleanall
+            ;;
+
+        *)
+            echo "invalid command $cmd"
+            echo "available commands - build, clean"
+    esac
+done
