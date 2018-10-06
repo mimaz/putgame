@@ -1,15 +1,17 @@
 #!/bin/bash
 
+MAKE="make --file glfw.mk -j12"
+
 case $1 in
 	clean)
-		make clean -j4
+		$MAKE clean
 		;;
 	
 	build)
-		make all -j4
+		$MAKE all
 		;;
 	
 	run)
-		make run -j4
+		$MAKE run
 		;;
 esac

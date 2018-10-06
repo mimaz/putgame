@@ -23,7 +23,7 @@ namespace common
 
         void log(level, const std::string &);
 
-#if defined PLATFORM_GNU_GLFW
+#if defined PLATFORM_GLFW
         void log(level lv, const std::string &str)
         {
             switch (lv)

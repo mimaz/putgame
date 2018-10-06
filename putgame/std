@@ -33,7 +33,7 @@
 
 #if defined PLATFORM_ANDROID
 #include <GLES3/gl3.h>
-#elif defined PLATFORM_GNU_GLFW
+#elif defined PLATFORM_GLFW
 #define GLFW_INCLUDE_ES3
 #include <GLFW/glfw3.h>
 #else

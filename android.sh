@@ -33,8 +33,10 @@ RELEASE=1
 USE_LTO=1
 MAKE_JOBS=12
 
+MAKE="make --file android.mk"
 LIB_OUT_DIR=$JNI_LIBS_DIR/$ARCH
-BUILD_DIR=$(make build_dir ARCH=$ARCH TARGET=$TARGET)
+BUILD_DIR=$($MAKE build_dir ARCH=$ARCH TARGET=$TARGET)
+LIB_FILE=$($MAKE lib_file ARCH=$ARCH TARGET=$TARGET)
 MAKE_TOOLCHAIN_SCRIPT=$NDK_DIR/build/tools/make_standalone_toolchain.py
 
 function print_usage {
@@ -98,15 +100,15 @@ function build {
     set_toolchain_path
     set_make_args
 
-    PATH=$TOOLCHAIN_PATH:$PATH make $MAKE_ARGS libputgame -j$MAKE_JOBS
+    PATH=$TOOLCHAIN_PATH:$PATH $MAKE $MAKE_ARGS -j$MAKE_JOBS all
     mkdir -p $LIB_OUT_DIR
 
-    cp $BUILD_DIR/libputgame.so $LIB_OUT_DIR/
+    cp $LIB_FILE $LIB_OUT_DIR/
 }
 
 function clean {
     set_make_args
-    make $MAKE_ARGS clean
+    $MAKE $MAKE_ARGS clean
 
     rm -rf $LIB_OUT_DIR
 }

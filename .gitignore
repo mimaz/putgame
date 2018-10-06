@@ -2,3 +2,6 @@ gen/
 *.so
 android/app/build/
 toolchains/
+jniLibs/
+android/app/src/main/jniLibs/
+**/.*.swp
