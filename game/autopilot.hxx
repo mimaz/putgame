@@ -17,7 +17,9 @@ namespace game
     public:
         autopilot(player *pl);
 
+        void correct(float momfactor);
         void correct();
+        void reset();
 
     private:
         float xmom;

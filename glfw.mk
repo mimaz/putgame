@@ -5,6 +5,8 @@
 
 PLATFORM = GLFW
 
+default: all
+
 include build.mk
 
 GLFW_APP = ${BUILD_DIR}/putgame.elf

@@ -19,8 +19,6 @@ namespace game
     class activity : public common::context::object
     {
     public:
-        PUTGAME_OBJECT
-
         enum state
         {
             splash,

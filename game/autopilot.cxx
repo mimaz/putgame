@@ -25,6 +25,11 @@ namespace game
 
     void autopilot::correct()
     {
+        correct(1);
+    }
+
+    void autopilot::correct(float momfactor)
+    {
         try {
             auto fgap = get<world::way_path>()->get_gap();
             auto foffset = static_cast<int>(distance_offset / fgap);
@@ -36,8 +41,8 @@ namespace game
                 - get<world::camera>()->get_position();
 
 
-            auto onaxis = [targetvec, this](glm::vec3 axis, 
-                                            float &momentum) -> void {
+            auto onaxis = [=](glm::vec3 axis, 
+                              float &momentum) -> void {
                 auto gr = get<world::camera>()
                     ->gradient(gradient_angle, axis, targetvec);
 
@@ -45,7 +50,7 @@ namespace game
                     return;
 
                 momentum = turning_rate * gradient_factor * gr 
-                         + (1 - turning_rate) * momentum;
+                         + (1 - turning_rate) * momentum * momfactor;
 
                 get<world::camera>()->rotate(math::pi * momentum, axis);
             };
@@ -54,5 +59,11 @@ namespace game
             onaxis(glm::vec3(1, 0, 0), xmom);
             onaxis(glm::vec3(0, 1, 0), ymom);
         } catch (world::path_line::no_point) {}
+    }
+
+    void autopilot::reset()
+    {
+        xmom = 0;
+        ymom = 0;
     }
 }

@@ -15,8 +15,6 @@ namespace game
     class player : public common::context::object
     {
     public:
-        PUTGAME_OBJECT
-
         class axis_correction;
 
         player(common::context *ctx);
@@ -35,6 +33,7 @@ namespace game
         bool test_collision();
 
         std::shared_ptr<autopilot> apilot;
+        bool apilot_enabled;
 
         float target_speed;
         float real_speed;

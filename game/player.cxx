@@ -16,7 +16,8 @@ namespace game
 {
     player::player(common::context *ctx)
         : object(ctx)
-        , apilot(nullptr)
+        , apilot(std::make_shared<autopilot>(this))
+        , apilot_enabled(false)
         , target_speed(10)
         , real_speed(0)
     {}
@@ -42,51 +43,34 @@ namespace game
 
         real_speed += (get_target_speed() - get_real_speed()) * factor;
 
-
         glm::vec3 movec(0, 0, -get_real_speed() / fps);
 
         cam->move(movec);
 
 
-
-        if (apilot != nullptr)
+        if (apilot_enabled)
         {
             apilot->correct();
         }
         else if (test_collision())
         {
-            auto way = get<world::way_path>();
+            auto hmask = get<hit_mask>();
 
-            auto camid = cam->get_frame_id();
-            auto camframe = way->at(camid);
+            apilot->correct(0.5f);
+            hmask->hit(0.1f);
 
-            auto radius = camframe.position() - cam->get_position();
-            auto camoff = radius * 0.1f;
-
-
-            auto norm = camframe.position() - cam->get_position();
-            
-            auto vect = -cam->get_direction();
-            auto axis = glm::normalize(glm::cross(norm, vect));
-
-            auto cosine = glm::dot(vect, norm);
-            auto angle = math::pi - 2.0f * acosf(cosine);
-
-            angle = std::max(angle, math::pi / 12);
-
-            cam->rotate(angle, axis);
-            cam->absolute_move(camoff);
-
-            get<activity>()->get_hit_mask()->hit(cosine);
+            if (hmask->get_exposure() > 1)
+                get<activity>()->switch_state(activity::defeated);
+        } 
+        else 
+        {
+            apilot->reset();
         }
     }
 
     void player::set_autopilot(bool ap)
     {
-        if (ap)
-            apilot = std::make_shared<autopilot>(this);
-        else
-            apilot = nullptr;
+        apilot_enabled = ap;
     }
 
     int player::get_frame_id() const

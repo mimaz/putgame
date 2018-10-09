@@ -103,6 +103,10 @@ namespace game
                 get<player>()->set_autopilot(false);
                 break;
 
+            case defeated:
+                common::logi("DEFEATED");
+                break;
+
             default:
                 break;
             }

@@ -155,8 +155,8 @@ int main(int argc, char **argv)
     window = glfwCreateWindow(960, 540, 
                               "putgame", 
                               NULL,
-                              glfwGetPrimaryMonitor());
-                              //NULL);
+                              //glfwGetPrimaryMonitor());
+                              NULL);
 
     if (window == NULL)
         exit_with_error("creating GLFW window failed");

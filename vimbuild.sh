@@ -10,6 +10,10 @@ case $1 in
 	build)
 		$MAKE all
 		;;
+
+    debug)
+        $MAKE debug
+        ;;
 	
 	run)
 		$MAKE run

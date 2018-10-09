@@ -22,9 +22,7 @@ namespace game
 
     void hit_mask::hit(float cosine)
     {
-        exposure = sqrtf(cosine);
-
-        common::logd("hit!!!");
+        exposure += cosine;
 
         set_active(true);
     }

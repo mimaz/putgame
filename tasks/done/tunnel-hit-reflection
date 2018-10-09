@@ -13,3 +13,7 @@ in common with tunnel absolute position
 start with tunnel bent by a small angle and check what happens then
 
 fix calculations in game/player.cxx / player::process()
+
+09.10.2018 mimaz
+
+Problem solved by using autopilot for hit correction

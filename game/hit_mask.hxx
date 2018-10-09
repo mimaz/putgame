@@ -15,8 +15,6 @@ namespace game
     class hit_mask : public gui::color_rectangle
     {
     public:
-        PUTGAME_OBJECT
-
         hit_mask(common::context *ctx);
 
         void hit(float cosine);
