@@ -43,6 +43,7 @@ void putgame_construct(putgame *self)
     self->on_draw = nullptr;
     self->on_resize = nullptr;
     self->on_cursor = nullptr;
+    self->on_key = nullptr;
     self->on_press = nullptr;
     self->on_release = nullptr;
     self->on_get_int = nullptr;
@@ -81,7 +82,6 @@ void putgame_draw(putgame *self)
 {
     callback(self->on_draw, self);
 
-    static_cast<subinstance *>(self->_game_instance)->process();
     static_cast<subinstance *>(self->_game_instance)->draw();
 }
 
@@ -101,6 +101,43 @@ void putgame_cursor(putgame *self,
     callback(self->on_cursor, self, xpos, ypos);
 
     static_cast<subinstance *>(self->_game_instance)->cursor(xpos, ypos);
+}
+
+void putgame_key(putgame *self,
+                 int key)
+{
+    callback(self->on_key, self, key);
+
+    game::instance::keycode kc;
+
+    switch (key)
+    {
+    case PUTGAME_LEFT:
+        kc = game::instance::keycode::left;
+        break;
+
+    case PUTGAME_RIGHT:
+        kc = game::instance::keycode::right;
+        break;
+
+    case PUTGAME_UP:
+        kc = game::instance::keycode::up;
+        break;
+
+    case PUTGAME_DOWN:
+        kc = game::instance::keycode::down;
+        break;
+
+    case PUTGAME_START:
+        kc = game::instance::keycode::start;
+        break;
+
+    default:
+        common::loge("invalid direction value!!!");
+        return;
+    }
+
+    static_cast<subinstance *>(self->_game_instance)->key(kc);
 }
 
 void putgame_press(putgame *self)

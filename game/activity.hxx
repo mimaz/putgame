@@ -23,10 +23,8 @@ namespace game
         {
             splash,
             menu,
-            starting,
             play,
             defeated,
-            score
         };
 
         using object_ref = std::shared_ptr<world::visible_object>;

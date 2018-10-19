@@ -61,8 +61,6 @@ namespace game
 
         get_player()->process();
 
-        //common::logd("difficulty: ", get_difficulty());
-
         if (is_transiting())
         {
             switch (get_state())
@@ -82,14 +80,14 @@ namespace game
 
     void activity::switch_state(state st)
     {
-        if (transiting)
-        {
-            common::loge("cannot set state while transiting!");
-            get_context()->exit();
-        }
-
         if (st != stat)
         {
+            if (transiting)
+            {
+                common::loge("cannot set state while transiting!");
+                get_context()->exit();
+            }
+
             transiting = true;
 
             switch (st)

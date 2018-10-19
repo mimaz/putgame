@@ -159,6 +159,7 @@ namespace game
             if (yoff < -1)
                 animating = false;
         }
+        common::logd("animating: ", animating);
 
 
         layout();

@@ -16,16 +16,25 @@ namespace game
     class instance : public common::context
     {
     public:
+        enum class keycode
+        {
+            left,
+            right,
+            up,
+            down,
+            start,
+        };
+
         instance();
         ~instance();
 
         virtual void start();
         virtual void stop();
         virtual void draw();
-        virtual void process();
 
         virtual void resize(int width, int height);
         virtual void cursor(int x, int y);
+        virtual void key(keycode kc);
         virtual void press();
         virtual void release();
 

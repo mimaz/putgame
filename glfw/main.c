@@ -91,6 +91,26 @@ static void key_callback(GLFWwindow *win,
 
     switch (key)
     {
+        case GLFW_KEY_H:
+            putgame_key(instance, PUTGAME_LEFT);
+            break;
+
+        case GLFW_KEY_L:
+            putgame_key(instance, PUTGAME_RIGHT);
+            break;
+
+        case GLFW_KEY_K:
+            putgame_key(instance, PUTGAME_UP);
+            break;
+
+        case GLFW_KEY_J:
+            putgame_key(instance, PUTGAME_DOWN);
+            break;
+
+        case GLFW_KEY_S:
+            putgame_key(instance, PUTGAME_START);
+            break;
+
         case GLFW_KEY_ESCAPE:
             glfwSetWindowShouldClose(window, GLFW_TRUE);
             break;
@@ -144,13 +164,12 @@ int main(int argc, char **argv)
     if (! glfwInit())
         exit_with_error("initialization GLFW failed!");
 
-
+    glfwSetErrorCallback(error_callback);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, 
                    GLFW_NATIVE_CONTEXT_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwSetErrorCallback(error_callback);
 
     window = glfwCreateWindow(960, 540, 
                               "putgame", 

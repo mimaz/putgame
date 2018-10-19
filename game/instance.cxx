@@ -42,19 +42,17 @@ namespace game
 
     void instance::draw()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        get<world::object_manager>()->draw_all();
-        get<gui::surface>()->draw();
-    }
-
-    void instance::process()
-    {
         get<activity>()->process();
         get<main_menu>()->process();
 
         get<world::object_manager>()->process_all();
         get<gui::surface>()->process();
+
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        get<world::object_manager>()->draw_all();
+        get<gui::surface>()->draw();
     }
 
     void instance::resize(int wid, int hei)
@@ -74,6 +72,8 @@ namespace game
     {
         if (x == mouse_x and y == mouse_y)
             return;
+
+        common::logd("cursor: ", x, " : ", y);
 
         x -= get_width() / 2;
         y -= get_height() / 2;
@@ -105,6 +105,52 @@ namespace game
 
         mouse_x = x;
         mouse_y = y;
+    }
+
+    void instance::key(keycode kc)
+    {
+        constexpr float scalar = 0.04f;
+
+        auto off_x = [this]() { 
+            return static_cast<int>(get_width() * scalar); 
+        };
+
+        auto off_y = [this]() {
+            return static_cast<int>(get_height() * scalar); 
+        };
+
+        press();
+
+        int x = mouse_x + get_width() / 2;
+        int y = mouse_y + get_height() / 2;
+
+        switch (kc)
+        {
+        case keycode::left:
+            cursor(x + off_x(), y);
+            break;
+
+        case keycode::right:
+            cursor(x - off_x(), y);
+            break;
+
+        case keycode::up:
+            cursor(x, y - off_y());
+            break;
+
+        case keycode::down:
+            cursor(x, y + off_y());
+            break;
+
+        case keycode::start:
+            get<activity>()->switch_state(activity::play);
+            break;
+
+        default:
+            common::loge("invalid dir value!");
+        }
+
+        release();
     }
 
     void instance::press()
