@@ -7,3 +7,4 @@
 #include "../../gui/surface.hxx"
 #include "../../gui/touch_event.hxx"
 #include "../../gui/color_rectangle.hxx"
+#include "../../gui/score_counter.hxx"

@@ -63,7 +63,7 @@ TARGET_CXX = ${TARGET}clang++
 PRECOMPILER_SRC = ${shell find precompiler/ -name "*.c"}
 PRECOMPILER_OBJ = ${PRECOMPILER_SRC:%=${BUILD_DIR}/%.o}
 
-GLSL_SRC = ${shell find glsl/ -type f}
+GLSL_SRC = ${shell find glsl/ -type f | grep -v ".swp"}
 GLSL_C_SRC = ${GLSL_SRC:%=${BUILD_DIR}/%.c}
 GLSL_C_OBJ = ${GLSL_C_SRC:%=%.o}
 

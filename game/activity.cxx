@@ -10,6 +10,7 @@
 #include "player.hxx"
 #include "hit_mask.hxx"
 #include "main_menu.hxx"
+#include "play_hud.hxx"
 
 namespace game
 {
@@ -98,6 +99,7 @@ namespace game
 
             case play:
                 get<main_menu>()->disable();
+                get<play_hud>()->enable();
                 get<player>()->set_autopilot(false);
                 break;
 
